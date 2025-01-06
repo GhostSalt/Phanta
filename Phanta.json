@@ -1,0 +1,13 @@
+{
+    "id": "GSPhanta",
+    "name": "Phanta",
+    "author": ["GhostSalt"],
+    "description": "A mod pack containing some Jokers! I've tried to keep this pack balanced, so no Cryptidesque shenanigans.",
+    "prefix": "phanta",
+    "main_file": "Phanta.lua",
+    "badge_colour": "4d1575",
+    "dependencies": [
+        "Steamodded (>=1.0.0~ALPHA-1225a)"
+    ],
+    "version": "1.0.0"
+}
