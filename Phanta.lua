@@ -21,6 +21,7 @@ function count_tarots()
     return tarot_counter
 end
 
+--[[
 local zodiac = {
 	object_type = "ConsumableType",
 	key = "Zodiac",
@@ -231,6 +232,7 @@ local packM2 = {
 	end,
 	group_key = "k_phanta_zodiac_pack",
 }
+]]
 
 SMODS.Joker {
   key = 'ghostjoker',
