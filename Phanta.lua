@@ -21,6 +21,217 @@ function count_tarots()
     return tarot_counter
 end
 
+local zodiac = {
+	object_type = "ConsumableType",
+	key = "Zodiac",
+	primary_colour = HEX("4076cf"),
+	secondary_colour = HEX("5998ff"),
+	collection_rows = { 3, 4 },
+	shop_rate = 0.0,
+	loc_txt = {},
+	default = "phanta_aries",
+	can_stack = true,
+	can_divide = true,
+}
+local zodiac_atlas = {
+	object_type = "Atlas",
+	key = "zodiac",
+	path = "PhantaZodiacs.png",
+	px = 71,
+	py = 95,
+}
+SMODS.UndiscoveredSprite({
+	key = "Zodiac",
+	atlas = "zodiac",
+	path = "PhantaBoosters.png",
+	pos = { x = 1, y = 3 },
+	px = 71,
+	py = 95,
+}):register()
+local pack_atlas = {
+	object_type = "Atlas",
+	key = "pack",
+	path = "PhantaBoosters.png",
+	px = 71,
+	py = 95,
+}
+local pack1 = {
+	object_type = "Booster",
+	key = "phanta_normal1",
+	kind = "Zodiac",
+	atlas = "pack",
+	pos = { x = 0, y = 0 },
+	config = { extra = 2, choose = 1 },
+	cost = 4,
+	order = 1,
+	weight = 0.96,
+	create_card = function(self, card)
+		return create_card("Zodiac", G.pack_cards, nil, nil, true, true, nil, "phanta_zodiac")
+	end,
+	ease_background_colour = function(self)
+		ease_colour(G.C.DYN_UI.MAIN, G.C.SET.Zodiac)
+		ease_background_colour({ new_colour = G.C.SET.Zodiac, special_colour = G.C.RED, contrast = 2 })
+	end,
+	loc_vars = function(self, info_queue, card)
+		return { vars = { card.config.center.config.choose, card.ability.extra } }
+	end,
+	group_key = "k_phanta_zodiac_pack",
+}
+local pack2 = {
+	object_type = "Booster",
+	key = "phanta_normal2",
+	kind = "Zodiac",
+	atlas = "pack",
+	pos = { x = 1, y = 0 },
+	config = { extra = 2, choose = 1 },
+	cost = 4,
+	order = 1,
+	weight = 0.96,
+	create_card = function(self, card)
+		return create_card("Zodiac", G.pack_cards, nil, nil, true, true, nil, "phanta_zodiac")
+	end,
+	ease_background_colour = function(self)
+		ease_colour(G.C.DYN_UI.MAIN, G.C.SET.Zodiac)
+		ease_background_colour({ new_colour = G.C.SET.Zodiac, special_colour = G.C.RED, contrast = 2 })
+	end,
+	loc_vars = function(self, info_queue, card)
+		return { vars = { card.config.center.config.choose, card.ability.extra } }
+	end,
+	group_key = "k_phanta_zodiac_pack",
+}
+local pack3 = {
+	object_type = "Booster",
+	key = "phanta_normal3",
+	kind = "Zodiac",
+	atlas = "pack",
+	pos = { x = 2, y = 0 },
+	config = { extra = 2, choose = 1 },
+	cost = 4,
+	order = 1,
+	weight = 0.96,
+	create_card = function(self, card)
+		return create_card("Zodiac", G.pack_cards, nil, nil, true, true, nil, "phanta_zodiac")
+	end,
+	ease_background_colour = function(self)
+		ease_colour(G.C.DYN_UI.MAIN, G.C.SET.Zodiac)
+		ease_background_colour({ new_colour = G.C.SET.Zodiac, special_colour = G.C.RED, contrast = 2 })
+	end,
+	loc_vars = function(self, info_queue, card)
+		return { vars = { card.config.center.config.choose, card.ability.extra } }
+	end,
+	group_key = "k_phanta_zodiac_pack",
+}
+local pack4 = {
+	object_type = "Booster",
+	key = "phanta_normal4",
+	kind = "Zodiac",
+	atlas = "pack",
+	pos = { x = 3, y = 0 },
+	config = { extra = 2, choose = 1 },
+	cost = 4,
+	order = 1,
+	weight = 0.96,
+	create_card = function(self, card)
+		return create_card("Zodiac", G.pack_cards, nil, nil, true, true, nil, "phanta_zodiac")
+	end,
+	ease_background_colour = function(self)
+		ease_colour(G.C.DYN_UI.MAIN, G.C.SET.Zodiac)
+		ease_background_colour({ new_colour = G.C.SET.Zodiac, special_colour = G.C.RED, contrast = 2 })
+	end,
+	loc_vars = function(self, info_queue, card)
+		return { vars = { card.config.center.config.choose, card.ability.extra } }
+	end,
+	group_key = "k_phanta_zodiac_pack",
+}
+local packJ1 = {
+	object_type = "Booster",
+	key = "phanta_jumbo1",
+	kind = "Zodiac",
+	atlas = "pack",
+	pos = { x = 0, y = 1 },
+	config = { extra = 4, choose = 1 },
+	cost = 6,
+	order = 3,
+	weight = 0.48,
+	create_card = function(self, card)
+		return create_card("Zodiac", G.pack_cards, nil, nil, true, true, nil, "phanta_zodiac")
+	end,
+	ease_background_colour = function(self)
+		ease_colour(G.C.DYN_UI.MAIN, G.C.SET.Zodiac)
+		ease_background_colour({ new_colour = G.C.SET.Zodiac, special_colour = G.C.RED, contrast = 2 })
+	end,
+	loc_vars = function(self, info_queue, card)
+		return { vars = { card.config.center.config.choose, card.ability.extra } }
+	end,
+	group_key = "k_phanta_zodiac_pack",
+}
+local packJ2 = {
+	object_type = "Booster",
+	key = "phanta_jumbo2",
+	kind = "Zodiac",
+	atlas = "pack",
+	pos = { x = 1, y = 1 },
+	config = { extra = 4, choose = 1 },
+	cost = 6,
+	order = 3,
+	weight = 0.48,
+	create_card = function(self, card)
+		return create_card("Zodiac", G.pack_cards, nil, nil, true, true, nil, "phanta_zodiac")
+	end,
+	ease_background_colour = function(self)
+		ease_colour(G.C.DYN_UI.MAIN, G.C.SET.Zodiac)
+		ease_background_colour({ new_colour = G.C.SET.Zodiac, special_colour = G.C.RED, contrast = 2 })
+	end,
+	loc_vars = function(self, info_queue, card)
+		return { vars = { card.config.center.config.choose, card.ability.extra } }
+	end,
+	group_key = "k_phanta_zodiac_pack",
+}
+local packM1 = {
+	object_type = "Booster",
+	key = "phanta_mega1",
+	kind = "Zodiac",
+	atlas = "pack",
+	pos = { x = 2, y = 1 },
+	config = { extra = 4, choose = 2 },
+	cost = 8,
+	order = 4,
+	weight = 0.12,
+	create_card = function(self, card)
+		return create_card("Zodiac", G.pack_cards, nil, nil, true, true, nil, "phanta_zodiac")
+	end,
+	ease_background_colour = function(self)
+		ease_colour(G.C.DYN_UI.MAIN, G.C.SET.Zodiac)
+		ease_background_colour({ new_colour = G.C.SET.Zodiac, special_colour = G.C.RED, contrast = 2 })
+	end,
+	loc_vars = function(self, info_queue, card)
+		return { vars = { card.config.center.config.choose, card.ability.extra } }
+	end,
+	group_key = "k_phanta_zodiac_pack",
+}
+local packM2 = {
+	object_type = "Booster",
+	key = "phanta_mega2",
+	kind = "Zodiac",
+	atlas = "pack",
+	pos = { x = 3, y = 1 },
+	config = { extra = 4, choose = 2 },
+	cost = 8,
+	order = 4,
+	weight = 0.12,
+	create_card = function(self, card)
+		return create_card("Zodiac", G.pack_cards, nil, nil, true, true, nil, "phanta_zodiac")
+	end,
+	ease_background_colour = function(self)
+		ease_colour(G.C.DYN_UI.MAIN, G.C.SET.Zodiac)
+		ease_background_colour({ new_colour = G.C.SET.Zodiac, special_colour = G.C.RED, contrast = 2 })
+	end,
+	loc_vars = function(self, info_queue, card)
+		return { vars = { card.config.center.config.choose, card.ability.extra } }
+	end,
+	group_key = "k_phanta_zodiac_pack",
+}
+
 SMODS.Joker {
   key = 'ghostjoker',
   loc_txt = {
