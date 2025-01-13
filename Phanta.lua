@@ -342,7 +342,7 @@ SMODS.Joker {
 SMODS.Joker {
   key = 'p5joker',
   loc_txt = {
-    name = 'Persona 5 Joker',
+    name = 'Looking Cool, Joker',
     text = {
       "Gains {C:mult}+#1#{} Mult per hand",
       "played that is not your",
@@ -415,6 +415,176 @@ SMODS.Joker {
       }))
 			
 			return nil, true
+    end
+  end
+}
+
+SMODS.Joker {
+  key = 'goldenfiddle',
+  loc_txt = {
+    name = 'Golden Fiddle',
+    text = {
+      "When {C:attention}Blind{} is selected,",
+      "creates a copy of",
+      "{C:tarot}The Devil{} or {C:tarot}The Chariot{}",
+      "{C:inactive}(Must have room){}"
+    }
+  },
+  rarity = 2,
+  atlas = 'Phanta',
+  pos = { x = 4, y = 0 },
+  cost = 6,
+	blueprint_compat = true,
+  calculate = function(self, card, context)
+    if context.setting_blind and not (context.blueprint_card or self).getting_sliced and #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit then
+      G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
+      G.E_MANAGER:add_event(Event({
+        func = function()
+          local chosen_message = '+1 Devil'
+          G.E_MANAGER:add_event(Event({
+            func = function()
+              local chosen_card = 'c_devil'
+              if pseudorandom('goldenfiddle', 1, 2) == 1 then
+                chosen_card = 'c_chariot'
+                chosen_message = '+1 Chariot'
+              end
+              local new_card = create_card("Tarot", G.consumables, nil, nil, nil, nil, chosen_card, 'goldenfiddle')
+              new_card:add_to_deck()
+              G.consumeables:emplace(new_card)
+              G.GAME.consumeable_buffer = 0
+              new_card:juice_up(0.3, 0.5)
+              return true
+            end}))
+              card_eval_status_text(context.blueprint_card or card, 'extra', nil, nil, nil, {message = chosen_message, colour = G.C.PURPLE})
+          return true
+        end
+      }))
+    end
+  end
+}
+
+SMODS.Joker {
+  key = 'reverie',
+  loc_txt = {
+    name = 'Reverie',
+    text = {
+      "When {C:attention}Blind{} is selected,",
+      "creates a copy of",
+      "{C:tarot}The Heirophant{} or {C:tarot}Temperance{}",
+      "{C:inactive}(Must have room){}"
+    }
+  },
+  rarity = 2,
+  atlas = 'Phanta',
+  pos = { x = 5, y = 0 },
+  cost = 6,
+	blueprint_compat = true,
+  calculate = function(self, card, context)
+    if context.setting_blind and not (context.blueprint_card or self).getting_sliced and #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit then
+      G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
+      G.E_MANAGER:add_event(Event({
+        func = function()
+          local chosen_message = '+1 Heirophant'
+          G.E_MANAGER:add_event(Event({
+            func = function()
+              local chosen_card = 'c_heirophant'
+              if pseudorandom('reverie', 1, 2) == 1 then
+                chosen_card = 'c_temperance'
+                chosen_message = '+1 Temperance'
+              end
+              local new_card = create_card("Tarot", G.consumables, nil, nil, nil, nil, chosen_card, 'reverie')
+              new_card:add_to_deck()
+              G.consumeables:emplace(new_card)
+              G.GAME.consumeable_buffer = 0
+              new_card:juice_up(0.3, 0.5)
+              return true
+            end}))
+              card_eval_status_text(context.blueprint_card or card, 'extra', nil, nil, nil, {message = chosen_message, colour = G.C.PURPLE})
+          return true
+        end
+      }))
+    end
+  end
+}
+
+SMODS.Joker {
+  key = 'introspection',
+  loc_txt = {
+    name = 'Introspection',
+    text = {
+      "When {C:attention}Blind{} is selected,",
+      "creates a #1#{} card and",
+      "changes type to #2#s{}",
+      "{C:inactive}(Must have room){}"
+    }
+  },
+  config = { extra = { chosen_type = 0 } },
+  rarity = 2,
+  atlas = 'Phanta',
+  pos = { x = 0, y = 1 },
+  cost = 6,
+  loc_vars = function(self, info_queue, card)
+    return { vars = { ({'{C:tarot}Tarot', '{C:planet}Planet'})[card.ability.extra.chosen_type + 1], ({'{C:planet}Planet', '{C:tarot}Tarot'})[card.ability.extra.chosen_type + 1] } }
+  end,
+	blueprint_compat = true,
+  calculate = function(self, card, context)
+    if context.setting_blind and not (context.blueprint_card or self).getting_sliced and #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit then
+      G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
+      G.E_MANAGER:add_event(Event({
+      func = (function()
+        G.E_MANAGER:add_event(Event({
+          func = function() 
+            local new_card = create_card(({'Tarot', 'Planet'})[card.ability.extra.chosen_type + 1], G.consumeables, nil, nil, nil, nil, nil, 'introspection')
+            new_card:add_to_deck()
+            G.consumeables:emplace(new_card)
+            G.GAME.consumeable_buffer = 0
+            card.ability.extra.chosen_type = 1 - card.ability.extra.chosen_type
+            return true
+          end}))   
+          card_eval_status_text(context.blueprint_card or self, 'extra', nil, nil, nil, {message = localize(({'k_plus_tarot', 'k_plus_planet'})[card.ability.extra.chosen_type + 1]), colour = ({G.C.PURPLE, G.C.BLUE})[card.ability.extra.chosen_type + 1]})                       
+        return true
+      end)}))
+    end
+  end
+}
+
+SMODS.Joker {
+  key = 'blindjoker',
+  loc_txt = {
+    name = 'Blind Joker',
+    text = {
+      "{C:attention}+#1#{} hand size,",
+      "{C:attention}+#2#{} discards,",
+      "{C:green}1 in #3#{} cards are",
+      "drawn {C:attention}face down{}"
+    }
+  },
+  config = { extra = { added_hand_size = 2, added_discards = 2, flipped_probability = 2 } },
+  rarity = 2,
+  atlas = 'Phanta',
+  pos = { x = 1, y = 1 },
+  cost = 6,
+  loc_vars = function(self, info_queue, card)
+    return { vars = { ({'{C:tarot}Tarot', '{C:planet}Planet'})[card.ability.extra.chosen_type + 1], ({'{C:planet}Planet', '{C:tarot}Tarot'})[card.ability.extra.chosen_type + 1] } }
+  end,
+	blueprint_compat = true,
+  calculate = function(self, card, context)
+    if context.setting_blind and not (context.blueprint_card or self).getting_sliced and #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit then
+      G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
+      G.E_MANAGER:add_event(Event({
+      func = (function()
+        G.E_MANAGER:add_event(Event({
+          func = function() 
+            local new_card = create_card(({'Tarot', 'Planet'})[card.ability.extra.chosen_type + 1], G.consumeables, nil, nil, nil, nil, nil, 'introspection')
+            new_card:add_to_deck()
+            G.consumeables:emplace(new_card)
+            G.GAME.consumeable_buffer = 0
+            card.ability.extra.chosen_type = 1 - card.ability.extra.chosen_type
+            return true
+          end}))   
+          card_eval_status_text(context.blueprint_card or self, 'extra', nil, nil, nil, {message = localize(({'k_plus_tarot', 'k_plus_planet'})[card.ability.extra.chosen_type + 1]), colour = ({G.C.PURPLE, G.C.BLUE})[card.ability.extra.chosen_type + 1]})                       
+        return true
+      end)}))
     end
   end
 }
