@@ -548,7 +548,7 @@ SMODS.Joker {
   end
 }
 
-SMODS.Joker {
+--[[SMODS.Joker {
   key = 'blindjoker',
   loc_txt = {
     name = 'Blind Joker',
@@ -586,5 +586,41 @@ SMODS.Joker {
         return true
       end)}))
     end
+  end
+}]]--
+
+SMODS.Joker {
+  key = 'ignaize',
+  loc_txt = {
+    name = 'Ignaize',
+    text = {
+      "Gains {X:mult,C:white}X#1#{} Mult when a",
+	  "{C:attention}consumable{} card is {C:attention}sold{}",
+	  "{C:inactive}(Currently {X:mult,C:white}X#2#{C:inactive} Mult)"
+    }
+  },
+  config = { extra = { current_xmult = 1, added_xmult = 0.2 } },
+  rarity = 4,
+  atlas = 'Phanta',
+  pos = { x = 2, y = 1 },
+  soul_pos = { x = 3, y = 2 },
+  cost = 20,
+  loc_vars = function(self, info_queue, card)
+    return { vars = { card.ability.extra.added_xmult, card.ability.extra.current_xmult,  } }
+  end,
+	blueprint_compat = true,
+  calculate = function(self, card, context)
+  if context.joker_main and card.ability.extra.current_xmult > 1 then
+      return {
+        Xmult_mod = card.ability.extra.current_xmult,
+        message = localize { type = 'variable', key = 'a_xmult', vars = { card.ability.extra.current_xmult } }
+      }
+    end
+  if context.selling_card and context.card.config.center.set ~= "Joker" then
+		card.ability.extra.current_xmult = card.ability.extra.current_xmult + card.ability.extra.added_xmult
+      card_eval_status_text(card, 'extra', nil, nil, nil,
+        { message = localize("k_upgrade_ex") })
+      return true
+  end
   end
 }
