@@ -624,3 +624,92 @@ SMODS.Joker {
   end
   end
 }
+
+SMODS.Joker {
+  key = 'dimere',
+  loc_txt = {
+    name = 'Dimere',
+    text = {
+      "When {C:attention}Boss Blind{} is defeated,",
+      "#1# random {C:attention}Joker{} becomes",
+      "{C:negative}Negative{} {C:inactive}(except Dimeres{}",
+	  "{C:inactive}or cards with editions){}"
+    }
+  },
+  config = { extra = { cards_turned = 1 } },
+  rarity = 4,
+  atlas = 'Phanta',
+  pos = { x = 3, y = 1 },
+  soul_pos = { x = 4, y = 2 },
+  cost = 20,
+  loc_vars = function(self, info_queue, card)
+    return { vars = { card.ability.extra.cards_turned } }
+  end,
+	blueprint_compat = true,
+  calculate = function(self, card, context)
+	if context.end_of_round and not context.individual and not context.repetition and G.GAME.blind.boss then
+	
+		--Check if the ability should trigger (i.e. there are valid, non-Dimere Jokers)
+		
+		local candidates = {}
+		for i = 1, #G.jokers.cards do
+			if G.jokers.cards[i].ability.name ~= card.ability.name and G.jokers.cards[i].ability.set == "Joker" and G.jokers.cards[i].edition == nil then
+				candidates[#candidates + 1] = G.jokers.cards[i]
+			end
+		end
+		
+		if not candidates then
+			return nil
+		end
+		
+		pseudorandom_element(candidates, pseudoseed("dimere")):set_edition{negative = true}
+		card_eval_status_text(card, 'extra', nil, nil, nil,
+        { message = "+Negative" })
+		
+	end
+  end
+}
+
+SMODS.Joker {
+  key = 'goldor',
+  loc_txt = {
+    name = 'Goldor',
+    text = {
+      "Played {C:attention}Gold{} cards",
+	  "each give {C:white,X:mult}X#1#{} Mult",
+	  "when scored"
+    }
+  },
+  config = { extra = { xmult = 2 } },
+  rarity = 4,
+  atlas = 'Phanta',
+  pos = { x = 3, y = 1 },
+  soul_pos = { x = 4, y = 2 },
+  cost = 20,
+  loc_vars = function(self, info_queue, card)
+    return { vars = { card.ability.extra.xmult } }
+  end,
+	blueprint_compat = true,
+  calculate = function(self, card, context)
+	if context.end_of_round and not context.individual and not context.repetition and G.GAME.blind.boss then
+	
+		--Check if the ability should trigger (i.e. there are valid, non-Dimere Jokers)
+		
+		local candidates = {}
+		for i = 1, #G.jokers.cards do
+			if G.jokers.cards[i].ability.name ~= card.ability.name and G.jokers.cards[i].ability.set == "Joker" and G.jokers.cards[i].edition == nil then
+				candidates[#candidates + 1] = G.jokers.cards[i]
+			end
+		end
+		
+		if not candidates then
+			return nil
+		end
+		
+		pseudorandom_element(candidates, pseudoseed("dimere")):set_edition{negative = true}
+		card_eval_status_text(card, 'extra', nil, nil, nil,
+        { message = "+Negative" })
+		
+	end
+  end
+}
