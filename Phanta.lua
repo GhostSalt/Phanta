@@ -676,40 +676,75 @@ SMODS.Joker {
     name = 'Goldor',
     text = {
       "Played {C:attention}Gold{} cards",
-	  "each give {C:white,X:mult}X#1#{} Mult",
-	  "when scored"
+	  "each give {C:money}$#2#{} and",
+	  "{C:white,X:mult}X#1#{} Mult when scored"
     }
   },
-  config = { extra = { xmult = 2 } },
+  config = { extra = { money = 2, xmult = 2 } },
   rarity = 4,
   atlas = 'Phanta',
-  pos = { x = 3, y = 1 },
-  soul_pos = { x = 4, y = 2 },
+  pos = { x = 4, y = 1 },
+  soul_pos = { x = 5, y = 2 },
   cost = 20,
   loc_vars = function(self, info_queue, card)
-    return { vars = { card.ability.extra.xmult } }
+    return { vars = { card.ability.extra.xmult, card.ability.extra.money } }
   end,
-	blueprint_compat = true,
+  blueprint_compat = true,
   calculate = function(self, card, context)
-	if context.end_of_round and not context.individual and not context.repetition and G.GAME.blind.boss then
-	
-		--Check if the ability should trigger (i.e. there are valid, non-Dimere Jokers)
-		
-		local candidates = {}
-		for i = 1, #G.jokers.cards do
-			if G.jokers.cards[i].ability.name ~= card.ability.name and G.jokers.cards[i].ability.set == "Joker" and G.jokers.cards[i].edition == nil then
-				candidates[#candidates + 1] = G.jokers.cards[i]
-			end
-		end
-		
-		if not candidates then
-			return nil
-		end
-		
-		pseudorandom_element(candidates, pseudoseed("dimere")):set_edition{negative = true}
-		card_eval_status_text(card, 'extra', nil, nil, nil,
-        { message = "+Negative" })
-		
+	if context.individual and context.cardarea == G.play and context.other_card.ability.name == 'Gold Card' then
+        G.GAME.dollar_buffer = (G.GAME.dollar_buffer or 0) + card.ability.extra.money
+        G.E_MANAGER:add_event(Event({func = (function() G.GAME.dollar_buffer = 0; return true end)}))
+        return {
+			dollars = card.ability.extra.money,
+			x_mult = card.ability.extra.xmult,
+			colour = G.C.RED,
+			card = self
+		}
+	end
+  end
+}
+
+SMODS.Joker {
+  key = 'famalia',
+  loc_txt = {
+    name = 'Famalia',
+    text = {
+     "When {C:attention}Blind{} is selected,",
+	 "add a {C:attention}King{} with a",
+	 "{C:purple}Purple seal{}and edition",
+	 "to your hand"
+    }
+  },
+  config = { extra = { money = 2, xmult = 2 } },
+  rarity = 4,
+  atlas = 'Phanta',
+  pos = { x = 5, y = 1 },
+  soul_pos = { x = 0, y = 3 },
+  cost = 20,
+  loc_vars = function(self, info_queue, card)
+    return { vars = { card.ability.extra.xmult, card.ability.extra.money } }
+  end,
+  blueprint_compat = true,
+  calculate = function(self, card, context)
+	if context.first_hand_drawn then
+		G.E_MANAGER:add_event(Event({
+            func = function() 
+				local _suit = pseudorandom_element({'S','H','D','C'}, pseudoseed('famaliasu'))
+                local _card = create_playing_card({front = G.P_CARDS[_suit..'_K'], center = G.P_CENTERS.c_base}, G.hand, nil, nil, {G.C.SECONDARY_SET.Enhanced})
+                _card:set_seal('Purple', true)
+				
+				local edition = pseudorandom(pseudoseed('famaliaed'))
+				if edition < 0.5 then _card:set_edition('e_foil')
+				elseif edition < 0.85 then _card:set_edition('e_holo')
+				else _card:set_edition('e_polychrome') end
+                
+                G.GAME.blind:debuff_card(_card)
+                G.hand:sort()
+                if context.blueprint_card then context.blueprint_card:juice_up() else card:juice_up() end
+                return true
+            end}))
+
+        playing_card_joker_effects({true})
 	end
   end
 }
