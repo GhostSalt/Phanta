@@ -748,3 +748,77 @@ SMODS.Joker {
 	end
   end
 }
+
+--[[SMODS.Joker {
+  key = 'modernart',
+  loc_txt = {
+    name = 'Modern Art',
+    text = {
+     "Gives {C:money}$5{} if {C:attention}Blind{}",
+     "is defeated in",
+     "#1# {C:hand}Hand{}"
+    }
+  },
+  config = { extra = { no_of_hands = 1 } },
+  rarity = 1,
+  atlas = 'Phanta',
+  pos = { x = 4, y = 3 },
+  cost = 4,
+  loc_vars = function(self, info_queue, card)
+    return { vars = { card.ability.extra.no_of_hands } } }
+  end,
+  blueprint_compat = true,
+  calculate = function(self, card, context)
+	if context.first_hand_drawn then
+		G.E_MANAGER:add_event(Event({
+            func = function() 
+				local _suit = pseudorandom_element({'S','H','D','C'}, pseudoseed('famaliasu'))
+                local _card = create_playing_card({front = G.P_CARDS[_suit..'_K'], center = G.P_CENTERS.c_base}, G.hand, nil, nil, {G.C.SECONDARY_SET.Enhanced})
+                _card:set_seal('Purple', true)
+				
+				local edition = pseudorandom(pseudoseed('famaliaed'))
+				if edition < 0.5 then _card:set_edition('e_foil')
+				elseif edition < 0.85 then _card:set_edition('e_holo')
+				else _card:set_edition('e_polychrome') end
+                
+                G.GAME.blind:debuff_card(_card)
+                G.hand:sort()
+                if context.blueprint_card then context.blueprint_card:juice_up() else card:juice_up() end
+                return true
+            end}))
+
+        playing_card_joker_effects({true})
+	end
+  end
+}]]--
+
+SMODS.Joker {
+  key = 'sketch',
+  loc_txt = {
+    name = 'Sketch',
+    text = {
+     "Gives {C:white,X:mult}X#1#{} Mult for",
+     "each played card",
+     "that {C:attention}doesn't score{}"
+    }
+  },
+  config = { extra = { xmult = 0.5 } },
+  rarity = 3,
+  atlas = 'Phanta',
+  pos = { x = 5, y = 3 },
+  cost = 8,
+  loc_vars = function(self, info_queue, card)
+    return { vars = { card.ability.extra.xmult } }
+  end,
+  blueprint_compat = true,
+  calculate = function(self, card, context)
+    if context.joker_main and #G.play.cards > #context.scoring_hand then
+      return {
+        message = localize { type = 'variable', key = 'a_xmult', vars = { 1 + (card.ability.extra.xmult * (#G.play.cards - #context.scoring_hand)) } },
+        Xmult_mod = 1 + (card.ability.extra.xmult * (#G.play.cards - #context.scoring_hand)),
+        colour = G.C.RED,
+        card = self
+      }
+    end
+  end
+}
