@@ -549,6 +549,44 @@ SMODS.Joker {
 }
 
 SMODS.Joker {
+  key = 'sees',
+  loc_txt = {
+    name = 'S.E.E.S.',
+    text = {
+      "When {C:attention}Blind{} is selected,",
+      "creates a copy of",
+      "{C:tarot}The Moon{}",
+      "{C:inactive}(Must have room){}"
+    }
+  },
+  rarity = 2,
+  atlas = 'Phanta',
+  pos = { x = 2, y = 4 },
+  cost = 6,
+	blueprint_compat = true,
+  calculate = function(self, card, context)
+    if context.setting_blind and not (context.blueprint_card or self).getting_sliced and #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit then
+      G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
+      G.E_MANAGER:add_event(Event({
+        func = function()
+          G.E_MANAGER:add_event(Event({
+            func = function()
+              local new_card = create_card("Tarot", G.consumables, nil, nil, nil, nil, "c_moon", 'sees')
+              new_card:add_to_deck()
+              G.consumeables:emplace(new_card)
+              G.GAME.consumeable_buffer = 0
+              new_card:juice_up(0.3, 0.5)
+              return true
+            end}))
+              card_eval_status_text(context.blueprint_card or card, 'extra', nil, nil, nil, {message = "+1 Moon", colour = G.C.PURPLE})
+          return true
+        end
+      }))
+    end
+  end
+}
+
+SMODS.Joker {
   key = 'blindjoker',
   loc_txt = {
     name = 'Blind Joker',
