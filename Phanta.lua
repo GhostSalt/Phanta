@@ -508,47 +508,6 @@ SMODS.Joker {
 }
 
 SMODS.Joker {
-  key = 'introspection',
-  loc_txt = {
-    name = 'Introspection',
-    text = {
-      "When {C:attention}Blind{} is selected,",
-      "creates a #1#{} card and",
-      "changes type to #2#s{}",
-      "{C:inactive}(Must have room){}"
-    }
-  },
-  config = { extra = { chosen_type = 0 } },
-  rarity = 2,
-  atlas = 'Phanta',
-  pos = { x = 0, y = 1 },
-  cost = 6,
-  loc_vars = function(self, info_queue, card)
-    return { vars = { ({'{C:tarot}Tarot', '{C:planet}Planet'})[card.ability.extra.chosen_type + 1], ({'{C:planet}Planet', '{C:tarot}Tarot'})[card.ability.extra.chosen_type + 1] } }
-  end,
-	blueprint_compat = true,
-  calculate = function(self, card, context)
-    if context.setting_blind and not (context.blueprint_card or self).getting_sliced and #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit then
-      G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
-      G.E_MANAGER:add_event(Event({
-      func = (function()
-        G.E_MANAGER:add_event(Event({
-          func = function() 
-            local new_card = create_card(({'Tarot', 'Planet'})[card.ability.extra.chosen_type + 1], G.consumeables, nil, nil, nil, nil, nil, 'introspection')
-            new_card:add_to_deck()
-            G.consumeables:emplace(new_card)
-            G.GAME.consumeable_buffer = 0
-            card.ability.extra.chosen_type = 1 - card.ability.extra.chosen_type
-            return true
-          end}))   
-          card_eval_status_text(context.blueprint_card or self, 'extra', nil, nil, nil, {message = localize(({'k_plus_tarot', 'k_plus_planet'})[card.ability.extra.chosen_type + 1]), colour = ({G.C.PURPLE, G.C.BLUE})[card.ability.extra.chosen_type + 1]})                       
-        return true
-      end)}))
-    end
-  end
-}
-
-SMODS.Joker {
   key = 'sees',
   loc_txt = {
     name = 'S.E.E.S.',
@@ -582,6 +541,137 @@ SMODS.Joker {
           return true
         end
       }))
+    end
+  end
+}
+
+SMODS.Joker {
+  key = 'caesarcipher',
+  loc_txt = {
+    name = 'Caesar Cipher',
+    text = {
+      "When {C:attention}Blind{} is selected,",
+      "creates a {C:planet}Planet{} card or",
+      "a copy of {C:tarot}Strength{}",
+      "{C:inactive}(Must have room){}"
+    }
+  },
+  rarity = 2,
+  atlas = 'Phanta',
+  pos = { x = 5, y = 4 },
+  cost = 6,
+	blueprint_compat = true,
+  calculate = function(self, card, context)
+    if context.setting_blind and not (context.blueprint_card or self).getting_sliced and #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit then
+      G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
+      G.E_MANAGER:add_event(Event({
+        func = function()
+          local random_card = pseudorandom('caesarcipher', 1, 2)
+          G.E_MANAGER:add_event(Event({
+            func = function()
+              if random_card == 1 then
+                local new_card = create_card("Planet", G.consumables, nil, nil, nil, nil)
+                new_card:add_to_deck()
+                G.consumeables:emplace(new_card)
+                G.GAME.consumeable_buffer = 0
+                new_card:juice_up(0.3, 0.5)
+              else
+                local new_card = create_card("Tarot", G.consumables, nil, nil, nil, nil, "c_strength", "caesarcipher")
+                new_card:add_to_deck()
+                G.consumeables:emplace(new_card)
+                G.GAME.consumeable_buffer = 0
+                new_card:juice_up(0.3, 0.5)
+              end
+              return true
+            end}))
+            if random_card == 1 then
+              card_eval_status_text(context.blueprint_card or card, 'extra', nil, nil, nil, {message = "+1 Planet", colour = G.C.BLUE})
+            else
+              card_eval_status_text(context.blueprint_card or card, 'extra', nil, nil, nil, {message = "+1 Strength", colour = G.C.PURPLE})
+            end
+          return true
+        end
+      }))
+    end
+  end
+}
+
+SMODS.Joker {
+  key = 'timepiece',
+  loc_txt = {
+    name = 'Timepiece',
+    text = {
+      "On {C:attention}final hand{} of",
+      "round, creates a",
+      "copy of {C:tarot}Death{}",
+      "{C:inactive}(Must have room){}"
+    }
+  },
+  rarity = 2,
+  atlas = 'Phanta',
+  pos = { x = 3, y = 4 },
+  cost = 6,
+	blueprint_compat = true,
+  calculate = function(self, card, context)
+    if context.cardarea == G.jokers and G.GAME.current_round.hands_left == 0 and not (context.blueprint_card or self).getting_sliced and #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit then
+      G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
+      G.E_MANAGER:add_event(Event({
+        func = function()
+          G.E_MANAGER:add_event(Event({
+            func = function()
+              local new_card = create_card("Tarot", G.consumables, nil, nil, nil, nil, "c_death", 'timepiece')
+              new_card:add_to_deck()
+              G.consumeables:emplace(new_card)
+              G.GAME.consumeable_buffer = 0
+              new_card:juice_up(0.3, 0.5)
+              return true
+            end}))
+              card_eval_status_text(context.blueprint_card or card, 'extra', nil, nil, nil, {message = "+1 Death", colour = G.C.PURPLE})
+          return true
+        end
+      }))
+    end
+  end
+}
+
+SMODS.Joker {
+  key = 'introspection',
+  loc_txt = {
+    name = 'Introspection',
+    text = {
+      "When {C:attention}Blind{} is selected,",
+      "creates a {V:1}#1#{} card and",
+      "changes type to {V:2}#2#{}",
+      "{C:inactive}(Must have room){}"
+    }
+  },
+  config = { extra = { chosen_type = 0 } },
+  rarity = 2,
+  atlas = 'Phanta',
+  pos = { x = 0, y = 1 },
+  cost = 6,
+  loc_vars = function(self, info_queue, card)
+    return { vars = { ({'Tarot', 'Planet'})[card.ability.extra.chosen_type + 1], ({'Planets', 'Tarots'})[card.ability.extra.chosen_type + 1],
+  colours = { ({ G.C.SECONDARY_SET.Tarot, G.C.SECONDARY_SET.Planet })[card.ability.extra.chosen_type + 1], ({ G.C.SECONDARY_SET.Planet, G.C.SECONDARY_SET.Tarot })[card.ability.extra.chosen_type + 1] } } }
+  end,
+	blueprint_compat = true,
+  calculate = function(self, card, context)
+    if context.setting_blind and not (context.blueprint_card or self).getting_sliced and #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit then
+      G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
+      G.E_MANAGER:add_event(Event({
+      func = (function()
+        G.E_MANAGER:add_event(Event({
+          func = function() 
+            local new_card = create_card(({'Tarot', 'Planet'})[card.ability.extra.chosen_type + 1], G.consumeables, nil, nil, nil, nil, nil, 'introspection')
+            new_card:add_to_deck()
+            G.consumeables:emplace(new_card)
+            G.GAME.consumeable_buffer = 0
+            card.ability.extra.chosen_type = 1 - card.ability.extra.chosen_type
+            return true
+          end}))   
+          card_eval_status_text(context.blueprint_card or self, 'extra', nil, nil, nil, {message = localize(({'k_plus_tarot', 'k_plus_planet'})[card.ability.extra.chosen_type + 1]), colour = ({G.C.PURPLE, G.C.BLUE})[card.ability.extra.chosen_type + 1]})                       
+        return true
+      end)}))
     end
   end
 }
@@ -642,48 +732,36 @@ SMODS.Joker {
   end
 }
 
---[[SMODS.Joker {
+SMODS.Joker {
   key = 'modernart',
   loc_txt = {
     name = 'Modern Art',
     text = {
-     "Gives {C:money}$5{} if {C:attention}Blind{}",
-     "is defeated in",
-     "#1# {C:hand}Hand{}"
+     "Gains {C:money}$#1#{} of",
+     "{C:attention}sell value{} per",
+     "{C:attention}High Card{} played"
     }
   },
-  config = { extra = { no_of_hands = 1 } },
+  config = { extra = { bonus_cash = 2 } },
   rarity = 1,
   atlas = 'Phanta',
   pos = { x = 4, y = 3 },
   cost = 4,
   loc_vars = function(self, info_queue, card)
-    return { vars = { card.ability.extra.no_of_hands } } }
+    return { vars = { card.ability.extra.bonus_cash } }
   end,
-  blueprint_compat = true,
+  blueprint_compat = false,
   calculate = function(self, card, context)
-	if context.first_hand_drawn then
-		G.E_MANAGER:add_event(Event({
-            func = function() 
-				local _suit = pseudorandom_element({'S','H','D','C'}, pseudoseed('famaliasu'))
-                local _card = create_playing_card({front = G.P_CARDS[_suit..'_K'], center = G.P_CENTERS.c_base}, G.hand, nil, nil, {G.C.SECONDARY_SET.Enhanced})
-                _card:set_seal('Purple', true)
-				
-				local edition = pseudorandom(pseudoseed('famaliaed'))
-				if edition < 0.5 then _card:set_edition('e_foil')
-				elseif edition < 0.85 then _card:set_edition('e_holo')
-				else _card:set_edition('e_polychrome') end
-                
-                G.GAME.blind:debuff_card(_card)
-                G.hand:sort()
-                if context.blueprint_card then context.blueprint_card:juice_up() else card:juice_up() end
-                return true
-            end}))
-
-        playing_card_joker_effects({true})
-	end
+    if context.before and next(context.poker_hands['High Card']) and not context.blueprint then
+      card.ability.extra_value = card.ability.extra_value + card.ability.extra.bonus_cash
+      card:set_cost()
+      return {
+        message = localize('k_val_up'),
+        colour = G.C.MONEY
+      }
+    end
   end
-}]]--
+}
 
 SMODS.Joker {
   key = 'sketch',
@@ -710,7 +788,147 @@ SMODS.Joker {
         message = localize { type = 'variable', key = 'a_xmult', vars = { 1 + (card.ability.extra.xmult * (#G.play.cards - #context.scoring_hand)) } },
         Xmult_mod = 1 + (card.ability.extra.xmult * (#G.play.cards - #context.scoring_hand)),
         colour = G.C.RED,
-        card = self
+        card = card
+      }
+    end
+  end
+}
+
+SMODS.Joker {
+  key = 'conspiracist',
+  loc_txt = {
+    name = 'Conspiracist',
+    text = {
+     "Gives {C:white,X:mult}X#1#{} Mult for",
+     "each played card",
+     "that {C:attention}doesn't score{}"
+    }
+  },
+  config = { extra = { xmult = 0.5 } },
+  rarity = 3,
+  atlas = 'Phanta',
+  pos = { x = 0, y = 5 },
+  cost = 8,
+  loc_vars = function(self, info_queue, card)
+    return { vars = { card.ability.extra.xmult } }
+  end,
+  blueprint_compat = true,
+  calculate = function(self, card, context)
+    if context.joker_main and #G.play.cards > #context.scoring_hand then
+      return {
+        message = localize { type = 'variable', key = 'a_xmult', vars = { 1 + (card.ability.extra.xmult * (#G.play.cards - #context.scoring_hand)) } },
+        Xmult_mod = 1 + (card.ability.extra.xmult * (#G.play.cards - #context.scoring_hand)),
+        colour = G.C.RED,
+        card = card
+      }
+    end
+  end
+}
+
+SMODS.Joker {
+  key = 'eyeofprovidence',
+  loc_txt = {
+    name = 'Eye of Providence',
+    text = {
+     "Gives {C:white,X:mult}X#1#{} Mult for",
+     "each played card",
+     "that {C:attention}doesn't score{}"
+    }
+  },
+  config = { extra = { xmult = 0.5 } },
+  rarity = 3,
+  atlas = 'Phanta',
+  pos = { x = 1, y = 5 },
+  cost = 8,
+  loc_vars = function(self, info_queue, card)
+    return { vars = { card.ability.extra.xmult } }
+  end,
+  blueprint_compat = true,
+  calculate = function(self, card, context)
+    if context.joker_main and #G.play.cards > #context.scoring_hand then
+      return {
+        message = localize { type = 'variable', key = 'a_xmult', vars = { 1 + (card.ability.extra.xmult * (#G.play.cards - #context.scoring_hand)) } },
+        Xmult_mod = 1 + (card.ability.extra.xmult * (#G.play.cards - #context.scoring_hand)),
+        colour = G.C.RED,
+        card = card
+      }
+    end
+  end
+}
+
+SMODS.Joker {
+  key = 'emotionaldamage',
+  loc_txt = {
+    name = 'Emotional Damage',
+    text = {
+     "Gains {C:white,X:mult}X#1#{} Mult per",
+     "discarded {C:attention}Flush{}",
+     "{C:inactive}(Currently {C:white,X:mult}X#2#{C:inactive} Mult)"
+    }
+  },
+  config = { extra = { added_xmult = 0.25, current_xmult = 1 } },
+  rarity = 3,
+  atlas = 'Phanta',
+  pos = { x = 1, y = 4 },
+  cost = 8,
+  loc_vars = function(self, info_queue, card)
+    return { vars = { card.ability.extra.added_xmult, card.ability.extra.current_xmult } }
+  end,
+  blueprint_compat = true,
+  calculate = function(self, card, context)
+    if context.joker_main then
+      return {
+        message = localize { type = 'variable', key = 'a_xmult', vars = { card.ability.extra.current_xmult } },
+        Xmult_mod = card.ability.extra.current_xmult
+      }
+    end
+
+    if context.pre_discard and not context.blueprint then
+      local text,disp_text = G.FUNCS.get_poker_hand_info(G.hand.highlighted)
+      if disp_text == "Flush" then
+				card.ability.extra.current_xmult = card.ability.extra.current_xmult + card.ability.extra.added_xmult
+        card_eval_status_text(context.blueprint_card or card, 'extra', nil, nil, nil, {message = localize('k_upgrade_ex')})
+			end
+		end
+  end
+}
+
+SMODS.Joker {
+  key = 'inception',
+  loc_txt = {
+    name = 'Inception',
+    text = {
+     "{C:mult}+#1#{} Mult per hand",
+     "played this {C:attention}Blind{}",
+     "{C:inactive}(Will give {C:mult}+#2#{C:inactive} Mult){}"
+    }
+  },
+  config = { extra = { current_mult = 0, added_mult = 6 } },
+  rarity = 1,
+  atlas = 'Phanta',
+  pos = { x = 0, y = 4 },
+  cost = 5,
+  loc_vars = function(self, info_queue, card)
+    return { vars = { card.ability.extra.added_mult, card.ability.extra.current_mult + card.ability.extra.added_mult } }
+  end,
+  blueprint_compat = true,
+  calculate = function(self, card, context)
+    if context.joker_main then
+      if not context.blueprint then
+        card.ability.extra.current_mult = card.ability.extra.current_mult + card.ability.extra.added_mult
+      end
+      return {
+        message = localize { type = 'variable', key = 'a_mult', vars = { card.ability.extra.current_mult } },
+        mult_mod = card.ability.extra.current_mult,
+        colour = G.C.RED,
+        card = card
+      }
+    elseif context.end_of_round and not context.blueprint and not context.repetition then
+      card.ability.extra.current_mult = 0
+      return {
+        message = localize('k_reset'),
+        colour = G.C.RED,
+        card = card
       }
     end
   end
@@ -926,9 +1144,9 @@ SMODS.Joker {
   loc_txt = {
     name = 'Fainfol',
     text = {
-     "Each {V:1}#1#{} card",
-	 "held in hand",
-	 "gives {C:white,X:mult}X#2#{} Mult",
+      "Each {V:1}#1#{} card held",
+      "in hand gives {C:white,X:mult}X#2#{} Mult,",
+      "suit changes every round"
     }
   },
   config = { extra = { xmult = 1.5 } },
