@@ -601,7 +601,7 @@ SMODS.Joker {
   loc_txt = {
     name = 'Forsaken Scroll',
     text = {
-      "{C:inactive,s:0.75}The legend says:{}",
+      "{C:inactive,s:0.75}The prophecy says:{}",
 	  "“Each used {C:tarot}#1#{}",
 	  "gives $#2#, {C:tarot}Tarot{} card",
 	  "changes every round”"
