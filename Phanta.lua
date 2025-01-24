@@ -596,7 +596,7 @@ SMODS.Joker {
   end
 }
 
-SMODS.Joker {
+--[[SMODS.Joker {
   key = 'forsakenscroll',
   loc_txt = {
     name = 'Forsaken Scroll',
@@ -649,7 +649,7 @@ SMODS.Joker {
       }))
     end
   end
-}
+}]]--
 
 SMODS.Joker {
   key = 'timepiece',
@@ -997,6 +997,49 @@ SMODS.Joker {
         colour = G.C.RED,
         card = card
       }
+    end
+  end
+}
+
+SMODS.Joker {
+  key = 'shackles',
+  loc_txt = {
+    name = 'Shackles',
+    text = {
+     "{C:chips}+#1#{} Chips,",
+     "forces 1 card to",
+     "always be selected"
+    }
+  },
+  config = { extra = { chips = 250 } },
+  rarity = 3,
+  atlas = 'Phanta',
+  pos = { x = 5, y = 5 },
+  cost = 8,
+  loc_vars = function(self, info_queue, card)
+    return { vars = { card.ability.extra.chips } }
+  end,
+  blueprint_compat = true,
+  calculate = function(self, card, context)
+    if context.joker_main then
+      return {
+        chip_mod = card.ability.extra.chips,
+        message = localize { type = 'variable', key = 'a_chips', vars = { card.ability.extra.chips } }
+      }
+    end
+    if context.drawn_to_hand then
+      local any_forced = nil
+      for i, j in ipairs(G.hand.cards) do
+          if j.ability.forced_selection then
+              any_forced = true
+          end
+      end
+      if not any_forced then 
+          G.hand:unhighlight_all()
+          local forced_card = pseudorandom_element(G.hand.cards, pseudoseed('shackles'))
+          forced_card.ability.forced_selection = true
+          G.hand:add_to_highlighted(forced_card)
+      end
     end
   end
 }
