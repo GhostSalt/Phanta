@@ -21,6 +21,18 @@ function count_tarots()
     return tarot_counter
 end
 
+function count_planets()
+  local planet_counter = 0
+    if G.consumeables.cards then
+      for _, card in pairs(G.consumeables.cards) do
+        if card.ability.set == "Planet" then
+          planet_counter = planet_counter + 1
+        end
+      end
+    end
+    return planet_counter
+end
+
 --[[
 local zodiac = {
 	object_type = "ConsumableType",
@@ -232,7 +244,7 @@ local packM2 = {
 	end,
 	group_key = "k_phanta_zodiac_pack",
 }
-]]
+]]--
 
 SMODS.Joker {
   key = 'ghostjoker',
@@ -255,13 +267,80 @@ SMODS.Joker {
     return { vars = { card.ability.extra.x_mult, 1 + (count_tarots() * card.ability.extra.x_mult) } }
   end,
   calculate = function(self, card, context)
-
     if context.joker_main then
       local tarot_count = count_tarots()
       if tarot_count > 0 then
         return {
           message = localize { type = 'variable', key = 'a_xmult', vars = { 1 + (count_tarots() * card.ability.extra.x_mult) } },
           Xmult_mod = 1 + (count_tarots() * card.ability.extra.x_mult)
+        }
+      end
+    end
+  end
+}
+
+SMODS.Joker {
+  key = 'astra',
+  loc_txt = {
+    name = 'Astra',
+    text = {
+      "{C:green}#1# in #2#{} chance to",
+      "give {C:mult}+#3#{} Mult,",
+      "held {C:tarot}Tarot{} cards",
+      "increase the odds",
+      "{C:inactive,s:0.75}(Guaranteed if with Lily){}"
+    }
+  },
+  config = { extra = { out_of_odds = 3, added_mult = 100 } },
+  rarity = 2,
+  atlas = 'Phanta',
+  pos = { x = 0, y = 8 },
+  cost = 7,
+  blueprint_compat = true,
+  loc_vars = function(self, info_queue, card)
+    return { vars = { count_tarots(), card.ability.extra.out_of_odds, card.ability.extra.added_mult } }
+  end,
+  calculate = function(self, card, context)
+    if context.joker_main then
+      local tarot_count = count_tarots()
+      if next(SMODS.find_card("j_phanta_lily")) or (tarot_count > 0 and pseudorandom('astra') < tarot_count / card.ability.extra.out_of_odds) then
+        return {
+          message = localize { type = 'variable', key = 'a_mult', vars = { card.ability.extra.added_mult } },
+          mult_mod = card.ability.extra.added_mult
+        }
+      end
+    end
+  end
+}
+
+SMODS.Joker {
+  key = 'lily',
+  loc_txt = {
+    name = 'Lily',
+    text = {
+      "{C:green}#1# in #2#{} chance to",
+      "give {X:mult,C:white}X#3#{} Mult,",
+      "held {C:planet}Planet{} cards",
+      "increase the odds",
+      "{C:inactive,s:0.75}(Guaranteed if with Astra){}"
+    }
+  },
+  config = { extra = { out_of_odds = 3, x_mult = 3 } },
+  rarity = 2,
+  atlas = 'Phanta',
+  pos = { x = 1, y = 8 },
+  cost = 7,
+  blueprint_compat = true,
+  loc_vars = function(self, info_queue, card)
+    return { vars = { count_planets(), card.ability.extra.out_of_odds, card.ability.extra.x_mult } }
+  end,
+  calculate = function(self, card, context)
+    if context.joker_main then
+      local planet_count = count_planets()
+      if next(SMODS.find_card("j_phanta_astra")) or (planet_count > 0 and pseudorandom('lily') < planet_count / card.ability.extra.out_of_odds) then
+        return {
+          message = localize { type = 'variable', key = 'a_xmult', vars = { card.ability.extra.x_mult } },
+          Xmult_mod = card.ability.extra.x_mult
         }
       end
     end
