@@ -247,6 +247,68 @@ local packM2 = {
 ]]--
 
 SMODS.Joker {
+  key = 'bootleg',
+  loc_txt = {
+    name = 'Bootleg',
+    text = {
+      "{C:chips}+#1#{} Chips,",
+      "{C:mult}+#2#{} Mult"
+    }
+  },
+  config = { extra = { chips = 30, mult = 2 } },
+  loc_vars = function(self, info_queue, card)
+    return { vars = { card.ability.extra.chips, card.ability.extra.mult } }
+  end,
+  rarity = 1,
+  atlas = 'Phanta',
+  pos = { x = 4, y = 8 },
+  cost = 2,
+  calculate = function(self, card, context)
+    if context.joker_main then
+		return {
+			chips = card.ability.extra.chips,
+			mult = card.ability.extra.mult,
+		}
+    end
+  end
+}
+
+SMODS.Joker {
+  key = 'trainstation',
+  loc_txt = {
+    name = 'Train Station',
+    text = {
+      "Gains {C:mult}+#1#{} Mult for each",
+	  "played {C:attention}#2#{}, rank changes",
+	  "each round",
+	  "{C:inactive}(Currently {C:mult}+#3#{C:inactive} Mult){}"
+    }
+  },
+  config = { extra = { added_mult = 2, current_mult = 0 } },
+  loc_vars = function(self, info_queue, card)
+    return { vars = { card.ability.extra.added_mult, G.GAME.current_round.train_station_card.rank, card.ability.extra.current_mult } }
+  end,
+  rarity = 2,
+  atlas = 'Phanta',
+  pos = { x = 5, y = 8 },
+  cost = 6,
+  calculate = function(self, card, context)
+    if context.joker_main then
+		return {
+			mult = card.ability.extra.current_mult,
+		}
+    end
+	if context.individual and context.cardarea == G.play and context.other_card:get_id() == G.GAME.current_round.train_station_card.rank then
+		card.ability.extra.current_mult = card.ability.extra.current_mult + card.ability.extra.added_mult
+		return {
+			message = localize('k_upgrade_ex'),
+			card = card
+		}
+	end
+  end
+}
+
+SMODS.Joker {
   key = 'ghostjoker',
   loc_txt = {
     name = 'Ghost',
@@ -1374,6 +1436,7 @@ SMODS.Joker {
 local igo = Game.init_game_object
 function Game:init_game_object()
   local ret = igo(self)
+  ret.current_round.train_station_card = { rank = 2 } 
   ret.current_round.fainfol_card = { suit = 'Spades' } 
   return ret
 end
@@ -1390,4 +1453,9 @@ function SMODS.current_mod.reset_game_globals(run_start)
       local chosen_card = pseudorandom_element(valid_cards, pseudoseed('fainfol'..G.GAME.round_resets.ante))
       G.GAME.current_round.fainfol_card.suit = chosen_card.base.suit
   end
+  if G.GAME.current_round.train_station_card.rank == 14 then
+	G.GAME.current_round.train_station_card.rank = 2
+	else
+	G.GAME.current_round.train_station_card.rank = G.GAME.current_round.train_station_card.rank + 1
+	end
 end
