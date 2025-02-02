@@ -288,7 +288,7 @@ SMODS.Joker {
   loc_vars = function(self, info_queue, card)
     return { vars = { card.ability.extra.added_mult, G.GAME.current_round.train_station_card.rank, card.ability.extra.current_mult } }
   end,
-  rarity = 2,
+  rarity = 1,
   atlas = 'Phanta',
   pos = { x = 5, y = 8 },
   cost = 6,
@@ -305,6 +305,53 @@ SMODS.Joker {
 			card = card
 		}
 	end
+  end
+}
+
+SMODS.Joker {
+  key = 'oracle',
+  loc_txt = {
+    name = 'Oracle',
+    text = {
+      "{C:attention}+1{} consumable slot"
+    }
+  },
+  rarity = 1,
+  atlas = 'Phanta',
+  pos = { x = 2, y = 8 },
+  cost = 4,
+  add_to_deck = function(self, card, from_debuff)
+		G.E_MANAGER:add_event(Event({func = function()
+      G.consumeables.config.card_limit = G.consumeables.config.card_limit + 1
+      return true end }))
+	end,
+	remove_from_deck = function(self, card, from_debuff)
+		G.E_MANAGER:add_event(Event({func = function()
+      G.consumeables.config.card_limit = G.consumeables.config.card_limit - 1
+      return true end }))
+  end
+}
+
+SMODS.Joker {
+  key = 'thief',
+  loc_txt = {
+    name = 'Thief',
+    text = {
+      "{C:blue}+1{} hand",
+      "each round"
+    }
+  },
+  rarity = 1,
+  atlas = 'Phanta',
+  pos = { x = 3, y = 8 },
+  cost = 4,
+  add_to_deck = function(self, card, from_debuff)
+      G.GAME.round_resets.hands = G.GAME.round_resets.hands + 1
+        ease_hands_played(1)
+	end,
+	remove_from_deck = function(self, card, from_debuff)
+		G.GAME.round_resets.hands = G.GAME.round_resets.hands - 1
+        ease_hands_played(-1)
   end
 }
 
@@ -353,7 +400,7 @@ SMODS.Joker {
       "{C:inactive,s:0.75}(Guaranteed if with Lily){}"
     }
   },
-  config = { extra = { out_of_odds = 3, added_mult = 100 } },
+  config = { extra = { out_of_odds = 4, added_mult = 75 } },
   rarity = 2,
   atlas = 'Phanta',
   pos = { x = 0, y = 8 },
@@ -387,7 +434,7 @@ SMODS.Joker {
       "{C:inactive,s:0.75}(Guaranteed if with Astra){}"
     }
   },
-  config = { extra = { out_of_odds = 3, x_mult = 3 } },
+  config = { extra = { out_of_odds = 4, x_mult = 3 } },
   rarity = 2,
   atlas = 'Phanta',
   pos = { x = 1, y = 8 },
