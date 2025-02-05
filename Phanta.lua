@@ -389,15 +389,15 @@ SMODS.Joker {
 }
 
 SMODS.Joker {
-  key = 'astra',
+  key = 'layton',
   loc_txt = {
-    name = 'Astra',
+    name = 'Layton',
     text = {
       "{C:green}#1# in #2#{} chance to",
       "give {C:mult}+#3#{} Mult,",
       "held {C:tarot}Tarot{} cards",
       "increase the odds",
-      "{C:inactive,s:0.75}(Guaranteed if with Lily){}"
+      "{C:inactive,s:0.75}(Guaranteed if with Luke){}"
     }
   },
   config = { extra = { out_of_odds = 4, added_mult = 75 } },
@@ -412,7 +412,7 @@ SMODS.Joker {
   calculate = function(self, card, context)
     if context.joker_main then
       local tarot_count = count_tarots()
-      if next(SMODS.find_card("j_phanta_lily")) or (tarot_count > 0 and pseudorandom('astra') < tarot_count / card.ability.extra.out_of_odds) then
+      if next(SMODS.find_card("j_phanta_luke")) or (tarot_count > 0 and pseudorandom('layton') < tarot_count / card.ability.extra.out_of_odds) then
         return {
           message = localize { type = 'variable', key = 'a_mult', vars = { card.ability.extra.added_mult } },
           mult_mod = card.ability.extra.added_mult
@@ -423,15 +423,15 @@ SMODS.Joker {
 }
 
 SMODS.Joker {
-  key = 'lily',
+  key = 'luke',
   loc_txt = {
-    name = 'Lily',
+    name = 'Luke',
     text = {
       "{C:green}#1# in #2#{} chance to",
       "give {X:mult,C:white}X#3#{} Mult,",
       "held {C:planet}Planet{} cards",
       "increase the odds",
-      "{C:inactive,s:0.75}(Guaranteed if with Astra){}"
+      "{C:inactive,s:0.75}(Guaranteed if with Layton){}"
     }
   },
   config = { extra = { out_of_odds = 4, x_mult = 3 } },
@@ -446,7 +446,7 @@ SMODS.Joker {
   calculate = function(self, card, context)
     if context.joker_main then
       local planet_count = count_planets()
-      if next(SMODS.find_card("j_phanta_astra")) or (planet_count > 0 and pseudorandom('lily') < planet_count / card.ability.extra.out_of_odds) then
+      if next(SMODS.find_card("j_phanta_layton")) or (planet_count > 0 and pseudorandom('luke') < planet_count / card.ability.extra.out_of_odds) then
         return {
           message = localize { type = 'variable', key = 'a_xmult', vars = { card.ability.extra.x_mult } },
           Xmult_mod = card.ability.extra.x_mult
