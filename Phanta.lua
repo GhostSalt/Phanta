@@ -11,7 +11,7 @@ SMODS.Atlas {
 
 function count_tarots()
   local tarot_counter = 0
-    if G.consumeables.cards then
+    if G.consumeables then
       for _, card in pairs(G.consumeables.cards) do
         if card.ability.set == "Tarot" then
           tarot_counter = tarot_counter + 1
@@ -23,7 +23,7 @@ end
 
 function count_planets()
   local planet_counter = 0
-    if G.consumeables.cards then
+    if G.consumeables then
       for _, card in pairs(G.consumeables.cards) do
         if card.ability.set == "Planet" then
           planet_counter = planet_counter + 1
@@ -461,7 +461,7 @@ SMODS.Joker {
   loc_txt = {
     name = 'Candle',
     text = {
-      "When {C:attention}Blind{} is selected,"
+      "When {C:attention}Blind{} is selected,",
 	  "destroys 1 {C:tarot}Tarot{} card",
 	  "and gains {C:white,X:mult}X#1#{} Mult",
 	  "{C:inactive}(Currently {C:white,X:mult}X#2#{C:inactive} Mult){}"
@@ -474,17 +474,36 @@ SMODS.Joker {
   cost = 7,
   blueprint_compat = true,
   loc_vars = function(self, info_queue, card)
-    return { vars = { count_planets(), card.ability.extra.out_of_odds, card.ability.extra.x_mult } }
+    return { vars = { card.ability.extra.added_xmult, card.ability.extra.current_xmult + 1 } }
   end,
   calculate = function(self, card, context)
-    if context.joker_main then
-      local planet_count = count_planets()
-      if next(SMODS.find_card("j_phanta_layton")) or (planet_count > 0 and pseudorandom('luke') < planet_count / card.ability.extra.out_of_odds) then
-        return {
-          message = localize { type = 'variable', key = 'a_xmult', vars = { card.ability.extra.x_mult } },
-          Xmult_mod = card.ability.extra.x_mult
-        }
-      end
+    if context.setting_blind and not (context.blueprint_card or self).getting_sliced then
+      local destructable_tarot = {}
+			for i = 1, #G.consumeables.cards do
+				if G.consumeables.cards[i].ability.set == "Tarot" and not G.consumeables.cards[i].getting_sliced and not G.consumeables.cards[i].ability.eternal then
+					destructable_tarot[#destructable_tarot + 1] = G.consumeables.cards[i]
+				end
+			end
+			local tarot_to_destroy = #destructable_tarot > 0 and pseudorandom_element(destructable_tarot, pseudoseed("candle")) or nil
+
+			if tarot_to_destroy then
+				tarot_to_destroy.getting_sliced = true
+				card.ability.extra.current_xmult = card.ability.extra.current_xmult + card.ability.extra.added_xmult
+				G.E_MANAGER:add_event(Event({
+					func = function()
+						(context.blueprint_card or card):juice_up(0.8, 0.8)
+						tarot_to_destroy:start_dissolve({ G.C.RED }, nil, 1.6)
+						return true
+					end,
+				}))
+				if not (context.blueprint_card or self).getting_sliced then
+					card_eval_status_text(context.blueprint_card or card, "extra", nil, nil, nil, {
+							message = localize{ type='variable', key='a_xmult', vars={number_format(to_big(card.ability.extra.current_xmult))}}
+						}
+					)
+				end
+				return nil, true
+			end
     end
   end
 }
