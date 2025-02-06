@@ -457,6 +457,39 @@ SMODS.Joker {
 }
 
 SMODS.Joker {
+  key = 'candle',
+  loc_txt = {
+    name = 'Candle',
+    text = {
+      "When {C:attention}Blind{} is selected,"
+	  "destroys 1 {C:tarot}Tarot{} card",
+	  "and gains {C:white,X:mult}X#1#{} Mult",
+	  "{C:inactive}(Currently {C:white,X:mult}X#2#{C:inactive} Mult){}"
+    }
+  },
+  config = { extra = { added_xmult = 0.2, current_xmult = 1 } },
+  rarity = 2,
+  atlas = 'Phanta',
+  pos = { x = 5, y = 7 },
+  cost = 7,
+  blueprint_compat = true,
+  loc_vars = function(self, info_queue, card)
+    return { vars = { count_planets(), card.ability.extra.out_of_odds, card.ability.extra.x_mult } }
+  end,
+  calculate = function(self, card, context)
+    if context.joker_main then
+      local planet_count = count_planets()
+      if next(SMODS.find_card("j_phanta_layton")) or (planet_count > 0 and pseudorandom('luke') < planet_count / card.ability.extra.out_of_odds) then
+        return {
+          message = localize { type = 'variable', key = 'a_xmult', vars = { card.ability.extra.x_mult } },
+          Xmult_mod = card.ability.extra.x_mult
+        }
+      end
+    end
+  end
+}
+
+SMODS.Joker {
   key = 'identity',
   loc_txt = {
     name = 'Identity',
@@ -530,7 +563,7 @@ SMODS.Joker {
 SMODS.Joker {
   key = 'p5joker',
   loc_txt = {
-    name = 'Looking Cool, Joker',
+    name = 'Looking Cool, Joker!',
     text = {
       "Gains {C:mult}+#1#{} Mult per hand",
       "played that is not your",
@@ -985,7 +1018,7 @@ SMODS.Joker {
      "{C:attention}High Card{} played"
     }
   },
-  config = { extra = { bonus_cash = 2 } },
+  config = { extra = { bonus_cash = 3 } },
   rarity = 1,
   atlas = 'Phanta',
   pos = { x = 4, y = 3 },
@@ -1090,7 +1123,7 @@ SMODS.Joker {
 	 "{C:white,X:mult}X#1#{} Mult when scored{}"
     }
   },
-  config = { extra = { xmult = 1.5 } },
+  config = { extra = { xmult = 2 } },
   rarity = 3,
   atlas = 'Phanta',
   pos = { x = 1, y = 5 },
@@ -1121,7 +1154,7 @@ SMODS.Joker {
      "{C:inactive}(Currently {C:white,X:mult}X#2#{C:inactive} Mult)"
     }
   },
-  config = { extra = { added_xmult = 0.25, current_xmult = 1 } },
+  config = { extra = { added_xmult = 0.2, current_xmult = 1 } },
   rarity = 3,
   atlas = 'Phanta',
   pos = { x = 1, y = 4 },
@@ -1276,7 +1309,7 @@ SMODS.Joker {
       "When {C:attention}Boss Blind{} is defeated,",
       "#1# random {C:attention}Joker{} becomes",
       "{C:negative}Negative{} {C:inactive}(except Dimeres{}",
-	  "{C:inactive}or cards with editions){}"
+	  "{C:inactive}or Jokers with editions){}"
     }
   },
   config = { extra = { cards_turned = 1 } },
@@ -1323,7 +1356,7 @@ SMODS.Joker {
 	  "{C:white,X:mult}X#1#{} Mult when scored"
     }
   },
-  config = { extra = { money = 2, xmult = 2 } },
+  config = { extra = { money = 3, xmult = 3 } },
   rarity = 4,
   atlas = 'Phanta',
   pos = { x = 4, y = 1 },
@@ -1358,15 +1391,11 @@ SMODS.Joker {
 	 "to your hand"
     }
   },
-  config = { extra = { money = 2, xmult = 2 } },
   rarity = 4,
   atlas = 'Phanta',
   pos = { x = 5, y = 1 },
   soul_pos = { x = 0, y = 3 },
   cost = 20,
-  loc_vars = function(self, info_queue, card)
-    return { vars = { card.ability.extra.xmult, card.ability.extra.money } }
-  end,
   blueprint_compat = true,
   calculate = function(self, card, context)
 	if context.first_hand_drawn then
