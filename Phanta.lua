@@ -847,47 +847,17 @@ SMODS.Joker {
 	  "changes every round”"
     }
   },
-  config = { extra = { chosen_tarot = 0 } },
+  config = { extra = { chosen_tarot = 0, money = 6 } },
   rarity = 1,
   atlas = 'Phanta',
   pos = { x = 2, y = 5 },
   cost = 4,
   blueprint_compat = true,
   loc_vars = function(self, info_queue, card)
-    return { vars = { card.ability.extra.chosen_tarot, card.ability.extra.chosen_tarot } }
+    return { vars = { card.ability.extra.chosen_tarot, card.ability.extra.money } }
   end,
   calculate = function(self, card, context)
-    if context.setting_blind and not (context.blueprint_card or self).getting_sliced and #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit then
-      G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
-      G.E_MANAGER:add_event(Event({
-        func = function()
-          local random_card = pseudorandom('caesarcipher', 1, 2)
-          G.E_MANAGER:add_event(Event({
-            func = function()
-              if random_card == 1 then
-                local new_card = create_card("Planet", G.consumables, nil, nil, nil, nil)
-                new_card:add_to_deck()
-                G.consumeables:emplace(new_card)
-                G.GAME.consumeable_buffer = 0
-                new_card:juice_up(0.3, 0.5)
-              else
-                local new_card = create_card("Tarot", G.consumables, nil, nil, nil, nil, "c_strength", "caesarcipher")
-                new_card:add_to_deck()
-                G.consumeables:emplace(new_card)
-                G.GAME.consumeable_buffer = 0
-                new_card:juice_up(0.3, 0.5)
-              end
-              return true
-            end}))
-            if random_card == 1 then
-              card_eval_status_text(context.blueprint_card or card, 'extra', nil, nil, nil, {message = "+1 Planet", colour = G.C.BLUE})
-            else
-              card_eval_status_text(context.blueprint_card or card, 'extra', nil, nil, nil, {message = "+1 Strength", colour = G.C.PURPLE})
-            end
-          return true
-        end
-      }))
-    end
+    
   end
 }]]--
 
@@ -1242,6 +1212,279 @@ SMODS.Joker {
 }
 
 SMODS.Joker {
+  key = 'thespear',
+  loc_txt = {
+    name = 'The Spear',
+    text = {
+     "If played hand contains",
+	 "a {C:spades}Spade{}, destroy it",
+	 "and upgrade {C:attention}Straight{}"
+    }
+  },
+  rarity = 3,
+  atlas = 'Phanta',
+  pos = { x = 0, y = 6 },
+  cost = 8,
+  blueprint_compat = true,
+  calculate = function(self, card, context)
+    if context.cardarea == G.jokers and context.before then
+      local destructable_card = {}
+			for i = 1, #context.scoring_hand do
+				if context.scoring_hand[i]:is_suit("Spades") and not context.scoring_hand[i].getting_sliced then
+					destructable_card[#destructable_card + 1] = context.scoring_hand[i]
+				end
+			end
+			local card_to_destroy = #destructable_card > 0 and pseudorandom_element(destructable_card, pseudoseed("thespear")) or nil
+
+			if card_to_destroy then
+				card_to_destroy.getting_sliced = true
+				G.E_MANAGER:add_event(Event({
+					func = function()
+						(context.blueprint_card or card):juice_up(0.8, 0.8)
+						card_to_destroy:start_dissolve({ G.C.RED }, nil, 1.6)
+						return true
+					end,
+				}))
+				update_hand_text({sound = 'button', volume = 0.7, pitch = 0.8, delay = 0.3}, {handname="Straight",chips = G.GAME.hands["Straight"].chips, mult = G.GAME.hands["Straight"].mult, level=G.GAME.hands["Straight"].level})
+				level_up_hand(self, "Straight", nil, 1)
+				update_hand_text({sound = 'button', volume = 0.7, pitch = 0.8, delay = 0.3}, {handname=context.scoring_name,chips = G.GAME.hands[context.scoring_name].chips, mult = G.GAME.hands[context.scoring_name].mult, level=G.GAME.hands[context.scoring_name].level})
+				return nil, true
+			end
+    end
+  end
+}
+
+SMODS.Joker {
+  key = 'thefuse',
+  loc_txt = {
+    name = 'The Fuse',
+    text = {
+     "If played hand contains",
+	 "a {C:hearts}Heart{}, destroy it",
+	 "and gain {C:white,X:mult}X#1#{} Mult",
+	 "{C:inactive}(Currently {C:white,X:mult}X#2#{C:inactive} Mult){}"
+    }
+  },
+  config = { extra = { added_xmult = 0.1, current_xmult = 1 } },
+  rarity = 3,
+  atlas = 'Phanta',
+  pos = { x = 1, y = 6 },
+  cost = 8,
+  blueprint_compat = true,
+  loc_vars = function(self, info_queue, card)
+    return { vars = { card.ability.extra.added_xmult, card.ability.extra.current_xmult } }
+  end,
+  calculate = function(self, card, context)
+  if context.joker_main and card.ability.extra.current_xmult > 1 then
+      return {
+        Xmult_mod = card.ability.extra.current_xmult,
+        message = localize { type = 'variable', key = 'a_xmult', vars = { card.ability.extra.current_xmult } }
+      }
+    end
+    if context.cardarea == G.jokers and context.before then
+      local destructable_card = {}
+			for i = 1, #context.scoring_hand do
+				if context.scoring_hand[i]:is_suit("Hearts") and not context.scoring_hand[i].getting_sliced then
+					destructable_card[#destructable_card + 1] = context.scoring_hand[i]
+				end
+			end
+			local card_to_destroy = #destructable_card > 0 and pseudorandom_element(destructable_card, pseudoseed("thefuse")) or nil
+
+			if card_to_destroy then
+				card_to_destroy.getting_sliced = true
+				card.ability.extra.current_xmult = card.ability.extra.current_xmult + card.ability.extra.added_xmult
+				G.E_MANAGER:add_event(Event({
+					func = function()
+						(context.blueprint_card or card):juice_up(0.8, 0.8)
+						card_to_destroy:start_dissolve({ G.C.RED }, nil, 1.6)
+						return true
+					end,
+				}))
+				if not (context.blueprint_card or self).getting_sliced then
+						card_eval_status_text(context.blueprint_card or card, "extra", nil, nil, nil, {
+							message = localize{ type='variable', key='a_xmult', vars={number_format(to_big(card.ability.extra.current_xmult))}}
+						}
+					)
+				end
+				return nil, true
+			end
+    end
+  end
+}
+
+SMODS.Joker {
+  key = 'themace',
+  loc_txt = {
+    name = 'The Mace',
+    text = {
+     "If played hand contains",
+	 "a {C:clubs}Club{}, destroy it",
+	 "and gain {C:money}$#1#{}"
+    }
+  },
+  config = { extra = { money = 5 } },
+  rarity = 3,
+  atlas = 'Phanta',
+  pos = { x = 2, y = 6 },
+  cost = 8,
+  blueprint_compat = true,
+  loc_vars = function(self, info_queue, card)
+    return { vars = { card.ability.extra.money } }
+  end,
+  calculate = function(self, card, context)
+    if context.cardarea == G.jokers and context.before then
+      local destructable_card = {}
+			for i = 1, #context.scoring_hand do
+				if context.scoring_hand[i]:is_suit("Mace") and not context.scoring_hand[i].getting_sliced then
+					destructable_card[#destructable_card + 1] = context.scoring_hand[i]
+				end
+			end
+			local card_to_destroy = #destructable_card > 0 and pseudorandom_element(destructable_card, pseudoseed("themace")) or nil
+
+			if card_to_destroy then
+				card_to_destroy.getting_sliced = true
+				G.E_MANAGER:add_event(Event({
+					func = function()
+						(context.blueprint_card or card):juice_up(0.8, 0.8)
+						card_to_destroy:start_dissolve({ G.C.RED }, nil, 1.6)
+						return true
+					end,
+				}))
+				ease_dollars(card.ability.extra.money)
+				G.E_MANAGER:add_event(Event({
+					func = function()
+                return {
+                    message = localize('$')..card.ability.extra.money,
+                    colour = G.C.MONEY,
+                    delay = 0.45, 
+                    remove = true,
+                    card = card
+                }
+					end,
+				}))
+				return nil, true
+			end
+		end
+  end
+}
+
+SMODS.Joker {
+  key = 'thedagger',
+  loc_txt = {
+    name = 'The Dagger',
+    text = {
+     "If played hand contains",
+	 "a {C:diamonds}Diamond{}, destroy it",
+	 "and gain {C:mult}+#1#{} Mult",
+	 "{C:inactive}(Currently {C:mult}+#2#{C:inactive} Mult){}"
+    }
+  },
+  config = { extra = { added_mult = 10, current_mult = 0 } },
+  rarity = 3,
+  atlas = 'Phanta',
+  pos = { x = 3, y = 6 },
+  cost = 8,
+  blueprint_compat = true,
+  loc_vars = function(self, info_queue, card)
+    return { vars = { card.ability.extra.added_mult, card.ability.extra.current_mult } }
+  end,
+  calculate = function(self, card, context)
+  if context.joker_main and card.ability.extra.current_mult > 0 then
+      return {
+        mult_mod = card.ability.extra.current_mult,
+        message = localize { type = 'variable', key = 'a_mult', vars = { card.ability.extra.current_mult } }
+      }
+    end
+    if context.cardarea == G.jokers and context.before then
+      local destructable_card = {}
+			for i = 1, #context.scoring_hand do
+				if context.scoring_hand[i]:is_suit("Diamonds") and not context.scoring_hand[i].getting_sliced then
+					destructable_card[#destructable_card + 1] = context.scoring_hand[i]
+				end
+			end
+			local card_to_destroy = #destructable_card > 0 and pseudorandom_element(destructable_card, pseudoseed("thedagger")) or nil
+
+			if card_to_destroy then
+				card_to_destroy.getting_sliced = true
+				card.ability.extra.current_mult = card.ability.extra.current_mult + card.ability.extra.added_mult
+				G.E_MANAGER:add_event(Event({
+					func = function()
+						(context.blueprint_card or card):juice_up(0.8, 0.8)
+						card_to_destroy:start_dissolve({ G.C.RED }, nil, 1.6)
+						return true
+					end,
+				}))
+				if not (context.blueprint_card or self).getting_sliced then
+						card_eval_status_text(context.blueprint_card or card, "extra", nil, nil, nil, {
+							message = localize{ type='variable', key='a_mult', vars={number_format(to_big(card.ability.extra.current_mult))}}
+						}
+					)
+				end
+				return nil, true
+			end
+    end
+  end
+}
+
+--[[SMODS.Joker {
+  key = 'caniossoul',
+  loc_txt = {
+    name = 'Canio\'s Soul',
+    text = {
+     "If played hand contains",
+	 "a {C:diamonds}Diamond{}, destroy it",
+	 "and gain {C:mult}+#1#{} Mult",
+	 "{C:inactive}(Currently {C:mult}+#2#{C:inactive} Mult){}"
+    }
+  },
+  config = { extra = { added_mult = 10, current_mult = 0 } },
+  rarity = 3,
+  atlas = 'Phanta',
+  pos = { x = 3, y = 6 },
+  cost = 8,
+  blueprint_compat = true,
+  loc_vars = function(self, info_queue, card)
+    return { vars = { card.ability.extra.added_mult, card.ability.extra.current_mult } }
+  end,
+  calculate = function(self, card, context)
+  if context.joker_main and card.ability.extra.current_mult > 0 then
+      return {
+        mult_mod = card.ability.extra.current_mult,
+        message = localize { type = 'variable', key = 'a_mult', vars = { card.ability.extra.current_mult } }
+      }
+    end
+    if context.cardarea == G.jokers and context.before then
+      local destructable_card = {}
+			for i = 1, #context.scoring_hand do
+				if context.scoring_hand[i]:is_suit("Diamonds") and not context.scoring_hand[i].getting_sliced then
+					destructable_card[#destructable_card + 1] = context.scoring_hand[i]
+				end
+			end
+			local card_to_destroy = #destructable_card > 0 and pseudorandom_element(destructable_card, pseudoseed("thedagger")) or nil
+
+			if card_to_destroy then
+				card_to_destroy.getting_sliced = true
+				card.ability.extra.current_mult = card.ability.extra.current_mult + card.ability.extra.added_mult
+				G.E_MANAGER:add_event(Event({
+					func = function()
+						(context.blueprint_card or card):juice_up(0.8, 0.8)
+						card_to_destroy:start_dissolve({ G.C.RED }, nil, 1.6)
+						return true
+					end,
+				}))
+				if not (context.blueprint_card or self).getting_sliced then
+						card_eval_status_text(context.blueprint_card or card, "extra", nil, nil, nil, {
+							message = localize{ type='variable', key='a_mult', vars={number_format(to_big(card.ability.extra.current_mult))}}
+						}
+					)
+				end
+				return nil, true
+			end
+    end
+  end
+}]]--
+
+--[[SMODS.Joker {
   key = 'shackles',
   loc_txt = {
     name = 'Shackles',
@@ -1282,7 +1525,7 @@ SMODS.Joker {
       end
     end
   end
-}
+}]]--
 
 SMODS.Joker {
   key = 'ignaize',
@@ -1510,7 +1753,7 @@ SMODS.Joker {
   end,
   blueprint_compat = true,
   calculate = function(self, card, context)
-	if context.cardarea == G.hand and context.other_card:is_suit(G.GAME.current_round.fainfol_card.suit) then
+	if context.cardarea == G.hand and context.other_card and context.other_card:is_suit(G.GAME.current_round.fainfol_card.suit) then
         if context.other_card.debuff then
             return {
                 message = localize('k_debuffed'),
