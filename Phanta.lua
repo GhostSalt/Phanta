@@ -286,7 +286,7 @@ SMODS.Joker {
   },
   config = { extra = { added_mult = 2, current_mult = 0 } },
   loc_vars = function(self, info_queue, card)
-    return { vars = { card.ability.extra.added_mult, G.GAME.current_round.train_station_card.rank, card.ability.extra.current_mult } }
+    return { vars = { card.ability.extra.added_mult, localize(G.GAME.current_round.train_station_card.rank, 'ranks'), card.ability.extra.current_mult } }
   end,
   rarity = 1,
   atlas = 'Phanta',
@@ -295,15 +295,17 @@ SMODS.Joker {
   calculate = function(self, card, context)
     if context.joker_main then
 		return {
-			mult = card.ability.extra.current_mult,
+      message = localize { type = 'variable', key = 'a_mult', vars = { card.ability.extra.current_mult } },
+			mult_mod = card.ability.extra.current_mult,
 		}
     end
 	if context.individual and context.cardarea == G.play and context.other_card:get_id() == G.GAME.current_round.train_station_card.rank then
 		card.ability.extra.current_mult = card.ability.extra.current_mult + card.ability.extra.added_mult
 		return {
-			message = localize('k_upgrade_ex'),
-			card = card
-		}
+      extra = {message = localize('k_upgrade_ex'), colour = G.C.CHIPS},
+      colour = G.C.CHIPS,
+      card = card
+    }
 	end
   end
 }
@@ -474,7 +476,7 @@ SMODS.Joker {
   cost = 7,
   blueprint_compat = true,
   loc_vars = function(self, info_queue, card)
-    return { vars = { card.ability.extra.added_xmult, card.ability.extra.current_xmult + 1 } }
+    return { vars = { card.ability.extra.added_xmult, card.ability.extra.current_xmult } }
   end,
   calculate = function(self, card, context)
     if context.setting_blind and not (context.blueprint_card or self).getting_sliced then
@@ -504,6 +506,13 @@ SMODS.Joker {
 				end
 				return nil, true
 			end
+    end
+
+    if context.joker_main then
+      return {
+        message = localize { type = 'variable', key = 'a_xmult', vars = { card.ability.extra.current_xmult } },
+        Xmult_mod = card.ability.extra.current_xmult
+      }
     end
   end
 }
@@ -878,7 +887,7 @@ SMODS.Joker {
   cost = 6,
 	blueprint_compat = true,
   calculate = function(self, card, context)
-    if context.cardarea == G.jokers and context.before and G.GAME.current_round.hands_left == 0 and not (context.blueprint_card or self).getting_sliced and #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit then
+    if context.cardarea == G.jokers and context.before and G.GAME.current_round.hands_left == 0 and not (context.blueprint_card or card).getting_sliced and #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit then
       G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
       G.E_MANAGER:add_event(Event({
         func = function()
@@ -921,7 +930,7 @@ SMODS.Joker {
   end,
 	blueprint_compat = true,
   calculate = function(self, card, context)
-    if context.setting_blind and not (context.blueprint_card or self).getting_sliced and #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit then
+    if context.setting_blind and not (context.blueprint_card or card).getting_sliced and #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit then
       G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
       G.E_MANAGER:add_event(Event({
       func = (function()
@@ -934,7 +943,7 @@ SMODS.Joker {
             card.ability.extra.chosen_type = 1 - card.ability.extra.chosen_type
             return true
           end}))   
-          card_eval_status_text(context.blueprint_card or self, 'extra', nil, nil, nil, {message = localize(({'k_plus_tarot', 'k_plus_planet'})[card.ability.extra.chosen_type + 1]), colour = ({G.C.PURPLE, G.C.BLUE})[card.ability.extra.chosen_type + 1]})                       
+          card_eval_status_text(context.blueprint_card or card, 'extra', nil, nil, nil, {message = localize(({'k_plus_tarot', 'k_plus_planet'})[card.ability.extra.chosen_type + 1]), colour = ({G.C.PURPLE, G.C.BLUE})[card.ability.extra.chosen_type + 1]})                       
         return true
       end)}))
     end
@@ -1389,14 +1398,8 @@ SMODS.Joker {
     return { vars = { card.ability.extra.added_mult, card.ability.extra.current_mult } }
   end,
   calculate = function(self, card, context)
-  if context.joker_main and card.ability.extra.current_mult > 0 then
-      return {
-        mult_mod = card.ability.extra.current_mult,
-        message = localize { type = 'variable', key = 'a_mult', vars = { card.ability.extra.current_mult } }
-      }
-    end
-    if context.cardarea == G.jokers and context.before then
-      local destructable_card = {}
+  if context.joker_main then
+    local destructable_card = {}
 			for i = 1, #context.scoring_hand do
 				if context.scoring_hand[i]:is_suit("Diamonds") and not context.scoring_hand[i].getting_sliced then
 					destructable_card[#destructable_card + 1] = context.scoring_hand[i]
@@ -1414,16 +1417,15 @@ SMODS.Joker {
 						return true
 					end,
 				}))
-				if not (context.blueprint_card or self).getting_sliced then
-						card_eval_status_text(context.blueprint_card or card, "extra", nil, nil, nil, {
-							message = localize{ type='variable', key='a_mult', vars={number_format(to_big(card.ability.extra.current_mult))}}
-						}
-					)
-				end
-				return nil, true
 			end
+    if card.ability.extra.current_mult > 0 then
+      return {
+        message = localize { type = 'variable', key = 'a_mult', vars = { card.ability.extra.current_mult } },
+        mult_mod = card.ability.extra.current_mult
+      }
     end
   end
+end
 }
 
 --[[SMODS.Joker {
