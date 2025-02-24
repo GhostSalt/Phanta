@@ -479,7 +479,7 @@ SMODS.Joker {
     return { vars = { card.ability.extra.added_xmult, card.ability.extra.current_xmult } }
   end,
   calculate = function(self, card, context)
-    if context.setting_blind and not (context.blueprint_card or self).getting_sliced then
+    if context.setting_blind and not (context.blueprint_card or card).getting_sliced then
       local destructable_tarot = {}
 			for i = 1, #G.consumeables.cards do
 				if G.consumeables.cards[i].ability.set == "Tarot" and not G.consumeables.cards[i].getting_sliced and not G.consumeables.cards[i].ability.eternal then
@@ -498,7 +498,7 @@ SMODS.Joker {
 						return true
 					end,
 				}))
-				if not (context.blueprint_card or self).getting_sliced then
+				if not (context.blueprint_card or card).getting_sliced then
 					card_eval_status_text(context.blueprint_card or card, "extra", nil, nil, nil, {
 							message = localize{ type='variable', key='a_xmult', vars={number_format(to_big(card.ability.extra.current_xmult))}}
 						}
@@ -1089,7 +1089,7 @@ SMODS.Joker {
   end,
   blueprint_compat = true,
   calculate = function(self, card, context)
-    if context.cardarea == G.jokers and context.before and not (context.blueprint_card or self).getting_sliced and #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit
+    if context.cardarea == G.jokers and context.before and not (context.blueprint_card or card).getting_sliced and #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit
 	and pseudorandom('conspiracist') < G.GAME.probabilities.normal / card.ability.extra.odds and next(context.poker_hands['Full House']) then
       G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
       G.E_MANAGER:add_event(Event({
@@ -1255,7 +1255,7 @@ SMODS.Joker {
 					end,
 				}))
 				update_hand_text({sound = 'button', volume = 0.7, pitch = 0.8, delay = 0.3}, {handname="Straight",chips = G.GAME.hands["Straight"].chips, mult = G.GAME.hands["Straight"].mult, level=G.GAME.hands["Straight"].level})
-				level_up_hand(self, "Straight", nil, 1)
+				level_up_hand(card, "Straight", nil, 1)
 				update_hand_text({sound = 'button', volume = 0.7, pitch = 0.8, delay = 0.3}, {handname=context.scoring_name,chips = G.GAME.hands[context.scoring_name].chips, mult = G.GAME.hands[context.scoring_name].mult, level=G.GAME.hands[context.scoring_name].level})
 				return nil, true
 			end
@@ -1309,7 +1309,7 @@ SMODS.Joker {
 						return true
 					end,
 				}))
-				if not (context.blueprint_card or self).getting_sliced then
+				if not (context.blueprint_card or card).getting_sliced then
 						card_eval_status_text(context.blueprint_card or card, "extra", nil, nil, nil, {
 							message = localize{ type='variable', key='a_xmult', vars={number_format(to_big(card.ability.extra.current_xmult))}}
 						}
