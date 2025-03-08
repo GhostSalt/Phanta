@@ -1225,8 +1225,8 @@ SMODS.Joker {
   loc_txt = {
     name = 'The Spear',
     text = {
-     "If played hand contains",
-	 "a {C:spades}Spade{}, destroy it",
+     "If played hand contains any",
+	 "{C:diamonds}Spade{} cards, destroy one",
 	 "and upgrade {C:attention}Straight{}"
     }
   },
@@ -1268,8 +1268,8 @@ SMODS.Joker {
   loc_txt = {
     name = 'The Fuse',
     text = {
-     "If played hand contains",
-	 "a {C:hearts}Heart{}, destroy it",
+     "If played hand contains any",
+	 "{C:diamonds}Heart{} cards, destroy one",
 	 "and gain {C:white,X:mult}X#1#{} Mult",
 	 "{C:inactive}(Currently {C:white,X:mult}X#2#{C:inactive} Mult){}"
     }
@@ -1326,8 +1326,8 @@ SMODS.Joker {
   loc_txt = {
     name = 'The Mace',
     text = {
-     "If played hand contains",
-	 "a {C:clubs}Club{}, destroy it",
+     "If played hand contains any",
+	 "{C:diamonds}Club{} cards, destroy one",
 	 "and gain {C:money}$#1#{}"
     }
   },
@@ -1382,8 +1382,8 @@ SMODS.Joker {
   loc_txt = {
     name = 'The Dagger',
     text = {
-     "If played hand contains",
-	 "a {C:diamonds}Diamond{}, destroy it",
+     "If played hand contains any",
+	 "{C:diamonds}Diamond{} cards, destroy one",
 	 "and gain {C:mult}+#1#{} Mult",
 	 "{C:inactive}(Currently {C:mult}+#2#{C:inactive} Mult){}"
     }
