@@ -263,6 +263,7 @@ SMODS.Joker {
   atlas = 'Phanta',
   pos = { x = 4, y = 8 },
   cost = 2,
+  blueprint_compat = true,
   calculate = function(self, card, context)
     if context.joker_main then
 		return {
@@ -292,6 +293,7 @@ SMODS.Joker {
   atlas = 'Phanta',
   pos = { x = 5, y = 8 },
   cost = 6,
+  blueprint_compat = true,
   calculate = function(self, card, context)
     if context.joker_main then
 		return {
@@ -299,14 +301,87 @@ SMODS.Joker {
 			mult_mod = card.ability.extra.current_mult,
 		}
     end
-	if context.individual and context.cardarea == G.play and context.other_card:get_id() == G.GAME.current_round.train_station_card.rank then
+	if context.individual and context.cardarea == G.play and context.other_card:get_id() == G.GAME.current_round.train_station_card.rank and not context.blueprint then
 		card.ability.extra.current_mult = card.ability.extra.current_mult + card.ability.extra.added_mult
 		return {
-      extra = {message = localize('k_upgrade_ex'), colour = G.C.CHIPS},
-      colour = G.C.CHIPS,
+      message = localize('k_upgrade_ex'),
+      colour = G.C.FILTER,
       card = card
     }
 	end
+  end
+}
+
+SMODS.Joker {
+  key = 'onemanstrash',
+  loc_txt = {
+    name = "One Man's Trash",
+    text = {
+      "Gains {C:mult}+#1#{} Mult for each",
+	  "card {C:attention}discarded{} this round",
+	  "{C:inactive}(Currently {C:mult}+#2#{C:inactive} Mult){}"
+    }
+  },
+  no_pool_flag = "one_mans_trash_sold",
+  config = { extra = { added_mult = 1, current_mult = 0 } },
+  loc_vars = function(self, info_queue, card)
+    return { vars = { card.ability.extra.added_mult, card.ability.extra.current_mult } }
+  end,
+  rarity = 1,
+  atlas = 'Phanta',
+  pos = { x = 3, y = 7 },
+  cost = 5,
+  blueprint_compat = true,
+  calculate = function(self, card, context)
+    if context.joker_main then
+		  return {
+  			mult = card.ability.extra.current_mult,
+		  }
+    end
+	  if context.discard and not context.blueprint then
+  		card.ability.extra.current_mult = card.ability.extra.current_mult + card.ability.extra.added_mult
+	  end
+    if context.end_of_round and context.individual and not context.blueprint then
+      card.ability.extra.current_mult = 0
+    end
+    if context.selling_self and not context.blueprint then
+      G.GAME.pool_flags.one_mans_trash_sold = true
+    end
+  end
+}
+
+SMODS.Joker {
+  key = 'anothermanstreasure',
+  loc_txt = {
+    name = "Another Man's Treasure",
+    text = {
+      "Gains {C:white,X:mult}X#1#{} Mult for each",
+	  "card {C:attention}discarded{} this round",
+	  "{C:inactive}(Currently {C:white,X:mult}X#2#{C:inactive} Mult){}"
+    }
+  },
+  yes_pool_flag = "one_mans_trash_sold",
+  config = { extra = { added_xmult = 0.1, current_xmult = 1 } },
+  loc_vars = function(self, info_queue, card)
+    return { vars = { card.ability.extra.added_xmult, card.ability.extra.current_xmult } }
+  end,
+  rarity = 1,
+  atlas = 'Phanta',
+  pos = { x = 0, y = 11 },
+  cost = 6,
+  blueprint_compat = true,
+  calculate = function(self, card, context)
+    if context.joker_main then
+		  return {
+  			xmult = card.ability.extra.current_xmult,
+		  }
+    end
+	  if context.discard and not context.blueprint then
+  		card.ability.extra.current_xmult = card.ability.extra.current_xmult + card.ability.extra.added_xmult
+	  end
+    if context.end_of_round and context.individual and not context.blueprint then
+      card.ability.extra.current_xmult = 1
+    end
   end
 }
 
@@ -322,6 +397,7 @@ SMODS.Joker {
   atlas = 'Phanta',
   pos = { x = 2, y = 8 },
   cost = 4,
+  blueprint_compat = false,
   add_to_deck = function(self, card, from_debuff)
 		G.E_MANAGER:add_event(Event({func = function()
       G.consumeables.config.card_limit = G.consumeables.config.card_limit + 1
@@ -347,6 +423,7 @@ SMODS.Joker {
   atlas = 'Phanta',
   pos = { x = 3, y = 8 },
   cost = 4,
+  blueprint_compat = false,
   add_to_deck = function(self, card, from_debuff)
       G.GAME.round_resets.hands = G.GAME.round_resets.hands + 1
         ease_hands_played(1)
@@ -354,6 +431,49 @@ SMODS.Joker {
 	remove_from_deck = function(self, card, from_debuff)
 		G.GAME.round_resets.hands = G.GAME.round_resets.hands - 1
         ease_hands_played(-1)
+  end
+}
+
+SMODS.Joker {
+  key = 'nonuniformday',
+  loc_txt = {
+    name = "Non-uniform Day",
+    text = {
+      "{C:green}#1# in #2#{} chance for each",
+      "played {C:attention}Wild{} card to create",
+      "a {C:tarot}Tarot{} card when scored",
+      "{C:inactive}(Must have room){}"
+    }
+  },
+  config = { extra = { odds = 2 } },
+  loc_vars = function(self, info_queue, card)
+    return { vars = { (G.GAME.probabilities.normal or 1), card.ability.extra.odds } }
+  end,
+  rarity = 1,
+  atlas = 'Phanta',
+  pos = { x = 2, y = 11 },
+  cost = 5,
+  blueprint_compat = true,
+  calculate = function(self, card, context)
+    if context.individual and context.cardarea == G.play and #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit and context.other_card.ability.name == 'Wild Card' and pseudorandom('nonuniformday') < G.GAME.probabilities.normal / card.ability.extra.odds then
+      G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
+      return { extra = {focus = card, message = localize('k_plus_tarot'), func = function()
+      G.E_MANAGER:add_event(Event({
+          trigger = 'before',
+          delay = 0.0,
+          func = function() play_sound("timpani")
+          local new_card = create_card("Tarot", G.consumables, nil, nil, nil, nil, nil, "nonuniformday")
+          new_card:add_to_deck()
+          G.consumeables:emplace(new_card)
+          G.GAME.consumeable_buffer = 0
+          new_card:juice_up(0.3, 0.5)
+          return true
+        end
+      })) end},
+      colour = G.C.SECONDARY_SET.Tarot,
+      card = card
+    }
+    end
   end
 }
 
@@ -589,6 +709,66 @@ SMODS.Joker {
 }
 
 SMODS.Joker {
+  key = 'beadnecklace',
+  loc_txt = {
+    name = 'Bead Necklace',
+    text = {
+      "If played hand contains",
+      "a {C:attention}Straight{}, gains {C:mult}+#1#{} Mult",
+      "for each unique scoring {C:attention}suit{}",
+      "{C:inactive}(Currently {C:mult}+#2#{C:inactive} Mult)"
+    }
+  },
+  config = { extra = { added_mult = 2, current_mult = 0 } },
+  rarity = 2,
+  atlas = 'Phanta',
+  pos = { x = 2, y = 0 },
+  cost = 5,
+  loc_vars = function(self, info_queue, card)
+    return { vars = { card.ability.extra.added_mult, card.ability.extra.current_mult } }
+  end,
+  calculate = function(self, card, context)
+    if context.joker_main then
+      return {
+        mult_mod = card.ability.extra.current_mult,
+        message = localize { type = 'variable', key = 'a_mult', vars = { card.ability.extra.current_mult } }
+      }
+    end
+
+    local suits = {
+      ['Hearts'] = 0,
+      ['Diamonds'] = 0,
+      ['Spades'] = 0,
+      ['Clubs'] = 0
+  }
+  for i = 1, #context.scoring_hand do
+      if not SMODS.has_any_suit(context.scoring_hand[i]) then
+          if context.scoring_hand[i]:is_suit('Hearts', true) and suits["Hearts"] == 0 then suits["Hearts"] = suits["Hearts"] + 1
+          elseif context.scoring_hand[i]:is_suit('Diamonds', true) and suits["Diamonds"] == 0  then suits["Diamonds"] = suits["Diamonds"] + 1
+          elseif context.scoring_hand[i]:is_suit('Spades', true) and suits["Spades"] == 0  then suits["Spades"] = suits["Spades"] + 1
+          elseif context.scoring_hand[i]:is_suit('Clubs', true) and suits["Clubs"] == 0  then suits["Clubs"] = suits["Clubs"] + 1 end
+      end
+  end
+  for i = 1, #context.scoring_hand do
+      if SMODS.has_any_suit(context.scoring_hand[i]) then
+          if context.scoring_hand[i]:is_suit('Hearts') and suits["Hearts"] == 0 then suits["Hearts"] = suits["Hearts"] + 1
+          elseif context.scoring_hand[i]:is_suit('Diamonds') and suits["Diamonds"] == 0  then suits["Diamonds"] = suits["Diamonds"] + 1
+          elseif context.scoring_hand[i]:is_suit('Spades') and suits["Spades"] == 0  then suits["Spades"] = suits["Spades"] + 1
+          elseif context.scoring_hand[i]:is_suit('Clubs') and suits["Clubs"] == 0  then suits["Clubs"] = suits["Clubs"] + 1 end
+      end
+  end
+  if suits["Hearts"] > 0 and
+  suits["Diamonds"] > 0 and
+  suits["Spades"] > 0 and
+  suits["Clubs"] > 0 then
+      return {
+        mult = card.ability.extra.current_mult
+      }
+  end
+  end
+}
+
+SMODS.Joker {
   key = 'p5joker',
   loc_txt = {
     name = 'Looking Cool, Joker!',
@@ -659,7 +839,7 @@ SMODS.Joker {
           new_card:add_to_deck()
           G.consumeables:emplace(new_card)
           new_card:juice_up(0.3, 0.5)
-          return true;
+          return true
         end
       }))
 			
@@ -1209,7 +1389,7 @@ SMODS.Joker {
         colour = G.C.RED,
         card = card
       }
-    elseif context.end_of_round and not context.blueprint and not context.repetition then
+    elseif context.end_of_round and not context.blueprint and context.individual then
       card.ability.extra.current_mult = 0
       return {
         message = localize('k_reset'),
@@ -1226,7 +1406,7 @@ SMODS.Joker {
     name = 'The Spear',
     text = {
      "If played hand contains any",
-	 "{C:diamonds}Spade{} cards, destroy one",
+	 "{C:spades}Spade{} cards, destroy one",
 	 "and upgrade {C:attention}Straight{}"
     }
   },
@@ -1269,7 +1449,7 @@ SMODS.Joker {
     name = 'The Fuse',
     text = {
      "If played hand contains any",
-	 "{C:diamonds}Heart{} cards, destroy one",
+	 "{C:hearts}Heart{} cards, destroy one",
 	 "and gain {C:white,X:mult}X#1#{} Mult",
 	 "{C:inactive}(Currently {C:white,X:mult}X#2#{C:inactive} Mult){}"
     }
@@ -1327,7 +1507,7 @@ SMODS.Joker {
     name = 'The Mace',
     text = {
      "If played hand contains any",
-	 "{C:diamonds}Club{} cards, destroy one",
+	 "{C:clubs}Club{} cards, destroy one",
 	 "and gain {C:money}$#1#{}"
     }
   },
