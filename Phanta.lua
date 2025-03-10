@@ -313,6 +313,35 @@ SMODS.Joker {
 }
 
 SMODS.Joker {
+  key = 'yellow',
+  loc_txt = {
+    name = 'Yellow',
+    text = {
+      "Earn {C:money}$#1#{} on",
+      "{C:attention}odd{} rounds,",
+      "earn {C:money}$#2#{} on",
+      "{C:attention}even{} rounds"
+    }
+  },
+  config = { extra = { odd_money = 7, even_money = 1 } },
+  rarity = 1,
+  atlas = 'Phanta',
+  pos = { x = 3, y = 11 },
+  cost = 6,
+  blueprint_compat = false,
+  loc_vars = function(self, info_queue, card)
+    return { vars = { card.ability.extra.odd_money, card.ability.extra.even_money } }
+  end,
+  calc_dollar_bonus = function(self, card)
+    if G.GAME.round % 2 == 1 then
+      return card.ability.extra.odd_money
+    else
+      return card.ability.extra.even_money
+    end
+  end
+}
+
+SMODS.Joker {
   key = 'onemanstrash',
   loc_txt = {
     name = "One Man's Trash",
@@ -975,6 +1004,44 @@ SMODS.Joker {
 }
 
 SMODS.Joker {
+  key = 'scissorsaresharp',
+  loc_txt = {
+    name = 'Scissors are Sharp',
+    text = {
+      "When {C:attention}Blind{} is selected,",
+      "creates a copy of",
+      "{C:tarot}Judgement{}",
+      "{C:inactive}(Must have room){}"
+    }
+  },
+  rarity = 3,
+  atlas = 'Phanta',
+  pos = { x = 4, y = 7 },
+  cost = 9,
+  blueprint_compat = true,
+  calculate = function(self, card, context)
+    if context.setting_blind and not (context.blueprint_card or self).getting_sliced and #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit then
+      G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
+      G.E_MANAGER:add_event(Event({
+        func = function()
+          G.E_MANAGER:add_event(Event({
+            func = function()
+              local new_card = create_card("Tarot", G.consumables, nil, nil, nil, nil, "c_judgement", 'scissorsaresharp')
+              new_card:add_to_deck()
+              G.consumeables:emplace(new_card)
+              G.GAME.consumeable_buffer = 0
+              new_card:juice_up(0.3, 0.5)
+              return true
+            end}))
+              card_eval_status_text(context.blueprint_card or card, 'extra', nil, nil, nil, {message = "+1 Judgement", colour = G.C.PURPLE})
+          return true
+        end
+      }))
+    end
+  end
+}
+
+SMODS.Joker {
   key = 'caesarcipher',
   loc_txt = {
     name = 'Caesar Cipher',
@@ -1183,6 +1250,51 @@ SMODS.Joker {
         }
     end
 	end
+  end
+}
+
+SMODS.Joker {
+  key = 'witchsmark',
+  loc_txt = {
+    name = "Witch's Mark",
+    text = {
+      "Creates a {C:tarot}Tarot{} card",
+	  "if all played cards",
+	  "are {C:attention}face cards{}",
+	  "{C:inactive}(Must have room){}"
+    }
+  },
+  rarity = 3,
+  atlas = 'Phanta',
+  pos = { x = 0, y = 10 },
+  cost = 8,
+  blueprint_compat = true,
+  calculate = function(self, card, context)
+    if context.joker_main and #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit then
+	  local contains_nonface = false
+	  for i = 1, #G.play.cards do
+	    if not G.play.cards[i]:is_face() then
+		  contains_nonface = true
+		end
+	  end
+	  if not contains_nonface then
+      G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
+      G.E_MANAGER:add_event(Event({
+        trigger = 'before',
+        delay = 0.0,
+        func = (function()
+            local card = create_card('Tarot', G.consumeables, nil, nil, nil, nil, nil, 'witchsmark')
+            card:add_to_deck()
+            G.consumeables:emplace(card)
+            G.GAME.consumeable_buffer = 0
+          return true
+        end)}))
+      return {
+        message = localize('k_plus_tarot'),
+        card = card
+      }
+	end
+    end
   end
 }
 
@@ -1605,6 +1717,54 @@ SMODS.Joker {
       }
     end
   end
+end
+}
+
+SMODS.Joker {
+  key = 'selfportrait',
+  loc_txt = {
+    name = 'Self-portrait',
+    text = {
+     "After #2# rounds,",
+	 "creates a copy of",
+	 "the next Joker you buy",
+	 "{C:inactive}(Currently #1#/{C:attention}#2#{C:inactive}){}"
+    }
+  },
+  config = { extra = { current_rounds = 0, rounds_required = 3 } },
+  rarity = 3,
+  atlas = 'Phanta',
+  pos = { x = 1, y = 11 },
+  cost = 8,
+  blueprint_compat = true,
+  loc_vars = function(self, info_queue, card)
+    return { vars = { card.ability.extra.added_mult, card.ability.extra.current_mult } }
+  end,
+  calculate = function(self, card, context)
+    if context.joker_main then
+      local eval = function(card) return (card.ability.loyalty_remaining == 0) and not G.RESET_JIGGLES end
+                                    juice_card_until(self, eval, true)
+                local jokers = {}
+                for i=1, #G.jokers.cards do 
+                    if G.jokers.cards[i] ~= self then
+                        jokers[#jokers+1] = G.jokers.cards[i]
+                    end
+                end
+                if #jokers > 0 then 
+                    if #G.jokers.cards <= G.jokers.config.card_limit then 
+                        card_eval_status_text(context.blueprint_card or self, 'extra', nil, nil, nil, {message = localize('k_duplicated_ex')})
+                        local chosen_joker = pseudorandom_element(jokers, pseudoseed('invisible'))
+                        local card = copy_card(chosen_joker, nil, nil, nil, chosen_joker.edition and chosen_joker.edition.negative)
+                        if card.ability.invis_rounds then card.ability.invis_rounds = 0 end
+                        card:add_to_deck()
+                        G.jokers:emplace(card)
+                    else
+                        card_eval_status_text(context.blueprint_card or self, 'extra', nil, nil, nil, {message = localize('k_no_room_ex')})
+                    end
+                else
+                    card_eval_status_text(context.blueprint_card or self, 'extra', nil, nil, nil, {message = localize('k_no_other_jokers')})
+                end
+    end
 end
 }
 
