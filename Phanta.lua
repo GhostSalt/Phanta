@@ -466,7 +466,7 @@ SMODS.Joker {
 SMODS.Joker {
   key = 'nonuniformday',
   loc_txt = {
-    name = "Non-uniform Day",
+    name = "Non-Uniform Day",
     text = {
       "{C:green}#1# in #2#{} chance for each",
       "played {C:attention}Wild{} card to create",
@@ -502,6 +502,51 @@ SMODS.Joker {
       colour = G.C.SECONDARY_SET.Tarot,
       card = card
     }
+    end
+  end
+}
+
+SMODS.Joker {
+  key = 'teastainedjoker',
+  loc_txt = {
+    name = "Tea-Stained Joker",
+    text = {
+      "{C:green}#1# in #2#{} chance to gain",
+      "{C:mult}+#3#{} Mult for each {C:attention}Lucky{}",
+      "card held in hand",
+      "{C:inactive}(Currently {C:mult}+#4#{C:inactive} Mult)"
+    }
+  },
+  config = { extra = { odds = 5, added_mult = 3, current_mult = 0 } },
+  loc_vars = function(self, info_queue, card)
+    return { vars = { (G.GAME.probabilities.normal or 1), card.ability.extra.odds, card.ability.extra.added_mult, card.ability.extra.current_mult } }
+  end,
+  rarity = 2,
+  atlas = 'Phanta',
+  pos = { x = 7, y = 0 },
+  cost = 6,
+  blueprint_compat = true,
+  calculate = function(self, card, context)
+    if context.joker_main and card.ability.extra.current_mult > 0 then
+      return {
+        mult = card.ability.extra.current_mult
+      }
+    end
+
+    if context.cardarea == G.hand and not context.blueprint and context.other_card and context.other_card.ability.name == 'Lucky Card' then
+      if context.other_card.debuff then
+        return {
+          message = localize('k_debuffed'),
+          colour = G.C.RED,
+          card = card
+        }
+      elseif pseudorandom('teastainedjoker') < G.GAME.probabilities.normal / card.ability.extra.odds then
+        card.ability.extra.current_mult = card.ability.extra.current_mult + card.ability.extra.added_mult
+				return {
+          message = localize('k_upgrade_ex'),
+          card = card
+        }
+      end
     end
   end
 }
