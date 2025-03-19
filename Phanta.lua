@@ -1,11 +1,7 @@
 SMODS.Atlas {
-  -- Key for code to find it with
   key = "Phanta",
-  -- The name of the file, for the code to pull the atlas from
   path = "Phanta.png",
-  -- Width of each sprite in 1x size
   px = 71,
-  -- Height of each sprite in 1x size
   py = 95
 }
 
@@ -736,7 +732,7 @@ SMODS.Joker {
     if context.ending_shop and not context.repetition then
       G.E_MANAGER:add_event(Event({
         func = function()
-          play_sound('glass' .. pseudorandom_element({'1', '2', '3', '4', '5', '6'}))
+          play_sound('glass' .. pseudorandom_element({'1', '2', '3', '4', '5', '6'}), 1, 0.25)
           play_sound('timpani')
 
           local creation_event = Event({
@@ -1062,7 +1058,7 @@ SMODS.Joker {
   rarity = 3,
   atlas = 'Phanta',
   pos = { x = 4, y = 7 },
-  cost = 9,
+  cost = 8,
   blueprint_compat = true,
   calculate = function(self, card, context)
     if context.setting_blind and not (context.blueprint_card or self).getting_sliced and #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit then
@@ -1363,7 +1359,7 @@ SMODS.Joker {
   end,
   blueprint_compat = false,
   calculate = function(self, card, context)
-    if context.before and next(context.poker_hands['High Card']) and not context.blueprint then
+    if context.before and context.scoring_name == "High Card" then
       card.ability.extra_value = card.ability.extra_value + card.ability.extra.bonus_cash
       card:set_cost()
       return {
@@ -1546,7 +1542,7 @@ SMODS.Joker {
         colour = G.C.RED,
         card = card
       }
-    elseif context.end_of_round and not context.repetition and not context.blueprint then
+    elseif context.end_of_round and not context.individual and not context.repetition and not context.blueprint then
       card.ability.extra.current_mult = 0
       return {
         message = localize('k_reset'),
@@ -1770,10 +1766,11 @@ SMODS.Joker {
   loc_txt = {
     name = 'Self-portrait',
     text = {
-     "After #2# rounds,",
-	 "creates a copy of",
-	 "the next Joker you buy",
-	 "{C:inactive}(Currently #1#/{C:attention}#2#{C:inactive}){}"
+     "After #2# rounds, {C:attention}duplicates{}",
+	 "the next Joker you {C:attention}buy{}",
+   "{C:red,E:2}self destructs{}",
+	 "{C:inactive}(Currently {C:attention}#1#{C:inactive}/#2#){}",
+   "{C:inactive}(Removes {C:dark_edition}Negative{C:inactive} from copy){}"
     }
   },
   config = { extra = { current_rounds = 0, rounds_required = 3 } },
@@ -1781,36 +1778,55 @@ SMODS.Joker {
   atlas = 'Phanta',
   pos = { x = 1, y = 11 },
   cost = 8,
-  blueprint_compat = true,
+  blueprint_compat = false,
   loc_vars = function(self, info_queue, card)
-    return { vars = { card.ability.extra.added_mult, card.ability.extra.current_mult } }
+    return { vars = { card.ability.extra.current_rounds, card.ability.extra.rounds_required } }
   end,
   calculate = function(self, card, context)
-    if context.joker_main then
-      local eval = function(card) return (card.ability.loyalty_remaining == 0) and not G.RESET_JIGGLES end
-                                    juice_card_until(self, eval, true)
-                local jokers = {}
-                for i=1, #G.jokers.cards do 
-                    if G.jokers.cards[i] ~= self then
-                        jokers[#jokers+1] = G.jokers.cards[i]
-                    end
-                end
-                if #jokers > 0 then 
-                    if #G.jokers.cards <= G.jokers.config.card_limit then 
-                        card_eval_status_text(context.blueprint_card or self, 'extra', nil, nil, nil, {message = localize('k_duplicated_ex')})
-                        local chosen_joker = pseudorandom_element(jokers, pseudoseed('invisible'))
-                        local card = copy_card(chosen_joker, nil, nil, nil, chosen_joker.edition and chosen_joker.edition.negative)
-                        if card.ability.invis_rounds then card.ability.invis_rounds = 0 end
-                        card:add_to_deck()
-                        G.jokers:emplace(card)
-                    else
-                        card_eval_status_text(context.blueprint_card or self, 'extra', nil, nil, nil, {message = localize('k_no_room_ex')})
-                    end
-                else
-                    card_eval_status_text(context.blueprint_card or self, 'extra', nil, nil, nil, {message = localize('k_no_other_jokers')})
-                end
+    if context.end_of_round and not context.individual and not context.repetition and not context.blueprint then
+      card.ability.extra.current_rounds = card.ability.extra.current_rounds + 1
+      if card.ability.extra.current_rounds == card.ability.extra.rounds_required then 
+        local eval = function(card) return not card.REMOVED end
+        juice_card_until(card, eval, true)
+      end
+      return {
+        message = (card.ability.extra.current_rounds < card.ability.extra.rounds_required) and (card.ability.extra.current_rounds..'/'..card.ability.extra.rounds_required) or localize('k_active_ex'),
+        colour = G.C.FILTER
+      }
     end
-end
+
+    if context.buying_card and context.card.config.center.set == "Joker" and card.ability.extra.current_rounds >= card.ability.extra.rounds_required then
+      local eval = function(card) return (card.ability.extra.current_rounds == card.ability.extra.rounds_required) and not G.RESET_JIGGLES end juice_card_until(card, eval, true)
+      if #G.jokers.cards <= G.jokers.config.card_limit then 
+        card_eval_status_text(context.blueprint_card or card, 'extra', nil, nil, nil, {message = localize('k_duplicated_ex')})
+        local new_card = copy_card(context.card, nil, nil, nil, context.card.edition and context.card.edition.negative)
+        card.ability.extra.current_rounds = 0
+        G.E_MANAGER:add_event(Event({
+          func = function()
+            play_sound('tarot1')
+            card.T.r = -0.2
+            card:juice_up(0.3, 0.4)
+            card.states.drag.is = true
+            card.children.center.pinch.x = true
+            G.E_MANAGER:add_event(Event({trigger = 'after', delay = 0.3, blockable = false,
+              func = function()
+                  G.jokers:remove_card(card)
+                  card:remove()
+                  card = nil
+                return true; end})) 
+            return true
+          end
+        }))
+        card:add_to_deck()
+        G.jokers:emplace(card)
+      else
+        card_eval_status_text(context.blueprint_card or card, 'extra', nil, nil, nil, {message = localize('k_no_room_ex')})
+      end
+    end
+  end,
+  set_ability = function(self, card, initial, delay_sprites)
+    card.ability.extra.current_rounds = 0
+  end
 }
 
 SMODS.Joker {
@@ -1845,7 +1861,7 @@ SMODS.Joker {
       end
       if faces then
 	    card.ability.extra.current_xmult = card.ability.extra.current_xmult - card.ability.extra.lost_xmult
-        if card.ability.extra.current_xmult - card.ability.extra.lost_xmult <= 1 then 
+        if card.ability.extra.current_xmult <= 1 then 
           G.E_MANAGER:add_event(Event({
             func = function()
               play_sound('tarot1')
@@ -1855,7 +1871,7 @@ SMODS.Joker {
               card.children.center.pinch.x = true
               G.E_MANAGER:add_event(Event({trigger = 'after', delay = 0.3, blockable = false,
                 func = function()
-                    G.jokers:remove_card(self)
+                    G.jokers:remove_card(card)
                     card:remove()
                     card = nil
                   return true; end})) 
@@ -1910,12 +1926,75 @@ SMODS.Joker {
         if context.scoring_hand[i]:get_id() == 13 then kings = true end
       end
       if kings and queens then
-	    card.ability.extra.remaining_hands = card.ability.extra.remaining_hands + card.ability.extra.added_hands
-		card_eval_status_text(card, 'extra', nil, nil, nil, { message = "+"..card.ability.extra.remaining_hands.." Hands" })
-	end
+	      card.ability.extra.remaining_hands = card.ability.extra.remaining_hands + card.ability.extra.added_hands
+        return {
+          message = "+"..card.ability.extra.added_hands.." Hands",
+          colour = G.C.BLUE
+        }
+      end
+	  end
+
     if context.cardarea == G.jokers and context.after and not context.blueprint then
 	    card.ability.extra.remaining_hands = card.ability.extra.remaining_hands - 1
-        if card.ability.extra.remaining_hands == 0 then 
+      if card.ability.extra.remaining_hands == 0 then 
+        G.E_MANAGER:add_event(Event({
+          func = function()
+            play_sound('tarot1')
+            card.T.r = -0.2
+            card:juice_up(0.3, 0.4)
+            card.states.drag.is = true
+            card.children.center.pinch.x = true
+            G.E_MANAGER:add_event(Event({trigger = 'after', delay = 0.3, blockable = false,
+              func = function()
+                G.jokers:remove_card(card)
+                card:remove()
+                card = nil
+              return true; end})) 
+            return true
+          end
+        })) 
+        return {
+          message = "Drained!",
+          colour = G.C.FILTER
+        }
+		  else
+        return {
+          message = card.ability.extra.remaining_hands.."",
+          colour = G.C.FILTER
+        }
+      end
+    end
+  end
+}
+
+SMODS.Joker {
+  key = 'perkeossoul',
+  loc_txt = {
+    name = 'Perkeo\'s Soul',
+    text = {
+     "{C:white,X:mult}X#2#{} Mult, loses {C:white,X:mult}X#1#{} Mult",
+	 "at the end of the round",
+	 "if any {C:attention}consumable{} slots",
+   "are {C:attention}empty{}"
+    }
+  },
+  config = { extra = { lost_xmult = 0.5, current_xmult = 3 } },
+  rarity = 3,
+  atlas = 'Phanta',
+  pos = { x = 2, y = 7 },
+  cost = 8,
+  blueprint_compat = true,
+  loc_vars = function(self, info_queue, card)
+    return { vars = { card.ability.extra.lost_xmult, card.ability.extra.current_xmult } }
+  end,
+  calculate = function(self, card, context)
+    if context.joker_main and card.ability.extra.current_xmult > 1 then
+      return { xmult = card.ability.extra.current_xmult }
+    end
+	
+    if context.end_of_round and not context.individual and not context.repetition and #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit then
+	    card.ability.extra.current_xmult = card.ability.extra.current_xmult - card.ability.extra.lost_xmult
+        if card.ability.extra.current_xmult <= 1 then 
           G.E_MANAGER:add_event(Event({
             func = function()
               play_sound('tarot1')
@@ -1925,7 +2004,7 @@ SMODS.Joker {
               card.children.center.pinch.x = true
               G.E_MANAGER:add_event(Event({trigger = 'after', delay = 0.3, blockable = false,
                 func = function()
-                    G.jokers:remove_card(self)
+                    G.jokers:remove_card(card)
                     card:remove()
                     card = nil
                   return true; end})) 
@@ -1936,15 +2015,14 @@ SMODS.Joker {
             message = "Drained!",
             colour = G.C.FILTER
           }
-		else
+        else
           return {
-            message = card.ability.extra.remaining_hands.."",
-            colour = G.C.FILTER
+            message = localize{type='variable',key='a_xmult_minus',vars={card.ability.extra.lost_xmult}},
+            colour = G.C.MULT
           }
         end
       end
     end
-  end
 }
 
 --[[SMODS.Joker {
@@ -2000,7 +2078,7 @@ SMODS.Joker {
 	  "{C:inactive}(Currently {X:mult,C:white}X#2#{C:inactive} Mult)"
     }
   },
-  config = { extra = { current_xmult = 1, added_xmult = 0.2 } },
+  config = { extra = { current_xmult = 1, added_xmult = 0.1 } },
   rarity = 4,
   atlas = 'Phanta',
   pos = { x = 2, y = 1 },
