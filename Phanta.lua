@@ -1546,7 +1546,7 @@ SMODS.Joker {
         colour = G.C.RED,
         card = card
       }
-    elseif context.end_of_round and not context.blueprint and context.individual then
+    elseif context.end_of_round and not context.repetition and not context.blueprint then
       card.ability.extra.current_mult = 0
       return {
         message = localize('k_reset'),
@@ -1813,63 +1813,139 @@ SMODS.Joker {
 end
 }
 
---[[SMODS.Joker {
+SMODS.Joker {
   key = 'caniossoul',
   loc_txt = {
     name = 'Canio\'s Soul',
     text = {
-     "If played hand contains",
-	 "a {C:diamonds}Diamond{}, destroy it",
-	 "and gain {C:mult}+#1#{} Mult",
-	 "{C:inactive}(Currently {C:mult}+#2#{C:inactive} Mult){}"
+     "{C:white,X:mult}X#2#{} Mult, loses",
+	 "{C:white,X:mult}X#1#{} Mult if played",
+	 "hand contains any",
+	 "{C:attention}face cards{}"
     }
   },
-  config = { extra = { added_mult = 10, current_mult = 0 } },
+  config = { extra = { lost_xmult = 0.5, current_xmult = 3 } },
   rarity = 3,
   atlas = 'Phanta',
-  pos = { x = 3, y = 6 },
+  pos = { x = 4, y = 6 },
   cost = 8,
   blueprint_compat = true,
   loc_vars = function(self, info_queue, card)
-    return { vars = { card.ability.extra.added_mult, card.ability.extra.current_mult } }
+    return { vars = { card.ability.extra.lost_xmult, card.ability.extra.current_xmult } }
   end,
   calculate = function(self, card, context)
-  if context.joker_main and card.ability.extra.current_mult > 0 then
-      return {
-        mult_mod = card.ability.extra.current_mult,
-        message = localize { type = 'variable', key = 'a_mult', vars = { card.ability.extra.current_mult } }
-      }
+    if context.joker_main and card.ability.extra.current_xmult > 1 then
+      return { xmult = card.ability.extra.current_xmult }
     end
-    if context.cardarea == G.jokers and context.before then
-      local destructable_card = {}
-			for i = 1, #context.scoring_hand do
-				if context.scoring_hand[i]:is_suit("Diamonds") and not context.scoring_hand[i].getting_sliced then
-					destructable_card[#destructable_card + 1] = context.scoring_hand[i]
-				end
-			end
-			local card_to_destroy = #destructable_card > 0 and pseudorandom_element(destructable_card, pseudoseed("thedagger")) or nil
-
-			if card_to_destroy then
-				card_to_destroy.getting_sliced = true
-				card.ability.extra.current_mult = card.ability.extra.current_mult + card.ability.extra.added_mult
-				G.E_MANAGER:add_event(Event({
-					func = function()
-						(context.blueprint_card or card):juice_up(0.8, 0.8)
-						card_to_destroy:start_dissolve({ G.C.RED }, nil, 1.6)
-						return true
-					end,
-				}))
-				if not (context.blueprint_card or self).getting_sliced then
-						card_eval_status_text(context.blueprint_card or card, "extra", nil, nil, nil, {
-							message = localize{ type='variable', key='a_mult', vars={number_format(to_big(card.ability.extra.current_mult))}}
-						}
-					)
-				end
-				return nil, true
-			end
+	
+    if context.cardarea == G.jokers and context.before and not context.blueprint then
+      local faces = false
+      for i = 1, #context.scoring_hand do
+        if context.scoring_hand[i]:is_face() then faces = true end
+      end
+      if faces then
+	    card.ability.extra.current_xmult = card.ability.extra.current_xmult - card.ability.extra.lost_xmult
+        if card.ability.extra.current_xmult - card.ability.extra.lost_xmult <= 1 then 
+          G.E_MANAGER:add_event(Event({
+            func = function()
+              play_sound('tarot1')
+              card.T.r = -0.2
+              card:juice_up(0.3, 0.4)
+              card.states.drag.is = true
+              card.children.center.pinch.x = true
+              G.E_MANAGER:add_event(Event({trigger = 'after', delay = 0.3, blockable = false,
+                func = function()
+                    G.jokers:remove_card(self)
+                    card:remove()
+                    card = nil
+                  return true; end})) 
+              return true
+            end
+          })) 
+          return {
+            message = "Drained!",
+            colour = G.C.FILTER
+          }
+        else
+          return {
+            message = localize{type='variable',key='a_xmult_minus',vars={card.ability.extra.lost_xmult}},
+            colour = G.C.MULT
+          }
+        end
+      end
     end
   end
-}]]--
+}
+
+SMODS.Joker {
+  key = 'tribouletssoul',
+  loc_txt = {
+    name = 'Triboulet\'s Soul',
+    text = {
+     "{C:white,X:mult}X#1#{} Mult for {C:attention}#2#{} round#3#,",
+	 "gains {C:attention}+#4#{} rounds if played",
+	 "hand contains a scoring",
+	 "{C:attention}King{} and {C:attention}Queen{}"
+    }
+  },
+  config = { extra = { given_xmult = 3, remaining_hands = 2, added_hands = 2  } },
+  rarity = 3,
+  atlas = 'Phanta',
+  pos = { x = 5, y = 6 },
+  cost = 8,
+  blueprint_compat = true,
+  loc_vars = function(self, info_queue, card)
+    return { vars = { card.ability.extra.given_xmult, card.ability.extra.remaining_hands, (function() if card.ability.extra.remaining_hands == 1 then return "" else return "s" end end)(), card.ability.extra.added_hands } }
+  end,
+  calculate = function(self, card, context)
+    if context.joker_main then
+      return { xmult = card.ability.extra.given_xmult }
+    end
+	
+    if context.cardarea == G.jokers and context.before and not context.blueprint then
+      local kings = false
+      local queens = false
+      for i = 1, #context.scoring_hand do
+        if context.scoring_hand[i]:get_id() == 12 then queens = true end
+        if context.scoring_hand[i]:get_id() == 13 then kings = true end
+      end
+      if kings and queens then
+	    card.ability.extra.remaining_hands = card.ability.extra.remaining_hands + card.ability.extra.added_hands
+		card_eval_status_text(card, 'extra', nil, nil, nil, { message = "+"..card.ability.extra.remaining_hands.." Hands" })
+	end
+    if context.cardarea == G.jokers and context.after and not context.blueprint then
+	    card.ability.extra.remaining_hands = card.ability.extra.remaining_hands - 1
+        if card.ability.extra.remaining_hands == 0 then 
+          G.E_MANAGER:add_event(Event({
+            func = function()
+              play_sound('tarot1')
+              card.T.r = -0.2
+              card:juice_up(0.3, 0.4)
+              card.states.drag.is = true
+              card.children.center.pinch.x = true
+              G.E_MANAGER:add_event(Event({trigger = 'after', delay = 0.3, blockable = false,
+                func = function()
+                    G.jokers:remove_card(self)
+                    card:remove()
+                    card = nil
+                  return true; end})) 
+              return true
+            end
+          })) 
+          return {
+            message = "Drained!",
+            colour = G.C.FILTER
+          }
+		else
+          return {
+            message = card.ability.extra.remaining_hands.."",
+            colour = G.C.FILTER
+          }
+        end
+      end
+    end
+  end
+}
 
 --[[SMODS.Joker {
   key = 'shackles',
