@@ -954,6 +954,7 @@ SMODS.Joker {
   atlas = 'Phanta',
   pos = { x = 3, y = 0 },
   cost = 4,
+  blueprint_compat = true,
   calculate = function(self, card, context)
     if context.selling_card and context.card.config.center.set == "Planet" then
       G.E_MANAGER:add_event(Event({
@@ -2189,7 +2190,7 @@ SMODS.Joker {
   soul_pos = { x = 3, y = 2 },
   cost = 20,
   loc_vars = function(self, info_queue, card)
-    return { vars = { card.ability.extra.added_xmult, card.ability.extra.current_xmult,  } }
+    return { vars = { card.ability.extra.added_xmult, card.ability.extra.current_xmult } }
   end,
 	blueprint_compat = true,
   calculate = function(self, card, context)
@@ -2342,42 +2343,55 @@ SMODS.Joker {
   loc_txt = {
     name = 'Godoor',
     text = {
-     "When {C:attention}Blind{} is selected,",
-	 "add a {C:attention}King{} with a",
-	 "{C:purple}Purple seal{} and edition",
-	 "to your hand"
+     "Gains {C:white,X:mult}X#1#{} Mult at the",
+	 "end of the {C:attention}shop{} if you",
+	 "used exactly {C:attention}1{} {C:green}Reroll{}",
+	 "{C:inactive}(Current {C:white,X:mult}X#2#{C:inactive} Mult){}"
     }
   },
-  config = { extra = { money = 2, xmult = 2 } },
+  config = { extra = { added_xmult = 1, current_xmult = 1, counted_rerolls = 0 } },
   rarity = 4,
   atlas = 'Phanta',
   pos = { x = 0, y = 2 },
   soul_pos = { x = 1, y = 3 },
   cost = 20,
   loc_vars = function(self, info_queue, card)
-    return { vars = { card.ability.extra.xmult, card.ability.extra.money } }
+    return { vars = { card.ability.extra.added_xmult, card.ability.extra.current_xmult } }
   end,
   blueprint_compat = true,
   calculate = function(self, card, context)
-	if context.first_hand_drawn then
-		G.E_MANAGER:add_event(Event({
-            func = function() 
-				local _suit = pseudorandom_element({'S','H','D','C'}, pseudoseed('famaliasu'))
-                local _card = create_playing_card({front = G.P_CARDS[_suit..'_K'], center = G.P_CENTERS.c_base}, G.hand, nil, nil, {G.C.SECONDARY_SET.Enhanced})
-                _card:set_seal('Purple', true)
-				
-				local edition = pseudorandom(pseudoseed('famaliaed'))
-				if edition < 0.5 then _card:set_edition('e_foil')
-				elseif edition < 0.85 then _card:set_edition('e_holo')
-				else _card:set_edition('e_polychrome') end
-                
-                G.GAME.blind:debuff_card(_card)
-                G.hand:sort()
-                if context.blueprint_card then context.blueprint_card:juice_up() else card:juice_up() end
-                return true
-            end}))
-
-        playing_card_joker_effects({true})
+    if context.joker_main and card.ability.extra.current_xmult > 1 then
+	  return { xmult = card.ability.extra.current_xmult }
+	end
+	
+	if context.reroll_shop and not context.blueprint then
+	  card.ability.extra.counted_rerolls = card.ability.extra.counted_rerolls + 1
+	  if card.ability.extra.counted_rerolls == 1 then
+	    return {
+		  message = "Upgrade?",
+		  colour = G.C.FILTER,
+		  card = card
+		}
+	  elseif card.ability.extra.counted_rerolls == 2 then
+	    return {
+		  message = "Nevermind!",
+		  colour = G.C.RED,
+		  card = card
+		}
+	  end
+	end
+	
+	if context.ending_shop and not context.blueprint then
+	  if card.ability.extra.counted_rerolls == 1 then
+	    card.ability.extra.current_xmult = card.ability.extra.current_xmult + card.ability.extra.added_xmult
+	    card.ability.extra.counted_rerolls = 0
+	    return {
+		  message = localize('k_upgrade_ex'),
+		  colour = G.C.FILTER,
+		  card = card
+		}
+	  end
+	  card.ability.extra.counted_rerolls = 0
 	end
   end
 }
