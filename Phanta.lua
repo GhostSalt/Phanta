@@ -1,6 +1,27 @@
 SMODS.Atlas {
+  key = "modicon",
+  path = "PhantaIcon.png",
+  px = 34,
+  py = 34
+}
+
+SMODS.Atlas {
   key = "Phanta",
   path = "Phanta.png",
+  px = 71,
+  py = 95
+}
+
+SMODS.Atlas {
+  key = "PhantaEnhancements",
+  path = "PhantaEnhancements.png",
+  px = 71,
+  py = 95
+}
+
+SMODS.Atlas {
+  key = "PhantaTarots",
+  path = "PhantaTarots.png",
   px = 71,
   py = 95
 }
@@ -28,6 +49,141 @@ function count_planets()
     end
     return planet_counter
 end
+
+SMODS.Enhancement {
+	object_type = "Enhancement",
+	key = "ghostcard",
+  loc_txt = {
+    name = 'Ghost Card',
+    text = {
+      "{C:white,X:mult}X#1#{} Mult if held in",
+      "hand, gains {C:white,X:mult}X#2#{} Mult",
+      "if played and not scored"
+    }
+  },
+	atlas = "PhantaEnhancements",
+	pos = { x = 0, y = 0 },
+	config = { h_x_mult = 1, extra = { added_xmult = 0.2 } },
+	loc_vars = function(self, info_queue)
+		return { vars = { self.config.h_x_mult, self.config.extra.added_xmult } }
+	end,
+  calculate = function(self, card, context)
+    if context.cardarea == "unscored" and context.main_scoring then
+      self.config.h_x_mult = self.config.h_x_mult + self.config.extra.added_xmult
+      G.E_MANAGER:add_event(Event({
+        func = function() card_eval_status_text(self, 'extra', nil, nil, nil, {message = localize('k_upgrade_ex')}); return true end}))
+		end
+  end
+}
+
+SMODS.Seal {
+	object_type = "Seal",
+	key = "ghostseal",
+  loc_txt = {
+    name = 'Ghost Seal',
+    text = {
+      "Creates a {C:spectral}Spectral{} card",
+      "if played and not scored",
+      "on {C:attention}final hand{} of round",
+      "{C:inactive}(Must have room){}"
+    }
+  },
+	badge_colour = HEX("cccccc"),
+	atlas = "PhantaEnhancements",
+	pos = { x = 1, y = 0 },
+
+	calculate = function(self, card, context)
+		if context.cardarea == "unscored" and context.main_scoring and G.GAME.current_round.hands_left == 0 and #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit then
+			G.E_MANAGER:add_event(Event({
+			  func = function()
+					if G.consumeables.config.card_limit > #G.consumeables.cards then
+						local new_card = create_card("Spectral", G.consumeables, nil, nil, nil, nil, nil, "ghostseal")
+						new_card:add_to_deck()
+						G.consumeables:emplace(new_card)
+						card:juice_up()
+					end
+				  return true
+				end
+      }))
+		end
+	end
+}
+
+SMODS.Tarot {
+	object_type = "Consumable",
+	set = "Tarot",
+	key = "grave",
+  loc_txt = {
+    name = 'Grave',
+    text = {
+      "Enhances {C:attention}#1#{}",
+      "selected card into a",
+      "{C:attention}Ghost Card{}"
+    }
+  },
+	pos = { x = 0, y = 0 },
+	config = {
+		mod_conv = "phanta_ghost_seal",
+		max_highlighted = 1
+	},
+	atlas = "PhantaTarots",
+	loc_vars = function(self, info_queue, center)
+		info_queue[#info_queue + 1] = { set = "Other", key = "phanta_ghostseal" }
+		return { vars = { center.ability.max_highlighted } }
+	end,
+	use = function(self, card, area, copier)
+		local conv_card = G.hand.highlighted[1]
+    G.E_MANAGER:add_event(Event({func = function()
+      play_sound('tarot1')
+      card:juice_up(0.3, 0.5)
+    return true end }))
+        
+    G.E_MANAGER:add_event(Event({trigger = 'after',delay = 0.1,func = function()
+      conv_card:set_seal("phanta_ghostseal", nil, true)
+    return true end }))
+        
+    delay(0.5)
+    G.E_MANAGER:add_event(Event({trigger = 'after', delay = 0.2,func = function() G.hand:unhighlight_all(); return true end }))
+	end
+}
+
+SMODS.Tarot {
+	object_type = "Consumable",
+	set = "Spectral",
+	key = "jinn",
+  loc_txt = {
+    name = 'Jinn',
+    text = {
+      "Add a {C:attention}Ghost Seal{}",
+      "to {C:attention}1{} selected",
+      "card held in hand"
+    }
+  },
+	pos = { x = 1, y = 0 },
+	config = {
+		mod_conv = "phanta_ghost_seal",
+		max_highlighted = 1
+	},
+	atlas = "PhantaTarots",
+	loc_vars = function(self, info_queue, center)
+		info_queue[#info_queue + 1] = { set = "Other", key = "phanta_ghostseal" }
+		return { vars = { center.ability.max_highlighted } }
+	end,
+	use = function(self, card, area, copier)
+		local conv_card = G.hand.highlighted[1]
+    G.E_MANAGER:add_event(Event({func = function()
+      play_sound('tarot1')
+      card:juice_up(0.3, 0.5)
+    return true end }))
+        
+    G.E_MANAGER:add_event(Event({trigger = 'after',delay = 0.1,func = function()
+      conv_card:set_seal("phanta_ghostseal", nil, true)
+    return true end }))
+        
+    delay(0.5)
+    G.E_MANAGER:add_event(Event({trigger = 'after', delay = 0.2,func = function() G.hand:unhighlight_all(); return true end }))
+	end
+}
 
 --[[
 local zodiac = {
@@ -244,13 +400,6 @@ local packM2 = {
 
 SMODS.Joker {
   key = 'bootleg',
-  loc_txt = {
-    name = 'Bootleg',
-    text = {
-      "{C:chips}+#1#{} Chips,",
-      "{C:mult}+#2#{} Mult"
-    }
-  },
   config = { extra = { chips = 30, mult = 2 } },
   loc_vars = function(self, info_queue, card)
     return { vars = { card.ability.extra.chips, card.ability.extra.mult } }
@@ -272,18 +421,9 @@ SMODS.Joker {
 
 SMODS.Joker {
   key = 'trainstation',
-  loc_txt = {
-    name = 'Train Station',
-    text = {
-      "Gains {C:mult}+#1#{} Mult for each",
-	  "played {C:attention}#2#{}, rank changes",
-	  "each round",
-	  "{C:inactive}(Currently {C:mult}+#3#{C:inactive} Mult){}"
-    }
-  },
-  config = { extra = { added_mult = 2, current_mult = 0 } },
+  config = { extra = { added_mult = 1, current_mult = 0 } },
   loc_vars = function(self, info_queue, card)
-    return { vars = { card.ability.extra.added_mult, localize(G.GAME.current_round.train_station_card.rank, 'ranks'), card.ability.extra.current_mult } }
+    return { vars = { card.ability.extra.added_mult, localize((G.GAME.current_round.train_station_card.rank or 2).."", 'ranks'), card.ability.extra.current_mult } }
   end,
   rarity = 1,
   atlas = 'Phanta',
@@ -310,15 +450,6 @@ SMODS.Joker {
 
 SMODS.Joker {
   key = 'yellow',
-  loc_txt = {
-    name = 'Yellow',
-    text = {
-      "Earn {C:money}$#1#{} on",
-      "{C:attention}odd{} rounds,",
-      "earn {C:money}$#2#{} on",
-      "{C:attention}even{} rounds"
-    }
-  },
   config = { extra = { odd_money = 7, even_money = 1 } },
   rarity = 1,
   atlas = 'Phanta',
@@ -339,14 +470,6 @@ SMODS.Joker {
 
 SMODS.Joker {
   key = 'onemanstrash',
-  loc_txt = {
-    name = "One Man's Trash",
-    text = {
-      "Gains {C:mult}+#1#{} Mult for each",
-	  "card {C:attention}discarded{} this round",
-	  "{C:inactive}(Currently {C:mult}+#2#{C:inactive} Mult){}"
-    }
-  },
   no_pool_flag = "one_mans_trash_sold",
   config = { extra = { added_mult = 1, current_mult = 0 } },
   loc_vars = function(self, info_queue, card)
@@ -377,14 +500,6 @@ SMODS.Joker {
 
 SMODS.Joker {
   key = 'anothermanstreasure',
-  loc_txt = {
-    name = "Another Man's Treasure",
-    text = {
-      "Gains {C:white,X:mult}X#1#{} Mult for each",
-	  "card {C:attention}discarded{} this round",
-	  "{C:inactive}(Currently {C:white,X:mult}X#2#{C:inactive} Mult){}"
-    }
-  },
   yes_pool_flag = "one_mans_trash_sold",
   config = { extra = { added_xmult = 0.1, current_xmult = 1 } },
   loc_vars = function(self, info_queue, card)
@@ -412,12 +527,6 @@ SMODS.Joker {
 
 SMODS.Joker {
   key = 'oracle',
-  loc_txt = {
-    name = 'Oracle',
-    text = {
-      "{C:attention}+1{} consumable slot"
-    }
-  },
   rarity = 1,
   atlas = 'Phanta',
   pos = { x = 2, y = 8 },
@@ -437,13 +546,6 @@ SMODS.Joker {
 
 SMODS.Joker {
   key = 'thief',
-  loc_txt = {
-    name = 'Thief',
-    text = {
-      "{C:blue}+1{} hand",
-      "each round"
-    }
-  },
   rarity = 1,
   atlas = 'Phanta',
   pos = { x = 3, y = 8 },
@@ -461,17 +563,9 @@ SMODS.Joker {
 
 SMODS.Joker {
   key = 'nonuniformday',
-  loc_txt = {
-    name = "Non-Uniform Day",
-    text = {
-      "{C:green}#1# in #2#{} chance for each",
-      "played {C:attention}Wild{} card to create",
-      "a {C:tarot}Tarot{} card when scored",
-      "{C:inactive}(Must have room){}"
-    }
-  },
   config = { extra = { odds = 2 } },
   loc_vars = function(self, info_queue, card)
+    info_queue[#info_queue+1] = G.P_CENTERS.m_wild
     return { vars = { (G.GAME.probabilities.normal or 1), card.ability.extra.odds } }
   end,
   rarity = 1,
@@ -504,17 +598,9 @@ SMODS.Joker {
 
 SMODS.Joker {
   key = 'teastainedjoker',
-  loc_txt = {
-    name = "Tea-Stained Joker",
-    text = {
-      "{C:green}#1# in #2#{} chance to gain",
-      "{C:mult}+#3#{} Mult for each {C:attention}Lucky{}",
-      "card held in hand",
-      "{C:inactive}(Currently {C:mult}+#4#{C:inactive} Mult)"
-    }
-  },
   config = { extra = { odds = 5, added_mult = 3, current_mult = 0 } },
   loc_vars = function(self, info_queue, card)
+    info_queue[#info_queue+1] = G.P_CENTERS.m_lucky
     return { vars = { (G.GAME.probabilities.normal or 1), card.ability.extra.odds, card.ability.extra.added_mult, card.ability.extra.current_mult } }
   end,
   rarity = 2,
@@ -548,16 +634,7 @@ SMODS.Joker {
 }
 
 SMODS.Joker {
-  key = 'ghostjoker',
-  loc_txt = {
-    name = 'Ghost',
-    text = {
-      "Gives {X:mult,C:white}X#1#{} Mult for",
-      "each {C:tarot}Tarot{} card in",
-      "your {C:attention}consumable{} area",
-      "{C:inactive}(Currently {X:mult,C:white}X#2#{C:inactive} Mult)"
-    }
-  },
+  key = 'ghost',
   config = { extra = { x_mult = 0.75 } },
   rarity = 3,
   atlas = 'Phanta',
@@ -580,18 +657,42 @@ SMODS.Joker {
   end
 }
 
-SMODS.Joker {
-  key = 'layton',
+--[[SMODS.Joker {
+  key = 'hgdfghghfdghfd',
   loc_txt = {
-    name = 'Layton',
+    name = 'dhgfhgdfhdgfghdffghd',
     text = {
-      "{C:green}#1# in #2#{} chance to",
-      "give {C:mult}+#3#{} Mult,",
-      "held {C:tarot}Tarot{} cards",
-      "increase the odds",
-      "{C:inactive,s:0.75}(Guaranteed if with Luke){}"
+      "Gives {X:mult,C:white}X#1#{} Mult for",
+      "each {C:tarot}Tarot{} card in",
+      "your {C:attention}consumable{} area",
+      "{C:inactive}(Currently {X:mult,C:white}X#2#{C:inactive} Mult)"
     }
   },
+  config = { extra = { x_mult = 0.75 } },
+  rarity = 3,
+  atlas = 'Phanta',
+  pos = { x = 8, y = 0 },
+  soul_pos = { x = 9, y = 0 },
+  cost = 8,
+  blueprint_compat = true,
+  loc_vars = function(self, info_queue, card)
+    return { vars = { card.ability.extra.x_mult, 1 + (count_tarots() * card.ability.extra.x_mult) } }
+  end,
+  calculate = function(self, card, context)
+    if context.joker_main then
+      local tarot_count = count_tarots()
+      if tarot_count > 0 then
+        return {
+          message = localize { type = 'variable', key = 'a_xmult', vars = { 1 + (count_tarots() * card.ability.extra.x_mult) } },
+          Xmult_mod = 1 + (count_tarots() * card.ability.extra.x_mult)
+        }
+      end
+    end
+  end
+}]]--
+
+SMODS.Joker {
+  key = 'layton',
   config = { extra = { out_of_odds = 4, added_mult = 75 } },
   rarity = 2,
   atlas = 'Phanta',
@@ -616,16 +717,6 @@ SMODS.Joker {
 
 SMODS.Joker {
   key = 'luke',
-  loc_txt = {
-    name = 'Luke',
-    text = {
-      "{C:green}#1# in #2#{} chance to",
-      "give {X:mult,C:white}X#3#{} Mult,",
-      "held {C:planet}Planet{} cards",
-      "increase the odds",
-      "{C:inactive,s:0.75}(Guaranteed if with Layton){}"
-    }
-  },
   config = { extra = { out_of_odds = 4, x_mult = 3 } },
   rarity = 2,
   atlas = 'Phanta',
@@ -650,15 +741,6 @@ SMODS.Joker {
 
 SMODS.Joker {
   key = 'candle',
-  loc_txt = {
-    name = 'Candle',
-    text = {
-      "When {C:attention}Blind{} is selected,",
-	  "destroys 1 {C:tarot}Tarot{} card",
-	  "and gains {C:white,X:mult}X#1#{} Mult",
-	  "{C:inactive}(Currently {C:white,X:mult}X#2#{C:inactive} Mult){}"
-    }
-  },
   config = { extra = { added_xmult = 0.2, current_xmult = 1 } },
   rarity = 2,
   atlas = 'Phanta',
@@ -709,15 +791,6 @@ SMODS.Joker {
 
 SMODS.Joker {
   key = 'identity',
-  loc_txt = {
-    name = 'Identity',
-    text = {
-      "Create #1# {C:dark_edition}Negative{}",
-      "{C:spectral}Spectral{} cards at",
-      "the end of the {C:attention}shop",
-      "{C:red,E:2}self destructs{}"
-    }
-  },
   config = { extra = { no_of_cards = 2 } },
   rarity = 2,
   atlas = 'Phanta',
@@ -792,7 +865,7 @@ SMODS.Joker {
   config = { extra = { added_mult = 2, current_mult = 0 } },
   rarity = 2,
   atlas = 'Phanta',
-  pos = { x = 2, y = 0 },
+  pos = { x = 2, y = 9 },
   cost = 5,
   loc_vars = function(self, info_queue, card)
     return { vars = { card.ability.extra.added_mult, card.ability.extra.current_mult } }
@@ -840,15 +913,6 @@ SMODS.Joker {
 
 SMODS.Joker {
   key = 'p5joker',
-  loc_txt = {
-    name = 'Looking Cool, Joker!',
-    text = {
-      "Gains {C:mult}+#1#{} Mult per hand",
-      "played that is not your",
-      "most played {C:attention}poker hand{}",
-      "{C:inactive}(Currently {C:mult}+#2#{C:inactive} Mult)"
-    }
-  },
   config = { extra = { mult_per_hand = 2, current_mult = 0 } },
   rarity = 2,
   atlas = 'Phanta',
@@ -886,14 +950,6 @@ SMODS.Joker {
 
 SMODS.Joker {
   key = 'crescent',
-  loc_txt = {
-    name = 'Crescent',
-    text = {
-      "Creates a {C:tarot}Tarot{} card when",
-      "a {C:planet}Planet{} card is sold",
-      "{C:inactive}(Must have room){}"
-    }
-  },
   rarity = 1,
   atlas = 'Phanta',
   pos = { x = 3, y = 0 },
@@ -919,20 +975,43 @@ SMODS.Joker {
 }
 
 SMODS.Joker {
+  key = 'purplejoker',
+  config = { extra = { mult_per_hand = 1, current_mult = 0 } },
+  rarity = 2,
+  atlas = 'Phanta',
+  pos = { x = 3, y = 9 },
+  cost = 6,
+  loc_vars = function(self, info_queue, card)
+    return { vars = { card.ability.extra.mult_per_hand, card.ability.extra.current_mult } }
+  end,
+  blueprint_compat = true,
+  calculate = function(self, card, context)
+    if context.joker_main then
+      return { mult = card.ability.extra.current_mult }
+    end
+    if context.before and not context.blueprint then
+			if count_tarots() > 0 then
+				card.ability.extra.current_mult = card.ability.extra.current_mult + card.ability.extra.mult_per_hand
+				return {
+          message = localize('k_upgrade_ex'),
+          card = card
+        }
+			end
+		end
+  end
+}
+
+SMODS.Joker {
   key = 'goldenfiddle',
-  loc_txt = {
-    name = 'Golden Fiddle',
-    text = {
-      "When {C:attention}Blind{} is selected,",
-      "creates a copy of",
-      "{C:tarot}The Devil{} or {C:tarot}The Chariot{}",
-      "{C:inactive}(Must have room){}"
-    }
-  },
   rarity = 2,
   atlas = 'Phanta',
   pos = { x = 4, y = 0 },
   cost = 6,
+  loc_vars = function(self, info_queue, card)
+    info_queue[#info_queue+1] = G.P_CENTERS.c_devil
+    info_queue[#info_queue+1] = G.P_CENTERS.c_chariot
+    return {  }
+  end,
 	blueprint_compat = true,
   calculate = function(self, card, context)
     if context.setting_blind and not (context.blueprint_card or self).getting_sliced and #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit then
@@ -977,6 +1056,11 @@ SMODS.Joker {
   atlas = 'Phanta',
   pos = { x = 5, y = 0 },
   cost = 6,
+  loc_vars = function(self, info_queue, card)
+    info_queue[#info_queue+1] = G.P_CENTERS.c_heirophant
+    info_queue[#info_queue+1] = G.P_CENTERS.c_temperance
+    return {  }
+  end,
 	blueprint_compat = true,
   calculate = function(self, card, context)
     if context.setting_blind and not (context.blueprint_card or self).getting_sliced and #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit then
@@ -1021,6 +1105,10 @@ SMODS.Joker {
   atlas = 'Phanta',
   pos = { x = 2, y = 4 },
   cost = 6,
+  loc_vars = function(self, info_queue, card)
+    info_queue[#info_queue+1] = G.P_CENTERS.c_moon
+    return {  }
+  end,
 	blueprint_compat = true,
   calculate = function(self, card, context)
     if context.setting_blind and not (context.blueprint_card or self).getting_sliced and #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit then
@@ -1055,10 +1143,14 @@ SMODS.Joker {
       "{C:inactive}(Must have room){}"
     }
   },
-  rarity = 3,
+  rarity = 2,
   atlas = 'Phanta',
   pos = { x = 4, y = 7 },
-  cost = 8,
+  cost = 7,
+  loc_vars = function(self, info_queue, card)
+    info_queue[#info_queue+1] = G.P_CENTERS.c_judgement
+    return {  }
+  end,
   blueprint_compat = true,
   calculate = function(self, card, context)
     if context.setting_blind and not (context.blueprint_card or self).getting_sliced and #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit then
@@ -1098,6 +1190,10 @@ SMODS.Joker {
   pos = { x = 5, y = 4 },
   cost = 6,
 	blueprint_compat = true,
+  loc_vars = function(self, info_queue, card)
+    info_queue[#info_queue+1] = G.P_CENTERS.c_strength
+    return {  }
+  end,
   calculate = function(self, card, context)
     if context.setting_blind and not (context.blueprint_card or self).getting_sliced and #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit then
       G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
@@ -1174,6 +1270,10 @@ SMODS.Joker {
   pos = { x = 3, y = 4 },
   cost = 6,
 	blueprint_compat = true,
+  loc_vars = function(self, info_queue, card)
+    info_queue[#info_queue+1] = G.P_CENTERS.c_death
+    return {  }
+  end,
   calculate = function(self, card, context)
     if context.cardarea == G.jokers and context.before and G.GAME.current_round.hands_left == 0 and not (context.blueprint_card or card).getting_sliced and #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit then
       G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
@@ -1408,7 +1508,7 @@ SMODS.Joker {
     text = {
      "{C:green}#1# in #2#{} chance to create",
 	 "a copy of {C:blue}Earth{} if",
-	 "played hand is a Full House",
+	 "played hand is a {C:attention}Full House{}",
 	 "{C:inactive}(Must have room){}"
     }
   },
@@ -1417,6 +1517,10 @@ SMODS.Joker {
   atlas = 'Phanta',
   pos = { x = 0, y = 5 },
   cost = 5,
+  loc_vars = function(self, info_queue, card)
+    info_queue[#info_queue+1] = G.P_CENTERS.c_earth
+    return {  }
+  end,
   loc_vars = function(self, info_queue, card)
     return { vars = { (G.GAME.probabilities.normal or 1), card.ability.extra.odds } }
   end,
@@ -2122,6 +2226,10 @@ SMODS.Joker {
   soul_pos = { x = 4, y = 2 },
   cost = 20,
   loc_vars = function(self, info_queue, card)
+    info_queue[#info_queue+1] = G.P_CENTERS.e_negative
+    return {  }
+  end,
+  loc_vars = function(self, info_queue, card)
     return { vars = { card.ability.extra.cards_turned } }
   end,
 	blueprint_compat = true,
@@ -2166,6 +2274,7 @@ SMODS.Joker {
   soul_pos = { x = 5, y = 2 },
   cost = 20,
   loc_vars = function(self, info_queue, card)
+    info_queue[#info_queue+1] = G.P_CENTERS.m_gold
     return { vars = { card.ability.extra.xmult, card.ability.extra.money } }
   end,
   blueprint_compat = true,
@@ -2190,7 +2299,7 @@ SMODS.Joker {
     text = {
      "When {C:attention}Blind{} is selected,",
 	 "add a {C:attention}King{} with a",
-	 "{C:purple}Purple seal{} and edition",
+	 "{C:purple}Purple{} seal and edition",
 	 "to your hand"
     }
   },
@@ -2199,6 +2308,10 @@ SMODS.Joker {
   pos = { x = 5, y = 1 },
   soul_pos = { x = 0, y = 3 },
   cost = 20,
+  loc_vars = function(self, info_queue, card)
+    --info_queue[#info_queue+1] = G.P_CENTERS.
+    return { }
+  end,
   blueprint_compat = true,
   calculate = function(self, card, context)
 	if context.first_hand_drawn then
@@ -2315,7 +2428,7 @@ SMODS.Joker {
 local igo = Game.init_game_object
 function Game:init_game_object()
   local ret = igo(self)
-  ret.current_round.train_station_card = { rank = 2 } 
+  ret.current_round.train_station_card = { rank = nil } 
   ret.current_round.fainfol_card = { suit = 'Spades' } 
   return ret
 end
@@ -2332,7 +2445,9 @@ function SMODS.current_mod.reset_game_globals(run_start)
       local chosen_card = pseudorandom_element(valid_cards, pseudoseed('fainfol'..G.GAME.round_resets.ante))
       G.GAME.current_round.fainfol_card.suit = chosen_card.base.suit
   end
-  if G.GAME.current_round.train_station_card.rank == 14 then
+  if not G.GAME.current_round.train_station_card.rank then
+    G.GAME.current_round.train_station_card.rank = 2
+  elseif G.GAME.current_round.train_station_card.rank == 14 then
 	G.GAME.current_round.train_station_card.rank = 2
 	else
 	G.GAME.current_round.train_station_card.rank = G.GAME.current_round.train_station_card.rank + 1
