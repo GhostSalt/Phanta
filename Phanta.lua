@@ -1003,6 +1003,34 @@ SMODS.Joker {
 }
 
 SMODS.Joker {
+  key = 'monetjoker',
+  rarity = 3,
+  atlas = 'Phanta',
+  pos = { x = 4, y = 9 },
+  cost = 8,
+  blueprint_compat = true,
+  calculate = function(self, card, context)
+    if context.discard and #context.full_hand == 1 then
+      G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
+      G.E_MANAGER:add_event(Event({
+        trigger = 'before',
+        delay = 0.0,
+        func = (function()
+            local card = create_card('Tarot', G.consumeables, nil, nil, nil, nil, nil, 'monetjoker')
+            card:add_to_deck()
+            G.consumeables:emplace(card)
+            G.GAME.consumeable_buffer = 0
+          return true
+        end)}))
+      return {
+        message = localize('k_plus_tarot'),
+        card = card
+      }
+    end
+  end
+}
+
+SMODS.Joker {
   key = 'goldenfiddle',
   rarity = 2,
   atlas = 'Phanta',
@@ -1044,15 +1072,6 @@ SMODS.Joker {
 
 SMODS.Joker {
   key = 'reverie',
-  loc_txt = {
-    name = 'Reverie',
-    text = {
-      "When {C:attention}Blind{} is selected,",
-      "creates a copy of",
-      "{C:tarot}The Heirophant{} or {C:tarot}Temperance{}",
-      "{C:inactive}(Must have room){}"
-    }
-  },
   rarity = 2,
   atlas = 'Phanta',
   pos = { x = 5, y = 0 },
@@ -1093,15 +1112,6 @@ SMODS.Joker {
 
 SMODS.Joker {
   key = 'sees',
-  loc_txt = {
-    name = 'S.E.E.S.',
-    text = {
-      "When {C:attention}Blind{} is selected,",
-      "creates a copy of",
-      "{C:tarot}The Moon{}",
-      "{C:inactive}(Must have room){}"
-    }
-  },
   rarity = 2,
   atlas = 'Phanta',
   pos = { x = 2, y = 4 },
@@ -1135,15 +1145,6 @@ SMODS.Joker {
 
 SMODS.Joker {
   key = 'scissorsaresharp',
-  loc_txt = {
-    name = 'Scissors are Sharp',
-    text = {
-      "When {C:attention}Blind{} is selected,",
-      "creates a copy of",
-      "{C:tarot}Judgement{}",
-      "{C:inactive}(Must have room){}"
-    }
-  },
   rarity = 2,
   atlas = 'Phanta',
   pos = { x = 4, y = 7 },
@@ -1177,15 +1178,6 @@ SMODS.Joker {
 
 SMODS.Joker {
   key = 'caesarcipher',
-  loc_txt = {
-    name = 'Caesar Cipher',
-    text = {
-      "When {C:attention}Blind{} is selected,",
-      "creates a {C:planet}Planet{} card or",
-      "a copy of {C:tarot}Strength{}",
-      "{C:inactive}(Must have room){}"
-    }
-  },
   rarity = 2,
   atlas = 'Phanta',
   pos = { x = 5, y = 4 },
@@ -1257,15 +1249,6 @@ SMODS.Joker {
 
 SMODS.Joker {
   key = 'timepiece',
-  loc_txt = {
-    name = 'Timepiece',
-    text = {
-      "On {C:attention}final hand{} of",
-      "round, creates a",
-      "copy of {C:tarot}Death{}",
-      "{C:inactive}(Must have room){}"
-    }
-  },
   rarity = 2,
   atlas = 'Phanta',
   pos = { x = 3, y = 4 },
@@ -1299,15 +1282,6 @@ SMODS.Joker {
 
 SMODS.Joker {
   key = 'introspection',
-  loc_txt = {
-    name = 'Introspection',
-    text = {
-      "When {C:attention}Blind{} is selected,",
-      "creates a {V:1}#1#{} card and",
-      "changes type to {V:2}#2#{}",
-      "{C:inactive}(Must have room){}"
-    }
-  },
   config = { extra = { chosen_type = 0 } },
   rarity = 2,
   atlas = 'Phanta',
@@ -1341,15 +1315,6 @@ SMODS.Joker {
 
 SMODS.Joker {
   key = 'blindjoker',
-  loc_txt = {
-    name = 'Blind Joker',
-    text = {
-      "Creates the {C:planet}Planet{} card",
-	  "for hands that contain",
-	  "exactly #1# {C:attention}Aces{}",
-	  "{C:inactive}(Must have room){}"
-    }
-  },
   config = { extra = { no_of_aces = 2 } },
   rarity = 2,
   atlas = 'Phanta',
@@ -1397,15 +1362,6 @@ SMODS.Joker {
 
 SMODS.Joker {
   key = 'witchsmark',
-  loc_txt = {
-    name = "Witch's Mark",
-    text = {
-      "Creates a {C:tarot}Tarot{} card",
-	  "if all played cards",
-	  "are {C:attention}face cards{}",
-	  "{C:inactive}(Must have room){}"
-    }
-  },
   rarity = 3,
   atlas = 'Phanta',
   pos = { x = 0, y = 10 },
@@ -1442,14 +1398,6 @@ SMODS.Joker {
 
 SMODS.Joker {
   key = 'modernart',
-  loc_txt = {
-    name = 'Modern Art',
-    text = {
-     "Gains {C:money}$#1#{} of",
-     "{C:attention}sell value{} per",
-     "{C:attention}High Card{} played"
-    }
-  },
   config = { extra = { bonus_cash = 3 } },
   rarity = 1,
   atlas = 'Phanta',
@@ -1504,15 +1452,6 @@ SMODS.Joker {
 
 SMODS.Joker {
   key = 'conspiracist',
-  loc_txt = {
-    name = 'Conspiracist',
-    text = {
-     "{C:green}#1# in #2#{} chance to create",
-	 "a copy of {C:blue}Earth{} if",
-	 "played hand is a {C:attention}Full House{}",
-	 "{C:inactive}(Must have room){}"
-    }
-  },
   config = { extra = { odds = 2 } },
   rarity = 1,
   atlas = 'Phanta',
@@ -1551,14 +1490,6 @@ SMODS.Joker {
 
 SMODS.Joker {
   key = 'eyeofprovidence',
-  loc_txt = {
-    name = 'Eye of Providence',
-    text = {
-     "Each played",
-	 "{C:attention}Ace of Spades{} gives",
-	 "{C:white,X:mult}X#1#{} Mult when scored{}"
-    }
-  },
   config = { extra = { xmult = 2 } },
   rarity = 3,
   atlas = 'Phanta',
@@ -1582,14 +1513,6 @@ SMODS.Joker {
 
 SMODS.Joker {
   key = 'emotionaldamage',
-  loc_txt = {
-    name = 'Emotional Damage',
-    text = {
-     "Gains {C:white,X:mult}X#1#{} Mult per",
-     "discarded {C:attention}Flush{}",
-     "{C:inactive}(Currently {C:white,X:mult}X#2#{C:inactive} Mult)"
-    }
-  },
   config = { extra = { added_xmult = 0.2, current_xmult = 1 } },
   rarity = 3,
   atlas = 'Phanta',
@@ -1660,14 +1583,6 @@ SMODS.Joker {
 
 SMODS.Joker {
   key = 'thespear',
-  loc_txt = {
-    name = 'The Spear',
-    text = {
-     "If played hand contains any",
-	 "{C:spades}Spade{} cards, destroy one",
-	 "and upgrade {C:attention}Straight{}"
-    }
-  },
   rarity = 3,
   atlas = 'Phanta',
   pos = { x = 0, y = 6 },
@@ -1703,15 +1618,6 @@ SMODS.Joker {
 
 SMODS.Joker {
   key = 'thefuse',
-  loc_txt = {
-    name = 'The Fuse',
-    text = {
-     "If played hand contains any",
-	 "{C:hearts}Heart{} cards, destroy one",
-	 "and gain {C:white,X:mult}X#1#{} Mult",
-	 "{C:inactive}(Currently {C:white,X:mult}X#2#{C:inactive} Mult){}"
-    }
-  },
   config = { extra = { added_xmult = 0.1, current_xmult = 1 } },
   rarity = 3,
   atlas = 'Phanta',
@@ -1761,14 +1667,6 @@ SMODS.Joker {
 
 SMODS.Joker {
   key = 'themace',
-  loc_txt = {
-    name = 'The Mace',
-    text = {
-     "If played hand contains any",
-	 "{C:clubs}Club{} cards, destroy one",
-	 "and gain {C:money}$#1#{}"
-    }
-  },
   config = { extra = { money = 5 } },
   rarity = 3,
   atlas = 'Phanta',
@@ -1817,15 +1715,6 @@ SMODS.Joker {
 
 SMODS.Joker {
   key = 'thedagger',
-  loc_txt = {
-    name = 'The Dagger',
-    text = {
-     "If played hand contains any",
-	 "{C:diamonds}Diamond{} cards, destroy one",
-	 "and gain {C:mult}+#1#{} Mult",
-	 "{C:inactive}(Currently {C:mult}+#2#{C:inactive} Mult){}"
-    }
-  },
   config = { extra = { added_mult = 10, current_mult = 0 } },
   rarity = 3,
   atlas = 'Phanta',
@@ -1868,16 +1757,6 @@ end
 
 SMODS.Joker {
   key = 'selfportrait',
-  loc_txt = {
-    name = 'Self-portrait',
-    text = {
-     "After #2# rounds, {C:attention}duplicates{}",
-	 "the next Joker you {C:attention}buy{}",
-   "{C:red,E:2}self destructs{}",
-	 "{C:inactive}(Currently {C:attention}#1#{C:inactive}/#2#){}",
-   "{C:inactive}(Removes {C:dark_edition}Negative{C:inactive} from copy){}"
-    }
-  },
   config = { extra = { current_rounds = 0, rounds_required = 3 } },
   rarity = 3,
   atlas = 'Phanta',
@@ -1936,15 +1815,6 @@ SMODS.Joker {
 
 SMODS.Joker {
   key = 'caniossoul',
-  loc_txt = {
-    name = 'Canio\'s Soul',
-    text = {
-     "{C:white,X:mult}X#2#{} Mult, loses",
-	 "{C:white,X:mult}X#1#{} Mult if played",
-	 "hand contains any",
-	 "{C:attention}face cards{}"
-    }
-  },
   config = { extra = { lost_xmult = 0.5, current_xmult = 3 } },
   rarity = 3,
   atlas = 'Phanta',
@@ -2000,15 +1870,6 @@ SMODS.Joker {
 
 SMODS.Joker {
   key = 'tribouletssoul',
-  loc_txt = {
-    name = 'Triboulet\'s Soul',
-    text = {
-     "{C:white,X:mult}X#1#{} Mult for {C:attention}#2#{} round#3#,",
-	 "gains {C:attention}+#4#{} rounds if played",
-	 "hand contains a scoring",
-	 "{C:attention}King{} and {C:attention}Queen{}"
-    }
-  },
   config = { extra = { given_xmult = 3, remaining_hands = 2, added_hands = 2  } },
   rarity = 3,
   atlas = 'Phanta',
@@ -2074,15 +1935,6 @@ SMODS.Joker {
 
 SMODS.Joker {
   key = 'perkeossoul',
-  loc_txt = {
-    name = 'Perkeo\'s Soul',
-    text = {
-     "{C:white,X:mult}X#2#{} Mult, loses {C:white,X:mult}X#1#{} Mult",
-	 "at the end of the round",
-	 "if any {C:attention}consumable{} slots",
-   "are {C:attention}empty{}"
-    }
-  },
   config = { extra = { lost_xmult = 0.5, current_xmult = 3 } },
   rarity = 3,
   atlas = 'Phanta',
@@ -2130,6 +1982,31 @@ SMODS.Joker {
     end
 }
 
+SMODS.Joker {
+  key = 'possession',
+  config = { extra = { odds = 13 } },
+  rarity = 3,
+  atlas = 'Phanta',
+  pos = { x = 8, y = 0 },
+  soul_pos = { x = 9, y = 0 },
+  cost = 8,
+  blueprint_compat = true,
+  loc_vars = function(self, info_queue, card)
+    return { vars = { (G.GAME.probabilities.normal or 1), card.ability.extra.odds } }
+  end,
+  calculate = function(self, card, context)
+    if context.buying_card and context.card.config.center.set == "Joker" and not context.card.edition and pseudorandom('possession') < G.GAME.probabilities.normal / card.ability.extra.odds then
+      G.E_MANAGER:add_event(Event({
+        func = function()
+          context.card:set_edition{negative = true}
+		      card_eval_status_text(card, 'extra', nil, nil, nil, { message = "Possessed!" })
+          return true
+        end
+      })) 
+    end
+  end
+}
+
 --[[SMODS.Joker {
   key = 'shackles',
   loc_txt = {
@@ -2175,14 +2052,6 @@ SMODS.Joker {
 
 SMODS.Joker {
   key = 'ignaize',
-  loc_txt = {
-    name = 'Ignaize',
-    text = {
-      "Gains {X:mult,C:white}X#1#{} Mult when a",
-	  "{C:attention}consumable{} card is {C:attention}sold{}",
-	  "{C:inactive}(Currently {X:mult,C:white}X#2#{C:inactive} Mult)"
-    }
-  },
   config = { extra = { current_xmult = 1, added_xmult = 0.1 } },
   rarity = 4,
   atlas = 'Phanta',
@@ -2211,15 +2080,6 @@ SMODS.Joker {
 
 SMODS.Joker {
   key = 'dimere',
-  loc_txt = {
-    name = 'Dimere',
-    text = {
-      "When {C:attention}Boss Blind{} is defeated,",
-      "#1# random {C:attention}Joker{} becomes",
-      "{C:negative}Negative{} {C:inactive}(except Dimeres{}",
-	  "{C:inactive}or Jokers with editions){}"
-    }
-  },
   config = { extra = { cards_turned = 1 } },
   rarity = 4,
   atlas = 'Phanta',
@@ -2260,14 +2120,6 @@ SMODS.Joker {
 
 SMODS.Joker {
   key = 'goldor',
-  loc_txt = {
-    name = 'Goldor',
-    text = {
-      "Played {C:attention}Gold{} cards",
-	  "each give {C:money}$#2#{} and",
-	  "{C:white,X:mult}X#1#{} Mult when scored"
-    }
-  },
   config = { extra = { money = 3, xmult = 3 } },
   rarity = 4,
   atlas = 'Phanta',
@@ -2295,15 +2147,6 @@ SMODS.Joker {
 
 SMODS.Joker {
   key = 'famalia',
-  loc_txt = {
-    name = 'Famalia',
-    text = {
-     "When {C:attention}Blind{} is selected,",
-	 "add a {C:attention}King{} with a",
-	 "{C:purple}Purple{} seal and edition",
-	 "to your hand"
-    }
-  },
   rarity = 4,
   atlas = 'Phanta',
   pos = { x = 5, y = 1 },
@@ -2340,15 +2183,6 @@ SMODS.Joker {
 
 SMODS.Joker {
   key = 'godoor',
-  loc_txt = {
-    name = 'Godoor',
-    text = {
-     "Gains {C:white,X:mult}X#1#{} Mult at the",
-	 "end of the {C:attention}shop{} if you",
-	 "used exactly {C:attention}1{} {C:green}Reroll{}",
-	 "{C:inactive}(Current {C:white,X:mult}X#2#{C:inactive} Mult){}"
-    }
-  },
   config = { extra = { added_xmult = 1, current_xmult = 1, counted_rerolls = 0 } },
   rarity = 4,
   atlas = 'Phanta',
@@ -2398,14 +2232,6 @@ SMODS.Joker {
 
 SMODS.Joker {
   key = 'fainfol',
-  loc_txt = {
-    name = 'Fainfol',
-    text = {
-      "Each {V:1}#1#{} card held",
-      "in hand gives {C:white,X:mult}X#2#{} Mult,",
-      "suit changes every round"
-    }
-  },
   config = { extra = { xmult = 1.5 } },
   rarity = 4,
   atlas = 'Phanta',
