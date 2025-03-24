@@ -99,6 +99,13 @@ return {
                     "{C:inactive}(Currently {C:mult}+#4#{C:inactive} Mult)"
                 }
 			},
+			j_phanta_saltcircle = {
+                name = 'Salt Circle',
+                text = {
+                    "Sets Chips",
+					"to {C:chips}200{}"
+                }
+			},
 			j_phanta_ghost = {
                 name = 'Ghost',
                 text = {
@@ -128,6 +135,14 @@ return {
                     "{C:inactive,s:0.75}(Guaranteed if with Layton){}"
                 }
 			},
+			j_phanta_apollosbracelet = {
+                name = 'Apollo\'s Bracelet',
+                text = {
+                    --"Swaps {C:chips}Chips{} and {C:mult}Mult{}"
+                    "Swaps {C:chips}Chips{} and {C:mult}Mult{}",
+                    "before and during scoring"
+                }
+			},
 			j_phanta_candle = {
                 name = 'Candle',
                 text = {
@@ -135,6 +150,12 @@ return {
                     "destroys 1 {C:tarot}Tarot{} card",
                     "and gains {C:white,X:mult}X#1#{} Mult",
                     "{C:inactive}(Currently {C:white,X:mult}X#2#{C:inactive} Mult){}"
+                }
+			},
+			j_phanta_goo = {
+                name = 'Goo',
+                text = {
+                    ""
                 }
 			},
 			j_phanta_identity = {
@@ -161,6 +182,13 @@ return {
                     "Creates a {C:tarot}Tarot{} card when",
                     "a {C:planet}Planet{} card is sold",
                     "{C:inactive}(Must have room){}"
+                }
+			},
+			j_phanta_ransomnote = {
+                name = 'Ransom Note',
+                text = {
+                    "Gives {C:money}$#1#{} every",
+					"{C:attention}#2#{} {C:inactive}[#3#]{} Jokers {C:attention}sold{}"
                 }
 			},
 			j_phanta_purplejoker = {
@@ -277,6 +305,15 @@ return {
                     "a copy of {C:blue}Earth{} if",
                     "played hand is a {C:attention}Full House{}",
                     "{C:inactive}(Must have room){}"
+                }
+			},
+			j_phanta_diningtable = {
+                name = 'Dining Table',
+                text = {
+                    "If played hand is",
+					"a {C:attention}Full House{},",
+					"the {C:attention}pair{} of cards",
+					"become {C:attention}Glass{}"
                 }
 			},
 			j_phanta_eyeofprovidence = {
@@ -464,7 +501,9 @@ return {
 	},
 	misc = {
 		dictionary = {
-			
+			chips_equals = "Chips=",
+			swapped = "Swapped",
+			become_glass = "Glass"
 		},
 		labels = {
 			phanta_ghost_card = "Ghost Card",

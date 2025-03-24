@@ -634,6 +634,26 @@ SMODS.Joker {
 }
 
 SMODS.Joker {
+  key = 'saltcircle',
+  config = { extra = { chips = 200 } },
+  rarity = 1,
+  atlas = 'Phanta',
+  pos = { x = 6, y = 1 },
+  cost = 6,
+  blueprint_compat = false,
+  loc_vars = function(self, info_queue, card)
+    return { vars = { card.ability.extra.chips } }
+  end,
+  calculate = function(self, card, context)
+    if context.joker_main then
+	  hand_chips = mod_chips(card.ability.extra.chips)
+	  update_hand_text({delay = 0}, {chips = hand_chips})
+	  return { message = localize("chips_equals")..card.ability.extra.chips, colour = G.C.CHIPS, card = card }
+    end
+  end
+}
+
+SMODS.Joker {
   key = 'ghost',
   config = { extra = { x_mult = 0.75 } },
   rarity = 3,
@@ -969,8 +989,31 @@ SMODS.Joker {
           return true
         end
       }))
-			
-			return nil, true
+      return nil, true
+    end
+  end
+}
+
+SMODS.Joker {
+  key = 'ransomnote',
+  config = { extra = { money = 25, joker_tally = 0, jokers_required = 5 } },
+  rarity = 2,
+  atlas = 'Phanta',
+  pos = { x = 3, y = 10 },
+  cost = 6,
+  loc_vars = function(self, info_queue, card)
+    return { vars = { card.ability.extra.money, card.ability.extra.jokers_required, card.ability.extra.jokers_required - card.ability.extra.joker_tally } }
+  end,
+  blueprint_compat = true,
+  calculate = function(self, card, context)
+    if context.selling_card and context.card.config.center.set == "Joker" and not card.getting_sliced then
+	  card.ability.extra.joker_tally = card.ability.extra.joker_tally + 1
+	  if card.ability.extra.joker_tally == card.ability.extra.jokers_required then
+        card.ability.extra.joker_tally = 0
+		return { dollars = card.ability.extra.money }
+	  else
+	    return { message = card.ability.extra.joker_tally.."/"..card.ability.extra.jokers_required, colour = G.C.FILTER, card = card }
+	  end
     end
   end
 }
@@ -978,10 +1021,10 @@ SMODS.Joker {
 SMODS.Joker {
   key = 'purplejoker',
   config = { extra = { mult_per_hand = 1, current_mult = 0 } },
-  rarity = 2,
+  rarity = 1,
   atlas = 'Phanta',
   pos = { x = 3, y = 9 },
-  cost = 6,
+  cost = 4,
   loc_vars = function(self, info_queue, card)
     return { vars = { card.ability.extra.mult_per_hand, card.ability.extra.current_mult } }
   end,
@@ -1459,9 +1502,6 @@ SMODS.Joker {
   cost = 5,
   loc_vars = function(self, info_queue, card)
     info_queue[#info_queue+1] = G.P_CENTERS.c_earth
-    return {  }
-  end,
-  loc_vars = function(self, info_queue, card)
     return { vars = { (G.GAME.probabilities.normal or 1), card.ability.extra.odds } }
   end,
   blueprint_compat = true,
@@ -1484,6 +1524,65 @@ SMODS.Joker {
           return true
         end
       }))
+    end
+  end
+}
+
+SMODS.Joker {
+  key = 'diningtable',
+  config = {  },
+  rarity = 2,
+  atlas = 'Phanta',
+  pos = { x = 1, y = 10 },
+  cost = 7,
+  loc_vars = function(self, info_queue, card)
+    info_queue[#info_queue+1] = G.P_CENTERS.m_glass
+    return {  }
+  end,
+  blueprint_compat = false,
+  calculate = function(self, card, context)
+    if context.cardarea == G.jokers and context.before and not card.getting_sliced and next(context.poker_hands['Full House']) then
+      local rank_tallies = {}
+	  for k, v in ipairs(context.scoring_hand) do
+	    if not rank_tallies[v.rank] then
+		  rank_tallies[v.rank] = 0
+		end
+		rank_tallies[v.rank] = rank_tallies[v.rank] + 1
+		sendInfoMessage("rank "..v.rank, self.key)
+	  end
+	  sendInfoMessage(""..(rank_tallies[2]  or 0), self.key)
+	  sendInfoMessage(""..(rank_tallies[3]  or 0), self.key)
+	  sendInfoMessage(""..(rank_tallies[4]  or 0), self.key)
+	  sendInfoMessage(""..(rank_tallies[5]  or 0), self.key)
+	  sendInfoMessage(""..(rank_tallies[6]  or 0), self.key)
+	  sendInfoMessage(""..(rank_tallies[7]  or 0), self.key)
+	  sendInfoMessage(""..(rank_tallies[8]  or 0), self.key)
+	  sendInfoMessage(""..(rank_tallies[9]  or 0), self.key)
+	  sendInfoMessage(""..(rank_tallies[10] or 0), self.key)
+	  sendInfoMessage(""..(rank_tallies[11] or 0), self.key)
+	  sendInfoMessage(""..(rank_tallies[12] or 0), self.key)
+	  sendInfoMessage(""..(rank_tallies[13] or 0), self.key)
+	  sendInfoMessage(""..(rank_tallies[14] or 0), self.key)
+	  
+	  local candidates = {}
+	  for k, v in ipairs(context.scoring_hand) do
+	    if rank_tallies[v.rank] == 2 then
+		  candidates[#candidates + 1] = v
+		end
+	  end
+	  
+	  if #candidates > 0 then
+	    for c in candidates do
+		  c:set_ability(G.P_CENTERS.m_glass, nil, true)
+          G.E_MANAGER:add_event(Event({
+            func = function()
+              c:juice_up()
+              return true
+            end
+          }))
+		end
+		return { message = localize("become_glass"), colour = G.C.FILTER, card = card }
+	  end
     end
   end
 }
