@@ -761,7 +761,7 @@ SMODS.Joker {
 
 SMODS.Joker {
   key = 'candle',
-  config = { extra = { added_xmult = 0.2, current_xmult = 1 } },
+  config = { extra = { added_xmult = 0.25, current_xmult = 1 } },
   rarity = 2,
   atlas = 'Phanta',
   pos = { x = 5, y = 7 },
@@ -1814,7 +1814,7 @@ SMODS.Joker {
 
 SMODS.Joker {
   key = 'thedagger',
-  config = { extra = { added_mult = 10, current_mult = 0 } },
+  config = { extra = { added_mult = 10, current_mult = 0, selected_card = nil } },
   rarity = 3,
   atlas = 'Phanta',
   pos = { x = 3, y = 6 },
@@ -1824,34 +1824,28 @@ SMODS.Joker {
     return { vars = { card.ability.extra.added_mult, card.ability.extra.current_mult } }
   end,
   calculate = function(self, card, context)
-  if context.joker_main then
-    local destructable_card = {}
-			for i = 1, #context.scoring_hand do
-				if context.scoring_hand[i]:is_suit("Diamonds") and not context.scoring_hand[i].getting_sliced then
-					destructable_card[#destructable_card + 1] = context.scoring_hand[i]
-				end
-			end
-			local card_to_destroy = #destructable_card > 0 and pseudorandom_element(destructable_card, pseudoseed("thedagger")) or nil
+    if context.joker_main then
+      if not context.blueprint then
+        local diamond_cards = {}
+        for k, v in ipairs(context.scoring_hand) do
+          if v:is_suit("Diamonds") then 
+            diamond_cards[#diamond_cards + 1] = v
+          end
+        end
+        if diamond_cards then
+          card.ability.extra.selected_card = pseudorandom_element(diamond_cards, pseudoseed("thedagger"))
+        else
+          card.ability.extra.selected_card = nil
+        end
+      end
+      return { mult = card.ability.extra.current_mult }
+    end
 
-			if card_to_destroy then
-				card_to_destroy.getting_sliced = true
-				card.ability.extra.current_mult = card.ability.extra.current_mult + card.ability.extra.added_mult
-				G.E_MANAGER:add_event(Event({
-					func = function()
-						(context.blueprint_card or card):juice_up(0.8, 0.8)
-						card_to_destroy:start_dissolve({ G.C.RED }, nil, 1.6)
-						return true
-					end,
-				}))
-			end
-    if card.ability.extra.current_mult > 0 then
-      return {
-        message = localize { type = 'variable', key = 'a_mult', vars = { card.ability.extra.current_mult } },
-        mult_mod = card.ability.extra.current_mult
-      }
+    if context.destroying_card and card.ability.extra.selected_card and context.other_card == card.ability.extra.selected_card then
+      card.ability.extra.current_mult = card.ability.extra.current_mult + card.ability.extra.added_mult
+      return {remove = true}
     end
   end
-end
 }
 
 SMODS.Joker {
