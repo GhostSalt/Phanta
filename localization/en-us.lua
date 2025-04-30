@@ -173,8 +173,8 @@ return {
                 name = 'Train Station',
                 text = {
                     "Gains {C:mult}+#1#{} Mult for each",
-                    "played {C:attention}#2#{}, rank increases",
-                    "each round",
+                    "played and scored {C:attention}#2#{}, rank",
+                    "increases each round",
                     "{C:inactive}(Currently {C:mult}+#3#{C:inactive} Mult){}"
                 }
 			},
@@ -656,7 +656,7 @@ return {
 			j_phanta_thespear = {
                 name = 'The Spear',
                 text = {
-                    "If played hand contains any",
+                    "If scored hand contains any",
                     "{C:spades}Spade{} cards, destroys one",
                     "and upgrade {C:attention}Straight{}"
                 }
@@ -664,7 +664,7 @@ return {
 			j_phanta_thefuse = {
                 name = 'The Fuse',
                 text = {
-                    "If played hand contains any",
+                    "If scored hand contains any",
                     "{C:hearts}Heart{} cards, destroys one",
                     "and gains {C:white,X:mult}X#1#{} Mult",
                     "{C:inactive}(Currently {C:white,X:mult}X#2#{C:inactive} Mult){}"
@@ -673,7 +673,7 @@ return {
 			j_phanta_themace = {
                 name = 'The Mace',
                 text = {
-                    "If played hand contains any",
+                    "If scored hand contains any",
                     "{C:clubs}Club{} cards, destroys one",
                     "and gives {C:money}$#1#{}"
                 }
@@ -681,7 +681,7 @@ return {
 			j_phanta_thedagger = {
                 name = 'The Dagger',
                 text = {
-                    "If played hand contains any",
+                    "If scored hand contains any",
                     "{C:diamonds}Diamond{} cards, destroys one",
                     "and gains {C:mult}+#1#{} Mult",
                     "{C:inactive}(Currently {C:mult}+#2#{C:inactive} Mult){}"

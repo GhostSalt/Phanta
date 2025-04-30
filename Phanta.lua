@@ -449,7 +449,7 @@ SMODS.Tarot {
 
 
 
-SMODS.Shader {
+--[[SMODS.Shader {
   key = "waxed",
   path = "waxed.fs"
 }
@@ -479,7 +479,7 @@ SMODS.Edition {
     if context.main_scoring and context.cardarea == G.play then return { xmult = self.config.xmult } end
   end,
   in_pool = function(v) return v.source == "standard_edition" end
-}
+}]]--
 
 
 
@@ -496,7 +496,7 @@ SMODS.Enhancement {
     return { vars = { center.ability.Xmult } }
   end,
   calculate = function(self, card, context)
-    if context.destroy_card and not (card.edition and card.edition.key == 'e_phanta_waxed') then
+    if context.destroy_card and context.cardarea == G.play and not (card.edition and card.edition.key == 'e_phanta_waxed') then
       card:set_ability(G.P_CENTERS.m_phanta_coppergrateexposed, nil, true)
       return false
     end
@@ -516,7 +516,7 @@ SMODS.Enhancement {
     return { vars = { center.ability.Xmult, center.ability.bonus } }
   end,
   calculate = function(self, card, context)
-    if context.destroy_card and not (card.edition and card.edition.key == 'e_phanta_waxed') then
+    if context.destroy_card and context.cardarea == G.play and not (card.edition and card.edition.key == 'e_phanta_waxed') then
       card:set_ability(G.P_CENTERS.m_phanta_coppergrateweathered, nil, true)
       return false
     end
@@ -538,7 +538,7 @@ SMODS.Enhancement {
     return { vars = { center.ability.Xmult, center.ability.bonus } }
   end,
   calculate = function(self, card, context)
-    if context.destroy_card and not (card.edition and card.edition.key == 'e_phanta_waxed') then
+    if context.destroy_card and context.cardarea == G.play and not (card.edition and card.edition.key == 'e_phanta_waxed') then
       card:set_ability(G.P_CENTERS.m_phanta_coppergrateoxidised, nil, true)
       return false
     end
@@ -560,7 +560,7 @@ SMODS.Enhancement {
     return { vars = { center.ability.bonus } }
   end,
   calculate = function(self, card, context)
-    if context.destroy_card and not (card.edition and card.edition.key == 'e_phanta_waxed') then return { remove = true } end
+    if context.destroy_card and context.cardarea == G.play and not (card.edition and card.edition.key == 'e_phanta_waxed') then return { remove = true } end
   end,
   set_badges = function(self, card, badges)
     badges[#badges + 1] = create_badge(localize('copper_grate_oxidised'), G.C.PHANTA.MISC_COLOURS.COPPER_OXIDISED,
@@ -1622,7 +1622,7 @@ SMODS.Joker {
       return { mult = card.ability.extra.current_mult }
     end
 
-    if context.cardarea == G.jokers and context.before and not context.blueprint and #context.scoring_hand <= card.ability.extra.no_of_cards then
+    if context.cardarea == G.jokers and context.before and not context.blueprint and #G.play.cards <= card.ability.extra.no_of_cards then
       card.ability.extra.current_mult = card.ability.extra.current_mult + card.ability.extra.added_mult
       return {
         message = localize('k_upgrade_ex'),
