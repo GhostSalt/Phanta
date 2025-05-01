@@ -1351,6 +1351,28 @@ SMODS.Joker {
 }
 
 SMODS.Joker {
+  key = 'theapparition',
+  rarity = 2,
+  atlas = 'Phanta',
+  pos = { x = 7, y = 1 },
+  draw = function(self, card, layer)
+    card.children.center:draw_shader('voucher', nil, card.ARGS.send_to_shader)
+  end,
+  cost = 6,
+  blueprint_compat = true,
+  eternal_compat = true,
+  perishable_compat = true,
+  calculate = function(self, card, context)
+    if context.repetition and context.cardarea == "unscored" then
+      return {
+        message = localize("k_again_ex"),
+        repetitions = 1
+      }
+    end
+  end
+}
+
+SMODS.Joker {
   key = 'grimreaper',
   rarity = 3,
   atlas = 'Phanta',
@@ -1763,12 +1785,13 @@ SMODS.Joker {
   draw = function(self, card, layer)
     card.children.center:draw_shader('voucher', nil, card.ARGS.send_to_shader)
   end,
-  blueprint_compat = true,
-  eternal_compat = true,
+  blueprint_compat = false,
+  eternal_compat = false,
   perishable_compat = false,
   phanta_shatters = true,
   calculate = function(self, card, context)
-    if context.ending_shop and not context.repetition then
+    if context.ending_shop and not context.repetition and not context.blueprint then
+      local _card = card
       G.E_MANAGER:add_event(Event({
         func = function()
           play_sound('timpani')
@@ -1803,7 +1826,7 @@ SMODS.Joker {
           return true
         end
       }))
-      card_eval_status_text(card, 'extra', nil, nil, nil, { message = "Shattered!" })
+      card_eval_status_text(_card, 'extra', nil, nil, nil, { message = "Shattered!", card = _card })
       return true
     end
   end
@@ -3970,7 +3993,7 @@ SMODS.Back {
 
 local ref1 = Card.start_dissolve
 function Card:start_dissolve()
-  if self.config.center.phanta_shatters then
+  if self.config and self.config.center and self.config.center.phanta_shatters then
     return self:shatter()
   else
     return ref1(self)

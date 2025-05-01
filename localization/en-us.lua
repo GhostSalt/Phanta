@@ -325,6 +325,13 @@ return {
                     "{C:inactive}(Currently {X:mult,C:white}X#2#{C:inactive} Mult)"
                 }
 			},
+			j_phanta_theapparition = {
+                name = 'The Apparition',
+                text = {
+                    "Retriggers all played",
+                    "and {C:attention}unscored{} cards"
+                }
+			},
 			j_phanta_grimreaper = {
                 name = 'The Grim Reaper',
                 text = {
