@@ -1,10 +1,10 @@
 -- For rendering shaders on the souls
 
 local scale_mod = 0.07 + 0.02 * math.sin(1.8 * G.TIMERS.REAL) +
-0.00 * math.sin((G.TIMERS.REAL - math.floor(G.TIMERS.REAL)) * math.pi * 14) *
-(1 - (G.TIMERS.REAL - math.floor(G.TIMERS.REAL))) ^ 3
+    0.00 * math.sin((G.TIMERS.REAL - math.floor(G.TIMERS.REAL)) * math.pi * 14) *
+    (1 - (G.TIMERS.REAL - math.floor(G.TIMERS.REAL))) ^ 3
 local rotate_mod = 0.05 * math.sin(1.219 * G.TIMERS.REAL) +
-0.00 * math.sin((G.TIMERS.REAL) * math.pi * 5) * (1 - (G.TIMERS.REAL - math.floor(G.TIMERS.REAL))) ^ 2
+    0.00 * math.sin((G.TIMERS.REAL) * math.pi * 5) * (1 - (G.TIMERS.REAL - math.floor(G.TIMERS.REAL))) ^ 2
 
 SMODS.Atlas {
   key = "modicon",
@@ -90,8 +90,69 @@ function count_planets()
   return planet_counter
 end
 
+function get_lowest(hand)
+  local lowest = nil
+  for k, v in ipairs(hand) do
+    if not lowest or v:get_nominal() < lowest:get_nominal() then
+      lowest = v
+    end
+  end
+  if #hand > 0 then return { { lowest } } else return {} end
+end
+
+SMODS.PokerHand {
+  key = "junk",
+  chips = 5,
+  mult = 2,
+  l_chips = 20,
+  l_mult = 1,
+  visible = false,
+  above_hand = "High Card",
+  example = {
+    { 'C_A', false },
+    { 'H_Q', false },
+    { 'H_6', false },
+    { 'C_3', false },
+    { 'S_2', true }
+  },
+  evaluate = function(parts, hand)
+    local lowest = get_lowest(hand)
+    if next(lowest) and #hand >= 5 then return lowest else return {} end
+  end
+}
+
+SMODS.Consumable {
+  set = "Planet",
+  key = "rubbish",
+  pos = { x = 0, y = 2 },
+  config = {
+    hand_type = "phanta_junk",
+    softlock = true
+  },
+  atlas = "PhantaTarots",
+  loc_vars = function(self, info_queue, center)
+    return {
+      vars = {
+        G.GAME.hands["phanta_junk"].level,
+        localize("phanta_junk"),
+        G.GAME.hands["phanta_junk"].l_mult,
+        G.GAME.hands["phanta_junk"].l_chips,
+        colours = { (to_big(G.GAME.hands["phanta_junk"].level) == to_big(1) and G.C.UI.TEXT_DARK or G.C.HAND_LEVELS[math.min(7, G.GAME.hands["phanta_junk"].level)]) }
+      }
+    }
+  end
+}
+
+SMODS.PokerHand:take_ownership('High Card', {
+  example = {
+    { 'S_A', true },
+    { 'D_Q', false },
+    { 'D_9', false },
+    { 'C_4', false },
+  },
+}, true)
+
 SMODS.Enhancement {
-  object_type = "Enhancement",
   key = "ghostcard",
   atlas = "PhantaEnhancements",
   pos = { x = 0, y = 0 },
@@ -108,7 +169,6 @@ SMODS.Enhancement {
 }
 
 SMODS.Seal {
-  object_type = "Seal",
   key = "ghostseal",
   loc_txt = {
     name = 'Ghost Seal',
@@ -141,7 +201,6 @@ SMODS.Seal {
 }
 
 SMODS.Consumable {
-  object_type = "Consumable",
   set = "Tarot",
   key = "grave",
   loc_txt = {
@@ -165,7 +224,6 @@ SMODS.Consumable {
 }
 
 SMODS.Consumable {
-  object_type = "Consumable",
   set = "Spectral",
   key = "jinn",
   loc_txt = {
@@ -206,14 +264,17 @@ SMODS.Consumable {
     }))
 
     delay(0.5)
-    G.E_MANAGER:add_event(Event({ trigger = 'after', delay = 0.2, func = function()
-      G.hand:unhighlight_all(); return true
-    end }))
+    G.E_MANAGER:add_event(Event({
+      trigger = 'after',
+      delay = 0.2,
+      func = function()
+        G.hand:unhighlight_all(); return true
+      end
+    }))
   end
 }
 
 SMODS.Consumable {
-  object_type = "Consumable",
   set = "Spectral",
   key = "shard",
   loc_txt = {
@@ -249,7 +310,7 @@ SMODS.Consumable {
   end,
   can_use = function(self, card)
     return G.consumeables.config.card_limit >= #G.consumeables.cards and G.GAME.last_spectral ~= nil and
-    G.GAME.last_spectral ~= "c_phanta_shard"
+        G.GAME.last_spectral ~= "c_phanta_shard"
   end,
   use = function(self, card, area, copier)
     G.E_MANAGER:add_event(Event({
@@ -274,7 +335,6 @@ SMODS.Consumable {
 }
 
 SMODS.Consumable {
-  object_type = "Consumable",
   set = "Spectral",
   key = "orbit",
   loc_txt = {
@@ -314,8 +374,13 @@ SMODS.Consumable {
     chosen_group = pseudorandom_element(candidates, pseudoseed('orbit'))
 
     update_hand_text({ sound = 'button', volume = 0.7, pitch = 0.8, delay = 0.3 },
-      { handname = localize(chosen_group.hand_name, 'poker_hands'), chips = chosen_group.hand.chips, mult = chosen_group
-      .hand.mult, level = chosen_group.hand.level })
+      {
+        handname = localize(chosen_group.hand_name, 'poker_hands'),
+        chips = chosen_group.hand.chips,
+        mult = chosen_group
+            .hand.mult,
+        level = chosen_group.hand.level
+      })
     level_up_hand(card, chosen_group.hand_name, false, card.ability.extra.no_of_upgrades)
     update_hand_text({ sound = 'button', volume = 0.7, pitch = 1.1, delay = 0 },
       { mult = 0, chips = 0, handname = '', level = '' })
@@ -327,8 +392,7 @@ SMODS.Consumable {
   end
 }
 
-SMODS.Tarot {
-  object_type = "Consumable",
+SMODS.Consumable {
   set = "Spectral",
   key = "norwellwall",
   loc_txt = {
@@ -365,7 +429,7 @@ SMODS.Tarot {
   end
 }
 
-SMODS.Tarot {
+SMODS.Consumable {
   object_type = "Consumable",
   set = "Spectral",
   key = "follower",
@@ -403,7 +467,7 @@ SMODS.Tarot {
   end
 }
 
-SMODS.Tarot {
+SMODS.Consumable {
   object_type = "Consumable",
   set = "Spectral",
   key = "timeline",
@@ -479,7 +543,7 @@ SMODS.Edition {
     if context.main_scoring and context.cardarea == G.play then return { xmult = self.config.xmult } end
   end,
   in_pool = function(v) return v.source == "standard_edition" end
-}]]--
+}]] --
 
 
 
@@ -487,7 +551,6 @@ SMODS.Edition {
 
 
 SMODS.Enhancement {
-  object_type = "Enhancement",
   key = "coppergratefresh",
   atlas = "PhantaEnhancements",
   pos = { x = 0, y = 1 },
@@ -507,7 +570,6 @@ SMODS.Enhancement {
 }
 
 SMODS.Enhancement {
-  object_type = "Enhancement",
   key = "coppergrateexposed",
   atlas = "PhantaEnhancements",
   pos = { x = 1, y = 1 },
@@ -529,7 +591,6 @@ SMODS.Enhancement {
 }
 
 SMODS.Enhancement {
-  object_type = "Enhancement",
   key = "coppergrateweathered",
   atlas = "PhantaEnhancements",
   pos = { x = 0, y = 2 },
@@ -551,7 +612,6 @@ SMODS.Enhancement {
 }
 
 SMODS.Enhancement {
-  object_type = "Enhancement",
   key = "coppergrateoxidised",
   atlas = "PhantaEnhancements",
   pos = { x = 1, y = 2 },
@@ -1079,12 +1139,13 @@ SMODS.Joker {
           play_sound("phanta_xhands")
           ease_hands_played(G.GAME.current_round.hands_left * (card.ability.extra.given_xhands - 1), true)
           --[[card_eval_status_text(context.blueprint_card or card, 'extra', nil, nil, nil,
-            { message = "X" .. card.ability.extra.given_xhands .. " Hands", colour = G.C.BLUE, card = context.blueprint_card or card })]]--
+            { message = "X" .. card.ability.extra.given_xhands .. " Hands", colour = G.C.BLUE, card = context.blueprint_card or card })]] --
           return true
         end
       }))
 
-      return { message = "X" .. card.ability.extra.given_xhands .. " Hands", colour = G.C.BLUE, card = context.blueprint_card or card }
+      return { message = "X" .. card.ability.extra.given_xhands .. " Hands", colour = G.C.BLUE, card = context
+      .blueprint_card or card }
     end
   end
 }
@@ -1319,7 +1380,7 @@ SMODS.Joker {
       return { message = localize("mult_equals") .. card.ability.extra.mult, colour = G.C.MULT, card = card }
     end
   end
-}]]--
+}]] --
 
 SMODS.Joker {
   key = 'ghost',
@@ -1567,7 +1628,7 @@ SMODS.Joker {
         end
       end
       local tarot_to_destroy = #destructable_tarot > 0 and pseudorandom_element(destructable_tarot, pseudoseed("candle")) or
-      nil
+          nil
 
       if tarot_to_destroy then
         tarot_to_destroy.getting_sliced = true
@@ -1693,7 +1754,7 @@ SMODS.Joker {
 
       if #bonus_cards > 0 then
         card.ability.extra.current_chips = card.ability.extra.current_chips +
-        (card.ability.extra.added_chips * #bonus_cards)
+            (card.ability.extra.added_chips * #bonus_cards)
         return {
           message = localize { type = 'variable', key = 'a_chips', vars = { card.ability.extra.current_chips } },
           colour = G.C.CHIPS,
@@ -1894,7 +1955,7 @@ SMODS.Joker {
       end
       if suits["Hearts"] > 0 or suits["Diamonds"] > 0 or suits["Spades"] > 0 or suits["Clubs"] > 0 then
         card.ability.extra.current_mult = card.ability.extra.current_mult +
-        ((suits["Hearts"] + suits["Diamonds"] + suits["Spades"] + suits["Clubs"]) * card.ability.extra.added_mult)
+            ((suits["Hearts"] + suits["Diamonds"] + suits["Spades"] + suits["Clubs"]) * card.ability.extra.added_mult)
         return {
           message = localize('k_upgrade_ex'),
           colour = G.C.FILTER,
@@ -1993,8 +2054,12 @@ SMODS.Joker {
         card.ability.extra.joker_tally = 0
         return { dollars = card.ability.extra.money }
       else
-        return { message = card.ability.extra.joker_tally .. "/" .. card.ability.extra.jokers_required, colour = G.C
-        .FILTER, card = card }
+        return {
+          message = card.ability.extra.joker_tally .. "/" .. card.ability.extra.jokers_required,
+          colour = G.C
+              .FILTER,
+          card = card
+        }
       end
     end
   end
@@ -2405,8 +2470,11 @@ SMODS.Joker {
             end
           }))
           card_eval_status_text(context.blueprint_card or card, 'extra', nil, nil, nil,
-            { message = localize(({ 'k_plus_tarot', 'k_plus_planet' })[card.ability.extra.chosen_type + 1]), colour = ({ G.C.PURPLE, G.C.BLUE })
-            [card.ability.extra.chosen_type + 1] })
+            {
+              message = localize(({ 'k_plus_tarot', 'k_plus_planet' })[card.ability.extra.chosen_type + 1]),
+              colour = ({ G.C.PURPLE, G.C.BLUE })
+                  [card.ability.extra.chosen_type + 1]
+            })
           return true
         end)
       }))
@@ -2628,8 +2696,18 @@ SMODS.Joker {
         if card.ability.extra.ranks[context.scoring_hand[i]:get_id() .. ""] and card.ability.extra.ranks[context.scoring_hand[i]:get_id() .. ""] == 0 then
           card.ability.extra.ranks[context.scoring_hand[i]:get_id() .. ""] = 1
 
-          local ranks_to_string = { ["2"] = "2", ["3"] = "3", ["4"] = "4", ["5"] = "5", ["6"] = "6", ["7"] = "7", ["8"] =
-          "8", ["9"] = "9", ["14"] = "Ace" }
+          local ranks_to_string = {
+            ["2"] = "2",
+            ["3"] = "3",
+            ["4"] = "4",
+            ["5"] = "5",
+            ["6"] = "6",
+            ["7"] = "7",
+            ["8"] =
+            "8",
+            ["9"] = "9",
+            ["14"] = "Ace"
+          }
           card_eval_status_text(context.blueprint_card or card, 'extra', nil, nil, nil,
             { message = ranks_to_string[context.scoring_hand[i]:get_id() .. ""], colour = G.C.FILTER })
 
@@ -2642,17 +2720,36 @@ SMODS.Joker {
               and card.ability.extra.ranks["7"] == 1
               and card.ability.extra.ranks["8"] == 1
               and card.ability.extra.ranks["9"] == 1 then
-            card.ability.extra.ranks = { ["2"] = 0, ["3"] = 0, ["4"] = 0, ["5"] = 0, ["6"] = 0, ["7"] = 0, ["8"] = 0,
-              ["9"] = 0, ["14"] = 0 }
+            card.ability.extra.ranks = {
+              ["2"] = 0,
+              ["3"] = 0,
+              ["4"] = 0,
+              ["5"] = 0,
+              ["6"] = 0,
+              ["7"] = 0,
+              ["8"] = 0,
+              ["9"] = 0,
+              ["14"] = 0
+            }
             card_eval_status_text(context.blueprint_card or card, 'extra', nil, nil, nil,
               { message = localize('k_upgrade_ex') })
             update_hand_text({ sound = 'button', volume = 0.7, pitch = 0.8, delay = 0.3 },
-              { handname = "Straight", chips = G.GAME.hands["Straight"].chips, mult = G.GAME.hands["Straight"].mult, level =
-              G.GAME.hands["Straight"].level })
+              {
+                handname = "Straight",
+                chips = G.GAME.hands["Straight"].chips,
+                mult = G.GAME.hands["Straight"].mult,
+                level =
+                    G.GAME.hands["Straight"].level
+              })
             level_up_hand(card, "Straight", nil, card.ability.extra.no_of_upgrades)
             update_hand_text({ sound = 'button', volume = 0.7, pitch = 0.8, delay = 0.3 },
-              { handname = context.scoring_name, chips = G.GAME.hands[context.scoring_name].chips, mult = G.GAME.hands
-              [context.scoring_name].mult, level = G.GAME.hands[context.scoring_name].level })
+              {
+                handname = context.scoring_name,
+                chips = G.GAME.hands[context.scoring_name].chips,
+                mult = G.GAME.hands
+                    [context.scoring_name].mult,
+                level = G.GAME.hands[context.scoring_name].level
+              })
           end
         end
       end
@@ -2680,12 +2777,22 @@ SMODS.Joker {
           card_eval_status_text(context.blueprint_card or card, 'extra', nil, nil, nil,
             { message = localize('k_upgrade_ex') })
           update_hand_text({ sound = 'button', volume = 0.7, pitch = 0.8, delay = 0.3 },
-            { handname = "Straight", chips = G.GAME.hands["Straight"].chips, mult = G.GAME.hands["Straight"].mult, level =
-            G.GAME.hands["Straight"].level })
+            {
+              handname = "Straight",
+              chips = G.GAME.hands["Straight"].chips,
+              mult = G.GAME.hands["Straight"].mult,
+              level =
+                  G.GAME.hands["Straight"].level
+            })
           level_up_hand(card, "Straight", nil, card.ability.extra.no_of_upgrades)
           update_hand_text({ sound = 'button', volume = 0.7, pitch = 0.8, delay = 0.3 },
-            { handname = context.scoring_name, chips = G.GAME.hands[context.scoring_name].chips, mult = G.GAME.hands
-            [context.scoring_name].mult, level = G.GAME.hands[context.scoring_name].level })
+            {
+              handname = context.scoring_name,
+              chips = G.GAME.hands[context.scoring_name].chips,
+              mult = G.GAME.hands
+                  [context.scoring_name].mult,
+              level = G.GAME.hands[context.scoring_name].level
+            })
         end
       }))
     end
@@ -2894,12 +3001,22 @@ SMODS.Joker {
         card_eval_status_text(context.blueprint_card or card, 'extra', nil, nil, nil,
           { message = localize('k_upgrade_ex') })
         update_hand_text({ sound = 'button', volume = 0.7, pitch = 0.8, delay = 0.3 },
-          { handname = "Straight", chips = G.GAME.hands["Straight"].chips, mult = G.GAME.hands["Straight"].mult, level =
-          G.GAME.hands["Straight"].level })
+          {
+            handname = "Straight",
+            chips = G.GAME.hands["Straight"].chips,
+            mult = G.GAME.hands["Straight"].mult,
+            level =
+                G.GAME.hands["Straight"].level
+          })
         level_up_hand(card, "Straight", nil, 1)
         update_hand_text({ sound = 'button', volume = 0.7, pitch = 0.8, delay = 0.3 },
-          { handname = context.scoring_name, chips = G.GAME.hands[context.scoring_name].chips, mult = G.GAME.hands
-          [context.scoring_name].mult, level = G.GAME.hands[context.scoring_name].level })
+          {
+            handname = context.scoring_name,
+            chips = G.GAME.hands[context.scoring_name].chips,
+            mult = G.GAME.hands
+                [context.scoring_name].mult,
+            level = G.GAME.hands[context.scoring_name].level
+          })
       end
     end
 
@@ -3042,14 +3159,16 @@ SMODS.Joker {
       end
       return {
         message = (card.ability.extra.current_rounds < card.ability.extra.rounds_required) and
-        (card.ability.extra.current_rounds .. '/' .. card.ability.extra.rounds_required) or localize('k_active_ex'),
+            (card.ability.extra.current_rounds .. '/' .. card.ability.extra.rounds_required) or localize('k_active_ex'),
         colour = G.C.FILTER
       }
     end
 
     if context.buying_card and context.card.config.center.set == "Joker" and card.ability.extra.current_rounds >= card.ability.extra.rounds_required then
-      local eval = function(card) return (card.ability.extra.current_rounds == card.ability.extra.rounds_required) and
-        not G.RESET_JIGGLES end
+      local eval = function(card)
+        return (card.ability.extra.current_rounds == card.ability.extra.rounds_required) and
+            not G.RESET_JIGGLES
+      end
       juice_card_until(card, eval, true)
       if #G.jokers.cards <= G.jokers.config.card_limit then
         card_eval_status_text(context.blueprint_card or card, 'extra', nil, nil, nil,
@@ -3163,8 +3282,16 @@ SMODS.Joker {
   eternal_compat = false,
   perishable_compat = true,
   loc_vars = function(self, info_queue, card)
-    return { vars = { card.ability.extra.given_xmult, card.ability.extra.remaining_hands, (function() if card.ability.extra.remaining_hands == 1 then return
-        "" else return "s" end end)(), card.ability.extra.added_hands } }
+    return {
+      vars = { card.ability.extra.given_xmult, card.ability.extra.remaining_hands, (function()
+        if card.ability.extra.remaining_hands == 1 then
+          return
+          ""
+        else
+          return "s"
+        end
+      end)(), card.ability.extra.added_hands }
+    }
   end,
   calculate = function(self, card, context)
     if context.joker_main then
@@ -3333,6 +3460,61 @@ SMODS.Joker {
           colour = G.C.MULT
         }
       end
+    end
+  end
+}
+
+SMODS.Joker {
+  key = 'spectretile',
+  config = { extra = { odds = 3 } },
+  rarity = 2,
+  atlas = 'Phanta',
+  pos = { x = 10, y = 5 },
+  cost = 6,
+  blueprint_compat = true,
+  eternal_compat = true,
+  perishable_compat = true,
+  loc_vars = function(self, info_queue, card)
+    return { vars = { (G.GAME.probabilities.normal or 1), card.ability.extra.odds } }
+  end,
+  calculate = function(self, card, context)
+    if context.buying_card and context.card.config.center.set == "Joker" and pseudorandom('spectretile') < G.GAME.probabilities.normal / card.ability.extra.odds and #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit then
+      local _card = card
+      G.E_MANAGER:add_event(Event({
+        func = function()
+          play_sound('timpani')
+          G.E_MANAGER:add_event(Event({
+            delay = 0.3,
+            blockable = false,
+            func = function()
+              local new_card = create_card("Spectral", G.consumables, nil, nil, nil, nil)
+              new_card:add_to_deck()
+              G.consumeables:emplace(new_card)
+              return true
+            end
+          }))
+
+          card.T.r = -0.2
+          card:juice_up(0.3, 0.4)
+          card.states.drag.is = true
+          card.children.center.pinch.x = true
+          G.E_MANAGER:add_event(Event({
+            trigger = 'after',
+            delay = 0.3,
+            blockable = false,
+            func = function()
+              G.jokers:remove_card(card)
+              card:remove()
+              card = nil
+              return true
+            end
+          }))
+          return true
+        end
+      }))
+      card_eval_status_text(_card, 'extra', nil, nil, nil,
+        { message = localize('k_plus_spectral'), colour = G.C.SECONDARY_SET.Spectral })
+      return true
     end
   end
 }
@@ -3518,9 +3700,11 @@ SMODS.Joker {
   calculate = function(self, card, context)
     if context.individual and context.cardarea == G.play and context.other_card.ability.name == 'Gold Card' then
       G.GAME.dollar_buffer = (G.GAME.dollar_buffer or 0) + card.ability.extra.money
-      G.E_MANAGER:add_event(Event({ func = (function()
-        G.GAME.dollar_buffer = 0; return true
-      end) }))
+      G.E_MANAGER:add_event(Event({
+        func = (function()
+          G.GAME.dollar_buffer = 0; return true
+        end)
+      }))
       return {
         dollars = card.ability.extra.money,
         x_mult = card.ability.extra.xmult,
@@ -3714,11 +3898,19 @@ SMODS.Joker {
       if card.ability.extra.current_unscored == card.ability.extra.target_unscored then
         card.ability.extra.current_xmult = card.ability.extra.current_xmult + card.ability.extra.added_xmult
         card.ability.extra.current_unscored = 0
-        return { message = localize { type = 'variable', key = 'a_xmult', vars = { card.ability.extra.current_xmult } }, colour =
-        G.C.RED, card = card }
+        return {
+          message = localize { type = 'variable', key = 'a_xmult', vars = { card.ability.extra.current_xmult } },
+          colour =
+              G.C.RED,
+          card = card
+        }
       else
-        return { message = (card.ability.extra.target_unscored - card.ability.extra.current_unscored) .. '', colour = G
-        .C.FILTER, card = card }
+        return {
+          message = (card.ability.extra.target_unscored - card.ability.extra.current_unscored) .. '',
+          colour = G
+              .C.FILTER,
+          card = card
+        }
       end
     end
   end
@@ -3885,11 +4077,13 @@ SMODS.Back {
       self.config.extra.triggered = true
       local destructable_jokers = {}
       for i = 1, #G.jokers.cards do
-        if not G.jokers.cards[i].ability.eternal and not G.jokers.cards[i].getting_sliced then destructable_jokers[#destructable_jokers + 1] =
-          G.jokers.cards[i] end
+        if not G.jokers.cards[i].ability.eternal and not G.jokers.cards[i].getting_sliced then
+          destructable_jokers[#destructable_jokers + 1] =
+              G.jokers.cards[i]
+        end
       end
       local joker_to_destroy = #destructable_jokers > 0 and
-      pseudorandom_element(destructable_jokers, pseudoseed('tallydeck')) or nil
+          pseudorandom_element(destructable_jokers, pseudoseed('tallydeck')) or nil
 
       if joker_to_destroy and not (context.blueprint_card or self).getting_sliced then
         joker_to_destroy.getting_sliced = true

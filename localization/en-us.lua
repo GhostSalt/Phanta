@@ -749,6 +749,15 @@ return {
                     "are {C:attention}empty{}"
                 }
 			},
+			j_phanta_spectretile = {
+                name = 'Spectre Tile',
+                text = {
+                    "When a Joker is",
+                    "{C:attention}purchased{}, {C:green}#1# in #2#{} chance",
+                    "to create a {C:spectral}Spectral{} card",
+                    "{C:inactive}(Must have room){}"
+                }
+			},
 			j_phanta_possession = {
                 name = 'Possession',
                 text = {
@@ -822,6 +831,17 @@ return {
                 
 			}
 		},
+        Planet = {
+            c_phanta_rubbish = {
+                name = 'Rubbish',
+                text = {
+                  "{S:0.8}({S:0.8,V:1}lvl.#1#{S:0.8}){} Level up",
+                  "{C:attention}Junk{}",
+                  "{C:mult}+#3#{} Mult and",
+                  "{C:chips}+#4#{} chips",
+                }
+            }
+        },
 		Tarot = {
 			c_phanta_grave = {
 				name = "The Grave",
@@ -866,6 +886,15 @@ return {
 			phanta_ghost_card = "Ghost Card",
 			phanta_ghost_seal = "Ghost Seal",
             phanta_waxed = "Waxed"
-		}
+		},
+		poker_hands = {
+			["phanta_junk"] = "Junk",
+		},
+		poker_hand_descriptions = {
+			["phanta_junk"] = {
+                "Any High Card where 5 cards are played.",
+                "The lowest card scores instead"
+			}
+		},
 	}
 }
