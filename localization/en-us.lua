@@ -213,6 +213,13 @@ return {
                     "reward by {C:money}$#2#{}"
                 }
 			},
+			j_phanta_binman = {
+                name = 'Binman',
+                text = {
+                    "Gives {C:money}$#1#{} for",
+                    "each {C:red}discarded{} {C:attention}Junk{}"
+                }
+			},
 			j_phanta_onemanstrash = {
                 name = "One Man's Trash",
                 text = {

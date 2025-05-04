@@ -952,7 +952,7 @@ SMODS.Joker {
     return { vars = { card.ability.extra.money, (G.jokers and G.jokers.cards and G.jokers.config and G.jokers.config.card_limit and (G.jokers.config.card_limit - #G.jokers.cards) * card.ability.extra.money) or 15 } }
   end,
   calc_dollar_bonus = function(self, card)
-    return (G.jokers.config.card_limit - #G.jokers.cards) * card.ability.extra.money
+    if G.jokers.config.card_limit - #G.jokers.cards > 0 then return (G.jokers.config.card_limit - #G.jokers.cards) * card.ability.extra.money end
   end
 }
 
@@ -980,6 +980,30 @@ SMODS.Joker {
       end
       if reward > 0 then return { dollars = reward } end
     end
+  end
+}
+
+SMODS.Joker {
+  key = 'binman',
+  config = { extra = { given_money = 3 } },
+  rarity = 1,
+  atlas = 'Phanta',
+  pos = { x = 6, y = 8 },
+  cost = 4,
+  loc_vars = function(self, info_queue, card)
+    return { vars = { card.ability.extra.given_money } }
+  end,
+  blueprint_compat = true,
+  eternal_compat = true,
+  perishable_compat = true,
+  calculate = function(self, card, context)
+    if context.pre_discard then
+      local text, disp_text = G.FUNCS.get_poker_hand_info(G.hand.highlighted)
+      if text == "phanta_junk" then return { dollars = card.ability.extra.given_money } end
+    end
+  end,
+  in_pool = function()
+    return G.GAME.hands["phanta_junk"].visible
   end
 }
 
@@ -1384,7 +1408,7 @@ SMODS.Joker {
 
 SMODS.Joker {
   key = 'ghost',
-  config = { extra = { x_mult = 0.75 } },
+  config = { extra = { x_mult = 1 } },
   rarity = 3,
   atlas = 'Phanta',
   pos = { x = 0, y = 0 },
@@ -2927,7 +2951,7 @@ SMODS.Joker {
 
     if context.pre_discard and not context.blueprint then
       local text, disp_text = G.FUNCS.get_poker_hand_info(G.hand.highlighted)
-      if disp_text == "Flush" then
+      if text == "Flush" then
         card.ability.extra.current_xmult = card.ability.extra.current_xmult + card.ability.extra.added_xmult
         card_eval_status_text(context.blueprint_card or card, 'extra', nil, nil, nil,
           { message = localize('k_upgrade_ex') })
