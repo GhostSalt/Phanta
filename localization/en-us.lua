@@ -38,8 +38,8 @@ return {
             b_phanta_silver = {
                 name = 'Silver Deck',
                 text = {
-                    "Played cards which",
-                    "{C:attention}don't score{} give {C:money}$#1#{}",
+                    "Played and {C:attention}unscored{}",
+                    "cards give {C:money}$#1#{}",
                     "{C:red}-#2#{} hand size"
                 }
 		    },
@@ -332,6 +332,13 @@ return {
                     "{C:inactive}(Currently {X:mult,C:white}X#2#{C:inactive} Mult)"
                 }
 			},
+			j_phanta_knowledgeofthecollege = {
+                name = 'Knowledge of the College',
+                text = {
+                    "Played and {C:attention}unscored{}",
+                    "{C:attention}Aces{} give {C:white,X:mult}X#1#{} Mult"
+                }
+			},
 			j_phanta_theapparition = {
                 name = 'The Apparition',
                 text = {
@@ -374,6 +381,15 @@ return {
                     "Upon discarding a {C:attention}Stone{}",
                     "card, {C:red}destroys{} it and creates",
                     "a copy of {C:tarot}The Devil{}",
+                    "{C:inactive}(Must have room){}"
+                }
+			},
+			j_phanta_engineer = {
+                name = 'Engineer',
+                text = {
+                    "If played hand is",
+                    "a {C:attention}Junk{}, creates a",
+                    "copy of {C:tarot}The Chariot{}",
                     "{C:inactive}(Must have room){}"
                 }
 			},

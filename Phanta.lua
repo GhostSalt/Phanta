@@ -6,6 +6,8 @@ local scale_mod = 0.07 + 0.02 * math.sin(1.8 * G.TIMERS.REAL) +
 local rotate_mod = 0.05 * math.sin(1.219 * G.TIMERS.REAL) +
     0.00 * math.sin((G.TIMERS.REAL) * math.pi * 5) * (1 - (G.TIMERS.REAL - math.floor(G.TIMERS.REAL))) ^ 2
 
+SMODS.current_mod.optional_features = { cardareas = { unscored = true } }
+
 SMODS.Atlas {
   key = "modicon",
   path = "PhantaIcon.png",
@@ -356,19 +358,17 @@ SMODS.Consumable {
     return true
   end,
   use = function(self, card, area, copier)
-    local hand_groupings, _max, _tally = {}, 0, 0
+    local hand_groupings, _tally = {}, 0, 0
     for k, v in pairs(G.GAME.hands) do
-      print(k)
       if v.visible and v.played >= _tally then
-        hand_groupings[#hand_groupings + 1].hand = v
-        hand_groupings[#hand_groupings + 1].hand_name = k
+        hand_groupings[#hand_groupings + 1] = {hand = v, hand_name = k}
         _tally = v.played
       end
     end
 
     local candidates = {}
-    for v in hand_groupings do
-      if v.hand.played == _max then candidates[#candidates + 1] = v end
+    for _, v in pairs(hand_groupings) do
+      if v.hand.played == _tally then candidates[#candidates + 1] = v end
     end
 
     chosen_group = pseudorandom_element(candidates, pseudoseed('orbit'))
@@ -869,7 +869,7 @@ SMODS.Joker {
   key = 'trainstation',
   config = { extra = { added_mult = 1, current_mult = 0 } },
   loc_vars = function(self, info_queue, card)
-    return { vars = { card.ability.extra.added_mult, localize((G.GAME.current_round.train_station_card.rank or 2) .. "", 'ranks'), card.ability.extra.current_mult } }
+    return { vars = { card.ability.extra.added_mult, localize((G.GAME.current_round.train_station_card.value or 2).."", 'ranks'), card.ability.extra.current_mult } }
   end,
   rarity = 1,
   atlas = 'Phanta',
@@ -885,12 +885,11 @@ SMODS.Joker {
         mult_mod = card.ability.extra.current_mult,
       }
     end
-    if context.individual and context.cardarea == G.play and context.other_card:get_id() == G.GAME.current_round.train_station_card.rank and not context.blueprint then
+    if context.individual and context.cardarea == G.play and context.other_card:get_id() == G.GAME.current_round.train_station_card.id and not context.blueprint then
       card.ability.extra.current_mult = card.ability.extra.current_mult + card.ability.extra.added_mult
       return {
         message = localize('k_upgrade_ex'),
-        colour = G.C.FILTER,
-        card = card
+        colour = G.C.FILTER
       }
     end
   end
@@ -1436,6 +1435,26 @@ SMODS.Joker {
 }
 
 SMODS.Joker {
+  key = 'knowledgeofthecollege',
+  config = { extra = { given_xmult = 3 } },
+  rarity = 2,
+  atlas = 'Phanta',
+  pos = { x = 9, y = 7 },
+  cost = 6,
+  blueprint_compat = true,
+  eternal_compat = true,
+  perishable_compat = true,
+  loc_vars = function(self, info_queue, card)
+    return { vars = { card.ability.extra.given_xmult } }
+  end,
+  calculate = function(self, card, context)
+    if context.individual and context.cardarea == "unscored" and context.other_card:get_id() == 14 then
+      return { xmult = card.ability.extra.given_xmult }
+    end
+  end
+}
+
+SMODS.Joker {
   key = 'theapparition',
   rarity = 2,
   atlas = 'Phanta',
@@ -1459,10 +1478,10 @@ SMODS.Joker {
 
 SMODS.Joker {
   key = 'grimreaper',
-  rarity = 3,
+  rarity = 2,
   atlas = 'Phanta',
   pos = { x = 9, y = 4 },
-  cost = 8,
+  cost = 6,
   blueprint_compat = false,
   eternal_compat = true,
   perishable_compat = true,
@@ -1627,6 +1646,40 @@ SMODS.Joker {
       end
       return { remove = true }
     end
+  end
+}
+
+SMODS.Joker {
+  key = 'engineer',
+  rarity = 2,
+  atlas = 'Phanta',
+  pos = { x = 7, y = 8 },
+  cost = 6,
+  blueprint_compat = true,
+  eternal_compat = true,
+  perishable_compat = true,
+  calculate = function(self, card, context)
+    if context.joker_main then
+      if context.scoring_name == "phanta_junk" and #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit then
+      G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
+          G.E_MANAGER:add_event(Event({
+            trigger = 'before',
+            delay = 0.0,
+            func = function()
+              local new_card = create_card("Tarot", G.consumables, nil, nil, nil, nil, 'c_chariot', 'engineer')
+              new_card:add_to_deck()
+              G.consumeables:emplace(new_card)
+              G.GAME.consumeable_buffer = 0
+              new_card:juice_up(0.3, 0.5)
+              return true
+            end
+          }))
+          return { message = '+1 Chariot', colour = G.C.PURPLE }
+      end
+    end
+  end,
+  in_pool = function()
+    return G.GAME.hands["phanta_junk"].visible
   end
 }
 
@@ -3943,7 +3996,7 @@ SMODS.Joker {
 local igo = Game.init_game_object
 function Game:init_game_object()
   local ret = igo(self)
-  ret.current_round.train_station_card = { rank = nil }
+  ret.current_round.train_station_card = { id = nil, value = nil }
   ret.current_round.fainfol_card = { suit = 'Spades' }
   return ret
 end
@@ -3960,13 +4013,16 @@ function SMODS.current_mod.reset_game_globals(run_start)
     local chosen_card = pseudorandom_element(valid_cards, pseudoseed('fainfol' .. G.GAME.round_resets.ante))
     G.GAME.current_round.fainfol_card.suit = chosen_card.base.suit
   end
-  if not G.GAME.current_round.train_station_card.rank then
-    G.GAME.current_round.train_station_card.rank = 2
-  elseif G.GAME.current_round.train_station_card.rank == 14 then
-    G.GAME.current_round.train_station_card.rank = 2
+  if not G.GAME.current_round.train_station_card.id then
+    G.GAME.current_round.train_station_card.id = 2
+  elseif G.GAME.current_round.train_station_card.id == 14 then
+    G.GAME.current_round.train_station_card.id = 2
   else
-    G.GAME.current_round.train_station_card.rank = G.GAME.current_round.train_station_card.rank + 1
+    G.GAME.current_round.train_station_card.id = G.GAME.current_round.train_station_card.id + 1
   end
+
+  local value_table = { '2', '3', '4', '5', '6', '7', '8', '9', '10', 'Jack', 'Queen', 'King', 'Ace' }
+  G.GAME.current_round.train_station_card.value = value_table[G.GAME.current_round.train_station_card.id - 1]
 end
 
 local scu = set_consumeable_usage
@@ -4058,7 +4114,7 @@ SMODS.Back {
   pos = { x = 0, y = 1 },
   calculate = function(self, back, context)
     if G.GAME.current_round.hands_left == 0 and context.destroy_card and (context.cardarea == G.play or context.cardarea == "unscored") then
-      return true
+      return { remove = true }
     end
   end
 }
@@ -4076,7 +4132,7 @@ SMODS.Back {
   end,
   calculate = function(self, back, context)
     if context.individual and context.cardarea == "unscored" then
-      return { dollars = self.config.extra.given_money }
+      SMODS.calculate_effect({dollars = self.config.extra.given_money}, context.other_card)
     end
   end
 }
