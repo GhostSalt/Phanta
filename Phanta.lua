@@ -1383,6 +1383,43 @@ SMODS.Joker {
   end
 }
 
+SMODS.Joker {
+  key = 'shackles',
+  config = { extra = { chips = 250 } },
+  rarity = 3,
+  atlas = 'Phanta',
+  pos = { x = 5, y = 5 },
+  cost = 8,
+  loc_vars = function(self, info_queue, card)
+    return { vars = { card.ability.extra.chips } }
+  end,
+  blueprint_compat = true,
+  eternal_compat = true,
+  perishable_compat = true,
+  calculate = function(self, card, context)
+    if context.joker_main then
+      return {
+        chip_mod = card.ability.extra.chips,
+        message = localize { type = 'variable', key = 'a_chips', vars = { card.ability.extra.chips } }
+      }
+    end
+    if context.hand_drawn and not context.blueprint then
+      local any_forced = nil
+      for i, j in ipairs(G.hand.cards) do
+          if j.ability.forced_selection then
+              any_forced = true
+          end
+      end
+      if not any_forced then
+          G.hand:unhighlight_all()
+          local forced_card = pseudorandom_element(G.hand.cards, pseudoseed('shackles'))
+          forced_card.ability.forced_selection = true
+          G.hand:add_to_highlighted(forced_card)
+      end
+    end
+  end
+}
+
 --[[SMODS.Joker {
   key = 'html',
   config = { extra = { mult = 1 } },
@@ -3216,7 +3253,7 @@ SMODS.Joker {
 
 SMODS.Joker {
   key = 'selfportrait',
-  config = { extra = { current_rounds = 0, rounds_required = 3 } },
+  config = { extra = { current_rounds = 0, rounds_required = 2 } },
   rarity = 3,
   atlas = 'Phanta',
   pos = { x = 1, y = 11 },
@@ -3242,14 +3279,13 @@ SMODS.Joker {
     end
 
     if context.buying_card and context.card.config.center.set == "Joker" and card.ability.extra.current_rounds >= card.ability.extra.rounds_required then
-      local eval = function(card)
+      --[[ocal eval = function(card)
         return (card.ability.extra.current_rounds == card.ability.extra.rounds_required) and
             not G.RESET_JIGGLES
       end
-      juice_card_until(card, eval, true)
+      juice_card_until(card, eval, true)]]--
       if #G.jokers.cards <= G.jokers.config.card_limit then
-        card_eval_status_text(context.blueprint_card or card, 'extra', nil, nil, nil,
-          { message = localize('k_duplicated_ex') })
+        card_eval_status_text(context.blueprint_card or card, 'extra', nil, nil, nil, { message = localize('k_duplicated_ex') })
         local new_card = copy_card(context.card, nil, nil, nil, context.card.edition and context.card.edition.negative)
         card.ability.extra.current_rounds = 0
         G.E_MANAGER:add_event(Event({
@@ -3267,17 +3303,16 @@ SMODS.Joker {
                 G.jokers:remove_card(card)
                 card:remove()
                 card = nil
-                return true;
+                return true
               end
             }))
             return true
           end
         }))
-        card:add_to_deck()
-        G.jokers:emplace(card)
+        new_card:add_to_deck()
+        G.jokers:emplace(new_card)
       else
-        card_eval_status_text(context.blueprint_card or card, 'extra', nil, nil, nil,
-          { message = localize('k_no_room_ex') })
+        card_eval_status_text(context.blueprint_card or card, 'extra', nil, nil, nil, { message = localize('k_no_room_ex') })
       end
     end
   end,
@@ -3622,51 +3657,6 @@ SMODS.Joker {
     end
   end
 }
-
---[[SMODS.Joker {
-  key = 'shackles',
-  loc_txt = {
-    name = 'Shackles',
-    text = {
-     "{C:chips}+#1#{} Chips,",
-     "forces 1 card to",
-     "always be selected"
-    }
-  },
-  config = { extra = { chips = 250 } },
-  rarity = 3,
-  atlas = 'Phanta',
-  pos = { x = 5, y = 5 },
-  cost = 8,
-  loc_vars = function(self, info_queue, card)
-    return { vars = { card.ability.extra.chips } }
-  end,
-  blueprint_compat = true,
-  eternal_compat = true,
-  perishable_compat = true,
-  calculate = function(self, card, context)
-    if context.joker_main then
-      return {
-        chip_mod = card.ability.extra.chips,
-        message = localize { type = 'variable', key = 'a_chips', vars = { card.ability.extra.chips } }
-      }
-    end
-    if context.drawn_to_hand then
-      local any_forced = nil
-      for i, j in ipairs(G.hand.cards) do
-          if j.ability.forced_selection then
-              any_forced = true
-          end
-      end
-      if not any_forced then
-          G.hand:unhighlight_all()
-          local forced_card = pseudorandom_element(G.hand.cards, pseudoseed('shackles'))
-          forced_card.ability.forced_selection = true
-          G.hand:add_to_highlighted(forced_card)
-      end
-    end
-  end
-}]] --
 
 SMODS.Joker {
   key = 'ignaize',

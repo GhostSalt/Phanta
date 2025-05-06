@@ -315,6 +315,14 @@ return {
 					"to {C:chips}#1#{}"
                 }
 			},
+			j_phanta_shackles = {
+                name = 'Shackles',
+                text = {
+                    "{C:chips}+#1#{} Chips,",
+                    "forces {C:attention}1{} card to",
+                    "always be selected"
+                }
+			},
 			j_phanta_html = {
                 name = 'HTML',
                 text = {
