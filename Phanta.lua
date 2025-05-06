@@ -1832,7 +1832,7 @@ SMODS.Joker {
 
 SMODS.Joker {
   key = 'blottedjoker',
-  config = { extra = { added_chips = 15, current_chips = 0 } },
+  config = { extra = { added_chips = 20, current_chips = 0 } },
   rarity = 2,
   atlas = 'Phanta',
   pos = { x = 11, y = 0 },
@@ -1881,7 +1881,7 @@ SMODS.Joker {
 
 SMODS.Joker {
   key = 'bloodpact',
-  config = { extra = { added_mult = 4, current_mult = 0 } },
+  config = { extra = { added_mult = 5, current_mult = 0 } },
   rarity = 2,
   atlas = 'Phanta',
   pos = { x = 3, y = 5 },
@@ -2933,7 +2933,7 @@ SMODS.Joker {
   end
 }
 
-SMODS.Joker {
+--[[SMODS.Joker {
   key = 'diningtable',
   rarity = 2,
   atlas = 'Phanta',
@@ -2991,7 +2991,7 @@ SMODS.Joker {
       end
     end
   end
-}
+}]]--
 
 SMODS.Joker {
   key = 'eyeofprovidence',
