@@ -8,6 +8,12 @@ local rotate_mod = 0.05 * math.sin(1.219 * G.TIMERS.REAL) +
 
 SMODS.current_mod.optional_features = { cardareas = { unscored = true } }
 
+PHANTA = {}
+
+function PHANTA.to_big(num)
+  if to_big then return to_big(num) else return num end
+end
+
 SMODS.Atlas {
   key = "modicon",
   path = "PhantaIcon.png",
@@ -1756,9 +1762,10 @@ SMODS.Joker {
         }))
         if not (context.blueprint_card or card).getting_sliced then
           card_eval_status_text(context.blueprint_card or card, "extra", nil, nil, nil, {
-            message = localize { type = 'variable', key = 'a_xmult', vars = { number_format(to_big(card.ability.extra.current_xmult)) } }
-          }
-          )
+            message = localize { type = 'variable', key = 'a_xmult', vars = { card.ability.extra.current_xmult } },
+            colour = G.C.RED,
+            card = card
+          })
         end
         return nil, true
       end
@@ -2080,6 +2087,76 @@ SMODS.Joker {
   end
 }
 
+--[[SMODS.Joker {
+  key = 'stickercollection',
+  loc_txt = {
+    name = 'Sticker Collection',
+    text = {
+      "Gives {C:chips}+#1#{} Chips for",
+      "each card with a",
+      "seal in your full deck"
+    }
+  },
+  config = { extra = { given_chips = 25 } },
+  rarity = 2,
+  atlas = 'Phanta',
+  pos = { x = 2, y = 9 },
+  cost = 5,
+  loc_vars = function(self, info_queue, card)
+    return { vars = { card.ability.extra.given_chips } }
+  end,
+  blueprint_compat = true,
+  eternal_compat = true,
+  perishable_compat = true,
+  calculate = function(self, card, context)
+    if context.joker_main and card.ability.extra.current_mult > 0 then return { mult = card.ability.extra.current_mult } end
+
+    if context.before and not context.blueprint and (next(context.poker_hands['Straight']) or next(context.poker_hands['Straight Flush'])) then
+      local suits = {
+        ['Hearts'] = 0,
+        ['Diamonds'] = 0,
+        ['Spades'] = 0,
+        ['Clubs'] = 0
+      }
+      for i = 1, #context.scoring_hand do
+        if not SMODS.has_any_suit(context.scoring_hand[i]) then
+          if context.scoring_hand[i]:is_suit('Hearts', true) and suits["Hearts"] == 0 then
+            suits["Hearts"] = suits["Hearts"] + 1
+          elseif context.scoring_hand[i]:is_suit('Diamonds', true) and suits["Diamonds"] == 0 then
+            suits["Diamonds"] = suits["Diamonds"] + 1
+          elseif context.scoring_hand[i]:is_suit('Spades', true) and suits["Spades"] == 0 then
+            suits["Spades"] = suits["Spades"] + 1
+          elseif context.scoring_hand[i]:is_suit('Clubs', true) and suits["Clubs"] == 0 then
+            suits["Clubs"] = suits["Clubs"] + 1
+          end
+        end
+      end
+      for i = 1, #context.scoring_hand do
+        if SMODS.has_any_suit(context.scoring_hand[i]) then
+          if suits["Hearts"] == 0 then
+            suits["Hearts"] = suits["Hearts"] + 1
+          elseif suits["Diamonds"] == 0 then
+            suits["Diamonds"] = suits["Diamonds"] + 1
+          elseif suits["Spades"] == 0 then
+            suits["Spades"] = suits["Spades"] + 1
+          elseif suits["Clubs"] == 0 then
+            suits["Clubs"] = suits["Clubs"] + 1
+          end
+        end
+      end
+      if suits["Hearts"] > 0 or suits["Diamonds"] > 0 or suits["Spades"] > 0 or suits["Clubs"] > 0 then
+        card.ability.extra.current_mult = card.ability.extra.current_mult +
+            ((suits["Hearts"] + suits["Diamonds"] + suits["Spades"] + suits["Clubs"]) * card.ability.extra.added_mult)
+        return {
+          message = localize('k_upgrade_ex'),
+          colour = G.C.FILTER,
+          card = card
+        }
+      end
+    end
+  end
+}]]--
+
 SMODS.Joker {
   key = 'p5joker',
   config = { extra = { mult_per_hand = 2, current_mult = 0 } },
@@ -2322,8 +2399,8 @@ SMODS.Joker {
   pos = { x = 5, y = 0 },
   cost = 6,
   loc_vars = function(self, info_queue, card)
-    info_queue[#info_queue + 1] = G.P_CENTERS.c_heirophant
     info_queue[#info_queue + 1] = G.P_CENTERS.c_temperance
+    info_queue[#info_queue + 1] = G.P_CENTERS.c_tower
     return {}
   end,
   blueprint_compat = true,
@@ -2334,13 +2411,13 @@ SMODS.Joker {
       G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
       G.E_MANAGER:add_event(Event({
         func = function()
-          local chosen_message = '+1 Heirophant'
+          local chosen_message = '+1 Temperance'
           G.E_MANAGER:add_event(Event({
             func = function()
-              local chosen_card = 'c_heirophant'
+              local chosen_card = 'c_temperance'
               if pseudorandom('reverie', 1, 2) == 1 then
-                chosen_card = 'c_temperance'
-                chosen_message = '+1 Temperance'
+                chosen_card = 'c_tower'
+                chosen_message = '+1 Tower'
               end
               local new_card = create_card("Tarot", G.consumables, nil, nil, nil, nil, chosen_card, 'reverie')
               new_card:add_to_deck()
@@ -3967,15 +4044,13 @@ SMODS.Joker {
         card.ability.extra.current_unscored = 0
         return {
           message = localize { type = 'variable', key = 'a_xmult', vars = { card.ability.extra.current_xmult } },
-          colour =
-              G.C.RED,
+          colour = G.C.RED,
           card = card
         }
       else
         return {
           message = (card.ability.extra.target_unscored - card.ability.extra.current_unscored) .. '',
-          colour = G
-              .C.FILTER,
+          colour = G.C.FILTER,
           card = card
         }
       end
