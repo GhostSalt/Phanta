@@ -873,6 +873,72 @@ return {
                 
 			}
 		},
+        Other = {
+            p_phanta_zodiac_normal1={
+                name="Zodiac Pack",
+                text={
+                    "Choose {C:attention}#1#{} of up to",
+                    "{C:attention}#2#{C:zodiac} Zodiac{} cards",
+                    "to take",
+                },
+            },
+            p_phanta_zodiac_normal2={
+                name="Zodiac Pack",
+                text={
+                    "Choose {C:attention}#1#{} of up to",
+                    "{C:attention}#2#{C:zodiac} Zodiac{} cards",
+                    "to take",
+                },
+            },
+            p_phanta_zodiac_normal3={
+                name="Zodiac Pack",
+                text={
+                    "Choose {C:attention}#1#{} of up to",
+                    "{C:attention}#2#{C:zodiac} Zodiac{} cards",
+                    "to take",
+                },
+            },
+            p_phanta_zodiac_normal4={
+                name="Zodiac Pack",
+                text={
+                    "Choose {C:attention}#1#{} of up to",
+                    "{C:attention}#2#{C:zodiac} Zodiac{} cards",
+                    "to take",
+                },
+            },
+            p_phanta_zodiac_jumbo1={
+                name="Jumbo Zodiac Pack",
+                text={
+                    "Choose {C:attention}#1#{} of up to",
+                    "{C:attention}#2#{C:zodiac} Zodiac{} cards",
+                    "to take",
+                },
+            },
+            p_phanta_zodiac_jumbo2={
+                name="Jumbo Zodiac Pack",
+                text={
+                    "Choose {C:attention}#1#{} of up to",
+                    "{C:attention}#2#{C:zodiac} Zodiac{} cards",
+                    "to take",
+                },
+            },
+            p_phanta_zodiac_mega1={
+                name="Mega Zodiac Pack",
+                text={
+                    "Choose {C:attention}#1#{} of up to",
+                    "{C:attention}#2#{C:zodiac} Zodiac{} cards",
+                    "to take",
+                },
+            },
+            p_phanta_zodiac_mega2={
+                name="Mega Zodiac Pack",
+                text={
+                    "Choose {C:attention}#1#{} of up to",
+                    "{C:attention}#2#{C:zodiac} Zodiac{} cards",
+                    "to take",
+                },
+            }
+        },
         Planet = {
             c_phanta_rubbish = {
                 name = 'Rubbish',
@@ -917,7 +983,7 @@ return {
 				text = {
 					"Creates a {C:tarot}Tarot{} card",
 					"when you play your",
-					"{C:attention}second{} hand"
+					"{C:attention}second{} hand",
 					"{C:inactive}(Must have room){}"
 				},
 			},
@@ -1005,19 +1071,21 @@ return {
 	},
 	misc = {
 		dictionary = {
-			chips_equals = "Chips=",
-            mult_equals = "Mult=",
-			swapped = "Swapped",
-			become_glass = "Glass",
-            copper_grate_fresh = "Fresh",
-            copper_grate_exposed = "Exposed",
-            copper_grate_weathered = "Weathered",
-            copper_grate_oxidised = "Oxidised",
-            one_extra_hand_size = "+1 Hand Size"
+			phanta_chips_equals = "Chips=",
+            phanta_mult_equals = "Mult=",
+			phanta_swapped = "Swapped",
+			phanta_become_glass = "Glass",
+            phanta_copper_grate_fresh = "Fresh",
+            phanta_copper_grate_exposed = "Exposed",
+            phanta_copper_grate_weathered = "Weathered",
+            phanta_copper_grate_oxidised = "Oxidised",
+            phanta_select = "SELECT"
 		},
 		labels = {
-			phanta_ghost_card = "Ghost Card",
-			phanta_ghost_seal = "Ghost Seal",
+			phanta_ghostcard = "Ghost Card",
+			phanta_ghostseal = "Ghost Seal",
+            phanta_zodiac = "Zodiac",
+            phanta_stat_zodiacs = "Zodiacs",
             phanta_waxed = "Waxed"
 		},
 		poker_hands = {

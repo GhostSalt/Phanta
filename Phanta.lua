@@ -42,7 +42,10 @@ SMODS.Atlas {
   py = 95
 }
 
-G.C.PHANTA = {}
+G.C.PHANTA = {
+  Zodiac = HEX("4076cf"),
+  ZodiacAlt = HEX("5998ff")
+}
 
 G.C.PHANTA.MISC_COLOURS = {
   COPPER_FRESH = HEX("904931"),
@@ -571,7 +574,7 @@ SMODS.Enhancement {
     end
   end,
   set_badges = function(self, card, badges)
-    badges[#badges + 1] = create_badge(localize('copper_grate_fresh'), G.C.PHANTA.MISC_COLOURS.COPPER_FRESH, G.C.WHITE, 1)
+    badges[#badges + 1] = create_badge(localize('phanta_copper_grate_fresh'), G.C.PHANTA.MISC_COLOURS.COPPER_FRESH, G.C.WHITE, 1)
   end
 }
 
@@ -590,7 +593,7 @@ SMODS.Enhancement {
     end
   end,
   set_badges = function(self, card, badges)
-    badges[#badges + 1] = create_badge(localize('copper_grate_exposed'), G.C.PHANTA.MISC_COLOURS.COPPER_EXPOSED,
+    badges[#badges + 1] = create_badge(localize('phanta_copper_grate_exposed'), G.C.PHANTA.MISC_COLOURS.COPPER_EXPOSED,
       G.C.WHITE, 1)
   end,
   in_pool = function() return false end
@@ -611,7 +614,7 @@ SMODS.Enhancement {
     end
   end,
   set_badges = function(self, card, badges)
-    badges[#badges + 1] = create_badge(localize('copper_grate_weathered'), G.C.PHANTA.MISC_COLOURS.COPPER_WEATHERED,
+    badges[#badges + 1] = create_badge(localize('phanta_copper_grate_weathered'), G.C.PHANTA.MISC_COLOURS.COPPER_WEATHERED,
       G.C.WHITE, 1)
   end,
   in_pool = function() return false end
@@ -629,224 +632,287 @@ SMODS.Enhancement {
     if context.destroy_card and context.cardarea == G.play and not (card.edition and card.edition.key == 'e_phanta_waxed') then return { remove = true } end
   end,
   set_badges = function(self, card, badges)
-    badges[#badges + 1] = create_badge(localize('copper_grate_oxidised'), G.C.PHANTA.MISC_COLOURS.COPPER_OXIDISED,
+    badges[#badges + 1] = create_badge(localize('phanta_copper_grate_oxidised'), G.C.PHANTA.MISC_COLOURS.COPPER_OXIDISED,
       G.C.WHITE, 1)
   end,
   in_pool = function() return false end
 }
 
+
+
+
+
+
+
 --[[
-local zodiac = {
-	object_type = "ConsumableType",
-	key = "Zodiac",
-	primary_colour = HEX("4076cf"),
-	secondary_colour = HEX("5998ff"),
-	collection_rows = { 3, 4 },
-	shop_rate = 0.0,
-	loc_txt = {},
-	default = "phanta_aries",
-	can_stack = true,
-	can_divide = true,
-}
-local zodiac_atlas = {
-	object_type = "Atlas",
-	key = "zodiac",
+local sell_use_ref = G.UIDEF.use_and_sell_buttons
+
+function G.UIDEF.use_and_sell_buttons(card)
+  if not card or not card.ability or card.ability.set ~= "Zodiac" then return sell_use_ref(card) end
+
+    if (card.area == G.pack_cards and G.pack_cards) then
+      return {
+        n=G.UIT.ROOT, config = {padding = 0, colour = G.C.CLEAR}, nodes={
+          {n=G.UIT.R, config={ref_table = card, r = 0.08, padding = 0.1, align = "bm", minw = 0.5*card.T.w - 0.15, maxw = 0.9*card.T.w - 0.15, minh = 0.3*card.T.h, hover = true, shadow = true, colour = G.C.UI.BACKGROUND_INACTIVE, one_press = true, button = 'use_card', func = 'can_select_card'}, nodes={
+            {n=G.UIT.T, config={text = localize('b_select'),colour = G.C.UI.TEXT_LIGHT, scale = 0.45, shadow = true}}
+          }},
+      }}
+    end
+
+      local sell = {n=G.UIT.C, config={align = "cr"}, nodes={
+        {n=G.UIT.C, config={ref_table = card, align = "cr",padding = 0.1, r=0.08, minw = 1.25, hover = true, shadow = true, colour = G.C.UI.BACKGROUND_INACTIVE, one_press = true, button = 'sell_card', func = 'can_sell_card'}, nodes={
+          {n=G.UIT.B, config = {w=0.1,h=0.6}},
+          {n=G.UIT.C, config={align = "tm"}, nodes={
+            {n=G.UIT.R, config={align = "cm", maxw = 1.25}, nodes={
+              {n=G.UIT.T, config={text = localize('b_sell'),colour = G.C.UI.TEXT_LIGHT, scale = 0.4, shadow = true}}
+            }},
+            {n=G.UIT.R, config={align = "cm"}, nodes={
+              {n=G.UIT.T, config={text = localize('$'),colour = G.C.WHITE, scale = 0.4, shadow = true}},
+              {n=G.UIT.T, config={ref_table = card, ref_value = 'sell_cost_label',colour = G.C.WHITE, scale = 0.55, shadow = true}}
+            }}
+          }}
+        }},
+      }}
+
+    local t = {
+      n=G.UIT.ROOT, config = {padding = 0, colour = G.C.CLEAR}, nodes={
+        {n=G.UIT.C, config={padding = 0.15, align = 'cl'}, nodes={
+          {n=G.UIT.R, config={align = 'cl'}, nodes={
+            sell
+          }}
+        }},
+    }}
+  return t
+end
+
+SMODS.Atlas {
+	key = "PhantaZodiacs",
 	path = "PhantaZodiacs.png",
 	px = 71,
 	py = 95,
 }
+
+SMODS.ConsumableType {
+	key = "Zodiac",
+	primary_colour = HEX("4076cf"),
+	secondary_colour = HEX("5998ff"),
+	collection_rows = { 2, 4 },
+	shop_rate = 0.0,
+	default = "phanta_aries",
+	can_stack = true,
+	can_divide = true,
+}
+
 SMODS.UndiscoveredSprite({
 	key = "Zodiac",
-	atlas = "zodiac",
-	path = "PhantaBoosters.png",
+	atlas = "PhantaZodiacs",
+	path = "PhantaZodiacs.png",
 	pos = { x = 1, y = 3 },
 	px = 71,
 	py = 95,
 }):register()
-local pack_atlas = {
-	object_type = "Atlas",
-	key = "pack",
+
+SMODS.Atlas {
+	key = "PhantaBoosters",
 	path = "PhantaBoosters.png",
 	px = 71,
 	py = 95,
 }
-local pack1 = {
-	object_type = "Booster",
-	key = "phanta_normal1",
+
+SMODS.Booster {
+	key = "zodiac_normal1",
 	kind = "Zodiac",
-	atlas = "pack",
+	atlas = "PhantaBoosters",
 	pos = { x = 0, y = 0 },
 	config = { extra = 2, choose = 1 },
 	cost = 4,
-	order = 1,
-	weight = 0.96,
+	weight = 0.9,
 	create_card = function(self, card)
 		return create_card("Zodiac", G.pack_cards, nil, nil, true, true, nil, "phanta_zodiac")
 	end,
 	ease_background_colour = function(self)
-		ease_colour(G.C.DYN_UI.MAIN, G.C.SET.Zodiac)
-		ease_background_colour({ new_colour = G.C.SET.Zodiac, special_colour = G.C.RED, contrast = 2 })
+		ease_colour(G.C.DYN_UI.MAIN, G.C.PHANTA.Zodiac)
+		ease_background_colour({ new_colour = G.C.PHANTA.Zodiac, special_colour = G.C.PHANTA.ZodiacAlt, contrast = 2 })
 	end,
 	loc_vars = function(self, info_queue, card)
 		return { vars = { card.config.center.config.choose, card.ability.extra } }
 	end,
-	group_key = "k_phanta_zodiac_pack",
+	group_key = "phanta_zodiac_pack",
 }
-local pack2 = {
-	object_type = "Booster",
-	key = "phanta_normal2",
+
+SMODS.Booster {
+	key = "zodiac_normal2",
 	kind = "Zodiac",
-	atlas = "pack",
+	atlas = "PhantaBoosters",
 	pos = { x = 1, y = 0 },
 	config = { extra = 2, choose = 1 },
 	cost = 4,
-	order = 1,
-	weight = 0.96,
+	weight = 0.9,
 	create_card = function(self, card)
 		return create_card("Zodiac", G.pack_cards, nil, nil, true, true, nil, "phanta_zodiac")
 	end,
 	ease_background_colour = function(self)
-		ease_colour(G.C.DYN_UI.MAIN, G.C.SET.Zodiac)
-		ease_background_colour({ new_colour = G.C.SET.Zodiac, special_colour = G.C.RED, contrast = 2 })
+		ease_colour(G.C.DYN_UI.MAIN, G.C.PHANTA.Zodiac)
+		ease_background_colour({ new_colour = G.C.PHANTA.Zodiac, special_colour = G.C.PHANTA.ZodiacAlt, contrast = 2 })
 	end,
 	loc_vars = function(self, info_queue, card)
 		return { vars = { card.config.center.config.choose, card.ability.extra } }
 	end,
-	group_key = "k_phanta_zodiac_pack",
+	group_key = "phanta_zodiac_pack",
 }
-local pack3 = {
-	object_type = "Booster",
-	key = "phanta_normal3",
+
+SMODS.Booster {
+	key = "zodiac_normal3",
 	kind = "Zodiac",
-	atlas = "pack",
+	atlas = "PhantaBoosters",
 	pos = { x = 2, y = 0 },
 	config = { extra = 2, choose = 1 },
 	cost = 4,
-	order = 1,
-	weight = 0.96,
+	weight = 0.9,
 	create_card = function(self, card)
 		return create_card("Zodiac", G.pack_cards, nil, nil, true, true, nil, "phanta_zodiac")
 	end,
 	ease_background_colour = function(self)
-		ease_colour(G.C.DYN_UI.MAIN, G.C.SET.Zodiac)
-		ease_background_colour({ new_colour = G.C.SET.Zodiac, special_colour = G.C.RED, contrast = 2 })
+		ease_colour(G.C.DYN_UI.MAIN, G.C.PHANTA.Zodiac)
+		ease_background_colour({ new_colour = G.C.PHANTA.Zodiac, special_colour = G.C.PHANTA.ZodiacAlt, contrast = 2 })
 	end,
 	loc_vars = function(self, info_queue, card)
 		return { vars = { card.config.center.config.choose, card.ability.extra } }
 	end,
-	group_key = "k_phanta_zodiac_pack",
+	group_key = "phanta_zodiac_pack",
 }
-local pack4 = {
-	object_type = "Booster",
-	key = "phanta_normal4",
+
+SMODS.Booster {
+	key = "zodiac_normal4",
 	kind = "Zodiac",
-	atlas = "pack",
+	atlas = "PhantaBoosters",
 	pos = { x = 3, y = 0 },
 	config = { extra = 2, choose = 1 },
 	cost = 4,
-	order = 1,
-	weight = 0.96,
+	weight = 0.9,
 	create_card = function(self, card)
 		return create_card("Zodiac", G.pack_cards, nil, nil, true, true, nil, "phanta_zodiac")
 	end,
 	ease_background_colour = function(self)
-		ease_colour(G.C.DYN_UI.MAIN, G.C.SET.Zodiac)
-		ease_background_colour({ new_colour = G.C.SET.Zodiac, special_colour = G.C.RED, contrast = 2 })
+		ease_colour(G.C.DYN_UI.MAIN, G.C.PHANTA.Zodiac)
+		ease_background_colour({ new_colour = G.C.PHANTA.Zodiac, special_colour = G.C.PHANTA.ZodiacAlt, contrast = 2 })
 	end,
 	loc_vars = function(self, info_queue, card)
 		return { vars = { card.config.center.config.choose, card.ability.extra } }
 	end,
-	group_key = "k_phanta_zodiac_pack",
+	group_key = "phanta_zodiac_pack",
 }
-local packJ1 = {
-	object_type = "Booster",
-	key = "phanta_jumbo1",
+
+SMODS.Booster {
+	key = "zodiac_jumbo1",
 	kind = "Zodiac",
-	atlas = "pack",
+	atlas = "PhantaBoosters",
 	pos = { x = 0, y = 1 },
 	config = { extra = 4, choose = 1 },
 	cost = 6,
-	order = 3,
-	weight = 0.48,
+	weight = 0.45,
 	create_card = function(self, card)
 		return create_card("Zodiac", G.pack_cards, nil, nil, true, true, nil, "phanta_zodiac")
 	end,
 	ease_background_colour = function(self)
-		ease_colour(G.C.DYN_UI.MAIN, G.C.SET.Zodiac)
-		ease_background_colour({ new_colour = G.C.SET.Zodiac, special_colour = G.C.RED, contrast = 2 })
+		ease_colour(G.C.DYN_UI.MAIN, G.C.PHANTA.Zodiac)
+		ease_background_colour({ new_colour = G.C.PHANTA.Zodiac, special_colour = G.C.PHANTA.ZodiacAlt, contrast = 2 })
 	end,
 	loc_vars = function(self, info_queue, card)
 		return { vars = { card.config.center.config.choose, card.ability.extra } }
 	end,
-	group_key = "k_phanta_zodiac_pack",
+	group_key = "phanta_zodiac_pack_jumbo",
 }
-local packJ2 = {
-	object_type = "Booster",
-	key = "phanta_jumbo2",
+
+SMODS.Booster {
+	key = "zodiac_jumbo2",
 	kind = "Zodiac",
-	atlas = "pack",
+	atlas = "PhantaBoosters",
 	pos = { x = 1, y = 1 },
 	config = { extra = 4, choose = 1 },
 	cost = 6,
-	order = 3,
-	weight = 0.48,
+	weight = 0.45,
 	create_card = function(self, card)
 		return create_card("Zodiac", G.pack_cards, nil, nil, true, true, nil, "phanta_zodiac")
 	end,
 	ease_background_colour = function(self)
-		ease_colour(G.C.DYN_UI.MAIN, G.C.SET.Zodiac)
-		ease_background_colour({ new_colour = G.C.SET.Zodiac, special_colour = G.C.RED, contrast = 2 })
+		ease_colour(G.C.DYN_UI.MAIN, G.C.PHANTA.Zodiac)
+		ease_background_colour({ new_colour = G.C.PHANTA.Zodiac, special_colour = G.C.PHANTA.ZodiacAlt, contrast = 2 })
 	end,
 	loc_vars = function(self, info_queue, card)
 		return { vars = { card.config.center.config.choose, card.ability.extra } }
 	end,
-	group_key = "k_phanta_zodiac_pack",
+	group_key = "phanta_zodiac_pack_jumbo",
 }
-local packM1 = {
-	object_type = "Booster",
-	key = "phanta_mega1",
+
+SMODS.Booster {
+	key = "zodiac_mega1",
 	kind = "Zodiac",
-	atlas = "pack",
+	atlas = "PhantaBoosters",
 	pos = { x = 2, y = 1 },
 	config = { extra = 4, choose = 2 },
 	cost = 8,
-	order = 4,
-	weight = 0.12,
+	weight = 0.1125,
 	create_card = function(self, card)
 		return create_card("Zodiac", G.pack_cards, nil, nil, true, true, nil, "phanta_zodiac")
 	end,
 	ease_background_colour = function(self)
-		ease_colour(G.C.DYN_UI.MAIN, G.C.SET.Zodiac)
-		ease_background_colour({ new_colour = G.C.SET.Zodiac, special_colour = G.C.RED, contrast = 2 })
+		ease_colour(G.C.DYN_UI.MAIN, G.C.PHANTA.Zodiac)
+		ease_background_colour({ new_colour = G.C.PHANTA.Zodiac, special_colour = G.C.PHANTA.ZodiacAlt, contrast = 2 })
 	end,
 	loc_vars = function(self, info_queue, card)
 		return { vars = { card.config.center.config.choose, card.ability.extra } }
 	end,
-	group_key = "k_phanta_zodiac_pack",
+	group_key = "phanta_zodiac_pack_mega",
 }
-local packM2 = {
-	object_type = "Booster",
-	key = "phanta_mega2",
+
+SMODS.Booster {
+	key = "zodiac_mega2",
 	kind = "Zodiac",
-	atlas = "pack",
-	pos = { x = 3, y = 1 },
+	atlas = "PhantaBoosters",
+	pos = { x = 2, y = 1 },
 	config = { extra = 4, choose = 2 },
 	cost = 8,
-	order = 4,
-	weight = 0.12,
+	weight = 0.1125,
 	create_card = function(self, card)
 		return create_card("Zodiac", G.pack_cards, nil, nil, true, true, nil, "phanta_zodiac")
 	end,
 	ease_background_colour = function(self)
-		ease_colour(G.C.DYN_UI.MAIN, G.C.SET.Zodiac)
-		ease_background_colour({ new_colour = G.C.SET.Zodiac, special_colour = G.C.RED, contrast = 2 })
+		ease_colour(G.C.DYN_UI.MAIN, G.C.PHANTA.Zodiac)
+		ease_background_colour({ new_colour = G.C.PHANTA.Zodiac, special_colour = G.C.PHANTA.ZodiacAlt, contrast = 2 })
 	end,
 	loc_vars = function(self, info_queue, card)
 		return { vars = { card.config.center.config.choose, card.ability.extra } }
 	end,
-	group_key = "k_phanta_zodiac_pack",
+	group_key = "phanta_zodiac_pack_mega",
 }
-]] --
+
+SMODS.Consumable {
+  set = "Zodiac",
+  key = "aries",
+  pos = { x = 0, y = 0 },
+  config = { },
+  atlas = "PhantaZodiacs",
+  loc_vars = function(self, info_queue, card)
+    return { vars = {  } }
+  end
+}
+]]--
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 SMODS.Joker {
   key = 'bootleg',
@@ -1384,7 +1450,7 @@ SMODS.Joker {
     if context.joker_main then
       hand_chips = mod_chips(card.ability.extra.chips)
       update_hand_text({ delay = 0 }, { chips = hand_chips })
-      return { message = localize("chips_equals") .. card.ability.extra.chips, colour = G.C.CHIPS, card = card }
+      return { message = localize("phanta_chips_equals") .. card.ability.extra.chips, colour = G.C.CHIPS, card = card }
     end
   end
 }
@@ -1443,7 +1509,7 @@ SMODS.Joker {
     if context.joker_main and G.GAME.current_round.hands_played == 0 then
       hand_mult = mod_mult(card.ability.extra.mult)
       update_hand_text({ delay = 0 }, { mult = hand_mult })
-      return { message = localize("mult_equals") .. card.ability.extra.mult, colour = G.C.MULT, card = card }
+      return { message = localize("phanta_mult_equals") .. card.ability.extra.mult, colour = G.C.MULT, card = card }
     end
   end
 }]] --
@@ -3095,7 +3161,7 @@ SMODS.Joker {
             end
           }))
         end
-        return { message = localize("become_glass"), colour = G.C.FILTER, card = card }
+        return { message = localize("phanta_become_glass"), colour = G.C.FILTER, card = card }
       end
     end
   end
