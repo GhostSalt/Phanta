@@ -454,6 +454,17 @@ return {
                     "{C:inactive}(Currently {C:mult}+#2#{C:inactive} Mult)"
                 }
 			},
+			j_phanta_tnetennba = {
+                name = 'TNETENNBA',
+                text = {
+                    "Gains {C:mult}+#1#{} Mult if hand is",
+                    "played while the cards held",
+                    "in hand contain a {C:attention}Straight{}",
+                    "{C:inactive}(Currently {C:mult}+#2#{C:inactive} Mult)",
+                    "{C:inactive,s:0.75}(Doesn't currently support{}",
+                    "{C:inactive,s:0.75}Four Fingers or Shortcut){}"
+                }
+			},
 			j_phanta_technicolourjoker = {
                 name = 'Technicolour Joker',
                 text = {
