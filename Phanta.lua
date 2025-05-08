@@ -1843,7 +1843,7 @@ SMODS.Joker {
   rarity = 2,
   atlas = 'Phanta',
   pos = { x = 11, y = 0 },
-  cost = 7,
+  cost = 5,
   loc_vars = function(self, info_queue, card)
     info_queue[#info_queue + 1] = G.P_CENTERS.m_bonus
     return { vars = { card.ability.extra.added_chips, card.ability.extra.current_chips } }
@@ -1892,7 +1892,7 @@ SMODS.Joker {
   rarity = 2,
   atlas = 'Phanta',
   pos = { x = 3, y = 5 },
-  cost = 7,
+  cost = 5,
   loc_vars = function(self, info_queue, card)
     info_queue[#info_queue + 1] = G.P_CENTERS.m_mult
     return { vars = { card.ability.extra.added_mult, card.ability.extra.current_mult } }
@@ -1927,6 +1927,37 @@ SMODS.Joker {
         return {
           message = localize { type = 'variable', key = 'a_mult', vars = { card.ability.extra.current_mult } },
           colour = G.C.MULT,
+          card = card
+        }
+      end
+    end
+  end
+}
+
+SMODS.Joker {
+  key = 'tnetennba',
+  config = { extra = { added_mult = 3, current_mult = 0 } },
+  rarity = 2,
+  atlas = 'Phanta',
+  pos = { x = 9, y = 9 },
+  cost = 6,
+  loc_vars = function(self, info_queue, card)
+    return { vars = { card.ability.extra.added_mult, card.ability.extra.current_mult } }
+  end,
+  blueprint_compat = true,
+  eternal_compat = true,
+  perishable_compat = false,
+  calculate = function(self, card, context)
+    if context.joker_main and card.ability.extra.current_mult > 0 then
+      return { mult = card.ability.extra.current_mult }
+    end
+
+    if context.cardarea == G.jokers and context.before and not context.blueprint then
+      if next(get_straight(G.hand.cards)) then
+        card.ability.extra.current_mult = card.ability.extra.current_mult + card.ability.extra.added_mult
+        return {
+          message = localize('k_upgrade_ex'),
+          colour = G.C.FILTER,
           card = card
         }
       end
