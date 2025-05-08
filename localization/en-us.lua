@@ -899,6 +899,97 @@ return {
                     "card held in hand"
 				},
 			}
+		},
+        Zodiac = {
+			c_phanta_aries = {
+				name = "Aries",
+				text = {
+					"Creates a {C:tarot}Tarot{} card",
+					"when you play your",
+					"{C:attention}second{} hand"
+					"{C:inactive}(Must have room){}"
+				},
+			},
+			c_phanta_taurus = {
+				name = "Taurus",
+				text = {
+					"{C:attention}Wild{} cards cannot",
+					"be {C:red}debuffed{} or",
+					"flipped {C:attention}face down{}"
+				},
+			},
+			c_phanta_gemini = {
+				name = "Gemini",
+				text = {
+					"Earn {C:money}$#1#{} if played",
+					"hand contains a",
+					"{C:attention}Two Pair{}"
+				},
+			},
+			c_phanta_cancer = {
+				name = "Cancer",
+				text = {
+					"Played cards with",
+					"{C:clubs}Clubs{} suit give",
+					"{C:chips}+#1#{} Chips when scored"
+				},
+			},
+			c_phanta_leo = {
+				name = "Leo",
+				text = {
+				    "Played cards with",
+					"{C:hearts}Hearts{} suit have a",
+					"{C:green}#1# in #2#{} chance to give",
+					"{C:mult}+#3#{} Mult when scored"
+				},
+			},
+			c_phanta_virgo = {
+				name = "Virgo",
+				text = {
+				    "If {C:attention}Blind{} is defeated",
+					"in {C:blue}1{} hand, creates",
+					"a {C:attention}Booster{} Tag"
+				},
+			},
+			c_phanta_leo = {
+				name = "Leo",
+				text = {
+					"Played cards with",
+					"{C:spades}Spades{} suit give",
+					"{C:white,X:mult}X#1#{} Mult when scored"
+				},
+			},
+			c_phanta_scorpio = {
+				name = "Scorpio",
+				text = {
+					"Played cards with",
+					"{C:diamonds}Diamonds{} suit",
+					"always {C:attention}score{}"
+				},
+			},
+			c_phanta_sagittarius = {
+				name = "Sagittarius",
+				text = {
+					"{C:red}+#1#{} discard",
+					"{C:red}-#1#{} discard when you",
+					"play your {C:attention}first hand{}"
+				},
+			},
+			c_phanta_capricorn = {
+				name = "Capricorn",
+				text = {
+					"Earn $#1# for each",
+					"{C:attention}reroll{} in the shop"
+				},
+			},
+			c_phanta_aquarius = {
+				name = "Aquarius",
+				text = {
+					"When {C:attention}Blind{} is selected,",
+					"upgrades a random",
+					"hand by {C:attention}#1#{} level"
+				},
+			},
 		}
 	},
 	misc = {
