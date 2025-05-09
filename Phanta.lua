@@ -693,10 +693,10 @@ SMODS.Atlas {
 }
 
 SMODS.ConsumableType {
-	key = "Zodiac",
+	key = "phanta_Zodiac",
 	primary_colour = HEX("4076cf"),
 	secondary_colour = HEX("5998ff"),
-	collection_rows = { 2, 4 },
+	collection_rows = { 4, 4 },
 	shop_rate = 0.0,
 	default = "phanta_aries",
 	can_stack = true,
@@ -704,7 +704,7 @@ SMODS.ConsumableType {
 }
 
 SMODS.UndiscoveredSprite({
-	key = "Zodiac",
+	key = "phanta_Zodiac",
 	atlas = "PhantaZodiacs",
 	path = "PhantaZodiacs.png",
 	pos = { x = 1, y = 3 },
@@ -721,7 +721,7 @@ SMODS.Atlas {
 
 SMODS.Booster {
 	key = "zodiac_normal1",
-	kind = "Zodiac",
+	kind = "phanta_Zodiac",
 	atlas = "PhantaBoosters",
 	pos = { x = 0, y = 0 },
 	config = { extra = 2, choose = 1 },
@@ -742,7 +742,7 @@ SMODS.Booster {
 
 SMODS.Booster {
 	key = "zodiac_normal2",
-	kind = "Zodiac",
+	kind = "phanta_Zodiac",
 	atlas = "PhantaBoosters",
 	pos = { x = 1, y = 0 },
 	config = { extra = 2, choose = 1 },
@@ -763,7 +763,7 @@ SMODS.Booster {
 
 SMODS.Booster {
 	key = "zodiac_normal3",
-	kind = "Zodiac",
+	kind = "phanta_Zodiac",
 	atlas = "PhantaBoosters",
 	pos = { x = 2, y = 0 },
 	config = { extra = 2, choose = 1 },
@@ -784,7 +784,7 @@ SMODS.Booster {
 
 SMODS.Booster {
 	key = "zodiac_normal4",
-	kind = "Zodiac",
+	kind = "phanta_Zodiac",
 	atlas = "PhantaBoosters",
 	pos = { x = 3, y = 0 },
 	config = { extra = 2, choose = 1 },
@@ -805,7 +805,7 @@ SMODS.Booster {
 
 SMODS.Booster {
 	key = "zodiac_jumbo1",
-	kind = "Zodiac",
+	kind = "phanta_Zodiac",
 	atlas = "PhantaBoosters",
 	pos = { x = 0, y = 1 },
 	config = { extra = 4, choose = 1 },
@@ -826,7 +826,7 @@ SMODS.Booster {
 
 SMODS.Booster {
 	key = "zodiac_jumbo2",
-	kind = "Zodiac",
+	kind = "phanta_Zodiac",
 	atlas = "PhantaBoosters",
 	pos = { x = 1, y = 1 },
 	config = { extra = 4, choose = 1 },
@@ -847,7 +847,7 @@ SMODS.Booster {
 
 SMODS.Booster {
 	key = "zodiac_mega1",
-	kind = "Zodiac",
+	kind = "phanta_Zodiac",
 	atlas = "PhantaBoosters",
 	pos = { x = 2, y = 1 },
 	config = { extra = 4, choose = 2 },
@@ -868,7 +868,7 @@ SMODS.Booster {
 
 SMODS.Booster {
 	key = "zodiac_mega2",
-	kind = "Zodiac",
+	kind = "phanta_Zodiac",
 	atlas = "PhantaBoosters",
 	pos = { x = 2, y = 1 },
 	config = { extra = 4, choose = 2 },
@@ -888,7 +888,7 @@ SMODS.Booster {
 }
 
 SMODS.Consumable {
-  set = "Zodiac",
+  set = "phanta_Zodiac",
   key = "aries",
   pos = { x = 0, y = 0 },
   config = { },
@@ -897,7 +897,139 @@ SMODS.Consumable {
     return { vars = {  } }
   end
 }
-]]--
+
+SMODS.Consumable {
+  set = "phanta_Zodiac",
+  key = "taurus",
+  pos = { x = 1, y = 0 },
+  config = { },
+  atlas = "PhantaZodiacs",
+  loc_vars = function(self, info_queue, card)
+    return { vars = {  } }
+  end
+}
+
+SMODS.Consumable {
+  set = "phanta_Zodiac",
+  key = "gemini",
+  pos = { x = 2, y = 0 },
+  config = { },
+  atlas = "PhantaZodiacs",
+  loc_vars = function(self, info_queue, card)
+    return { vars = {  } }
+  end
+}
+
+SMODS.Consumable {
+  set = "phanta_Zodiac",
+  key = "cancer",
+  pos = { x = 3, y = 0 },
+  config = { },
+  atlas = "PhantaZodiacs",
+  loc_vars = function(self, info_queue, card)
+    return { vars = {  } }
+  end
+}
+
+SMODS.Consumable {
+  set = "phanta_Zodiac",
+  key = "leo",
+  pos = { x = 0, y = 1 },
+  config = { },
+  atlas = "PhantaZodiacs",
+  loc_vars = function(self, info_queue, card)
+    return { vars = {  } }
+  end
+}
+
+SMODS.Consumable {
+  set = "phanta_Zodiac",
+  key = "virgo",
+  pos = { x = 1, y = 1 },
+  config = { },
+  atlas = "PhantaZodiacs",
+  loc_vars = function(self, info_queue, card)
+    return { vars = {  } }
+  end
+}
+
+SMODS.Consumable {
+  set = "phanta_Zodiac",
+  key = "libra",
+  pos = { x = 2, y = 1 },
+  config = { },
+  atlas = "PhantaZodiacs",
+  loc_vars = function(self, info_queue, card)
+    return { vars = {  } }
+  end
+}
+
+SMODS.Consumable {
+  set = "phanta_Zodiac",
+  key = "scorpio",
+  pos = { x = 3, y = 1 },
+  config = { },
+  atlas = "PhantaZodiacs",
+  loc_vars = function(self, info_queue, card)
+    return { vars = {  } }
+  end
+}
+
+SMODS.Consumable {
+  set = "phanta_Zodiac",
+  key = "sagittarius",
+  pos = { x = 0, y = 2 },
+  config = { },
+  atlas = "PhantaZodiacs",
+  loc_vars = function(self, info_queue, card)
+    return { vars = {  } }
+  end
+}
+
+SMODS.Consumable {
+  set = "phanta_Zodiac",
+  key = "capricorn",
+  pos = { x = 1, y = 2 },
+  config = { },
+  atlas = "PhantaZodiacs",
+  loc_vars = function(self, info_queue, card)
+    return { vars = {  } }
+  end
+}
+
+SMODS.Consumable {
+  set = "phanta_Zodiac",
+  key = "aquarius",
+  pos = { x = 2, y = 2 },
+  config = { },
+  atlas = "PhantaZodiacs",
+  loc_vars = function(self, info_queue, card)
+    return { vars = {  } }
+  end
+}
+
+SMODS.Consumable {
+  set = "phanta_Zodiac",
+  key = "pisces",
+  pos = { x = 3, y = 2 },
+  config = { },
+  atlas = "PhantaZodiacs",
+  loc_vars = function(self, info_queue, card)
+    return { vars = {  } }
+  end
+}
+
+SMODS.Consumable {
+  set = "phanta_Zodiac",
+  key = "darkhour",
+  pos = { x = 0, y = 3 },
+  config = { },
+  atlas = "PhantaZodiacs",
+  loc_vars = function(self, info_queue, card)
+    return { vars = {  } }
+  end
+}]]--
+
 
 
 

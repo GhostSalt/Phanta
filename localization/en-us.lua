@@ -977,7 +977,7 @@ return {
 				},
 			}
 		},
-        Zodiac = {
+        phanta_Zodiac = {
 			c_phanta_aries = {
 				name = "Aries",
 				text = {
@@ -1028,8 +1028,8 @@ return {
 					"a {C:attention}Booster{} Tag"
 				},
 			},
-			c_phanta_leo = {
-				name = "Leo",
+			c_phanta_libra = {
+				name = "Libra",
 				text = {
 					"Played cards with",
 					"{C:spades}Spades{} suit give",
@@ -1067,6 +1067,22 @@ return {
 					"hand by {C:attention}#1#{} level"
 				},
 			},
+			c_phanta_pisces = {
+				name = "Pisces",
+				text = {
+					"{C:attention}+#1#{} hand size after",
+					"playing your {C:attention}first{}",
+					"{C:attention}hand{} of round"
+				},
+			},
+			c_phanta_darkhour = {
+				name = "Dark Hour",
+				text = {
+					"Played cards with",
+					"{C:clubs}Clubs{} suit give",
+					"{C:white,X:mult}X#1#{} Mult if unscored"
+				},
+			}
 		}
 	},
 	misc = {
@@ -1079,13 +1095,12 @@ return {
             phanta_copper_grate_exposed = "Exposed",
             phanta_copper_grate_weathered = "Weathered",
             phanta_copper_grate_oxidised = "Oxidised",
-            phanta_select = "SELECT"
+            b_phanta_zodiac_cards = "Zodiac Cards",
+            k_phanta_zodiac = "Zodiac"
 		},
 		labels = {
 			phanta_ghostcard = "Ghost Card",
-			phanta_ghostseal = "Ghost Seal",
-            phanta_zodiac = "Zodiac",
-            phanta_stat_zodiacs = "Zodiacs",
+			phanta_ghostseal_seal = "Ghost Seal",
             phanta_waxed = "Waxed"
 		},
 		poker_hands = {
