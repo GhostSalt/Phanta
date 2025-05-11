@@ -274,6 +274,13 @@ return {
                     "{V:5}#7#{}#8#{V:6}#9#{}"
                 }
 			},
+			j_phanta_junpei = {
+                name = "Junpei",
+                text = {
+                    "Played {C:attention}5s{} give",
+                    "{C:mult}+#1#{} Mult when scored"
+                }
+			},
 			j_phanta_nonuniformday = {
                 name = "Non-Uniform Day",
                 text = {
@@ -352,6 +359,22 @@ return {
                 text = {
                     "Retriggers all played",
                     "and {C:attention}unscored{} cards"
+                }
+			},
+			j_phanta_willothewisp = {
+                name = 'Will-o\'-the-wisp',
+                text = {
+                    "{C:attention}Ghost{} cards also give",
+                    "their {C:white,X:mult}XMult{} when played",
+                    "and {C:attention}unscored{}"
+                }
+			},
+			j_phanta_stickercollection = {
+                name = 'Sticker Collection',
+                text = {
+                    "Retriggers the {C:attention}lowest{} played",
+                    "and scored card {C:attention}#1#{} times",
+                    "if played hand is a {C:attention}Junk{}"
                 }
 			},
 			j_phanta_grimreaper = {
@@ -503,6 +526,15 @@ return {
                     "Creates a {C:tarot}Tarot{} card when",
                     "a {C:planet}Planet{} card is sold",
                     "{C:inactive}(Must have room){}"
+                }
+			},
+			j_phanta_shoppinglist = {
+                name = 'Shopping List',
+                text = {
+                    "Gains {C:mult}+#1#{} Mult every",
+                    "{C:attention}#2#{} {C:inactive}[#3#]{} cards {C:attention}purchased{}",
+                    "from the shop",
+                    "{C:inactive}(Currently {C:mult}+#4#{C:inactive} Mult){}"
                 }
 			},
 			j_phanta_ransomnote = {
@@ -1096,7 +1128,8 @@ return {
             phanta_copper_grate_weathered = "Weathered",
             phanta_copper_grate_oxidised = "Oxidised",
             b_phanta_zodiac_cards = "Zodiac Cards",
-            k_phanta_zodiac = "Zodiac"
+            k_phanta_zodiac = "Zodiac",
+            k_phanta_zodiac_pack = "Zodiac Pack"
 		},
 		labels = {
 			phanta_ghostcard = "Ghost Card",

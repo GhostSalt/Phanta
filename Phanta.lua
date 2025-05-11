@@ -370,7 +370,7 @@ SMODS.Consumable {
     local hand_groupings, _tally = {}, 0, 0
     for k, v in pairs(G.GAME.hands) do
       if v.visible and v.played >= _tally then
-        hand_groupings[#hand_groupings + 1] = {hand = v, hand_name = k}
+        hand_groupings[#hand_groupings + 1] = { hand = v, hand_name = k }
         _tally = v.played
       end
     end
@@ -558,7 +558,7 @@ SMODS.Edition {
 
 
 
-
+--[[
 SMODS.Enhancement {
   key = "coppergratefresh",
   atlas = "PhantaEnhancements",
@@ -574,7 +574,8 @@ SMODS.Enhancement {
     end
   end,
   set_badges = function(self, card, badges)
-    badges[#badges + 1] = create_badge(localize('phanta_copper_grate_fresh'), G.C.PHANTA.MISC_COLOURS.COPPER_FRESH, G.C.WHITE, 1)
+    badges[#badges + 1] = create_badge(localize('phanta_copper_grate_fresh'), G.C.PHANTA.MISC_COLOURS.COPPER_FRESH,
+      G.C.WHITE, 1)
   end
 }
 
@@ -614,7 +615,8 @@ SMODS.Enhancement {
     end
   end,
   set_badges = function(self, card, badges)
-    badges[#badges + 1] = create_badge(localize('phanta_copper_grate_weathered'), G.C.PHANTA.MISC_COLOURS.COPPER_WEATHERED,
+    badges[#badges + 1] = create_badge(localize('phanta_copper_grate_weathered'),
+      G.C.PHANTA.MISC_COLOURS.COPPER_WEATHERED,
       G.C.WHITE, 1)
   end,
   in_pool = function() return false end
@@ -637,7 +639,7 @@ SMODS.Enhancement {
   end,
   in_pool = function() return false end
 }
-
+]]--
 
 
 
@@ -648,253 +650,312 @@ SMODS.Enhancement {
 local sell_use_ref = G.UIDEF.use_and_sell_buttons
 
 function G.UIDEF.use_and_sell_buttons(card)
-  if not card or not card.ability or card.ability.set ~= "Zodiac" then return sell_use_ref(card) end
+  if not card or not card.ability or card.ability.set ~= "phanta_Zodiac" then return sell_use_ref(card) end
 
-    if (card.area == G.pack_cards and G.pack_cards) then
-      return {
-        n=G.UIT.ROOT, config = {padding = 0, colour = G.C.CLEAR}, nodes={
-          {n=G.UIT.R, config={ref_table = card, r = 0.08, padding = 0.1, align = "bm", minw = 0.5*card.T.w - 0.15, maxw = 0.9*card.T.w - 0.15, minh = 0.3*card.T.h, hover = true, shadow = true, colour = G.C.UI.BACKGROUND_INACTIVE, one_press = true, button = 'use_card', func = 'can_select_card'}, nodes={
-            {n=G.UIT.T, config={text = localize('b_select'),colour = G.C.UI.TEXT_LIGHT, scale = 0.45, shadow = true}}
-          }},
-      }}
-    end
+  if (card.area == G.pack_cards and G.pack_cards) then
+    return {
+      n = G.UIT.ROOT,
+      config = { padding = 0, colour = G.C.CLEAR },
+      nodes = {
+        {
+          n = G.UIT.R,
+          config = { ref_table = card, r = 0.08, padding = 0.1, align = "bm", minw = 0.5 * card.T.w - 0.15, maxw = 0.9 * card.T.w - 0.15, minh = 0.3 * card.T.h, hover = true, shadow = true, colour = G.C.UI.BACKGROUND_INACTIVE, one_press = true, button = 'use_card', func = 'can_select_card' },
+          nodes = {
+            { n = G.UIT.T, config = { text = localize('b_select'), colour = G.C.UI.TEXT_LIGHT, scale = 0.45, shadow = true } }
+          }
+        },
+      }
+    }
+  end
 
-      local sell = {n=G.UIT.C, config={align = "cr"}, nodes={
-        {n=G.UIT.C, config={ref_table = card, align = "cr",padding = 0.1, r=0.08, minw = 1.25, hover = true, shadow = true, colour = G.C.UI.BACKGROUND_INACTIVE, one_press = true, button = 'sell_card', func = 'can_sell_card'}, nodes={
-          {n=G.UIT.B, config = {w=0.1,h=0.6}},
-          {n=G.UIT.C, config={align = "tm"}, nodes={
-            {n=G.UIT.R, config={align = "cm", maxw = 1.25}, nodes={
-              {n=G.UIT.T, config={text = localize('b_sell'),colour = G.C.UI.TEXT_LIGHT, scale = 0.4, shadow = true}}
-            }},
-            {n=G.UIT.R, config={align = "cm"}, nodes={
-              {n=G.UIT.T, config={text = localize('$'),colour = G.C.WHITE, scale = 0.4, shadow = true}},
-              {n=G.UIT.T, config={ref_table = card, ref_value = 'sell_cost_label',colour = G.C.WHITE, scale = 0.55, shadow = true}}
-            }}
-          }}
-        }},
-      }}
+  local sell = {
+    n = G.UIT.C,
+    config = { align = "cr" },
+    nodes = {
+      {
+        n = G.UIT.C,
+        config = { ref_table = card, align = "cr", padding = 0.1, r = 0.08, minw = 1.25, hover = true, shadow = true, colour = G.C.UI.BACKGROUND_INACTIVE, one_press = true, button = 'sell_card', func = 'can_sell_card' },
+        nodes = {
+          { n = G.UIT.B, config = { w = 0.1, h = 0.6 } },
+          {
+            n = G.UIT.C,
+            config = { align = "tm" },
+            nodes = {
+              {
+                n = G.UIT.R,
+                config = { align = "cm", maxw = 1.25 },
+                nodes = {
+                  { n = G.UIT.T, config = { text = localize('b_sell'), colour = G.C.UI.TEXT_LIGHT, scale = 0.4, shadow = true } }
+                }
+              },
+              {
+                n = G.UIT.R,
+                config = { align = "cm" },
+                nodes = {
+                  { n = G.UIT.T, config = { text = localize('$'), colour = G.C.WHITE, scale = 0.4, shadow = true } },
+                  { n = G.UIT.T, config = { ref_table = card, ref_value = 'sell_cost_label', colour = G.C.WHITE, scale = 0.55, shadow = true } }
+                }
+              }
+            }
+          }
+        }
+      },
+    }
+  }
 
-    local t = {
-      n=G.UIT.ROOT, config = {padding = 0, colour = G.C.CLEAR}, nodes={
-        {n=G.UIT.C, config={padding = 0.15, align = 'cl'}, nodes={
-          {n=G.UIT.R, config={align = 'cl'}, nodes={
-            sell
-          }}
-        }},
-    }}
+  local t = {
+    n = G.UIT.ROOT,
+    config = { padding = 0, colour = G.C.CLEAR },
+    nodes = {
+      {
+        n = G.UIT.C,
+        config = { padding = 0.15, align = 'cl' },
+        nodes = {
+          {
+            n = G.UIT.R,
+            config = { align = 'cl' },
+            nodes = {
+              sell
+            }
+          }
+        }
+      },
+    }
+  }
   return t
 end
 
 SMODS.Atlas {
-	key = "PhantaZodiacs",
-	path = "PhantaZodiacs.png",
-	px = 71,
-	py = 95,
+  key = "PhantaZodiacs",
+  path = "PhantaZodiacs.png",
+  px = 71,
+  py = 95,
 }
 
 SMODS.ConsumableType {
-	key = "phanta_Zodiac",
-	primary_colour = HEX("4076cf"),
-	secondary_colour = HEX("5998ff"),
-	collection_rows = { 4, 4 },
-	shop_rate = 0.0,
-	default = "phanta_aries",
-	can_stack = true,
-	can_divide = true,
+  key = "phanta_Zodiac",
+  primary_colour = HEX("4076cf"),
+  secondary_colour = HEX("5998ff"),
+  collection_rows = { 4, 4 },
+  shop_rate = 0.0,
+  default = "phanta_aries",
+  can_stack = true,
+  can_divide = true
 }
 
 SMODS.UndiscoveredSprite({
-	key = "phanta_Zodiac",
-	atlas = "PhantaZodiacs",
-	path = "PhantaZodiacs.png",
-	pos = { x = 1, y = 3 },
-	px = 71,
-	py = 95,
+  key = "phanta_Zodiac",
+  atlas = "PhantaZodiacs",
+  path = "PhantaZodiacs.png",
+  pos = { x = 1, y = 3 },
+  px = 71,
+  py = 95,
 }):register()
 
 SMODS.Atlas {
-	key = "PhantaBoosters",
-	path = "PhantaBoosters.png",
-	px = 71,
-	py = 95,
+  key = "PhantaBoosters",
+  path = "PhantaBoosters.png",
+  px = 71,
+  py = 95,
+}
+
+SMODS.Sound({
+  vol = 1,
+  pitch = 1,
+  key = "zodiac_pack_music",
+  path = "phanta_zodiac_pack.ogg",
+  select_music_track = function() -- scuffed!!
+    if G.booster_pack and (G.p_phanta_zodiac_normal1 or G.p_phanta_zodiac_normal2 or G.p_phanta_zodiac_normal3 or G.p_phanta_zodiac_normal4 or G.p_phanta_zodiac_jumbo1 or G.p_phanta_zodiac_jumbo2 or G.p_phanta_zodiac_mega1 or G.p_phanta_zodiac_mega2) then
+      return true
+    end
+    return false
+  end,
+})
+
+SMODS.Booster {
+  key = "zodiac_normal1",
+  kind = "phanta_Zodiac",
+  atlas = "PhantaBoosters",
+  pos = { x = 0, y = 0 },
+  config = { extra = 2, choose = 1 },
+  cost = 4,
+  weight = 0.8,
+  create_card = function(self, card)
+    return create_card("phanta_Zodiac", G.pack_cards, nil, nil, true, true, nil, "zodiac_normal1")
+  end,
+  ease_background_colour = function(self)
+    ease_colour(G.C.DYN_UI.MAIN, G.C.PHANTA.Zodiac)
+    ease_background_colour({ new_colour = G.C.PHANTA.Zodiac, special_colour = G.C.PHANTA.ZodiacAlt, contrast = 2 })
+  end,
+  loc_vars = function(self, info_queue, card)
+    return { vars = { card.config.center.config.choose, card.ability.extra } }
+  end,
+  group_key = "k_phanta_zodiac_pack",
+  select_card = "consumeables"
 }
 
 SMODS.Booster {
-	key = "zodiac_normal1",
-	kind = "phanta_Zodiac",
-	atlas = "PhantaBoosters",
-	pos = { x = 0, y = 0 },
-	config = { extra = 2, choose = 1 },
-	cost = 4,
-	weight = 0.9,
-	create_card = function(self, card)
-		return create_card("Zodiac", G.pack_cards, nil, nil, true, true, nil, "phanta_zodiac")
-	end,
-	ease_background_colour = function(self)
-		ease_colour(G.C.DYN_UI.MAIN, G.C.PHANTA.Zodiac)
-		ease_background_colour({ new_colour = G.C.PHANTA.Zodiac, special_colour = G.C.PHANTA.ZodiacAlt, contrast = 2 })
-	end,
-	loc_vars = function(self, info_queue, card)
-		return { vars = { card.config.center.config.choose, card.ability.extra } }
-	end,
-	group_key = "phanta_zodiac_pack",
+  key = "zodiac_normal2",
+  kind = "phanta_Zodiac",
+  atlas = "PhantaBoosters",
+  pos = { x = 1, y = 0 },
+  config = { extra = 2, choose = 1 },
+  cost = 4,
+  weight = 0.8,
+  create_card = function(self, card)
+    return create_card("phanta_Zodiac", G.pack_cards, nil, nil, true, true, nil, "zodiac_normal2")
+  end,
+  ease_background_colour = function(self)
+    ease_colour(G.C.DYN_UI.MAIN, G.C.PHANTA.Zodiac)
+    ease_background_colour({ new_colour = G.C.PHANTA.Zodiac, special_colour = G.C.PHANTA.ZodiacAlt, contrast = 2 })
+  end,
+  loc_vars = function(self, info_queue, card)
+    return { vars = { card.config.center.config.choose, card.ability.extra } }
+  end,
+  group_key = "k_phanta_zodiac_pack",
+  select_card = "consumeables"
 }
 
 SMODS.Booster {
-	key = "zodiac_normal2",
-	kind = "phanta_Zodiac",
-	atlas = "PhantaBoosters",
-	pos = { x = 1, y = 0 },
-	config = { extra = 2, choose = 1 },
-	cost = 4,
-	weight = 0.9,
-	create_card = function(self, card)
-		return create_card("Zodiac", G.pack_cards, nil, nil, true, true, nil, "phanta_zodiac")
-	end,
-	ease_background_colour = function(self)
-		ease_colour(G.C.DYN_UI.MAIN, G.C.PHANTA.Zodiac)
-		ease_background_colour({ new_colour = G.C.PHANTA.Zodiac, special_colour = G.C.PHANTA.ZodiacAlt, contrast = 2 })
-	end,
-	loc_vars = function(self, info_queue, card)
-		return { vars = { card.config.center.config.choose, card.ability.extra } }
-	end,
-	group_key = "phanta_zodiac_pack",
+  key = "zodiac_normal3",
+  kind = "phanta_Zodiac",
+  atlas = "PhantaBoosters",
+  pos = { x = 2, y = 0 },
+  config = { extra = 2, choose = 1 },
+  cost = 4,
+  weight = 0.8,
+  create_card = function(self, card)
+    return create_card("phanta_Zodiac", G.pack_cards, nil, nil, true, true, nil, "zodiac_normal3")
+  end,
+  ease_background_colour = function(self)
+    ease_colour(G.C.DYN_UI.MAIN, G.C.PHANTA.Zodiac)
+    ease_background_colour({ new_colour = G.C.PHANTA.Zodiac, special_colour = G.C.PHANTA.ZodiacAlt, contrast = 2 })
+  end,
+  loc_vars = function(self, info_queue, card)
+    return { vars = { card.config.center.config.choose, card.ability.extra } }
+  end,
+  group_key = "k_phanta_zodiac_pack",
+  select_card = "consumeables"
 }
 
 SMODS.Booster {
-	key = "zodiac_normal3",
-	kind = "phanta_Zodiac",
-	atlas = "PhantaBoosters",
-	pos = { x = 2, y = 0 },
-	config = { extra = 2, choose = 1 },
-	cost = 4,
-	weight = 0.9,
-	create_card = function(self, card)
-		return create_card("Zodiac", G.pack_cards, nil, nil, true, true, nil, "phanta_zodiac")
-	end,
-	ease_background_colour = function(self)
-		ease_colour(G.C.DYN_UI.MAIN, G.C.PHANTA.Zodiac)
-		ease_background_colour({ new_colour = G.C.PHANTA.Zodiac, special_colour = G.C.PHANTA.ZodiacAlt, contrast = 2 })
-	end,
-	loc_vars = function(self, info_queue, card)
-		return { vars = { card.config.center.config.choose, card.ability.extra } }
-	end,
-	group_key = "phanta_zodiac_pack",
+  key = "zodiac_normal4",
+  kind = "phanta_Zodiac",
+  atlas = "PhantaBoosters",
+  pos = { x = 3, y = 0 },
+  config = { extra = 2, choose = 1 },
+  cost = 4,
+  weight = 0.8,
+  create_card = function(self, card)
+    return create_card("phanta_Zodiac", G.pack_cards, nil, nil, true, true, nil, "zodiac_normal4")
+  end,
+  ease_background_colour = function(self)
+    ease_colour(G.C.DYN_UI.MAIN, G.C.PHANTA.Zodiac)
+    ease_background_colour({ new_colour = G.C.PHANTA.Zodiac, special_colour = G.C.PHANTA.ZodiacAlt, contrast = 2 })
+  end,
+  loc_vars = function(self, info_queue, card)
+    return { vars = { card.config.center.config.choose, card.ability.extra } }
+  end,
+  group_key = "k_phanta_zodiac_pack",
+  select_card = "consumeables"
 }
 
 SMODS.Booster {
-	key = "zodiac_normal4",
-	kind = "phanta_Zodiac",
-	atlas = "PhantaBoosters",
-	pos = { x = 3, y = 0 },
-	config = { extra = 2, choose = 1 },
-	cost = 4,
-	weight = 0.9,
-	create_card = function(self, card)
-		return create_card("Zodiac", G.pack_cards, nil, nil, true, true, nil, "phanta_zodiac")
-	end,
-	ease_background_colour = function(self)
-		ease_colour(G.C.DYN_UI.MAIN, G.C.PHANTA.Zodiac)
-		ease_background_colour({ new_colour = G.C.PHANTA.Zodiac, special_colour = G.C.PHANTA.ZodiacAlt, contrast = 2 })
-	end,
-	loc_vars = function(self, info_queue, card)
-		return { vars = { card.config.center.config.choose, card.ability.extra } }
-	end,
-	group_key = "phanta_zodiac_pack",
+  key = "zodiac_jumbo1",
+  kind = "phanta_Zodiac",
+  atlas = "PhantaBoosters",
+  pos = { x = 0, y = 1 },
+  config = { extra = 4, choose = 1 },
+  cost = 6,
+  weight = 0.4,
+  create_card = function(self, card)
+    return create_card("phanta_Zodiac", G.pack_cards, nil, nil, true, true, nil, "zodiac_jumbo1")
+  end,
+  ease_background_colour = function(self)
+    ease_colour(G.C.DYN_UI.MAIN, G.C.PHANTA.Zodiac)
+    ease_background_colour({ new_colour = G.C.PHANTA.Zodiac, special_colour = G.C.PHANTA.ZodiacAlt, contrast = 2 })
+  end,
+  loc_vars = function(self, info_queue, card)
+    return { vars = { card.config.center.config.choose, card.ability.extra } }
+  end,
+  group_key = "k_phanta_zodiac_pack",
+  select_card = "consumeables"
 }
 
 SMODS.Booster {
-	key = "zodiac_jumbo1",
-	kind = "phanta_Zodiac",
-	atlas = "PhantaBoosters",
-	pos = { x = 0, y = 1 },
-	config = { extra = 4, choose = 1 },
-	cost = 6,
-	weight = 0.45,
-	create_card = function(self, card)
-		return create_card("Zodiac", G.pack_cards, nil, nil, true, true, nil, "phanta_zodiac")
-	end,
-	ease_background_colour = function(self)
-		ease_colour(G.C.DYN_UI.MAIN, G.C.PHANTA.Zodiac)
-		ease_background_colour({ new_colour = G.C.PHANTA.Zodiac, special_colour = G.C.PHANTA.ZodiacAlt, contrast = 2 })
-	end,
-	loc_vars = function(self, info_queue, card)
-		return { vars = { card.config.center.config.choose, card.ability.extra } }
-	end,
-	group_key = "phanta_zodiac_pack_jumbo",
+  key = "zodiac_jumbo2",
+  kind = "phanta_Zodiac",
+  atlas = "PhantaBoosters",
+  pos = { x = 1, y = 1 },
+  config = { extra = 4, choose = 1 },
+  cost = 6,
+  weight = 0.4,
+  create_card = function(self, card)
+    return create_card("phanta_Zodiac", G.pack_cards, nil, nil, true, true, nil, "zodiac_jumbo2")
+  end,
+  ease_background_colour = function(self)
+    ease_colour(G.C.DYN_UI.MAIN, G.C.PHANTA.Zodiac)
+    ease_background_colour({ new_colour = G.C.PHANTA.Zodiac, special_colour = G.C.PHANTA.ZodiacAlt, contrast = 2 })
+  end,
+  loc_vars = function(self, info_queue, card)
+    return { vars = { card.config.center.config.choose, card.ability.extra } }
+  end,
+  group_key = "k_phanta_zodiac_pack",
+  select_card = "consumeables"
 }
 
 SMODS.Booster {
-	key = "zodiac_jumbo2",
-	kind = "phanta_Zodiac",
-	atlas = "PhantaBoosters",
-	pos = { x = 1, y = 1 },
-	config = { extra = 4, choose = 1 },
-	cost = 6,
-	weight = 0.45,
-	create_card = function(self, card)
-		return create_card("Zodiac", G.pack_cards, nil, nil, true, true, nil, "phanta_zodiac")
-	end,
-	ease_background_colour = function(self)
-		ease_colour(G.C.DYN_UI.MAIN, G.C.PHANTA.Zodiac)
-		ease_background_colour({ new_colour = G.C.PHANTA.Zodiac, special_colour = G.C.PHANTA.ZodiacAlt, contrast = 2 })
-	end,
-	loc_vars = function(self, info_queue, card)
-		return { vars = { card.config.center.config.choose, card.ability.extra } }
-	end,
-	group_key = "phanta_zodiac_pack_jumbo",
+  key = "zodiac_mega1",
+  kind = "phanta_Zodiac",
+  atlas = "PhantaBoosters",
+  pos = { x = 2, y = 1 },
+  config = { extra = 4, choose = 2 },
+  cost = 8,
+  weight = 0.1,
+  create_card = function(self, card)
+    return create_card("phanta_Zodiac", G.pack_cards, nil, nil, true, true, nil, "zodiac_mega1")
+  end,
+  ease_background_colour = function(self)
+    ease_colour(G.C.DYN_UI.MAIN, G.C.PHANTA.Zodiac)
+    ease_background_colour({ new_colour = G.C.PHANTA.Zodiac, special_colour = G.C.PHANTA.ZodiacAlt, contrast = 2 })
+  end,
+  loc_vars = function(self, info_queue, card)
+    return { vars = { card.config.center.config.choose, card.ability.extra } }
+  end,
+  group_key = "k_phanta_zodiac_pack",
+  select_card = "consumeables"
 }
 
 SMODS.Booster {
-	key = "zodiac_mega1",
-	kind = "phanta_Zodiac",
-	atlas = "PhantaBoosters",
-	pos = { x = 2, y = 1 },
-	config = { extra = 4, choose = 2 },
-	cost = 8,
-	weight = 0.1125,
-	create_card = function(self, card)
-		return create_card("Zodiac", G.pack_cards, nil, nil, true, true, nil, "phanta_zodiac")
-	end,
-	ease_background_colour = function(self)
-		ease_colour(G.C.DYN_UI.MAIN, G.C.PHANTA.Zodiac)
-		ease_background_colour({ new_colour = G.C.PHANTA.Zodiac, special_colour = G.C.PHANTA.ZodiacAlt, contrast = 2 })
-	end,
-	loc_vars = function(self, info_queue, card)
-		return { vars = { card.config.center.config.choose, card.ability.extra } }
-	end,
-	group_key = "phanta_zodiac_pack_mega",
-}
-
-SMODS.Booster {
-	key = "zodiac_mega2",
-	kind = "phanta_Zodiac",
-	atlas = "PhantaBoosters",
-	pos = { x = 2, y = 1 },
-	config = { extra = 4, choose = 2 },
-	cost = 8,
-	weight = 0.1125,
-	create_card = function(self, card)
-		return create_card("Zodiac", G.pack_cards, nil, nil, true, true, nil, "phanta_zodiac")
-	end,
-	ease_background_colour = function(self)
-		ease_colour(G.C.DYN_UI.MAIN, G.C.PHANTA.Zodiac)
-		ease_background_colour({ new_colour = G.C.PHANTA.Zodiac, special_colour = G.C.PHANTA.ZodiacAlt, contrast = 2 })
-	end,
-	loc_vars = function(self, info_queue, card)
-		return { vars = { card.config.center.config.choose, card.ability.extra } }
-	end,
-	group_key = "phanta_zodiac_pack_mega",
+  key = "zodiac_mega2",
+  kind = "phanta_Zodiac",
+  atlas = "PhantaBoosters",
+  pos = { x = 3, y = 1 },
+  config = { extra = 4, choose = 2 },
+  cost = 8,
+  weight = 0.1,
+  create_card = function(self, card)
+    return create_card("phanta_Zodiac", G.pack_cards, nil, nil, true, true, nil, "zodiac_mega2")
+  end,
+  ease_background_colour = function(self)
+    ease_colour(G.C.DYN_UI.MAIN, G.C.PHANTA.Zodiac)
+    ease_background_colour({ new_colour = G.C.PHANTA.Zodiac, special_colour = G.C.PHANTA.ZodiacAlt, contrast = 2 })
+  end,
+  loc_vars = function(self, info_queue, card)
+    return { vars = { card.config.center.config.choose, card.ability.extra } }
+  end,
+  group_key = "k_phanta_zodiac_pack",
+  select_card = "consumeables"
 }
 
 SMODS.Consumable {
   set = "phanta_Zodiac",
   key = "aries",
   pos = { x = 0, y = 0 },
-  config = { },
+  config = {},
   atlas = "PhantaZodiacs",
   loc_vars = function(self, info_queue, card)
-    return { vars = {  } }
+    return { vars = {} }
   end
 }
 
@@ -902,10 +963,10 @@ SMODS.Consumable {
   set = "phanta_Zodiac",
   key = "taurus",
   pos = { x = 1, y = 0 },
-  config = { },
+  config = {},
   atlas = "PhantaZodiacs",
   loc_vars = function(self, info_queue, card)
-    return { vars = {  } }
+    return { vars = {} }
   end
 }
 
@@ -913,10 +974,10 @@ SMODS.Consumable {
   set = "phanta_Zodiac",
   key = "gemini",
   pos = { x = 2, y = 0 },
-  config = { },
+  config = {},
   atlas = "PhantaZodiacs",
   loc_vars = function(self, info_queue, card)
-    return { vars = {  } }
+    return { vars = {} }
   end
 }
 
@@ -924,10 +985,10 @@ SMODS.Consumable {
   set = "phanta_Zodiac",
   key = "cancer",
   pos = { x = 3, y = 0 },
-  config = { },
+  config = {},
   atlas = "PhantaZodiacs",
   loc_vars = function(self, info_queue, card)
-    return { vars = {  } }
+    return { vars = {} }
   end
 }
 
@@ -935,10 +996,10 @@ SMODS.Consumable {
   set = "phanta_Zodiac",
   key = "leo",
   pos = { x = 0, y = 1 },
-  config = { },
+  config = {},
   atlas = "PhantaZodiacs",
   loc_vars = function(self, info_queue, card)
-    return { vars = {  } }
+    return { vars = {} }
   end
 }
 
@@ -946,10 +1007,10 @@ SMODS.Consumable {
   set = "phanta_Zodiac",
   key = "virgo",
   pos = { x = 1, y = 1 },
-  config = { },
+  config = {},
   atlas = "PhantaZodiacs",
   loc_vars = function(self, info_queue, card)
-    return { vars = {  } }
+    return { vars = {} }
   end
 }
 
@@ -957,10 +1018,10 @@ SMODS.Consumable {
   set = "phanta_Zodiac",
   key = "libra",
   pos = { x = 2, y = 1 },
-  config = { },
+  config = {},
   atlas = "PhantaZodiacs",
   loc_vars = function(self, info_queue, card)
-    return { vars = {  } }
+    return { vars = {} }
   end
 }
 
@@ -968,10 +1029,10 @@ SMODS.Consumable {
   set = "phanta_Zodiac",
   key = "scorpio",
   pos = { x = 3, y = 1 },
-  config = { },
+  config = {},
   atlas = "PhantaZodiacs",
   loc_vars = function(self, info_queue, card)
-    return { vars = {  } }
+    return { vars = {} }
   end
 }
 
@@ -979,10 +1040,10 @@ SMODS.Consumable {
   set = "phanta_Zodiac",
   key = "sagittarius",
   pos = { x = 0, y = 2 },
-  config = { },
+  config = {},
   atlas = "PhantaZodiacs",
   loc_vars = function(self, info_queue, card)
-    return { vars = {  } }
+    return { vars = {} }
   end
 }
 
@@ -990,10 +1051,10 @@ SMODS.Consumable {
   set = "phanta_Zodiac",
   key = "capricorn",
   pos = { x = 1, y = 2 },
-  config = { },
+  config = {},
   atlas = "PhantaZodiacs",
   loc_vars = function(self, info_queue, card)
-    return { vars = {  } }
+    return { vars = {} }
   end
 }
 
@@ -1001,10 +1062,10 @@ SMODS.Consumable {
   set = "phanta_Zodiac",
   key = "aquarius",
   pos = { x = 2, y = 2 },
-  config = { },
+  config = {},
   atlas = "PhantaZodiacs",
   loc_vars = function(self, info_queue, card)
-    return { vars = {  } }
+    return { vars = {} }
   end
 }
 
@@ -1012,10 +1073,10 @@ SMODS.Consumable {
   set = "phanta_Zodiac",
   key = "pisces",
   pos = { x = 3, y = 2 },
-  config = { },
+  config = {},
   atlas = "PhantaZodiacs",
   loc_vars = function(self, info_queue, card)
-    return { vars = {  } }
+    return { vars = {} }
   end
 }
 
@@ -1023,13 +1084,13 @@ SMODS.Consumable {
   set = "phanta_Zodiac",
   key = "darkhour",
   pos = { x = 0, y = 3 },
-  config = { },
+  config = {},
   atlas = "PhantaZodiacs",
   loc_vars = function(self, info_queue, card)
-    return { vars = {  } }
+    return { vars = {} }
   end
-}]]--
-
+}
+]]--
 
 
 
@@ -1073,7 +1134,7 @@ SMODS.Joker {
   key = 'trainstation',
   config = { extra = { added_mult = 1, current_mult = 0 } },
   loc_vars = function(self, info_queue, card)
-    return { vars = { card.ability.extra.added_mult, localize((G.GAME.current_round.train_station_card.value or 2).."", 'ranks'), card.ability.extra.current_mult } }
+    return { vars = { card.ability.extra.added_mult, localize((G.GAME.current_round.train_station_card.value or 2) .. "", 'ranks'), card.ability.extra.current_mult } }
   end,
   rarity = 1,
   atlas = 'Phanta',
@@ -1155,7 +1216,8 @@ SMODS.Joker {
     return { vars = { card.ability.extra.money, (G.jokers and G.jokers.cards and G.jokers.config and G.jokers.config.card_limit and (G.jokers.config.card_limit - #G.jokers.cards) * card.ability.extra.money) or 15 } }
   end,
   calc_dollar_bonus = function(self, card)
-    if G.jokers.config.card_limit - #G.jokers.cards > 0 then return (G.jokers.config.card_limit - #G.jokers.cards) * card.ability.extra.money end
+    if G.jokers.config.card_limit - #G.jokers.cards > 0 then return (G.jokers.config.card_limit - #G.jokers.cards) *
+      card.ability.extra.money end
   end
 }
 
@@ -1371,8 +1433,12 @@ SMODS.Joker {
         end
       }))
 
-      return { message = "X" .. card.ability.extra.given_xhands .. " Hands", colour = G.C.BLUE, card = context
-      .blueprint_card or card }
+      return {
+        message = "X" .. card.ability.extra.given_xhands .. " Hands",
+        colour = G.C.BLUE,
+        card = context
+            .blueprint_card or card
+      }
     end
   end
 }
@@ -1439,6 +1505,26 @@ SMODS.Joker {
   blueprint_compat = false,
   eternal_compat = true,
   perishable_compat = true
+}
+
+SMODS.Joker {
+  key = 'junpei',
+  config = { extra = { given_mult = 9 } },
+  loc_vars = function(self, info_queue, card)
+    return { vars = { card.ability.extra.given_mult } }
+  end,
+  rarity = 1,
+  atlas = 'Phanta',
+  pos = { x = 10, y = 7 },
+  cost = 4,
+  blueprint_compat = true,
+  eternal_compat = true,
+  perishable_compat = true,
+  calculate = function(self, card, context)
+    if context.individual and context.cardarea == G.play and context.other_card:get_id() == 5 then
+      return { mult = card.ability.extra.given_mult }
+    end
+  end
 }
 
 SMODS.Joker {
@@ -1610,15 +1696,15 @@ SMODS.Joker {
     if context.hand_drawn and not context.blueprint then
       local any_forced = nil
       for i, j in ipairs(G.hand.cards) do
-          if j.ability.forced_selection then
-              any_forced = true
-          end
+        if j.ability.forced_selection then
+          any_forced = true
+        end
       end
       if not any_forced then
-          G.hand:unhighlight_all()
-          local forced_card = pseudorandom_element(G.hand.cards, pseudoseed('shackles'))
-          forced_card.ability.forced_selection = true
-          G.hand:add_to_highlighted(forced_card)
+        G.hand:unhighlight_all()
+        local forced_card = pseudorandom_element(G.hand.cards, pseudoseed('shackles'))
+        forced_card.ability.forced_selection = true
+        G.hand:add_to_highlighted(forced_card)
       end
     end
   end
@@ -1678,10 +1764,10 @@ SMODS.Joker {
 SMODS.Joker {
   key = 'knowledgeofthecollege',
   config = { extra = { given_xmult = 3 } },
-  rarity = 2,
+  rarity = 3,
   atlas = 'Phanta',
   pos = { x = 9, y = 7 },
-  cost = 6,
+  cost = 7,
   blueprint_compat = true,
   eternal_compat = true,
   perishable_compat = true,
@@ -1695,6 +1781,7 @@ SMODS.Joker {
   end
 }
 
+--[[
 SMODS.Joker {
   key = 'theapparition',
   rarity = 2,
@@ -1714,6 +1801,49 @@ SMODS.Joker {
         repetitions = 1
       }
     end
+  end
+}
+
+SMODS.Joker {
+  key = 'willothewisp',
+  rarity = 2,
+  atlas = 'Phanta',
+  pos = { x = 7, y = 10 },
+  cost = 6,
+  blueprint_compat = true,
+  eternal_compat = true,
+  perishable_compat = true,
+  calculate = function(self, card, context)
+    if context.individual and context.cardarea == "unscored" and context.other_card.ability.name == "Ghost Card" then
+      return { xmult = context.other_card.ability.config.h_x_mult }
+    end
+  end
+}
+]]--
+
+SMODS.Joker {
+  key = 'stickercollection',
+  config = { extra = { retriggers = 3 } },
+  rarity = 2,
+  atlas = 'Phanta',
+  pos = { x = 2, y = 10 },
+  cost = 6,
+  loc_vars = function(self, info_queue, card)
+    return { vars = { card.ability.extra.retriggers } }
+  end,
+  blueprint_compat = true,
+  eternal_compat = true,
+  perishable_compat = true,
+  calculate = function(self, card, context)
+    if context.repetition and context.scoring_name == "phanta_junk" and get_lowest(context.scoring_hand)[1][1]:get_id() == context.other_card:get_id() and context.cardarea == G.play then
+      return {
+        message = localize("k_again_ex"),
+        repetitions = card.ability.extra.retriggers
+      }
+    end
+  end,
+  in_pool = function()
+    return G.GAME.hands["phanta_junk"].visible
   end
 }
 
@@ -1902,20 +2032,20 @@ SMODS.Joker {
   calculate = function(self, card, context)
     if context.joker_main then
       if context.scoring_name == "phanta_junk" and #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit then
-      G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
-          G.E_MANAGER:add_event(Event({
-            trigger = 'before',
-            delay = 0.0,
-            func = function()
-              local new_card = create_card("Tarot", G.consumables, nil, nil, nil, nil, 'c_chariot', 'engineer')
-              new_card:add_to_deck()
-              G.consumeables:emplace(new_card)
-              G.GAME.consumeable_buffer = 0
-              new_card:juice_up(0.3, 0.5)
-              return true
-            end
-          }))
-          return { message = '+1 Chariot', colour = G.C.PURPLE }
+        G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
+        G.E_MANAGER:add_event(Event({
+          trigger = 'before',
+          delay = 0.0,
+          func = function()
+            local new_card = create_card("Tarot", G.consumables, nil, nil, nil, nil, 'c_chariot', 'engineer')
+            new_card:add_to_deck()
+            G.consumeables:emplace(new_card)
+            G.GAME.consumeable_buffer = 0
+            new_card:juice_up(0.3, 0.5)
+            return true
+          end
+        }))
+        return { message = '+1 Chariot', colour = G.C.PURPLE }
       end
     end
   end,
@@ -2316,76 +2446,6 @@ SMODS.Joker {
   end
 }
 
---[[SMODS.Joker {
-  key = 'stickercollection',
-  loc_txt = {
-    name = 'Sticker Collection',
-    text = {
-      "Gives {C:chips}+#1#{} Chips for",
-      "each card with a",
-      "seal in your full deck"
-    }
-  },
-  config = { extra = { given_chips = 25 } },
-  rarity = 2,
-  atlas = 'Phanta',
-  pos = { x = 2, y = 9 },
-  cost = 5,
-  loc_vars = function(self, info_queue, card)
-    return { vars = { card.ability.extra.given_chips } }
-  end,
-  blueprint_compat = true,
-  eternal_compat = true,
-  perishable_compat = true,
-  calculate = function(self, card, context)
-    if context.joker_main and card.ability.extra.current_mult > 0 then return { mult = card.ability.extra.current_mult } end
-
-    if context.before and not context.blueprint and (next(context.poker_hands['Straight']) or next(context.poker_hands['Straight Flush'])) then
-      local suits = {
-        ['Hearts'] = 0,
-        ['Diamonds'] = 0,
-        ['Spades'] = 0,
-        ['Clubs'] = 0
-      }
-      for i = 1, #context.scoring_hand do
-        if not SMODS.has_any_suit(context.scoring_hand[i]) then
-          if context.scoring_hand[i]:is_suit('Hearts', true) and suits["Hearts"] == 0 then
-            suits["Hearts"] = suits["Hearts"] + 1
-          elseif context.scoring_hand[i]:is_suit('Diamonds', true) and suits["Diamonds"] == 0 then
-            suits["Diamonds"] = suits["Diamonds"] + 1
-          elseif context.scoring_hand[i]:is_suit('Spades', true) and suits["Spades"] == 0 then
-            suits["Spades"] = suits["Spades"] + 1
-          elseif context.scoring_hand[i]:is_suit('Clubs', true) and suits["Clubs"] == 0 then
-            suits["Clubs"] = suits["Clubs"] + 1
-          end
-        end
-      end
-      for i = 1, #context.scoring_hand do
-        if SMODS.has_any_suit(context.scoring_hand[i]) then
-          if suits["Hearts"] == 0 then
-            suits["Hearts"] = suits["Hearts"] + 1
-          elseif suits["Diamonds"] == 0 then
-            suits["Diamonds"] = suits["Diamonds"] + 1
-          elseif suits["Spades"] == 0 then
-            suits["Spades"] = suits["Spades"] + 1
-          elseif suits["Clubs"] == 0 then
-            suits["Clubs"] = suits["Clubs"] + 1
-          end
-        end
-      end
-      if suits["Hearts"] > 0 or suits["Diamonds"] > 0 or suits["Spades"] > 0 or suits["Clubs"] > 0 then
-        card.ability.extra.current_mult = card.ability.extra.current_mult +
-            ((suits["Hearts"] + suits["Diamonds"] + suits["Spades"] + suits["Clubs"]) * card.ability.extra.added_mult)
-        return {
-          message = localize('k_upgrade_ex'),
-          colour = G.C.FILTER,
-          card = card
-        }
-      end
-    end
-  end
-}]]--
-
 SMODS.Joker {
   key = 'p5joker',
   config = { extra = { mult_per_hand = 2, current_mult = 0 } },
@@ -2455,6 +2515,44 @@ SMODS.Joker {
 }
 
 SMODS.Joker {
+  key = 'shoppinglist',
+  config = { extra = { added_mult = 4, target = 5, current_bought = 0, current_mult = 0 } },
+  rarity = 1,
+  atlas = 'Phanta',
+  pos = { x = 7, y = 4 },
+  cost = 4,
+  loc_vars = function(self, info_queue, card)
+    return { vars = { card.ability.extra.added_mult, card.ability.extra.target, card.ability.extra.target - card.ability.extra.current_bought, card.ability.extra.current_mult } }
+  end,
+  blueprint_compat = true,
+  eternal_compat = true,
+  perishable_compat = false,
+  calculate = function(self, card, context)
+    if context.joker_main and card.ability.extra.current_mult > 0 then
+      return { mult = card.ability.extra.current_mult }
+    end
+
+    if context.buying_card then
+      card.ability.extra.current_bought = card.ability.extra.current_bought + 1
+      if card.ability.extra.current_bought == card.ability.extra.target then
+        card.ability.extra.current_bought = 0
+        card.ability.extra.current_mult = card.ability.extra.current_mult + card.ability.extra.added_mult
+        return {
+          message = localize('k_upgrade_ex'),
+          card = card
+        }
+      else
+        return {
+          message = card.ability.extra.current_bought .. "/" .. card.ability.extra.target,
+          colour = G.C.FILTER,
+          card = card
+        }
+      end
+    end
+  end
+}
+
+SMODS.Joker {
   key = 'ransomnote',
   config = { extra = { money = 25, joker_tally = 0, jokers_required = 5 } },
   rarity = 2,
@@ -2476,8 +2574,7 @@ SMODS.Joker {
       else
         return {
           message = card.ability.extra.joker_tally .. "/" .. card.ability.extra.jokers_required,
-          colour = G.C
-              .FILTER,
+          colour = G.C.FILTER,
           card = card
         }
       end
@@ -3297,7 +3394,7 @@ SMODS.Joker {
       end
     end
   end
-}]]--
+}]] --
 
 SMODS.Joker {
   key = 'eyeofprovidence',
@@ -3461,7 +3558,7 @@ SMODS.Joker {
     return { vars = { card.ability.extra.added_xmult, card.ability.extra.current_xmult } }
   end,
   calculate = function(self, card, context)
-    if context.joker_main then
+    if context.before then
       local heart_cards = {}
       for k, v in ipairs(context.scoring_hand) do
         if v:is_suit("Hearts") and not v.phanta_weapon_marked_for_death then
@@ -3475,8 +3572,9 @@ SMODS.Joker {
           return { message = localize('k_upgrade_ex'), colour = G.C.FILTER }
         end
       end
-      if card.ability.extra.current_xmult > 1 then return { xmult = card.ability.extra.current_xmult } end
     end
+
+    if context.joker_main and card.ability.extra.current_xmult > 1 then return { xmult = card.ability.extra.current_xmult } end
 
     if context.destroy_card and context.cardarea == G.play and context.destroy_card.phanta_weapon_marked_for_death then
       context.destroy_card.phanta_weapon_marked_for_death = nil
@@ -3533,7 +3631,7 @@ SMODS.Joker {
     return { vars = { card.ability.extra.added_mult, card.ability.extra.current_mult } }
   end,
   calculate = function(self, card, context)
-    if context.joker_main then
+    if context.before then
       local diamond_cards = {}
       for k, v in ipairs(context.scoring_hand) do
         if v:is_suit("Diamonds") and not v.phanta_weapon_marked_for_death then
@@ -3547,8 +3645,9 @@ SMODS.Joker {
           return { message = localize('k_upgrade_ex'), colour = G.C.FILTER }
         end
       end
-      return { mult = card.ability.extra.current_mult }
     end
+
+    if context.joker_main and card.ability.extra.current_mult > 0 then return { mult = card.ability.extra.current_mult } end
 
     if context.destroy_card and context.cardarea == G.play and context.destroy_card.phanta_weapon_marked_for_death then
       context.destroy_card.phanta_weapon_marked_for_death = nil
@@ -3589,9 +3688,10 @@ SMODS.Joker {
         return (card.ability.extra.current_rounds == card.ability.extra.rounds_required) and
             not G.RESET_JIGGLES
       end
-      juice_card_until(card, eval, true)]]--
+      juice_card_until(card, eval, true)]] --
       if #G.jokers.cards <= G.jokers.config.card_limit then
-        card_eval_status_text(context.blueprint_card or card, 'extra', nil, nil, nil, { message = localize('k_duplicated_ex') })
+        card_eval_status_text(context.blueprint_card or card, 'extra', nil, nil, nil,
+          { message = localize('k_duplicated_ex') })
         local new_card = copy_card(context.card, nil, nil, nil, context.card.edition and context.card.edition.negative)
         card.ability.extra.current_rounds = 0
         G.E_MANAGER:add_event(Event({
@@ -3618,7 +3718,8 @@ SMODS.Joker {
         new_card:add_to_deck()
         G.jokers:emplace(new_card)
       else
-        card_eval_status_text(context.blueprint_card or card, 'extra', nil, nil, nil, { message = localize('k_no_room_ex') })
+        card_eval_status_text(context.blueprint_card or card, 'extra', nil, nil, nil,
+          { message = localize('k_no_room_ex') })
       end
     end
   end,
@@ -3908,22 +4009,6 @@ SMODS.Joker {
               local new_card = create_card("Spectral", G.consumables, nil, nil, nil, nil)
               new_card:add_to_deck()
               G.consumeables:emplace(new_card)
-              return true
-            end
-          }))
-
-          card.T.r = -0.2
-          card:juice_up(0.3, 0.4)
-          card.states.drag.is = true
-          card.children.center.pinch.x = true
-          G.E_MANAGER:add_event(Event({
-            trigger = 'after',
-            delay = 0.3,
-            blockable = false,
-            func = function()
-              G.jokers:remove_card(card)
-              card:remove()
-              card = nil
               return true
             end
           }))
@@ -4426,7 +4511,7 @@ SMODS.Back {
   end,
   calculate = function(self, back, context)
     if context.individual and context.cardarea == "unscored" then
-      SMODS.calculate_effect({dollars = self.config.extra.given_money}, context.other_card)
+      SMODS.calculate_effect({ dollars = self.config.extra.given_money }, context.other_card)
     end
   end
 }
