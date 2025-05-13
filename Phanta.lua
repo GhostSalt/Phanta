@@ -279,7 +279,7 @@ SMODS.Consumable {
       trigger = 'after',
       delay = 0.2,
       func = function()
-        G.hand:unhighlight_all(); return true
+        G.hand:unhighlight_all() return true
       end
     }))
   end
@@ -1144,7 +1144,7 @@ SMODS.Joker {
   eternal_compat = true,
   perishable_compat = false,
   calculate = function(self, card, context)
-    if context.joker_main then
+    if context.joker_main and card.ability.extra.current_mult > 0 then
       return {
         message = localize { type = 'variable', key = 'a_mult', vars = { card.ability.extra.current_mult } },
         mult_mod = card.ability.extra.current_mult,
@@ -3302,14 +3302,9 @@ SMODS.Joker {
                   G.GAME.hands["Straight"].level
             })
           level_up_hand(card, "Straight", nil, card.ability.extra.no_of_upgrades)
-          update_hand_text({ sound = 'button', volume = 0.7, pitch = 0.8, delay = 0.3 },
-            {
-              handname = context.scoring_name,
-              chips = G.GAME.hands[context.scoring_name].chips,
-              mult = G.GAME.hands
-                  [context.scoring_name].mult,
-              level = G.GAME.hands[context.scoring_name].level
-            })
+        update_hand_text({ sound = 'button', volume = 0.7, pitch = 0.8, delay = 0.3 },
+          { mult = 0, chips = 0, handname = '', level = '' })
+          return true
         end
       }))
     end
@@ -3411,12 +3406,7 @@ SMODS.Joker {
   perishable_compat = true,
   calculate = function(self, card, context)
     if context.individual and context.cardarea == G.play and context.other_card:get_id() == 14 and context.other_card:is_suit("Spades") then
-      return {
-        message = localize { type = 'variable', key = 'a_xmult', vars = { card.ability.extra.xmult } },
-        x_mult = card.ability.extra.xmult,
-        colour = G.C.RED,
-        card = card
-      }
+      return { xmult = card.ability.extra.xmult }
     end
   end
 }
@@ -3435,7 +3425,7 @@ SMODS.Joker {
   eternal_compat = true,
   perishable_compat = false,
   calculate = function(self, card, context)
-    if context.joker_main then
+    if context.joker_main and card.ability.extra.current_xmult > 1 then
       return {
         message = localize { type = 'variable', key = 'a_xmult', vars = { card.ability.extra.current_xmult } },
         Xmult_mod = card.ability.extra.current_xmult
@@ -3769,7 +3759,7 @@ SMODS.Joker {
                   G.jokers:remove_card(card)
                   card:remove()
                   card = nil
-                  return true;
+                  return true
                 end
               }))
               return true
@@ -3851,7 +3841,7 @@ SMODS.Joker {
                 G.jokers:remove_card(card)
                 card:remove()
                 card = nil
-                return true;
+                return true
               end
             }))
             return true
@@ -3865,62 +3855,6 @@ SMODS.Joker {
         return {
           message = card.ability.extra.remaining_hands .. "",
           colour = G.C.FILTER
-        }
-      end
-    end
-  end
-}
-
-SMODS.Joker {
-  key = 'perkeossoul',
-  config = { extra = { lost_xmult = 0.5, current_xmult = 3 } },
-  rarity = 3,
-  atlas = 'Phanta',
-  pos = { x = 2, y = 7 },
-  cost = 8,
-  blueprint_compat = true,
-  eternal_compat = false,
-  perishable_compat = true,
-  loc_vars = function(self, info_queue, card)
-    return { vars = { card.ability.extra.lost_xmult, card.ability.extra.current_xmult } }
-  end,
-  calculate = function(self, card, context)
-    if context.joker_main and card.ability.extra.current_xmult > 1 then
-      return { xmult = card.ability.extra.current_xmult }
-    end
-
-    if context.end_of_round and not context.individual and not context.repetition and #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit then
-      card.ability.extra.current_xmult = card.ability.extra.current_xmult - card.ability.extra.lost_xmult
-      if card.ability.extra.current_xmult <= 1 then
-        G.E_MANAGER:add_event(Event({
-          func = function()
-            play_sound('tarot1')
-            card.T.r = -0.2
-            card:juice_up(0.3, 0.4)
-            card.states.drag.is = true
-            card.children.center.pinch.x = true
-            G.E_MANAGER:add_event(Event({
-              trigger = 'after',
-              delay = 0.3,
-              blockable = false,
-              func = function()
-                G.jokers:remove_card(card)
-                card:remove()
-                card = nil
-                return true;
-              end
-            }))
-            return true
-          end
-        }))
-        return {
-          message = "Drained!",
-          colour = G.C.FILTER
-        }
-      else
-        return {
-          message = localize { type = 'variable', key = 'a_xmult_minus', vars = { card.ability.extra.lost_xmult } },
-          colour = G.C.MULT
         }
       end
     end
@@ -3963,7 +3897,119 @@ SMODS.Joker {
                 G.jokers:remove_card(card)
                 card:remove()
                 card = nil
-                return true;
+                return true
+              end
+            }))
+            return true
+          end
+        }))
+        return {
+          message = "Drained!",
+          colour = G.C.FILTER
+        }
+      else
+        return {
+          message = localize { type = 'variable', key = 'a_xmult_minus', vars = { card.ability.extra.lost_xmult } },
+          colour = G.C.MULT
+        }
+      end
+    end
+  end
+}
+
+SMODS.Joker {
+  key = 'chicotssoul',
+  config = { extra = { lost_xmult = 0.5, current_xmult = 3 } },
+  rarity = 3,
+  atlas = 'Phanta',
+  pos = { x = 1, y = 7 },
+  cost = 8,
+  blueprint_compat = true,
+  eternal_compat = false,
+  perishable_compat = true,
+  loc_vars = function(self, info_queue, card)
+    return { vars = { card.ability.extra.lost_xmult, card.ability.extra.current_xmult } }
+  end,
+  calculate = function(self, card, context)
+    if context.joker_main and card.ability.extra.current_xmult > 1 then
+      return { xmult = card.ability.extra.current_xmult }
+    end
+
+    if context.before and G.GAME.current_round.hands_played == 1 then
+      card.ability.extra.current_xmult = card.ability.extra.current_xmult - card.ability.extra.lost_xmult
+      if card.ability.extra.current_xmult <= 1 then
+        G.E_MANAGER:add_event(Event({
+          func = function()
+            play_sound('tarot1')
+            card.T.r = -0.2
+            card:juice_up(0.3, 0.4)
+            card.states.drag.is = true
+            card.children.center.pinch.x = true
+            G.E_MANAGER:add_event(Event({
+              trigger = 'after',
+              delay = 0.3,
+              blockable = false,
+              func = function()
+                G.jokers:remove_card(card)
+                card:remove()
+                card = nil
+                return true
+              end
+            }))
+            return true
+          end
+        }))
+        return {
+          message = "Drained!",
+          colour = G.C.FILTER
+        }
+      else
+        return {
+          message = localize { type = 'variable', key = 'a_xmult_minus', vars = { card.ability.extra.lost_xmult } },
+          colour = G.C.MULT
+        }
+      end
+    end
+  end
+}
+
+SMODS.Joker {
+  key = 'perkeossoul',
+  config = { extra = { lost_xmult = 0.5, current_xmult = 3 } },
+  rarity = 3,
+  atlas = 'Phanta',
+  pos = { x = 2, y = 7 },
+  cost = 8,
+  blueprint_compat = true,
+  eternal_compat = false,
+  perishable_compat = true,
+  loc_vars = function(self, info_queue, card)
+    return { vars = { card.ability.extra.lost_xmult, card.ability.extra.current_xmult } }
+  end,
+  calculate = function(self, card, context)
+    if context.joker_main and card.ability.extra.current_xmult > 1 then
+      return { xmult = card.ability.extra.current_xmult }
+    end
+
+    if context.end_of_round and not context.individual and not context.repetition and #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit then
+      card.ability.extra.current_xmult = card.ability.extra.current_xmult - card.ability.extra.lost_xmult
+      if card.ability.extra.current_xmult <= 1 then
+        G.E_MANAGER:add_event(Event({
+          func = function()
+            play_sound('tarot1')
+            card.T.r = -0.2
+            card:juice_up(0.3, 0.4)
+            card.states.drag.is = true
+            card.children.center.pinch.x = true
+            G.E_MANAGER:add_event(Event({
+              trigger = 'after',
+              delay = 0.3,
+              blockable = false,
+              func = function()
+                G.jokers:remove_card(card)
+                card:remove()
+                card = nil
+                return true
               end
             }))
             return true
@@ -4160,7 +4206,7 @@ SMODS.Joker {
       G.GAME.dollar_buffer = (G.GAME.dollar_buffer or 0) + card.ability.extra.money
       G.E_MANAGER:add_event(Event({
         func = (function()
-          G.GAME.dollar_buffer = 0; return true
+          G.GAME.dollar_buffer = 0 return true
         end)
       }))
       return {
@@ -4329,7 +4375,7 @@ SMODS.Joker {
   rarity = 4,
   atlas = 'Phanta',
   pos = { x = 2, y = 2 },
-  soul_pos = { x = 3, y = 3,
+  --[[soul_pos = { x = 3, y = 3,
     draw = function(card, scale_mod, rotate_mod)
       card.ARGS.send_to_shader = card.ARGS.send_to_shader or {}
 
@@ -4338,6 +4384,15 @@ SMODS.Joker {
       card.children.floating_sprite:draw_shader(nil, nil, nil, nil, card.children.center, scale_mod, rotate_mod)
       card.children.floating_sprite:draw_shader('voucher', nil, card.ARGS.send_to_shader, nil, card.children.center,
         scale_mod, rotate_mod, nil, 0.1 + 0.03 * math.sin(1.8 * G.TIMERS.REAL), nil, 0.6)
+    end },]]--
+  soul_pos = { x = 3, y = 3,
+    draw = function(card, scale_mod, rotate_mod)
+      card.children.floating_sprite:draw_shader('dissolve', 0, nil, nil, card.children.center, scale_mod, rotate_mod, nil,
+        0.1 + 0.03 * math.sin(1.8 * G.TIMERS.REAL), nil, 0.6)
+      card.children.floating_sprite:draw_shader('dissolve', nil, nil, nil, card.children.center, scale_mod, rotate_mod)
+      card.children.floating_sprite:draw_shader('voucher', 0, nil, nil, card.children.center, scale_mod, rotate_mod, nil,
+        0.1 + 0.03 * math.sin(1.8 * G.TIMERS.REAL), nil, 0.6)
+      card.children.floating_sprite:draw_shader('voucher', nil, nil, nil, card.children.center, scale_mod, rotate_mod)
     end },
   cost = 20,
   loc_vars = function(self, info_queue, card)

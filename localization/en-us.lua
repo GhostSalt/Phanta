@@ -800,9 +800,8 @@ return {
                 name = 'Chicot\'s Soul',
                 text = {
                     "{C:white,X:mult}X#2#{} Mult, loses {C:white,X:mult}X#1#{}",
-                    "Mult at the end of",
-                    "the round if more",
-                    "than {C:attention}#3#{} {C:blue}hand{} was used"
+                    "Mult when you play",
+					"your {C:attention}second{} hand"
                 }
 			},
 			j_phanta_yorickssoul = {
