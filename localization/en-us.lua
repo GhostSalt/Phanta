@@ -852,7 +852,7 @@ return {
                 name = 'Dimere',
                 text = {
                     "When {C:attention}Boss Blind{} is defeated,",
-                    "#1# random {C:attention}Joker{} becomes",
+                    "1 random {C:attention}Joker{} becomes",
                     "{C:negative}Negative{} {C:inactive}(except Dimeres{}",
                     "{C:inactive}or Jokers with editions){}"
                 }

@@ -8,11 +8,7 @@ local rotate_mod = 0.05 * math.sin(1.219 * G.TIMERS.REAL) +
 
 SMODS.current_mod.optional_features = { cardareas = { unscored = true } }
 
-PHANTA = {}
-
-function PHANTA.to_big(num)
-  if to_big then return to_big(num) else return num end
-end
+to_big = to_big or function(x) return x end
 
 SMODS.Atlas {
   key = "modicon",
@@ -229,7 +225,7 @@ SMODS.Consumable {
   },
   atlas = "PhantaTarots",
   loc_vars = function(self, info_queue, card)
-    info_queue[#info_queue + 1] = G.P_CENTERS.m_phanta_ghost
+    info_queue[#info_queue + 1] = G.P_CENTERS.m_phanta_ghostcard
     return { vars = { card.ability.max_highlighted } }
   end
 }
@@ -252,7 +248,7 @@ SMODS.Consumable {
   },
   atlas = "PhantaTarots",
   loc_vars = function(self, info_queue, card)
-    info_queue[#info_queue + 1] = { set = "Other", key = "phanta_ghostseal" }
+    info_queue[#info_queue + 1] = { set = "Other", key = "phanta_ghostseal_seal" }
     return { vars = { card.ability.max_highlighted } }
   end,
   use = function(self, card, area, copier)
@@ -4131,7 +4127,6 @@ SMODS.Joker {
 
 SMODS.Joker {
   key = 'dimere',
-  config = { extra = { cards_turned = 1 } },
   rarity = 4,
   atlas = 'Phanta',
   pos = { x = 3, y = 1 },
@@ -4152,22 +4147,18 @@ SMODS.Joker {
   blueprint_compat = true,
   eternal_compat = true,
   perishable_compat = true,
-  loc_vars = function(self, info_queue, card)
-    return { vars = { card.ability.extra.cards_turned } }
-  end,
-  blueprint_compat = true,
   calculate = function(self, card, context)
     if context.end_of_round and not context.individual and not context.repetition and G.GAME.blind.boss then
       --Check if the ability should trigger (i.e. there are valid, non-Dimere Jokers)
 
       local candidates = {}
       for i = 1, #G.jokers.cards do
-        if G.jokers.cards[i].ability.name ~= card.ability.name and G.jokers.cards[i].ability.set == "Joker" and G.jokers.cards[i].edition == nil then
+        if G.jokers.cards[i].config.center ~= card.config.center and G.jokers.cards[i].ability.set == "Joker" and G.jokers.cards[i].edition == nil then
           candidates[#candidates + 1] = G.jokers.cards[i]
         end
       end
 
-      if not candidates then
+      if #candidates == 0 then
         return nil
       end
 
@@ -4352,7 +4343,7 @@ SMODS.Joker {
   eternal_compat = true,
   perishable_compat = true,
   calculate = function(self, card, context)
-    if context.cardarea == G.hand and context.other_card and context.other_card:is_suit(G.GAME.current_round.fainfol_card.suit) then
+    if context.cardarea == G.hand and not context.end_of_round and not context.repetition and context.other_card and context.other_card:is_suit(G.GAME.current_round.fainfol_card.suit) then
       if context.other_card.debuff then
         return {
           message = localize('k_debuffed'),
