@@ -275,7 +275,8 @@ SMODS.Consumable {
       trigger = 'after',
       delay = 0.2,
       func = function()
-        G.hand:unhighlight_all() return true
+        G.hand:unhighlight_all()
+        return true
       end
     }))
   end
@@ -635,7 +636,7 @@ SMODS.Enhancement {
   end,
   in_pool = function() return false end
 }
-]]--
+]] --
 
 
 
@@ -1086,7 +1087,7 @@ SMODS.Consumable {
     return { vars = {} }
   end
 }
-]]--
+]] --
 
 
 
@@ -1212,8 +1213,10 @@ SMODS.Joker {
     return { vars = { card.ability.extra.money, (G.jokers and G.jokers.cards and G.jokers.config and G.jokers.config.card_limit and (G.jokers.config.card_limit - #G.jokers.cards) * card.ability.extra.money) or 15 } }
   end,
   calc_dollar_bonus = function(self, card)
-    if G.jokers.config.card_limit - #G.jokers.cards > 0 then return (G.jokers.config.card_limit - #G.jokers.cards) *
-      card.ability.extra.money end
+    if G.jokers.config.card_limit - #G.jokers.cards > 0 then
+      return (G.jokers.config.card_limit - #G.jokers.cards) *
+          card.ability.extra.money
+    end
   end
 }
 
@@ -1524,6 +1527,83 @@ SMODS.Joker {
 }
 
 SMODS.Joker {
+  key = 'redkeycards',
+  config = { extra = { added_discards = 3, will_be_spent = false, is_spent = false } },
+  loc_vars = function(self, info_queue, card)
+    return { vars = { card.ability.extra.added_discards, (function() if card.ability.extra.is_spent then return 'inactive' else return 'active' end end)() } }
+  end,
+  rarity = 2,
+  atlas = 'Phanta',
+  pos = { x = 6, y = 9 },
+  cost = 5,
+  blueprint_compat = true,
+  eternal_compat = true,
+  perishable_compat = true,
+  calculate = function(self, card, context)
+    if context.individual and context.cardarea == "unscored" and context.other_card.config.center == G.P_CENTERS.m_mult and not card.ability.extra.is_spent then
+      card.ability.extra.will_be_spent = true
+      ease_discard(card.ability.extra.added_discards)
+
+      local _card = context.other_card
+
+      G.E_MANAGER:add_event(Event({
+        func = function()
+          _card:juice_up()
+          return true
+        end
+      }))
+      return { message = localize { type = 'variable', key = 'a_discards', vars = { card.ability.extra.added_discards } }, colour = G.C.RED }
+    end
+
+    -- The whole will be / is spent thing is for Blueprint compat.
+    if context.after and card.ability.extra.will_be_spent then
+      card.ability.extra.will_be_spent = false
+      card.ability.extra.is_spent = true
+    end
+
+    if context.end_of_round then card.ability.extra.is_spent = false end
+  end
+}
+
+SMODS.Joker {
+  key = 'bluekeycards',
+  config = { extra = { added_hands = 3, will_be_spent = false, is_spent = false } },
+  loc_vars = function(self, info_queue, card)
+    return { vars = { card.ability.extra.added_hands, (function() if card.ability.extra.is_spent then return 'inactive' else return 'active' end end)() } }
+  end,
+  rarity = 2,
+  atlas = 'Phanta',
+  pos = { x = 7, y = 9 },
+  cost = 5,
+  blueprint_compat = true,
+  eternal_compat = true,
+  perishable_compat = true,
+  calculate = function(self, card, context)
+    if context.individual and context.cardarea == "unscored" and context.other_card.config.center == G.P_CENTERS.m_bonus and not card.ability.extra.is_spent then
+      card.ability.extra.will_be_spent = true
+      ease_hands_played(card.ability.extra.added_hands)
+
+      local _card = context.other_card
+
+      G.E_MANAGER:add_event(Event({
+        func = function()
+          _card:juice_up()
+          return true
+        end
+      }))
+      return { message = localize { type = 'variable', key = 'a_hands', vars = { card.ability.extra.added_hands } }, colour = G.C.BLUE }
+    end
+
+    if context.after and card.ability.extra.will_be_spent then
+      card.ability.extra.will_be_spent = false
+      card.ability.extra.is_spent = true
+    end
+
+    if context.end_of_round then card.ability.extra.is_spent = false end
+  end
+}
+
+SMODS.Joker {
   key = 'nonuniformday',
   config = { extra = { odds = 2 } },
   loc_vars = function(self, info_queue, card)
@@ -1815,7 +1895,7 @@ SMODS.Joker {
     end
   end
 }
-]]--
+]] --
 
 SMODS.Joker {
   key = 'stickercollection',
@@ -3298,8 +3378,8 @@ SMODS.Joker {
                   G.GAME.hands["Straight"].level
             })
           level_up_hand(card, "Straight", nil, card.ability.extra.no_of_upgrades)
-        update_hand_text({ sound = 'button', volume = 0.7, pitch = 0.8, delay = 0.3 },
-          { mult = 0, chips = 0, handname = '', level = '' })
+          update_hand_text({ sound = 'button', volume = 0.7, pitch = 0.8, delay = 0.3 },
+            { mult = 0, chips = 0, handname = '', level = '' })
           return true
         end
       }))
@@ -3560,7 +3640,12 @@ SMODS.Joker {
       end
     end
 
-    if context.joker_main and card.ability.extra.current_xmult > 1 then return { xmult = card.ability.extra.current_xmult } end
+    if context.joker_main and card.ability.extra.current_xmult > 1 then
+      return {
+        xmult = card.ability.extra
+            .current_xmult
+      }
+    end
 
     if context.destroy_card and context.cardarea == G.play and context.destroy_card.phanta_weapon_marked_for_death then
       context.destroy_card.phanta_weapon_marked_for_death = nil
@@ -4197,7 +4282,8 @@ SMODS.Joker {
       G.GAME.dollar_buffer = (G.GAME.dollar_buffer or 0) + card.ability.extra.money
       G.E_MANAGER:add_event(Event({
         func = (function()
-          G.GAME.dollar_buffer = 0 return true
+          G.GAME.dollar_buffer = 0
+          return true
         end)
       }))
       return {
@@ -4375,7 +4461,7 @@ SMODS.Joker {
       card.children.floating_sprite:draw_shader(nil, nil, nil, nil, card.children.center, scale_mod, rotate_mod)
       card.children.floating_sprite:draw_shader('voucher', nil, card.ARGS.send_to_shader, nil, card.children.center,
         scale_mod, rotate_mod, nil, 0.1 + 0.03 * math.sin(1.8 * G.TIMERS.REAL), nil, 0.6)
-    end },]]--
+    end },]] --
   soul_pos = { x = 3, y = 3,
     draw = function(card, scale_mod, rotate_mod)
       card.children.floating_sprite:draw_shader('dissolve', 0, nil, nil, card.children.center, scale_mod, rotate_mod, nil,
