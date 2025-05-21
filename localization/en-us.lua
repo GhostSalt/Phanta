@@ -1134,10 +1134,8 @@ return {
             c_phanta_sagittarius = {
                 name = "Sagittarius",
                 text = {
-                text = {
                     "{C:red}+1{} discard",
                     "each round"
-                }
                 },
             },
             c_phanta_capricorn = {
