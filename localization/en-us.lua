@@ -447,9 +447,9 @@ return {
             j_phanta_apollosbracelet = {
                 name = 'Apollo\'s Bracelet',
                 text = {
-                    --"Swaps {C:chips}Chips{} and {C:mult}Mult{}"
-                    "Swaps {C:chips}Chips{} and {C:mult}Mult{}",
-                    "before and during scoring"
+                    "Retriggers all played",
+                    "and scored cards",
+                    "with {C:attention}enhancements{}"
                 }
             },
             j_phanta_candle = {
@@ -457,7 +457,8 @@ return {
                 text = {
                     "When {C:attention}Blind{} is selected,",
                     "destroys 1 {C:tarot}Tarot{} card",
-                    "and gains {C:white,X:mult}X#1#{} Mult",
+                    "Gains {C:white,X:mult}X#1#{} Mult",
+                    "if successful",
                     "{C:inactive}(Currently {C:white,X:mult}X#2#{C:inactive} Mult){}"
                 }
             },
@@ -605,7 +606,7 @@ return {
                 text = {
                     "When {C:attention}Blind{} is selected,",
                     "creates a copy of",
-                    "{C:tarot}The Heirophant{} or {C:tarot}Temperance{}",
+                    "{C:tarot}The Tower{} or {C:tarot}Temperance{}",
                     "{C:inactive}(Must have room){}"
                 }
             },
@@ -1045,6 +1046,15 @@ return {
                 },
             }
         },
+        Tag = {
+            tag_phanta_sol = {
+                name = "Sol",
+                text = {
+                    "Gives a free",
+                    "{C:zodiac}Jumbo Zodiac Pack{}"
+                },
+            }
+        },
         phanta_Zodiac = {
             c_phanta_aries = {
                 name = "Aries",
@@ -1058,9 +1068,9 @@ return {
             c_phanta_taurus = {
                 name = "Taurus",
                 text = {
-                    "{C:attention}Wild{} cards cannot",
-                    "be {C:red}debuffed{} or",
-                    "flipped {C:attention}face down{}"
+                    "Retriggers the {C:attention}first{}",
+                    "played and scored",
+                    "card of {C:attention}round{}"
                 },
             },
             c_phanta_gemini = {
@@ -1093,7 +1103,7 @@ return {
                 text = {
                     "If {C:attention}Blind{} is defeated",
                     "in {C:blue}1{} hand, creates",
-                    "a {C:attention}Booster{} Tag"
+                    "a {C:attention}Standard{} Tag"
                 },
             },
             c_phanta_libra = {
@@ -1108,39 +1118,40 @@ return {
                 name = "Scorpio",
                 text = {
                     "Played cards with",
-                    "{C:diamonds}Diamonds{} suit",
-                    "always {C:attention}score{}"
+                    "{C:diamonds}Diamonds{} suit create",
+                    "{C:planet}Planet{} cards when scored",
+                    "{C:inactive}(Must have room){}"
                 },
             },
             c_phanta_sagittarius = {
                 name = "Sagittarius",
                 text = {
-                    "{C:red}+#1#{} discard",
+                    "When {C:attention}Blind{} is selected,",
+                    "gain {C:red}+#1#{} discard",
                     "{C:red}-#1#{} discard when you",
-                    "play your {C:attention}first hand{}"
+                    "play your {C:attention}second hand{}"
                 },
             },
             c_phanta_capricorn = {
                 name = "Capricorn",
                 text = {
-                    "Earn $#1# for each",
+                    "Earn {C:money}$#1#{} for each",
                     "{C:attention}reroll{} in the shop"
                 },
             },
             c_phanta_aquarius = {
                 name = "Aquarius",
                 text = {
-                    "When {C:attention}Blind{} is selected,",
-                    "upgrades a random",
-                    "hand by {C:attention}#1#{} level"
+                    "{C:blue}+#1#{} hand,",
+                    "{C:red}-#2#{} discard"
                 },
             },
             c_phanta_pisces = {
                 name = "Pisces",
                 text = {
-                    "{C:attention}+#1#{} hand size after",
-                    "playing your {C:attention}first{}",
-                    "{C:attention}hand{} of round"
+                    "Gains {C:money}$#1#{} of {C:attention}sell{}",
+                    "{C:attention}value{} for each",
+                    "skipped {C:attention}Booster Pack{}"
                 },
             },
             c_phanta_darkhour = {
@@ -1182,7 +1193,11 @@ return {
             }
         },
         v_dictionary = {
-            a_discards = '+#1# Discards'
+            a_discards = '+#1# Discards',
+            s_discards = '-#1# Discards',
+            a_discard = '+#1# Discard',
+            s_discard = '-#1# Discard',
+            plus_standard_tag = '+Standard Tag',
         }
     }
 }
