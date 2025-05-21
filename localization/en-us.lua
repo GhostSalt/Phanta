@@ -397,6 +397,14 @@ return {
                     "if played hand is a {C:attention}Junk{}"
                 }
             },
+            j_phanta_prognosticator = {
+                name = 'Prognosticator',
+                text = {
+                    "Retriggers all",
+                    "{C:phanta_zodiac}Zodiac{} cards",
+                    "{C:attention}#1#{} times"
+                }
+            },
             j_phanta_grimreaper = {
                 name = 'The Grim Reaper',
                 text = {
@@ -947,7 +955,7 @@ return {
                 name = "Zodiac Pack",
                 text = {
                     "Choose {C:attention}#1#{} of up to",
-                    "{C:attention}#2#{C:zodiac} Zodiac{} cards",
+                    "{C:attention}#2#{C:phanta_zodiac} Zodiac{} cards",
                     "to take",
                 },
             },
@@ -955,7 +963,7 @@ return {
                 name = "Zodiac Pack",
                 text = {
                     "Choose {C:attention}#1#{} of up to",
-                    "{C:attention}#2#{C:zodiac} Zodiac{} cards",
+                    "{C:attention}#2#{C:phanta_zodiac} Zodiac{} cards",
                     "to take",
                 },
             },
@@ -963,7 +971,7 @@ return {
                 name = "Zodiac Pack",
                 text = {
                     "Choose {C:attention}#1#{} of up to",
-                    "{C:attention}#2#{C:zodiac} Zodiac{} cards",
+                    "{C:attention}#2#{C:phanta_zodiac} Zodiac{} cards",
                     "to take",
                 },
             },
@@ -971,7 +979,7 @@ return {
                 name = "Zodiac Pack",
                 text = {
                     "Choose {C:attention}#1#{} of up to",
-                    "{C:attention}#2#{C:zodiac} Zodiac{} cards",
+                    "{C:attention}#2#{C:phanta_zodiac} Zodiac{} cards",
                     "to take",
                 },
             },
@@ -979,7 +987,7 @@ return {
                 name = "Jumbo Zodiac Pack",
                 text = {
                     "Choose {C:attention}#1#{} of up to",
-                    "{C:attention}#2#{C:zodiac} Zodiac{} cards",
+                    "{C:attention}#2#{C:phanta_zodiac} Zodiac{} cards",
                     "to take",
                 },
             },
@@ -987,7 +995,7 @@ return {
                 name = "Jumbo Zodiac Pack",
                 text = {
                     "Choose {C:attention}#1#{} of up to",
-                    "{C:attention}#2#{C:zodiac} Zodiac{} cards",
+                    "{C:attention}#2#{C:phanta_zodiac} Zodiac{} cards",
                     "to take",
                 },
             },
@@ -995,7 +1003,7 @@ return {
                 name = "Mega Zodiac Pack",
                 text = {
                     "Choose {C:attention}#1#{} of up to",
-                    "{C:attention}#2#{C:zodiac} Zodiac{} cards",
+                    "{C:attention}#2#{C:phanta_zodiac} Zodiac{} cards",
                     "to take",
                 },
             },
@@ -1003,7 +1011,7 @@ return {
                 name = "Mega Zodiac Pack",
                 text = {
                     "Choose {C:attention}#1#{} of up to",
-                    "{C:attention}#2#{C:zodiac} Zodiac{} cards",
+                    "{C:attention}#2#{C:phanta_zodiac} Zodiac{} cards",
                     "to take",
                 },
             }
@@ -1051,7 +1059,7 @@ return {
                 name = "Sol",
                 text = {
                     "Gives a free",
-                    "{C:zodiac}Jumbo Zodiac Pack{}"
+                    "{C:phanta_zodiac}Jumbo Zodiac Pack{}"
                 },
             }
         },
@@ -1069,8 +1077,8 @@ return {
                 name = "Taurus",
                 text = {
                     "Retriggers the {C:attention}first{}",
-                    "played and scored",
-                    "card of {C:attention}round{}"
+                    "played card used",
+                    "in scoring"
                 },
             },
             c_phanta_gemini = {
@@ -1126,10 +1134,10 @@ return {
             c_phanta_sagittarius = {
                 name = "Sagittarius",
                 text = {
-                    "When {C:attention}Blind{} is selected,",
-                    "gain {C:red}+#1#{} discard",
-                    "{C:red}-#1#{} discard when you",
-                    "play your {C:attention}second hand{}"
+                text = {
+                    "{C:red}+1{} discard",
+                    "each round"
+                }
                 },
             },
             c_phanta_capricorn = {
@@ -1142,9 +1150,9 @@ return {
             c_phanta_aquarius = {
                 name = "Aquarius",
                 text = {
-                    "{C:blue}+#1#{} hand,",
-                    "{C:red}-#2#{} discard"
-                },
+                    "{C:blue}+1{} hand",
+                    "each round"
+                }
             },
             c_phanta_pisces = {
                 name = "Pisces",

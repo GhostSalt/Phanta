@@ -788,7 +788,7 @@ SMODS.Booster {
   pos = { x = 0, y = 0 },
   config = { extra = 2, choose = 1 },
   cost = 4,
-  weight = 0.8,
+  weight = 0.64,
   create_card = function(self, card)
     return create_card("phanta_Zodiac", G.pack_cards, nil, nil, true, true, nil, "zodiac_normal1")
   end,
@@ -810,7 +810,7 @@ SMODS.Booster {
   pos = { x = 1, y = 0 },
   config = { extra = 2, choose = 1 },
   cost = 4,
-  weight = 0.8,
+  weight = 0.64,
   create_card = function(self, card)
     return create_card("phanta_Zodiac", G.pack_cards, nil, nil, true, true, nil, "zodiac_normal2")
   end,
@@ -832,7 +832,7 @@ SMODS.Booster {
   pos = { x = 2, y = 0 },
   config = { extra = 2, choose = 1 },
   cost = 4,
-  weight = 0.8,
+  weight = 0.64,
   create_card = function(self, card)
     return create_card("phanta_Zodiac", G.pack_cards, nil, nil, true, true, nil, "zodiac_normal3")
   end,
@@ -854,7 +854,7 @@ SMODS.Booster {
   pos = { x = 3, y = 0 },
   config = { extra = 2, choose = 1 },
   cost = 4,
-  weight = 0.8,
+  weight = 0.64,
   create_card = function(self, card)
     return create_card("phanta_Zodiac", G.pack_cards, nil, nil, true, true, nil, "zodiac_normal4")
   end,
@@ -876,7 +876,7 @@ SMODS.Booster {
   pos = { x = 0, y = 1 },
   config = { extra = 4, choose = 1 },
   cost = 6,
-  weight = 0.4,
+  weight = 0.32,
   create_card = function(self, card)
     return create_card("phanta_Zodiac", G.pack_cards, nil, nil, true, true, nil, "zodiac_jumbo1")
   end,
@@ -898,7 +898,7 @@ SMODS.Booster {
   pos = { x = 1, y = 1 },
   config = { extra = 4, choose = 1 },
   cost = 6,
-  weight = 0.4,
+  weight = 0.32,
   create_card = function(self, card)
     return create_card("phanta_Zodiac", G.pack_cards, nil, nil, true, true, nil, "zodiac_jumbo2")
   end,
@@ -920,7 +920,7 @@ SMODS.Booster {
   pos = { x = 2, y = 1 },
   config = { extra = 4, choose = 2 },
   cost = 8,
-  weight = 0.1,
+  weight = 0.08,
   create_card = function(self, card)
     return create_card("phanta_Zodiac", G.pack_cards, nil, nil, true, true, nil, "zodiac_mega1")
   end,
@@ -942,7 +942,7 @@ SMODS.Booster {
   pos = { x = 3, y = 1 },
   config = { extra = 4, choose = 2 },
   cost = 8,
-  weight = 0.1,
+  weight = 0.08,
   create_card = function(self, card)
     return create_card("phanta_Zodiac", G.pack_cards, nil, nil, true, true, nil, "zodiac_mega2")
   end,
@@ -1017,15 +1017,11 @@ SMODS.Consumable {
   set = "phanta_Zodiac",
   key = "taurus",
   pos = { x = 1, y = 0 },
-  config = { extra = { has_retriggered = false } },
   atlas = "PhantaZodiacs",
   calculate = function(self, card, context)
-    if context.individual and context.cardarea == G.play and not card.ability.extra.has_retriggered and context.other_card == context.scoring_hand[1] then
-      card.ability.extra.has_retriggered = true
+    if context.individual and context.cardarea == G.play and context.other_card == context.scoring_hand[1] then
       return { retriggers = 1 }
     end
-    
-    if context.end_of_round and context.individual then card.ability.extra.has_retriggered = false end
   end
 }
 
@@ -1049,7 +1045,7 @@ SMODS.Consumable {
   set = "phanta_Zodiac",
   key = "cancer",
   pos = { x = 3, y = 0 },
-  config = { extra = { chips = 10 } },
+  config = { extra = { chips = 15 } },
   atlas = "PhantaZodiacs",
   loc_vars = function(self, info_queue, card)
     return { vars = { card.ability.extra.chips } }
@@ -1065,7 +1061,7 @@ SMODS.Consumable {
   set = "phanta_Zodiac",
   key = "leo",
   pos = { x = 0, y = 1 },
-  config = { extra = { odds = 2, mult = 4 } },
+  config = { extra = { odds = 2, mult = 10 } },
   atlas = "PhantaZodiacs",
   loc_vars = function(self, info_queue, card)
     return { vars = { (G.GAME.probabilities.normal or 1), card.ability.extra.odds, card.ability.extra.mult } }
@@ -1149,16 +1145,13 @@ SMODS.Consumable {
   loc_vars = function(self, info_queue, card)
     return { vars = { card.ability.extra.added_discards } }
   end,
-  calculate = function(self, card, context)
-    if context.setting_blind then
-      ease_discard(card.ability.extra.added_discards)
-      return { message = localize { type = 'variable', key = 'a_discard', vars = { card.ability.extra.added_discards } }, colour = G.C.RED }
-    end
-
-    if context.before and G.GAME.current_round.hands_played == 1 then
-      ease_discard(-card.ability.extra.added_discards)
-      return { message = localize { type = 'variable', key = 's_discard', vars = { card.ability.extra.added_discards } }, colour = G.C.RED }
-    end
+  add_to_deck = function(self, card, from_debuff)
+    G.GAME.round_resets.discards = G.GAME.round_resets.discards + card.ability.extra.added_discards
+    ease_discard(card.ability.extra.added_discards)
+  end,
+  remove_from_deck = function(self, card, from_debuff)
+    G.GAME.round_resets.discards = G.GAME.round_resets.discards - card.ability.extra.added_discards
+    ease_discard(-card.ability.extra.added_discards)
   end
 }
 
@@ -1166,7 +1159,7 @@ SMODS.Consumable {
   set = "phanta_Zodiac",
   key = "capricorn",
   pos = { x = 1, y = 2 },
-  config = { extra = { money = 1 } },
+  config = { extra = { money = 2 } },
   atlas = "PhantaZodiacs",
   loc_vars = function(self, info_queue, card)
     return { vars = { card.ability.extra.money } }
@@ -1180,7 +1173,7 @@ SMODS.Consumable {
   set = "phanta_Zodiac",
   key = "aquarius",
   pos = { x = 2, y = 2 },
-  config = { extra = { added_hands = 1, removed_discards = 1 } },
+  config = { extra = { added_hands = 1 } },
   atlas = "PhantaZodiacs",
   loc_vars = function(self, info_queue, card)
     return { vars = { card.ability.extra.added_hands, card.ability.extra.removed_discards } }
@@ -1188,14 +1181,10 @@ SMODS.Consumable {
   add_to_deck = function(self, card, from_debuff)
     G.GAME.round_resets.hands = G.GAME.round_resets.hands + card.ability.extra.added_hands
     ease_hands_played(card.ability.extra.added_hands)
-    G.GAME.round_resets.discards = G.GAME.round_resets.discards - card.ability.extra.removed_discards
-    ease_discard(-card.ability.extra.removed_discards)
   end,
   remove_from_deck = function(self, card, from_debuff)
     G.GAME.round_resets.hands = G.GAME.round_resets.hands - card.ability.extra.added_hands
     ease_hands_played(-card.ability.extra.added_hands)
-    G.GAME.round_resets.discards = G.GAME.round_resets.discards + card.ability.extra.removed_discards
-    ease_discard(card.ability.extra.removed_discards)
   end
 }
 
@@ -1203,7 +1192,7 @@ SMODS.Consumable {
   set = "phanta_Zodiac",
   key = "pisces",
   pos = { x = 3, y = 2 },
-  config = { extra = { added_value = 2 } },
+  config = { extra = { added_value = 5 } },
   atlas = "PhantaZodiacs",
   loc_vars = function(self, info_queue, card)
     return { vars = { card.ability.extra.added_value } }
@@ -2078,6 +2067,29 @@ SMODS.Joker {
     return G.GAME.hands["phanta_junk"].visible
   end
 }
+
+--[[SMODS.Joker {
+  key = 'prognosticator',
+  config = { extra = { retriggers = 2 } },
+  rarity = 2,
+  atlas = 'Phanta',
+  pos = { x = 10, y = 10 },
+  cost = 6,
+  loc_vars = function(self, info_queue, card)
+    return { vars = { card.ability.extra.retriggers } }
+  end,
+  blueprint_compat = true,
+  eternal_compat = true,
+  perishable_compat = true,
+  calculate = function(self, card, context)
+    if context.repetition and context.cardarea == G.consumeables and context.other_card.ability.set == "phanta_Zodiac" then
+      return {
+        message = localize("k_again_ex"),
+        repetitions = card.ability.extra.retriggers
+      }
+    end
+  end
+}]]--
 
 SMODS.Joker {
   key = 'grimreaper',
