@@ -305,6 +305,13 @@ return {
                     "{C:mult}+#1#{} Mult when scored"
                 }
             },
+            j_phanta_sigma = {
+                name = "Sigma",
+                text = {
+                    "Retriggers all played",
+                    "and scored {C:attention}Bonus{} cards"
+                }
+            },
             j_phanta_redkeycards = {
                 name = "Red Key Cards",
                 text = {
