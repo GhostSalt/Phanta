@@ -1747,9 +1747,30 @@ SMODS.Joker {
 }
 
 SMODS.Joker {
+  key = 'sigma',
+  loc_vars = function(self, info_queue, card)
+    info_queue[#info_queue + 1] = G.P_CENTERS.m_bonus
+    return { }
+  end,
+  rarity = 1,
+  atlas = 'Phanta',
+  pos = { x = 11, y = 7 },
+  cost = 4,
+  blueprint_compat = true,
+  eternal_compat = true,
+  perishable_compat = true,
+  calculate = function(self, card, context)
+    if context.repetition and context.cardarea == G.play and context.other_card.config.center == G.P_CENTERS.m_bonus then
+      return { repetitions = 1 }
+    end
+  end
+}
+
+SMODS.Joker {
   key = 'redkeycards',
   config = { extra = { added_discards = 3, will_be_spent = false, is_spent = false } },
   loc_vars = function(self, info_queue, card)
+    info_queue[#info_queue + 1] = G.P_CENTERS.m_mult
     return {
       vars = { card.ability.extra.added_discards, (function()
         if card.ability.extra.is_spent then
@@ -1802,6 +1823,7 @@ SMODS.Joker {
   key = 'bluekeycards',
   config = { extra = { added_hands = 3, will_be_spent = false, is_spent = false } },
   loc_vars = function(self, info_queue, card)
+    info_queue[#info_queue + 1] = G.P_CENTERS.m_bonus
     return {
       vars = { card.ability.extra.added_hands, (function()
         if card.ability.extra.is_spent then
