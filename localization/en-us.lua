@@ -400,9 +400,8 @@ return {
             j_phanta_prognosticator = {
                 name = 'Prognosticator',
                 text = {
-                    "Retriggers all",
-                    "{C:phanta_zodiac}Zodiac{} cards",
-                    "{C:attention}#1#{} times"
+                    "{C:zodiac}Zodiac{} cards have",
+                    "{C:attention}stronger{} abilities"
                 }
             },
             j_phanta_grimreaper = {
@@ -538,6 +537,17 @@ return {
                     "{C:spectral}Spectral{} cards at",
                     "the end of the {C:attention}shop",
                     "{C:red,E:2}self destructs{}"
+                }
+            },
+            j_phanta_beadnecklace = {
+                name = 'Bead Necklace',
+                text = {
+                    "If played hand contains",
+                    "a {C:attention}Straight{}, gains {C:mult}+#1#{} Mult",
+                    "for each unique scoring {C:attention}suit{}",
+                    "{C:inactive}(Currently {C:mult}+#2#{C:inactive} Mult)",
+                    "{C:inactive,s:0.75}(Doesn't currently support{}",
+                    "{C:inactive,s:0.75}custom suits){}"
                 }
             },
             j_phanta_p5joker = {
@@ -1068,8 +1078,7 @@ return {
                 name = "Aries",
                 text = {
                     "Creates a {C:tarot}Tarot{} card",
-                    "when you play your",
-                    "{C:attention}second{} hand",
+                    "when {C:attention}#1#{}hand is played",
                     "{C:inactive}(Must have room){}"
                 },
             },
@@ -1078,7 +1087,7 @@ return {
                 text = {
                     "Retriggers the {C:attention}first{}",
                     "played card used",
-                    "in scoring"
+                    "in scoring {C:attention}#1#{} time#2#"
                 },
             },
             c_phanta_gemini = {
@@ -1101,17 +1110,16 @@ return {
                 name = "Leo",
                 text = {
                     "Played cards with",
-                    "{C:hearts}Hearts{} suit have a",
-                    "{C:green}#1# in #2#{} chance to give",
-                    "{C:mult}+#3#{} Mult when scored"
+                    "{C:hearts}Hearts{} suit give",
+                    "{C:mult}+#1#{} Mult when scored"
                 },
             },
             c_phanta_virgo = {
                 name = "Virgo",
                 text = {
                     "If {C:attention}Blind{} is defeated",
-                    "in {C:blue}1{} hand, creates",
-                    "a {C:attention}Standard{} Tag"
+                    "in #1#{C:blue}#2#{} hand#3#,#4#",
+                    "#5#a {C:attention}Standard{} Tag"
                 },
             },
             c_phanta_libra = {
@@ -1126,15 +1134,16 @@ return {
                 name = "Scorpio",
                 text = {
                     "Played cards with",
-                    "{C:diamonds}Diamonds{} suit create",
-                    "{C:planet}Planet{} cards when scored",
+                    "{C:diamonds}Diamonds{} suit",
+                    "create {C:planet}Planet{} cards#1#",
+                    "#2#when scored",
                     "{C:inactive}(Must have room){}"
                 },
             },
             c_phanta_sagittarius = {
                 name = "Sagittarius",
                 text = {
-                    "{C:red}+1{} discard",
+                    "{C:red}+#1#{} discard#2#",
                     "each round"
                 },
             },
@@ -1148,7 +1157,7 @@ return {
             c_phanta_aquarius = {
                 name = "Aquarius",
                 text = {
-                    "{C:blue}+1{} hand",
+                    "{C:blue}+#1#{} hand#2#",
                     "each round"
                 }
             },
@@ -1182,7 +1191,15 @@ return {
             phanta_copper_grate_oxidised = "Oxidised",
             b_phanta_zodiac_cards = "Zodiac Cards",
             k_phanta_zodiac = "Zodiac",
-            k_phanta_zodiac_pack = "Zodiac Pack"
+            k_phanta_zodiac_pack = "Zodiac Pack",
+            plus_standard_tag = '+Standard Tag',
+            phanta_aries_second = "second ",
+            phanta_plural = "s",
+            phanta_virgo_at_most = "at most ",
+            phanta_virgo_creates_a = " creates",
+            phanta_virgo_creates_b = "creates ",
+            phanta_scorpio_extra_a = " for",
+            phanta_scorpio_extra_b = "played hand "
         },
         labels = {
             phanta_ghostcard = "Ghost Card",
@@ -1202,8 +1219,7 @@ return {
             a_discards = '+#1# Discards',
             s_discards = '-#1# Discards',
             a_discard = '+#1# Discard',
-            s_discard = '-#1# Discard',
-            plus_standard_tag = '+Standard Tag',
+            s_discard = '-#1# Discard'
         }
     }
 }

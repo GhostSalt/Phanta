@@ -114,6 +114,10 @@ function get_lowest(hand)
   if #hand > 0 then return { { lowest } } else return {} end
 end
 
+function count_prognosticators()
+  return #SMODS.find_card("j_phanta_prognosticator")
+end
+
 SMODS.PokerHand {
   key = "junk",
   chips = 5,
@@ -769,14 +773,16 @@ SMODS.Sound({
   path = "phanta_zodiac_pack.ogg",
   select_music_track = function()
     if G.booster_pack and SMODS.OPENED_BOOSTER and
-      (SMODS.OPENED_BOOSTER.config.center.key == 'p_phanta_zodiac_normal1'
-    or SMODS.OPENED_BOOSTER.config.center.key == 'p_phanta_zodiac_normal2'
-    or SMODS.OPENED_BOOSTER.config.center.key == 'p_phanta_zodiac_normal3'
-    or SMODS.OPENED_BOOSTER.config.center.key == 'p_phanta_zodiac_normal4'
-    or SMODS.OPENED_BOOSTER.config.center.key == 'p_phanta_zodiac_jumbo1'
-    or SMODS.OPENED_BOOSTER.config.center.key == 'p_phanta_zodiac_jumbo2'
-    or SMODS.OPENED_BOOSTER.config.center.key == 'p_phanta_zodiac_mega1'
-    or SMODS.OPENED_BOOSTER.config.center.key == 'p_phanta_zodiac_mega2') then return true end
+        (SMODS.OPENED_BOOSTER.config.center.key == 'p_phanta_zodiac_normal1'
+          or SMODS.OPENED_BOOSTER.config.center.key == 'p_phanta_zodiac_normal2'
+          or SMODS.OPENED_BOOSTER.config.center.key == 'p_phanta_zodiac_normal3'
+          or SMODS.OPENED_BOOSTER.config.center.key == 'p_phanta_zodiac_normal4'
+          or SMODS.OPENED_BOOSTER.config.center.key == 'p_phanta_zodiac_jumbo1'
+          or SMODS.OPENED_BOOSTER.config.center.key == 'p_phanta_zodiac_jumbo2'
+          or SMODS.OPENED_BOOSTER.config.center.key == 'p_phanta_zodiac_mega1'
+          or SMODS.OPENED_BOOSTER.config.center.key == 'p_phanta_zodiac_mega2') then
+      return true
+    end
     return false
   end
 })
@@ -962,28 +968,28 @@ SMODS.Tag {
   atlas = "PhantaTags",
   pos = { x = 0, y = 0 },
   apply = function(self, tag, context)
-		if context.type == "new_blind_choice" then
-			tag:yep("+", G.C.PHANTA.Zodiac, function()
-				local key = "p_phanta_zodiac_jumbo1"
-				local card = Card(
-					G.play.T.x + G.play.T.w / 2 - G.CARD_W * 1.27 / 2,
-					G.play.T.y + G.play.T.h / 2 - G.CARD_H * 1.27 / 2,
-					G.CARD_W * 1.27,
-					G.CARD_H * 1.27,
-					G.P_CARDS.empty,
-					G.P_CENTERS[key],
-					{ bypass_discovery_center = true, bypass_discovery_ui = true }
-				)
-				card.cost = 0
-				card.from_tag = true
-				G.FUNCS.use_card({ config = { ref_table = card } })
-				card:start_materialize()
-				return true
-			end)
-			tag.triggered = true
-			return true
-		end
-	end
+    if context.type == "new_blind_choice" then
+      tag:yep("+", G.C.PHANTA.Zodiac, function()
+        local key = "p_phanta_zodiac_jumbo1"
+        local card = Card(
+          G.play.T.x + G.play.T.w / 2 - G.CARD_W * 1.27 / 2,
+          G.play.T.y + G.play.T.h / 2 - G.CARD_H * 1.27 / 2,
+          G.CARD_W * 1.27,
+          G.CARD_H * 1.27,
+          G.P_CARDS.empty,
+          G.P_CENTERS[key],
+          { bypass_discovery_center = true, bypass_discovery_ui = true }
+        )
+        card.cost = 0
+        card.from_tag = true
+        G.FUNCS.use_card({ config = { ref_table = card } })
+        card:start_materialize()
+        return true
+      end)
+      tag.triggered = true
+      return true
+    end
+  end
 }
 
 SMODS.Consumable {
@@ -991,8 +997,11 @@ SMODS.Consumable {
   key = "aries",
   pos = { x = 0, y = 0 },
   atlas = "PhantaZodiacs",
+  loc_vars = function(self, info_queue, card)
+    return { vars = { count_prognosticators() > 0 and "" or localize("phanta_aries_second") } }
+  end,
   calculate = function(self, card, context)
-    if context.before and G.GAME.current_round.hands_played == 1 and #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit then
+    if context.before and (count_prognosticators() > 0 or G.GAME.current_round.hands_played == 1) and #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit then -- Progs allow Tarots to be made on all hands. (Unstackable)
       G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
       G.E_MANAGER:add_event(Event({
         trigger = 'before',
@@ -1018,9 +1027,12 @@ SMODS.Consumable {
   key = "taurus",
   pos = { x = 1, y = 0 },
   atlas = "PhantaZodiacs",
+  loc_vars = function(self, info_queue, card)
+    return { vars = { (count_prognosticators() * 2) + 1, count_prognosticators() > 0 and localize("phanta_plural") or "" } }
+  end,
   calculate = function(self, card, context)
-    if context.individual and context.cardarea == G.play and context.other_card == context.scoring_hand[1] then
-      return { retriggers = 1 }
+    if context.repetition and context.cardarea == G.play and context.other_card == context.scoring_hand[1] then
+      return { repetitions = count_prognosticators() > 0 and (count_prognosticators() * 2) + 1 } -- Progs add 2 retriggers each.
     end
   end
 }
@@ -1032,11 +1044,11 @@ SMODS.Consumable {
   config = { extra = { money = 2 } },
   atlas = "PhantaZodiacs",
   loc_vars = function(self, info_queue, card)
-    return { vars = { card.ability.extra.money } }
+    return { vars = { card.ability.extra.money + (count_prognosticators() * 2) } }
   end,
   calculate = function(self, card, context)
     if context.before and (next(context.poker_hands['Two Pair']) or next(context.poker_hands['Full House'])) then
-      return { dollars = card.ability.extra.money }
+      return { dollars = card.ability.extra.money + (count_prognosticators() * 2) }  -- Progs add $2 each.
     end
   end
 }
@@ -1045,14 +1057,14 @@ SMODS.Consumable {
   set = "phanta_Zodiac",
   key = "cancer",
   pos = { x = 3, y = 0 },
-  config = { extra = { chips = 15 } },
+  config = { extra = { chips = 20 } },
   atlas = "PhantaZodiacs",
   loc_vars = function(self, info_queue, card)
-    return { vars = { card.ability.extra.chips } }
+    return { vars = { card.ability.extra.chips + (count_prognosticators() * 30) } }
   end,
   calculate = function(self, card, context)
     if context.individual and context.cardarea == G.play and context.other_card:is_suit("Clubs") then
-      return { chips = card.ability.extra.chips }
+      return { chips = card.ability.extra.chips + (count_prognosticators() * 30) } -- Progs add 30 Chips. (hardcoded so Cryptid doesn't make this nonsensical)
     end
   end
 }
@@ -1061,14 +1073,14 @@ SMODS.Consumable {
   set = "phanta_Zodiac",
   key = "leo",
   pos = { x = 0, y = 1 },
-  config = { extra = { odds = 2, mult = 10 } },
+  config = { extra = { mult = 2 } },
   atlas = "PhantaZodiacs",
   loc_vars = function(self, info_queue, card)
-    return { vars = { (G.GAME.probabilities.normal or 1), card.ability.extra.odds, card.ability.extra.mult } }
+    return { vars = { card.ability.extra.mult + (count_prognosticators() * 4) } }
   end,
   calculate = function(self, card, context)
-    if context.individual and context.cardarea == G.play and context.other_card:is_suit("Hearts") and pseudorandom('zodiacleo') < G.GAME.probabilities.normal / card.ability.extra.odds then
-      return { mult = card.ability.extra.mult }
+    if context.individual and context.cardarea == G.play and context.other_card:is_suit("Hearts") then
+      return { mult = card.ability.extra.mult + (count_prognosticators() * 4) } -- Progs add 4 Mult.
     end
   end
 }
@@ -1077,15 +1089,26 @@ SMODS.Consumable {
   set = "phanta_Zodiac",
   key = "virgo",
   pos = { x = 1, y = 1 },
+  config = { extra = { hands = 1 } },
   atlas = "PhantaZodiacs",
+  loc_vars = function(self, info_queue, card)
+    return {
+      vars = { count_prognosticators() > 0 and localize("phanta_virgo_at_most") or "",
+        card.ability.extra.hands + count_prognosticators(),
+        count_prognosticators() > 0 and localize("phanta_plural") or "",
+        count_prognosticators() == 0 and localize("phanta_virgo_creates_a") or "",
+        count_prognosticators() > 0 and localize("phanta_virgo_creates_b") or "" }
+    }
+  end,
   calculate = function(self, card, context)
-    if context.end_of_round and not context.individual and not context.repetition and G.GAME.current_round.hands_played == 1 then
+    if context.end_of_round and not context.individual and not context.repetition and G.GAME.current_round.hands_played <= card.ability.extra.hands + count_prognosticators() + 1 then -- Prog makes Virgo easier to proc.
       G.E_MANAGER:add_event(Event({
         func = function()
           add_tag(Tag('tag_standard'))
           play_sound('generic1', 0.9 + math.random() * 0.1, 0.8)
           play_sound('holo1', 1.2 + math.random() * 0.1, 0.4)
-          card_eval_status_text(card, 'extra', nil, nil, nil, { message = localize("plus_standard_tag"), colour = G.C.FILTER })
+          card_eval_status_text(card, 'extra', nil, nil, nil,
+            { message = localize("plus_standard_tag"), colour = G.C.FILTER })
           return true
         end
       }))
@@ -1100,11 +1123,11 @@ SMODS.Consumable {
   config = { extra = { xmult = 1.1 } },
   atlas = "PhantaZodiacs",
   loc_vars = function(self, info_queue, card)
-    return { vars = { card.ability.extra.xmult } }
+    return { vars = { card.ability.extra.xmult + (count_prognosticators() * 0.2) } }
   end,
   calculate = function(self, card, context)
     if context.individual and context.cardarea == G.play and context.other_card:is_suit("Spades") then
-      return { xmult = card.ability.extra.xmult }
+      return { xmult = card.ability.extra.xmult + (count_prognosticators() * 0.2) } -- Prog adds X0.2 Mult.
     end
   end
 }
@@ -1114,6 +1137,12 @@ SMODS.Consumable {
   key = "scorpio",
   pos = { x = 3, y = 1 },
   atlas = "PhantaZodiacs",
+  loc_vars = function(self, info_queue, card)
+    return {
+      vars = { count_prognosticators() > 0 and localize("phanta_scorpio_extra_a") or "",
+        count_prognosticators() > 0 and localize("phanta_scorpio_extra_b") or "" }
+    }
+  end,
   calculate = function(self, card, context)
     if context.individual and context.cardarea == G.play and context.other_card:is_suit("Diamonds") and #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit then
       G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
@@ -1121,7 +1150,14 @@ SMODS.Consumable {
         trigger = 'before',
         delay = 0.0,
         func = (function()
-          local card = create_card('Planet', G.consumeables, nil, nil, nil, nil)
+          local planet = 0
+          for i, j in pairs(G.P_CENTER_POOLS.Planet) do
+            if j.config.hand_type == G.GAME.last_hand_played then
+              planet = j.key
+            end
+          end
+          local card = create_card('Planet', G.consumeables, nil, nil, nil, nil,
+            count_prognosticators() > 0 and planet or nil, "scorpio") -- Prog makes the created Planets specific to the played hand.
           card:add_to_deck()
           G.consumeables:emplace(card)
           G.GAME.consumeable_buffer = 0
@@ -1143,15 +1179,24 @@ SMODS.Consumable {
   config = { extra = { added_discards = 1 } },
   atlas = "PhantaZodiacs",
   loc_vars = function(self, info_queue, card)
-    return { vars = { card.ability.extra.added_discards } }
+    return { vars = { card.ability.extra.added_discards + count_prognosticators(), count_prognosticators() > 0 and localize("phanta_plural") or "" } }
   end,
   add_to_deck = function(self, card, from_debuff)
-    G.GAME.round_resets.discards = G.GAME.round_resets.discards + card.ability.extra.added_discards
-    ease_discard(card.ability.extra.added_discards)
+    G.GAME.round_resets.discards = G.GAME.round_resets.discards + card.ability.extra.added_discards + count_prognosticators() -- Prog adds 1 discard.
+    ease_discard(card.ability.extra.added_discards + count_prognosticators())
   end,
   remove_from_deck = function(self, card, from_debuff)
-    G.GAME.round_resets.discards = G.GAME.round_resets.discards - card.ability.extra.added_discards
-    ease_discard(-card.ability.extra.added_discards)
+    G.GAME.round_resets.discards = G.GAME.round_resets.discards - card.ability.extra.added_discards -
+    count_prognosticators()
+    ease_discard(-(card.ability.extra.added_discards + count_prognosticators()))
+  end,
+  add_prog = function(self)
+    G.GAME.round_resets.discards = G.GAME.round_resets.discards + 1
+    ease_discard(1)
+  end,
+  remove_prog = function(self)
+    G.GAME.round_resets.discards = G.GAME.round_resets.discards - 1
+    ease_discard(-1)
   end
 }
 
@@ -1162,10 +1207,10 @@ SMODS.Consumable {
   config = { extra = { money = 2 } },
   atlas = "PhantaZodiacs",
   loc_vars = function(self, info_queue, card)
-    return { vars = { card.ability.extra.money } }
+    return { vars = { card.ability.extra.money + (count_prognosticators() * 2) } }
   end,
   calculate = function(self, card, context)
-    if context.reroll_shop then return { dollars = card.ability.extra.money } end
+    if context.reroll_shop then return { dollars = card.ability.extra.money + (count_prognosticators() * 2) } end -- Prog adds $2 to each reroll reward.
   end
 }
 
@@ -1176,15 +1221,23 @@ SMODS.Consumable {
   config = { extra = { added_hands = 1 } },
   atlas = "PhantaZodiacs",
   loc_vars = function(self, info_queue, card)
-    return { vars = { card.ability.extra.added_hands, card.ability.extra.removed_discards } }
+    return { vars = { card.ability.extra.added_hands + count_prognosticators(), count_prognosticators() > 0 and localize("phanta_plural") or "" } }
   end,
   add_to_deck = function(self, card, from_debuff)
-    G.GAME.round_resets.hands = G.GAME.round_resets.hands + card.ability.extra.added_hands
-    ease_hands_played(card.ability.extra.added_hands)
+    G.GAME.round_resets.hands = G.GAME.round_resets.hands + card.ability.extra.added_hands + count_prognosticators()
+    ease_hands_played(card.ability.extra.added_hands + count_prognosticators())
   end,
   remove_from_deck = function(self, card, from_debuff)
-    G.GAME.round_resets.hands = G.GAME.round_resets.hands - card.ability.extra.added_hands
-    ease_hands_played(-card.ability.extra.added_hands)
+    G.GAME.round_resets.hands = G.GAME.round_resets.hands - card.ability.extra.added_hands - count_prognosticators()
+    ease_hands_played(-(card.ability.extra.added_hands + count_prognosticators()))
+  end,
+  add_prog = function(self)
+    G.GAME.round_resets.hands = G.GAME.round_resets.hands + 1
+    ease_hands_played(1)
+  end,
+  remove_prog = function(self)
+    G.GAME.round_resets.hands = G.GAME.round_resets.hands - 1
+    ease_hands_played(-1)
   end
 }
 
@@ -1195,11 +1248,11 @@ SMODS.Consumable {
   config = { extra = { added_value = 5 } },
   atlas = "PhantaZodiacs",
   loc_vars = function(self, info_queue, card)
-    return { vars = { card.ability.extra.added_value } }
+    return { vars = { card.ability.extra.added_value + (count_prognosticators() * 3) } }
   end,
   calculate = function(self, card, context)
     if context.skipping_booster then
-      card.ability.extra_value = card.ability.extra_value + card.ability.extra.added_value
+      card.ability.extra_value = card.ability.extra_value + card.ability.extra.added_value + (count_prognosticators() * 3)  -- Prog adds $3 extra sell value.
       card:set_cost()
       return {
         message = localize('k_val_up'),
@@ -1216,11 +1269,11 @@ SMODS.Consumable {
   config = { extra = { xmult = 2 } },
   atlas = "PhantaZodiacs",
   loc_vars = function(self, info_queue, card)
-    return { vars = { card.ability.extra.xmult } }
+    return { vars = { card.ability.extra.xmult + (count_prognosticators() * 2) } }
   end,
   calculate = function(self, card, context)
     if context.individual and context.cardarea == "unscored" and context.other_card:is_suit("Clubs") then
-      return { xmult = card.ability.extra.xmult }
+      return { xmult = card.ability.extra.xmult + (count_prognosticators() * 2) } -- Prog adds X2 Mult.
     end
   end,
 
@@ -1671,8 +1724,16 @@ SMODS.Joker {
   key = 'redkeycards',
   config = { extra = { added_discards = 3, will_be_spent = false, is_spent = false } },
   loc_vars = function(self, info_queue, card)
-    return { vars = { card.ability.extra.added_discards, (function() if card.ability.extra.is_spent then return
-        'inactive' else return 'active' end end)() } }
+    return {
+      vars = { card.ability.extra.added_discards, (function()
+        if card.ability.extra.is_spent then
+          return
+          'inactive'
+        else
+          return 'active'
+        end
+      end)() }
+    }
   end,
   rarity = 2,
   atlas = 'Phanta',
@@ -1694,8 +1755,11 @@ SMODS.Joker {
           return true
         end
       }))
-      return { message = localize { type = 'variable', key = 'a_discards', vars = { card.ability.extra.added_discards } }, colour =
-      G.C.RED }
+      return {
+        message = localize { type = 'variable', key = 'a_discards', vars = { card.ability.extra.added_discards } },
+        colour =
+            G.C.RED
+      }
     end
 
     -- The whole will be / is spent thing is for Blueprint compat.
@@ -1712,8 +1776,16 @@ SMODS.Joker {
   key = 'bluekeycards',
   config = { extra = { added_hands = 3, will_be_spent = false, is_spent = false } },
   loc_vars = function(self, info_queue, card)
-    return { vars = { card.ability.extra.added_hands, (function() if card.ability.extra.is_spent then return 'inactive' else return
-        'active' end end)() } }
+    return {
+      vars = { card.ability.extra.added_hands, (function()
+        if card.ability.extra.is_spent then
+          return 'inactive'
+        else
+          return
+          'active'
+        end
+      end)() }
+    }
   end,
   rarity = 2,
   atlas = 'Phanta',
@@ -1735,8 +1807,11 @@ SMODS.Joker {
           return true
         end
       }))
-      return { message = localize { type = 'variable', key = 'a_hands', vars = { card.ability.extra.added_hands } }, colour =
-      G.C.BLUE }
+      return {
+        message = localize { type = 'variable', key = 'a_hands', vars = { card.ability.extra.added_hands } },
+        colour =
+            G.C.BLUE
+      }
     end
 
     if context.after and card.ability.extra.will_be_spent then
@@ -2068,28 +2143,34 @@ SMODS.Joker {
   end
 }
 
---[[SMODS.Joker {
+SMODS.Joker {
   key = 'prognosticator',
-  config = { extra = { retriggers = 2 } },
   rarity = 2,
   atlas = 'Phanta',
   pos = { x = 10, y = 10 },
   cost = 6,
-  loc_vars = function(self, info_queue, card)
-    return { vars = { card.ability.extra.retriggers } }
-  end,
   blueprint_compat = true,
   eternal_compat = true,
   perishable_compat = true,
-  calculate = function(self, card, context)
-    if context.repetition and context.cardarea == G.consumeables and context.other_card.ability.set == "phanta_Zodiac" then
-      return {
-        message = localize("k_again_ex"),
-        repetitions = card.ability.extra.retriggers
-      }
+  add_to_deck = function(self, card, from_debuff)
+    if G.consumeables then
+      for _, card in pairs(G.consumeables.cards) do
+        if card.ability.set == "phanta_Zodiac" and card.config.center.add_prog then
+          card.config.center:add_prog()
+        end
+      end
     end
-  end
-}]]--
+  end,
+  remove_from_deck = function(self, card, from_debuff)
+    if G.consumeables then
+      for _, card in pairs(G.consumeables.cards) do
+        if card.ability.set == "phanta_Zodiac" and card.config.center.remove_prog then
+          card.config.center:remove_prog()
+        end
+      end
+    end
+  end,
+}
 
 SMODS.Joker {
   key = 'grimreaper',
@@ -2601,18 +2682,49 @@ SMODS.Joker {
 }
 
 SMODS.Joker {
-  key = 'beadnecklace',
+  key = 'tricolour',
   loc_txt = {
-    name = 'Bead Necklace',
+    name = 'Tricolour',
     text = {
-      "If played hand contains",
-      "a {C:attention}Straight{}, gains {C:mult}+#1#{} Mult",
-      "for each unique scoring {C:attention}suit{}",
-      "{C:inactive}(Currently {C:mult}+#2#{C:inactive} Mult)",
-      "{C:inactive,s:0.75}(Doesn't currently support{}",
-      "{C:inactive,s:0.75}custom suits){}"
+      "{C:mult}+#1#{} Mult if played",
+      "hand contains exactly",
+      "{C:attention}3{} unique scoring {C:attention}suits{}"
     }
   },
+  config = { extra = { mult = 17 } },
+  rarity = 1,
+  atlas = 'Phanta',
+  pos = { x = 8, y = 7 },
+  cost = 5,
+  loc_vars = function(self, info_queue, card)
+    return { vars = { card.ability.extra.mult } }
+  end,
+  blueprint_compat = true,
+  eternal_compat = true,
+  perishable_compat = true,
+  calculate = function(self, card, context)
+    if context.joker_main then
+      local wilds = 0
+      local counted_suits = {}
+      for i = 1, #context.scoring_hand do
+        if not SMODS.has_any_suit(context.scoring_hand[i]) then
+          local is_new = true
+          for j = 1, #counted_suits do
+            if context.scoring_hand[i].base.suit == counted_suits[j] then is_new = false end
+          end
+          if is_new then counted_suits[#counted_suits + 1] = context.scoring_hand[i].base.suit end
+        else wilds = wilds + 1 end
+      end
+
+      if #counted_suits <= 3 and #counted_suits + wilds >= 3 then
+        return { mult = card.ability.extra.mult }
+      end
+    end
+  end
+}
+
+SMODS.Joker {
+  key = 'beadnecklace',
   config = { extra = { added_mult = 1, current_mult = 0 } },
   rarity = 2,
   atlas = 'Phanta',
