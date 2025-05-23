@@ -86,6 +86,21 @@ return {
                     "Start run with the",
                     "{C:red}#1#{} Voucher"
                 }
+            },
+            b_phanta_crate = {
+                name = 'Crate Deck',
+                text = {
+                    "{C:attention}+#1#{} consumable slots"
+                }
+            },
+            b_phanta_todayandtomorrow = {
+                name = 'Today & Tomorrow Deck',
+                text = {
+                    --[["{C:phanta_zodiac}Zodiac{} cards may",
+                    "appear in the shop,",]]--
+                    "Start with a copy of",
+                    "{C:phanta_zodiac}Virgo{} and {C:phanta_zodiac}Capricorn{}"
+                }
             }
         },
         Blind = {
@@ -195,12 +210,21 @@ return {
                     "{C:attention}even{} rounds"
                 }
             },
+            j_phanta_purplegoldenjoker = {
+                name = 'Purple Golden Joker',
+                text = {
+                    "Earn {C:money}$#1#{} at end of round",
+                    "for each held {C:tarot}Tarot{} card",
+                    "{C:inactive}(Will give {C:money}$#2#{C:inactive}){}"
+                }
+            },
             j_phanta_holeinthejoker = {
                 name = 'Hole in the Joker',
                 text = {
                     "Earn {C:money}$#1#{} at end of",
                     "round for each",
                     "empty {C:attention}Joker{} slot",
+                    "{s:0.8}Hole in the Joker included{}",
                     "{C:inactive}(Will give {C:money}$#2#{C:inactive}){}"
                 }
             },
@@ -400,7 +424,7 @@ return {
             j_phanta_prognosticator = {
                 name = 'Prognosticator',
                 text = {
-                    "{C:zodiac}Zodiac{} cards have",
+                    "{C:phanta_zodiac}Zodiac{} cards have",
                     "{C:attention}stronger{} abilities"
                 }
             },

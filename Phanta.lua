@@ -745,7 +745,7 @@ SMODS.ConsumableType {
   primary_colour = HEX("4076cf"),
   secondary_colour = HEX("5998ff"),
   collection_rows = { 4, 4 },
-  shop_rate = 0.0,
+  shop_rate = (G.GAME and G.GAME.selected_back and G.GAME.selected_back.effect and G.GAME.selected_back.effect.center and G.GAME.selected_back.effect.center.key) == "b_phanta_todayandtomorrow" and 1 or 0,
   default = "phanta_aries",
   can_stack = true,
   can_divide = true
@@ -1048,7 +1048,7 @@ SMODS.Consumable {
   end,
   calculate = function(self, card, context)
     if context.before and (next(context.poker_hands['Two Pair']) or next(context.poker_hands['Full House'])) then
-      return { dollars = card.ability.extra.money + (count_prognosticators() * 2) }  -- Progs add $2 each.
+      return { dollars = card.ability.extra.money + (count_prognosticators() * 2) } -- Progs add $2 each.
     end
   end
 }
@@ -1182,12 +1182,13 @@ SMODS.Consumable {
     return { vars = { card.ability.extra.added_discards + count_prognosticators(), count_prognosticators() > 0 and localize("phanta_plural") or "" } }
   end,
   add_to_deck = function(self, card, from_debuff)
-    G.GAME.round_resets.discards = G.GAME.round_resets.discards + card.ability.extra.added_discards + count_prognosticators() -- Prog adds 1 discard.
+    G.GAME.round_resets.discards = G.GAME.round_resets.discards + card.ability.extra.added_discards +
+    count_prognosticators()                                                                                                   -- Prog adds 1 discard.
     ease_discard(card.ability.extra.added_discards + count_prognosticators())
   end,
   remove_from_deck = function(self, card, from_debuff)
     G.GAME.round_resets.discards = G.GAME.round_resets.discards - card.ability.extra.added_discards -
-    count_prognosticators()
+        count_prognosticators()
     ease_discard(-(card.ability.extra.added_discards + count_prognosticators()))
   end,
   add_prog = function(self)
@@ -1252,7 +1253,8 @@ SMODS.Consumable {
   end,
   calculate = function(self, card, context)
     if context.skipping_booster then
-      card.ability.extra_value = card.ability.extra_value + card.ability.extra.added_value + (count_prognosticators() * 3)  -- Prog adds $3 extra sell value.
+      card.ability.extra_value = card.ability.extra_value + card.ability.extra.added_value +
+      (count_prognosticators() * 3)                                                                                        -- Prog adds $3 extra sell value.
       card:set_cost()
       return {
         message = localize('k_val_up'),
@@ -1394,6 +1396,26 @@ SMODS.Joker {
 }
 
 SMODS.Joker {
+  key = 'purplegoldenjoker',
+  config = { extra = { money = 3 } },
+  rarity = 1,
+  atlas = 'Phanta',
+  pos = { x = 8, y = 6 },
+  cost = 6,
+  blueprint_compat = false,
+  eternal_compat = true,
+  perishable_compat = true,
+  loc_vars = function(self, info_queue, card)
+    return { vars = { card.ability.extra.money, count_tarots() * card.ability.extra.money } }
+  end,
+  calc_dollar_bonus = function(self, card)
+    if count_tarots() > 0 then
+      return count_tarots() * card.ability.extra.money
+    end
+  end
+}
+
+SMODS.Joker {
   key = 'holeinthejoker',
   config = { extra = { money = 3 } },
   rarity = 1,
@@ -1404,11 +1426,15 @@ SMODS.Joker {
   eternal_compat = true,
   perishable_compat = true,
   loc_vars = function(self, info_queue, card)
-    return { vars = { card.ability.extra.money, (G.jokers and G.jokers.cards and G.jokers.config and G.jokers.config.card_limit and (G.jokers.config.card_limit - #G.jokers.cards) * card.ability.extra.money) or 15 } }
+    return {
+      vars = { card.ability.extra.money,
+        (G.jokers and G.jokers.cards and G.jokers.config and G.jokers.config.card_limit and (G.jokers.config.card_limit - (#G.jokers.cards - #SMODS.find_card("j_phanta_holeinthejoker"))) * card.ability.extra.money)
+        or card.ability.extra.money * 5 }
+    }
   end,
   calc_dollar_bonus = function(self, card)
-    if G.jokers.config.card_limit - #G.jokers.cards > 0 then
-      return (G.jokers.config.card_limit - #G.jokers.cards) *
+    if G.jokers.config.card_limit - (#G.jokers.cards - #SMODS.find_card("j_phanta_holeinthejoker")) > 0 then
+      return (G.jokers.config.card_limit - (#G.jokers.cards - #SMODS.find_card("j_phanta_holeinthejoker"))) *
           card.ability.extra.money
     end
   end
@@ -2149,7 +2175,7 @@ SMODS.Joker {
   atlas = 'Phanta',
   pos = { x = 10, y = 10 },
   cost = 6,
-  blueprint_compat = true,
+  blueprint_compat = false,
   eternal_compat = true,
   perishable_compat = true,
   add_to_deck = function(self, card, from_debuff)
@@ -2713,7 +2739,9 @@ SMODS.Joker {
             if context.scoring_hand[i].base.suit == counted_suits[j] then is_new = false end
           end
           if is_new then counted_suits[#counted_suits + 1] = context.scoring_hand[i].base.suit end
-        else wilds = wilds + 1 end
+        else
+          wilds = wilds + 1
+        end
       end
 
       if #counted_suits <= 3 and #counted_suits + wilds >= 3 then
@@ -5033,6 +5061,42 @@ SMODS.Back {
   config = { vouchers = { 'v_directors_cut' } },
   loc_vars = function(self, info_queue, card)
     return { vars = { localize({ type = 'name_text', set = 'Voucher', key = self.config.vouchers[1] }) } }
+  end
+}
+
+SMODS.Back {
+  key = 'crate',
+  atlas = 'Decks',
+  pos = { x = 1, y = 3 },
+  config = { extra = { added_slots = 2 } },
+  loc_vars = function(self, info_queue, card)
+    return { vars = { self.config.extra.added_slots } }
+  end,
+  apply = function(self, back)
+    G.GAME.starting_params.consumable_slots = G.GAME.starting_params.consumable_slots + self.config.extra.added_slots
+  end
+}
+
+SMODS.Back {
+  key = 'todayandtomorrow',
+  atlas = 'Decks',
+  pos = { x = 2, y = 3 },
+  apply = function(self, back)
+    G.E_MANAGER:add_event(Event({
+      func = function()
+        if G.consumeables then
+          local new_card_a = create_card("phanta_Zodiac", G.consumables, nil, nil, nil, nil, "c_phanta_virgo", 'todayandtomorrowa')
+          new_card_a:add_to_deck()
+          G.consumeables:emplace(new_card_a)
+          new_card_a:juice_up(0.3, 0.5)
+          local new_card_b = create_card("phanta_Zodiac", G.consumables, nil, nil, nil, nil, "c_phanta_capricorn", 'todayandtomorrowb')
+          new_card_b:add_to_deck()
+          G.consumeables:emplace(new_card_b)
+          new_card_b:juice_up(0.3, 0.5)
+          return true
+        end
+      end
+    }))
   end
 }
 
