@@ -115,7 +115,7 @@ function get_lowest(hand)
 end
 
 function count_prognosticators()
-  return #SMODS.find_card("j_phanta_prognosticator")
+  return #SMODS.find_card("j_phanta_prognosticator") + (G.GAME and G.GAME.selected_back and G.GAME.selected_back and G.GAME.selected_back.effect and G.GAME.selected_back.effect.center.key == "b_phanta_todayandtomorrow" and 1 or 0)
 end
 
 SMODS.PokerHand {
@@ -5102,24 +5102,7 @@ SMODS.Back {
 SMODS.Back {
   key = 'todayandtomorrow',
   atlas = 'Decks',
-  pos = { x = 2, y = 3 },
-  apply = function(self, back)
-    G.E_MANAGER:add_event(Event({
-      func = function()
-        if G.consumeables then
-          local new_card_a = create_card("phanta_Zodiac", G.consumables, nil, nil, nil, nil, "c_phanta_virgo", 'todayandtomorrowa')
-          new_card_a:add_to_deck()
-          G.consumeables:emplace(new_card_a)
-          new_card_a:juice_up(0.3, 0.5)
-          local new_card_b = create_card("phanta_Zodiac", G.consumables, nil, nil, nil, nil, "c_phanta_capricorn", 'todayandtomorrowb')
-          new_card_b:add_to_deck()
-          G.consumeables:emplace(new_card_b)
-          new_card_b:juice_up(0.3, 0.5)
-          return true
-        end
-      end
-    }))
-  end
+  pos = { x = 2, y = 3 }
 }
 
 local ref1 = Card.start_dissolve

@@ -98,8 +98,10 @@ return {
                 text = {
                     --[["{C:phanta_zodiac}Zodiac{} cards may",
                     "appear in the shop,",]]--
-                    "Start with a copy of",
-                    "{C:phanta_zodiac}Virgo{} and {C:phanta_zodiac}Capricorn{}"
+                    --[["Start with a copy of",
+                    "{C:phanta_zodiac}Virgo{} and {C:phanta_zodiac}Capricorn{}"]]--
+                    "{C:phanta_zodiac}Zodiac{} cards have",
+                    "{C:attention}stronger{} abilities"
                 }
             }
         },
