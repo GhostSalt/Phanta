@@ -1041,7 +1041,7 @@ SMODS.Consumable {
   set = "phanta_Zodiac",
   key = "gemini",
   pos = { x = 2, y = 0 },
-  config = { extra = { money = 2 } },
+  config = { extra = { money = 4 } },
   atlas = "PhantaZodiacs",
   loc_vars = function(self, info_queue, card)
     return { vars = { card.ability.extra.money + (count_prognosticators() * 2) } }
