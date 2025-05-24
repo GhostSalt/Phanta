@@ -989,6 +989,16 @@ return {
                     "and scored",
                     "{C:attention}2{}, {C:attention}3{}, {C:attention}4{}, or {C:attention}5{}"
                 },
+            },
+
+            -- Original ability text implied that unscored face cards were retriggered.
+            j_sock_and_buskin = {
+                name = 'Sock and Buskin',
+                text = {
+                    "Retrigger all",
+                    "played and scored",
+                    "{C:attention}face{} cards"
+                },
             }
         },
         Other = {
