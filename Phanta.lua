@@ -2139,7 +2139,7 @@ SMODS.Joker {
   calculate = function(self, card, context)
     if context.joker_main and card.ability.extra.current_mult > 0 then return { mult = card.ability.extra.current_mult } end
 
-    if context.remove_playing_cards then
+    if context.remove_playing_cards and not context.blueprint then
       card.ability.extra.current_mult = card.ability.extra.current_mult +
           (#context.removed * card.ability.extra.added_mult)
       return { message = localize("k_upgrade_ex"), color = G.C.FILTER, card = card }
@@ -2284,7 +2284,7 @@ SMODS.Joker {
     return { vars = { card.ability.extra.added_money, card.ability.extra.current_money } }
   end,
   calculate = function(self, card, context)
-    if context.using_consumeable then
+    if context.using_consumeable and not context.blueprint then
       card.ability.extra.current_money = card.ability.extra.current_money + card.ability.extra.added_money
       return { message = localize("k_upgrade_ex"), colour = G.C.FILTER }
     end
@@ -2340,7 +2340,7 @@ SMODS.Joker {
       }
     end
 
-    if context.end_of_round and context.individual and context.cardarea == G.hand and context.other_card:get_id() == 9 then
+    if context.end_of_round and context.individual and context.cardarea == G.hand and context.other_card:get_id() == 9 and not context.blueprint then
       card.ability.extra.current_chips = card.ability.extra.current_chips + card.ability.extra.added_chips
       return { message = localize("k_upgrade_ex"), colour = G.C.FILTER }
     end
@@ -3265,7 +3265,7 @@ SMODS.Joker {
       return { mult = card.ability.extra.current_mult }
     end
 
-    if context.buying_card then
+    if context.buying_card and not context.blueprint then
       card.ability.extra.current_bought = card.ability.extra.current_bought + 1
       if card.ability.extra.current_bought == card.ability.extra.target then
         card.ability.extra.current_bought = 0
@@ -4420,7 +4420,7 @@ SMODS.Joker {
 
 SMODS.Joker {
   key = 'thedagger',
-  config = { extra = { added_mult = 10, current_mult = 0 } },
+  config = { extra = { added_mult = 5, current_mult = 0 } },
   rarity = 3,
   atlas = 'Phanta',
   pos = { x = 3, y = 6 },
@@ -4453,6 +4453,63 @@ SMODS.Joker {
     if context.destroy_card and context.cardarea == G.play and context.destroy_card.phanta_weapon_marked_for_death then
       context.destroy_card.phanta_weapon_marked_for_death = nil
       return true
+    end
+  end
+}
+
+SMODS.Joker {
+  key = 'evidence',
+  config = { extra = { added_xmult = 1, current_xmult = 1 } },
+  rarity = 3,
+  atlas = 'Phanta',
+  pos = { x = 8, y = 3 },
+  cost = 8,
+  blueprint_compat = true,
+  eternal_compat = true,
+  perishable_compat = true,
+  loc_vars = function(self, info_queue, card)
+    return { vars = { card.ability.extra.added_xmult, card.ability.extra.current_xmult } }
+  end,
+  calculate = function(self, card, context)
+    if context.joker_main and card.ability.extra.current_xmult > 1 then return { xmult = card.ability.extra.current_xmult } end
+
+    if context.remove_playing_cards and not context.blueprint then
+      local upgrade = 0
+      for k, v in ipairs(context.removed) do
+        if SMODS.has_enhancement(v, "m_stone") then
+          upgrade = upgrade + card.ability.extra.added_xmult
+        end
+      end
+      if upgrade > 0 then
+        card.ability.extra.current_xmult = card.ability.extra.current_xmult + upgrade
+        return { message = localize("k_upgrade_ex"), colour = G.C.FILTER }
+      end
+    end
+  end
+}
+
+SMODS.Joker {
+  key = 'lily',
+  config = { extra = { given_chips = 250 } },
+  rarity = 3,
+  atlas = 'Phanta',
+  pos = { x = 0, y = 9 },
+  cost = 8,
+  blueprint_compat = true,
+  eternal_compat = true,
+  perishable_compat = true,
+  loc_vars = function(self, info_queue, card)
+    return { vars = { card.ability.extra.given_chips } }
+  end,
+  calculate = function(self, card, context)
+    if context.joker_main then
+      local diamond_cards = {}
+      for k, v in ipairs(context.scoring_hand) do
+        if v:is_suit("Diamonds") then
+          diamond_cards[#diamond_cards + 1] = v
+        end
+      end
+      if #diamond_cards == 1 then return { chips = card.ability.extra.given_chips } end
     end
   end
 }

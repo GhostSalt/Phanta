@@ -958,6 +958,22 @@ return {
                     "{C:inactive}(Currently {C:mult}+#2#{C:inactive} Mult){}"
                 }
             },
+            j_phanta_evidence = {
+                name = 'Evidence',
+                text = {
+                    "Gains {C:white,X:mult}X#1#{} Mult when a",
+                    "{C:attention}Stone card is {C:red}destroyed{}",
+                    "{C:inactive}(Currently {C:white,X:mult}X#2#{C:inactive} Mult){}"
+                }
+            },
+            j_phanta_lily = {
+                name = 'Lily',
+                text = {
+                    "{C:chips}+#1#{} Chips if played",
+                    "hand contains exactly {C:attention}1{}",
+                    "card with {C:diamonds}Diamonds{} suit"
+                }
+            },
             j_phanta_selfportrait = {
                 name = 'Self-portrait',
                 text = {
