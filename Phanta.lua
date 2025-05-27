@@ -122,7 +122,7 @@ function count_lucky_cards()
   local lucky_counter = 0
   if G.playing_cards then
     for _, card in pairs(G.playing_cards) do
-      if card.config.center == G.P_CENTERS.m_lucky then
+      if SMODS.has_enhancement(card, "m_lucky") then
         lucky_counter = lucky_counter + 1
       end
     end
@@ -755,6 +755,22 @@ function G.UIDEF.use_and_sell_buttons(card)
     }
   }
   return t
+end
+
+local can_select_card_ref = G.FUNCS.can_select_card
+G.FUNCS.can_select_card = function(e)
+    local card = e.config.ref_table
+    if card.ability.set == 'phanta_Zodiac' then
+        if #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit then
+            e.config.colour = G.C.GREEN
+            e.config.button = 'use_card'
+        else
+            e.config.colour = G.C.UI.BACKGROUND_INACTIVE
+            e.config.button = nil
+        end
+    else
+        can_select_card_ref(e)
+    end
 end
 
 SMODS.Atlas {
@@ -1909,7 +1925,7 @@ SMODS.Joker {
   eternal_compat = true,
   perishable_compat = true,
   calculate = function(self, card, context)
-    if context.repetition and context.cardarea == G.play and context.other_card.config.center == G.P_CENTERS.m_bonus then
+    if context.repetition and context.cardarea == G.play and SMODS.has_enhancement(context.other_card, "m_bonus") then
       return { repetitions = 1 }
     end
   end
@@ -1939,7 +1955,7 @@ SMODS.Joker {
   eternal_compat = true,
   perishable_compat = true,
   calculate = function(self, card, context)
-    if context.individual and context.cardarea == "unscored" and context.other_card.config.center == G.P_CENTERS.m_mult and not card.ability.extra.is_spent then
+    if context.individual and context.cardarea == "unscored" and SMODS.has_enhancement(context.other_card, "m_mult") and not card.ability.extra.is_spent then
       card.ability.extra.will_be_spent = true
       ease_discard(card.ability.extra.added_discards)
 
@@ -1992,7 +2008,7 @@ SMODS.Joker {
   eternal_compat = true,
   perishable_compat = true,
   calculate = function(self, card, context)
-    if context.individual and context.cardarea == "unscored" and context.other_card.config.center == G.P_CENTERS.m_bonus and not card.ability.extra.is_spent then
+    if context.individual and context.cardarea == "unscored" and SMODS.has_enhancement(context.other_card, "m_bonus") and not card.ability.extra.is_spent then
       card.ability.extra.will_be_spent = true
       ease_hands_played(card.ability.extra.added_hands)
 
@@ -2073,7 +2089,7 @@ SMODS.Joker {
   eternal_compat = true,
   perishable_compat = true,
   calculate = function(self, card, context)
-    if context.individual and context.cardarea == G.play and #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit and context.other_card.ability.name == 'Wild Card' and pseudorandom('nonuniformday') < G.GAME.probabilities.normal / card.ability.extra.odds then
+    if context.individual and context.cardarea == G.play and #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit and SMODS.has_enhancement(context.other_card, "m_wild") and pseudorandom('nonuniformday') < G.GAME.probabilities.normal / card.ability.extra.odds then
       G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
       return {
         extra = {
@@ -2117,7 +2133,7 @@ SMODS.Joker {
   eternal_compat = true,
   perishable_compat = true,
   calculate = function(self, card, context)
-    if context.destroy_card and context.cardarea == G.hand and context.destroy_card.ability.name == 'Wild Card' and pseudorandom('badhairday') < G.GAME.probabilities.normal / card.ability.extra.odds then
+    if context.destroy_card and context.cardarea == G.hand and SMODS.has_enhancement(context.other_card, "m_wild") and pseudorandom('badhairday') < G.GAME.probabilities.normal / card.ability.extra.odds then
       return true
     end
   end
@@ -2168,7 +2184,7 @@ SMODS.Joker {
       }
     end
 
-    if context.cardarea == G.hand and not context.blueprint and context.other_card and context.other_card.ability.name == 'Lucky Card' then
+    if context.cardarea == G.hand and not context.blueprint and context.other_card and SMODS.has_enhancement(context.other_card, "m_lucky") then
       if context.other_card.debuff then
         return {
           message = localize('k_debuffed'),
@@ -2687,7 +2703,7 @@ SMODS.Joker {
     return {}
   end,
   calculate = function(self, card, context)
-    if context.discard and context.other_card and context.other_card.ability.name == 'Stone Card' then
+    if context.discard and context.other_card and SMODS.has_enhancement(context.other_card, "m_stone") then
       if #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit then
         G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
         G.E_MANAGER:add_event(Event({
@@ -2893,7 +2909,7 @@ SMODS.Joker {
     if context.cardarea == G.jokers and context.before and not context.blueprint then
       local bonus_cards = {}
       for k, v in ipairs(context.scoring_hand) do
-        if v.config.center == G.P_CENTERS.m_bonus and not v.debuff and not v.blotted_selected then
+        if SMODS.has_enhancement(v, "m_bonus") and not v.debuff and not v.blotted_selected then
           bonus_cards[#bonus_cards + 1] = v
           v.blotted_selected = true
           v:set_ability(G.P_CENTERS.c_base, nil, true)
@@ -2942,7 +2958,7 @@ SMODS.Joker {
     if context.cardarea == G.jokers and context.before and not context.blueprint then
       local mult_cards = {}
       for k, v in ipairs(context.scoring_hand) do
-        if v.config.center == G.P_CENTERS.m_mult and not v.debuff and not v.bloodpact_selected then
+        if SMODS.has_enhancement(v, "m_mult") and not v.debuff and not v.bloodpact_selected then
           mult_cards[#mult_cards + 1] = v
           v.bloodpact_selected = true
           v:set_ability(G.P_CENTERS.c_base, nil, true)
@@ -3013,7 +3029,7 @@ SMODS.Joker {
   eternal_compat = true,
   perishable_compat = true,
   calculate = function(self, card, context)
-    if context.individual and context.cardarea == G.play and context.other_card.ability.name == 'Wild Card' then
+    if context.individual and context.cardarea == G.play and SMODS.has_enhancement(context.other_card, "m_wild") then
       return { mult = card.ability.extra.given_mult }
     end
   end
@@ -5065,7 +5081,7 @@ SMODS.Joker {
   eternal_compat = true,
   perishable_compat = true,
   calculate = function(self, card, context)
-    if context.individual and context.cardarea == G.play and context.other_card.ability.name == 'Gold Card' then
+    if context.individual and context.cardarea == G.play and SMODS.has_enhancement(context.other_card, "m_gold") then
       G.GAME.dollar_buffer = (G.GAME.dollar_buffer or 0) + card.ability.extra.money
       G.E_MANAGER:add_event(Event({
         func = (function()
