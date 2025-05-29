@@ -327,21 +327,48 @@ return {
                 }
             },
             j_phanta_junpei = {
-                name = "Junpei",
+                name = 'Junpei',
                 text = {
                     "Played {C:attention}5s{} give",
                     "{C:mult}+#1#{} Mult when scored"
                 }
             },
             j_phanta_sigma = {
-                name = "Sigma",
+                name = 'Sigma',
                 text = {
                     "Retriggers all played",
                     "and scored {C:attention}Bonus{} cards"
                 }
             },
+            j_phanta_carlos = {
+                name = 'Carlos',
+                text = {
+                    "Gain {C:blue}+#1#{} hand#2# when",
+                    "next {C:attention}Blind{} is selected,",
+                    "increases by {C:attention}#3#{} when",
+                    "selling a {C:attention}consumable{}"
+                }
+            },
+            j_phanta_q = {
+                name = 'Q',
+                text = {
+                    "If played hand contains",
+                    "at least {C:attention}2 Queens{},",
+                    "the first 2 give {C:white,X:mult}X#1#{}",
+                    "Mult when scored"
+                }
+            },
+            j_phanta_diana = {
+                name = 'Diana',
+                text = {
+                    "Gains {C:mult}+#1#{} Mult for",
+                    "each played and scored",
+                    "{C:attention}Bonus{} card",
+                    "{C:inactive}(Currently {C:mult}+#2#{C:inactive} Mult){}"
+                }
+            },
             j_phanta_redkeycards = {
-                name = "Red Key Cards",
+                name = 'Red Key Cards',
                 text = {
                     "Gain {C:red}+#1#{} discards",
                     "when playing an",
@@ -351,7 +378,7 @@ return {
                 }
             },
             j_phanta_bluekeycards = {
-                name = "Blue Key Cards",
+                name = 'Blue Key Cards',
                 text = {
                     "Gain {C:blue}+3{} hands",
                     "when playing an",
@@ -524,6 +551,15 @@ return {
                     "be {C:attention}retriggered{}"
                 }
             },
+            j_phanta_doubledice = {
+                name = 'Double Dice',
+                text = {
+                    "Played and scored {C:attention}7{}s",
+                    "give {C:mult}+#1#{} Mult for",
+                    "each owned {C:blue}Common{} Joker",
+                    "{C:inactive}(Will give {C:mult}+#2#{C:inactive} Mult){}"
+                }
+            },
             j_phanta_prognosticator = {
                 name = 'Prognosticator',
                 text = {
@@ -602,6 +638,14 @@ return {
                     "{C:inactive}(Currently {C:white,X:mult}X#2#{C:inactive} Mult){}"
                 }
             },
+			j_phanta_goo = {
+                name = 'Goo',
+                text = {
+                    "On {C:attention}final hand{} of",
+                    "round, adds a {C:blue}Blue{} seal",
+                    "to the {C:attention}first{} scored card"
+                }
+			},
             j_phanta_web = {
                 name = 'Web',
                 text = {
@@ -655,12 +699,6 @@ return {
                     "Played {C:attention}Wild{} cards",
                     "give {C:mult}+#1#{} Mult",
                     "when scored"
-                }
-            },
-            j_phanta_goo = {
-                name = 'Goo',
-                text = {
-                    ""
                 }
             },
             j_phanta_identity = {
@@ -899,11 +937,20 @@ return {
                     "{C:inactive}(Currently {C:mult}+#2#{C:inactive} Mult){}"
                 }
             },
+            j_phanta_lotteryticket = {
+                name = 'Lottery Ticket',
+                text = {
+                    "If {C:attention}first hand{} of",
+                    "round is a {C:attention}Straight{},",
+                    "upgrades {C:attention}Straight Flush{}",
+                    "by {C:attention}#1#{} level#2#"
+                }
+            },
             j_phanta_diningtable = {
                 name = 'Dining Table',
                 text = {
-                    "If played hand is",
-                    "a {C:attention}Full House{},",
+                    "If played hand",
+                    "contains a {C:attention}Full House{},",
                     "the {C:attention}pair{} of cards",
                     "become {C:attention}Glass{}"
                 }
@@ -1203,6 +1250,21 @@ return {
                 },
             }
         },
+        Partner={
+            pnr_phanta_ghost={
+                name = "Spooky",
+                text = {
+                    "{C:tarot}Tarot{} cards",
+                    "in your consumable",
+                    "area give {C:white,X:mult}X#1#{} Mult"
+                },
+                unlock={
+                    "Used {C:attention}Ghost{}",
+                    "to win on {C:attention}Gold{}",
+                    "{C:attention}Stake{} difficulty",
+                },
+            }
+        },
         Planet = {
             c_phanta_rubbish = {
                 name = 'Rubbish',
@@ -1377,7 +1439,9 @@ return {
             phanta_virgo_creates_b = "creates ",
             phanta_scorpio_extra_a = " for",
             phanta_scorpio_extra_b = "played hand ",
-            phanta_lucky = "Lucky"
+            phanta_lucky = "Lucky",
+            a_hand="+1 Hand",
+			created_blue_seal = "Blue Seal",
         },
         labels = {
             phanta_ghostcard = "Ghost Card",
@@ -1391,6 +1455,29 @@ return {
             ["phanta_junk"] = {
                 "Any High Card where 5 cards are played.",
                 "The lowest card scores instead"
+            }
+        },
+        quips = {
+            pnr_phanta_ghost_1 = {
+                "oooOOOooo"
+            },
+            pnr_phanta_ghost_2 = {
+                "Boo!"
+            },
+            pnr_phanta_ghost_3 = {
+                "I hope I'm not",
+                "too scary!"
+            },
+            pnr_phanta_ghost_4 = {
+                "Try not to",
+                "get spooked!"
+            },
+            pnr_phanta_ghost_5 = {
+                "Awawa!"
+            },
+            pnr_phanta_ghost_6 = {
+                "I know you possess",
+                "the skills to win!"
             }
         },
         v_dictionary = {
