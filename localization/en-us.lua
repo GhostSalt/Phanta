@@ -4,7 +4,7 @@ return {
             b_phanta_stormcaught = {
                 name = 'Stormcaught Deck',
                 text = {
-                    "Gain an {C:attention}Uncommon Tag{} at",
+                    "Gain an {C:attention,T:tag_uncommon}Uncommon Tag{} at",
                     "the start of the {C:attention}run{},",
                     "and after defeating",
                     "each {C:attention}Boss Blind{}"
@@ -56,7 +56,7 @@ return {
                 name = 'Trickster Deck',
                 text = {
                     "Creates a copy of",
-                    "{C:tarot}The Hanged Man{} when a",
+                    "{C:tarot,T:c_hanged_man}The Hanged Man{} when a",
                     "{C:attention}playing card{} is added",
                     "to your deck",
                     "{C:inactive}(Must have room){}"
@@ -84,7 +84,7 @@ return {
                 name = 'Hi-Vis Deck',
                 text = {
                     "Start run with the",
-                    "{C:red}#1#{} Voucher"
+                    "{C:red,T:v_directors_cut}#1#{} Voucher"
                 }
             },
             b_phanta_crate = {
@@ -781,6 +781,41 @@ return {
                     "{C:inactive}(Currently {C:mult}+#2#{C:inactive} Mult){}"
                 }
             },
+            j_phanta_hill = {
+                name = 'Hill',
+                text = {
+                    "When {C:attention}Blind{} is selected,",
+                    "creates a copy of {C:phanta_resource}Brick{}"
+                }
+            },
+            j_phanta_forest = {
+                name = 'Forest',
+                text = {
+                    "When {C:attention}Blind{} is selected,",
+                    "creates a copy of {C:phanta_resource}Wood{}"
+                }
+            },
+            j_phanta_pasture = {
+                name = 'Pasture',
+                text = {
+                    "When {C:attention}Blind{} is selected,",
+                    "creates a copy of {C:phanta_resource}Wool{}"
+                }
+            },
+            j_phanta_field = {
+                name = 'Field',
+                text = {
+                    "When {C:attention}Blind{} is selected,",
+                    "creates a copy of {C:phanta_resource}Grain{}"
+                }
+            },
+            j_phanta_mountain = {
+                name = 'Mountain',
+                text = {
+                    "When {C:attention}Blind{} is selected,",
+                    "creates a copy of {C:phanta_resource}Ore{}"
+                }
+            },
             j_phanta_goldenfiddle = {
                 name = 'Golden Fiddle',
                 text = {
@@ -1248,7 +1283,23 @@ return {
                     "{C:attention}#2#{C:phanta_zodiac} Zodiac{} cards",
                     "to take",
                 },
-            }
+            },
+			undiscovered_phanta_zodiac = {
+				name = "Not Discovered",
+				text = {
+					"Obtain this card in",
+					"an unseeded run to",
+					"learn what it does",
+				},
+			},
+			undiscovered_phanta_resource = {
+				name = "Not Discovered",
+				text = {
+					"Obtain this card in",
+					"an unseeded run to",
+					"learn what it does",
+				},
+			}
         },
         Partner={
             pnr_phanta_ghost={
@@ -1310,6 +1361,21 @@ return {
                     "Gives a free",
                     "{C:phanta_zodiac}Jumbo Zodiac Pack{}"
                 },
+            }
+        },
+        Voucher = {
+            v_phanta_resourcetycoon = {
+                name = "Resource Tycoon",
+                text = {
+                    "{C:attention}+1{} {C:phanta_resource}Resource{} card per shop"
+                }
+            },
+            v_phanta_robber = {
+                name = "Robber",
+                text = {
+                    "All {C:phanta_resource}Resource{} cards",
+                    "in the shop are {C:attention}free{}"
+                }
             }
         },
         phanta_Zodiac = {
@@ -1416,6 +1482,169 @@ return {
                     "{C:white,X:mult}X#1#{} Mult if unscored"
                 },
             }
+        },
+        phanta_CatanResource = {
+            c_phanta_brick = {
+                name = "Brick",
+                text = {
+                    "{C:attention}+#1#{} consumable slot"
+                }
+            },
+            c_phanta_lumber = {
+                name = "Lumber",
+                text = {
+                    "{C:attention}+#1#{} consumable slot"
+                }
+            },
+            c_phanta_wool = {
+                name = "Wool",
+                text = {
+                    "{C:attention}+#1#{} consumable slot"
+                }
+            },
+            c_phanta_grain = {
+                name = "Grain",
+                text = {
+                    "{C:attention}+#1#{} consumable slot"
+                }
+            },
+            c_phanta_ore = {
+                name = "Ore",
+                text = {
+                    "{C:attention}+#1#{} consumable slot"
+                }
+            }
+        },
+        phanta_CatanDevelopmentCard = {
+            c_phanta_knight1 = {
+                name = "Knight",
+                text = {
+                    "Disables the current",
+                    "{C:attention}Boss Blind{}"
+                }
+            },
+            c_phanta_knight2 = {
+                name = "Knight",
+                text = {
+                    "Disables the current",
+                    "{C:attention}Boss Blind{}"
+                }
+            },
+            c_phanta_knight3 = {
+                name = "Knight",
+                text = {
+                    "Disables the current",
+                    "{C:attention}Boss Blind{}"
+                }
+            },
+            c_phanta_knight4 = {
+                name = "Knight",
+                text = {
+                    "Disables the current",
+                    "{C:attention}Boss Blind{}"
+                }
+            },
+            c_phanta_knight5 = {
+                name = "Knight",
+                text = {
+                    "Disables the current",
+                    "{C:attention}Boss Blind{}"
+                }
+            },
+            c_phanta_knight6 = {
+                name = "Knight",
+                text = {
+                    "Disables the current",
+                    "{C:attention}Boss Blind{}"
+                }
+            },
+            c_phanta_knight7 = {
+                name = "Knight",
+                text = {
+                    "Disables the current",
+                    "{C:attention}Boss Blind{}"
+                }
+            },
+            c_phanta_library = {
+                name = "Library",
+                text = {
+                    "Creates a free",
+                    "{C:attention}Double Tag{}"
+                }
+            },
+            c_phanta_market = {
+                name = "Market",
+                text = {
+                    "Creates a free",
+                    "{C:attention}Double Tag{}"
+                }
+            },
+            c_phanta_greathall = {
+                name = "Great Hall",
+                text = {
+                    "Creates a free",
+                    "{C:attention}Double Tag{}"
+                }
+            },
+            c_phanta_chapel = {
+                name = "Chapel",
+                text = {
+                    "Creates a free",
+                    "{C:attention}Double Tag{}"
+                }
+            },
+            c_phanta_university = {
+                name = "University",
+                text = {
+                    "Creates a free",
+                    "{C:attention}Double Tag{}"
+                }
+            },
+            c_phanta_monopoly = {
+                name = "Monopoly",
+                text = {
+                    "Creates {C:attention}#1#{} copies",
+                    "of a random",
+                    "{C:phanta_catanresource}Resource{} type"
+                }
+            },
+            c_phanta_yearofplenty = {
+                name = "Year of Plenty",
+                text = {
+                    "Earn {C:money}$#1#{}"
+                }
+            },
+            c_phanta_roadbuilding = {
+                name = "Road Building",
+                text = {
+                    "Creates {C:attention}#1#{} copies of {C:phanta_catanbuilding}Road{}",
+                    "{C:inactive}(Must have room){}"
+                }
+            }
+        },
+        phanta_CatanBuilding = {
+            c_phanta_road ={
+                name= "Road",
+                text= {
+                    "Enhances {C:attention}#1#{}",
+                    "selected cards to",
+                    "{C:attention}random enhancements{}",
+                }
+            },
+            c_phanta_settlement ={
+                name= "Settlement",
+                text= {
+                    "Creates a free",
+                    "{C:attention}Rare Tag{}"
+                }
+            },
+            c_phanta_city ={
+                name= "City",
+                text= {
+                    "Creates {C:attention}#1#{} free",
+                    "{C:attention}Negative Tags{}"
+                }
+            }
         }
     },
     misc = {
@@ -1431,6 +1660,24 @@ return {
             b_phanta_zodiac_cards = "Zodiac Cards",
             k_phanta_zodiac = "Zodiac",
             k_phanta_zodiac_pack = "Zodiac Pack",
+            b_phanta_catanresource_cards = "Resources",
+            k_phanta_catanresource = "Resource",
+            b_phanta_catandevelopmentcard_cards = "Development Cards",
+            k_phanta_catandevelopmentcard = "Development Card",
+            b_phanta_catanbuilding_cards = "Buildings",
+            k_phanta_catanbuilding = "Building",
+            b_phanta_catanbuilding = "Building",
+            b_phanta_catanroad = "Road",
+            b_phanta_catansettlement = "Settlement",
+            b_phanta_catancity = "City",
+            b_phanta_catandevelopmentcard = "Development Card",
+            phanta_catan_menu_infotip = {
+                "Resources required for building:",
+                "Road: Brick, Lumber",
+                "Settlement: Brick, Lumber, Grain, Wool",
+                "City: Settlement, Grain, Grain, Ore, Ore, Ore",
+                "Development Card: Wool, Grain, Ore"
+            },
             plus_standard_tag = '+Standard Tag',
             phanta_aries_second = "second ",
             phanta_plural = "s",
@@ -1478,6 +1725,14 @@ return {
             pnr_phanta_ghost_6 = {
                 "I know you possess",
                 "the skills to win!"
+            },
+            pnr_phanta_ghost_7 = {
+                "Don't worry, I",
+                "won't ghost you!"
+            },
+            pnr_phanta_ghost_8 = {
+                "This run isn't",
+                "gonna die!"
             }
         },
         v_dictionary = {

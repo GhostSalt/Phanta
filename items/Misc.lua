@@ -105,10 +105,10 @@ SMODS.Seal {
   pos = { x = 1, y = 0 },
 
   calculate = function(self, card, context)
-    if context.cardarea == "unscored" and context.main_scoring and G.GAME.current_round.hands_left == 0 and #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit then
+    if context.cardarea == "unscored" and context.main_scoring and G.GAME.current_round.hands_left == 0 and count_consumables() < G.consumeables.config.card_limit then
       G.E_MANAGER:add_event(Event({
         func = function()
-          if G.consumeables.config.card_limit > #G.consumeables.cards then
+          if count_consumables() < G.consumeables.config.card_limit then
             local new_card = create_card("Spectral", G.consumeables, nil, nil, nil, nil, nil, "ghostseal")
             new_card:add_to_deck()
             G.consumeables:emplace(new_card)
@@ -231,7 +231,7 @@ SMODS.Consumable {
     }
   end,
   can_use = function(self, card)
-    return G.consumeables.config.card_limit >= #G.consumeables.cards and G.GAME.last_spectral ~= nil and
+    return G.consumeables.config.card_limit >= count_consumables() and G.GAME.last_spectral ~= nil and
         G.GAME.last_spectral ~= "c_phanta_shard"
   end,
   use = function(self, card, area, copier)
@@ -239,7 +239,7 @@ SMODS.Consumable {
       trigger = 'after',
       delay = 0.4,
       func = function()
-        if G.consumeables.config.card_limit > #G.consumeables.cards then
+        if G.consumeables.config.card_limit > count_consumables() then
           play_sound('timpani')
           local new_card = create_card('Spectral', G.consumeables, nil, nil, nil, nil, G.GAME.last_spectral, 'shard')
           new_card:add_to_deck()
@@ -561,7 +561,7 @@ SMODS.Enhancement {
 local sell_use_ref = G.UIDEF.use_and_sell_buttons
 
 function G.UIDEF.use_and_sell_buttons(card)
-  if not card or not card.ability or card.ability.set ~= "phanta_Zodiac" then return sell_use_ref(card) end
+  if not card or not card.ability or (card.ability.set ~= "phanta_Zodiac" and card.ability.set ~= "phanta_CatanResource") then return sell_use_ref(card) end
 
   if (card.area == G.pack_cards and G.pack_cards) then
     return {
@@ -640,7 +640,7 @@ local can_select_card_ref = G.FUNCS.can_select_card
 G.FUNCS.can_select_card = function(e)
     local card = e.config.ref_table
     if card.ability.set == 'phanta_Zodiac' then
-        if #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit then
+        if count_consumables() < G.consumeables.config.card_limit then
             e.config.colour = G.C.GREEN
             e.config.button = 'use_card'
         else
@@ -920,7 +920,7 @@ SMODS.Consumable {
     return { vars = { count_prognosticators() > 0 and "" or localize("phanta_aries_second") } }
   end,
   calculate = function(self, card, context)
-    if context.before and (count_prognosticators() > 0 or G.GAME.current_round.hands_played == 1) and #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit then -- Progs allow Tarots to be made on all hands. (Unstackable)
+    if context.before and (count_prognosticators() > 0 or G.GAME.current_round.hands_played == 1) and count_consumables() < G.consumeables.config.card_limit then -- Progs allow Tarots to be made on all hands. (Unstackable)
       G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
       G.E_MANAGER:add_event(Event({
         trigger = 'before',
@@ -1063,7 +1063,7 @@ SMODS.Consumable {
     }
   end,
   calculate = function(self, card, context)
-    if context.individual and context.cardarea == G.play and context.other_card:is_suit("Diamonds") and #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit then
+    if context.individual and context.cardarea == G.play and context.other_card:is_suit("Diamonds") and count_consumables() < G.consumeables.config.card_limit then
       G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
       G.E_MANAGER:add_event(Event({
         trigger = 'before',
@@ -1282,7 +1282,7 @@ SMODS.Back {
   atlas = 'Decks',
   pos = { x = 1, y = 0 },
   calculate = function(self, back, context)
-    if context.setting_blind and #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit then
+    if context.setting_blind and count_consumables() < G.consumeables.config.card_limit then
       G.E_MANAGER:add_event(Event({
         delay = 0.3,
         blockable = false,
@@ -1388,7 +1388,7 @@ SMODS.Back {
               delay = 0.3,
               blockable = false,
               func = function()
-                if #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit then
+                if count_consumables() < G.consumeables.config.card_limit then
                   play_sound('timpani')
                   local new_card = create_card("Tarot", G.consumables, nil, nil, nil, nil, 'c_hanged_man')
                   new_card:add_to_deck()

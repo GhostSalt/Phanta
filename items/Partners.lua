@@ -25,7 +25,7 @@ Partner_API.Partner {
     return { vars = { card.ability.extra.xmult + benefits } }
   end,
   calculate = function(self, card, context)
-    if context.partner_other_main and context.other_card and context.other_card.ability.set == "Tarot" then
+    if context.other_main and context.other_card and context.other_card.ability.set == "Tarot" then
       local benefits = 0
       if next(SMODS.find_card(card.ability.extra.related_card)) then benefits = 0.5 end
       return { xmult = card.ability.extra.xmult + benefits }
@@ -57,7 +57,7 @@ Partner_API.Partner {
     return { vars = { card.ability.extra.xmult + benefits } }
   end,
   calculate = function(self, card, context)
-    if context.partner_other_main and context.other_card and context.other_card.ability.set == "Tarot" then
+    if context.other_main and context.other_card and context.other_card.ability.set == "Tarot" then
       local benefits = 0
       if next(SMODS.find_card(card.ability.extra.related_card)) then benefits = 0.5 end
       return { xmult = card.ability.extra.xmult + benefits }

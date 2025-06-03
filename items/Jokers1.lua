@@ -423,7 +423,7 @@ SMODS.Joker {
   end,
   rarity = 2,
   atlas = 'Phanta',
-  pos = { x = 9, y = 10 },
+  pos = { x = 8, y = 10 },
   cost = 6,
   blueprint_compat = false,
   eternal_compat = true,
@@ -864,7 +864,7 @@ SMODS.Joker {
   eternal_compat = true,
   perishable_compat = true,
   calculate = function(self, card, context)
-    if context.individual and context.cardarea == G.play and #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit and SMODS.has_enhancement(context.other_card, "m_wild") and pseudorandom('nonuniformday') < G.GAME.probabilities.normal / card.ability.extra.odds then
+    if context.individual and context.cardarea == G.play and count_consumables() < G.consumeables.config.card_limit and SMODS.has_enhancement(context.other_card, "m_wild") and pseudorandom('nonuniformday') < G.GAME.probabilities.normal / card.ability.extra.odds then
       G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
       return {
         extra = {
@@ -1285,7 +1285,7 @@ SMODS.Joker {
   key = 'willothewisp',
   rarity = 2,
   atlas = 'Phanta',
-  pos = { x = 7, y = 10 },
+  pos = { x = 6, y = 10 },
   cost = 6,
   blueprint_compat = true,
   eternal_compat = true,
@@ -1349,7 +1349,7 @@ SMODS.Joker {
   config = { extra = { added_mult = 5 } },
   rarity = 2,
   atlas = 'Phanta',
-  pos = { x = 6, y = 11 },
+  pos = { x = 11, y = 10 },
   cost = 6,
   loc_vars = function(self, info_queue, card)
     return { vars = { card.ability.extra.added_mult, count_common_jokers() * card.ability.extra.added_mult } }
@@ -1368,7 +1368,7 @@ SMODS.Joker {
   key = 'prognosticator',
   rarity = 2,
   atlas = 'Phanta',
-  pos = { x = 10, y = 10 },
+  pos = { x = 9, y = 10 },
   cost = 6,
   blueprint_compat = false,
   eternal_compat = true,
@@ -1397,7 +1397,7 @@ SMODS.Joker {
   key = 'calendar',
   rarity = 2,
   atlas = 'Phanta',
-  pos = { x = 11, y = 10 },
+  pos = { x = 10, y = 10 },
   cost = 6,
   blueprint_compat = false,
   eternal_compat = true,
@@ -1529,7 +1529,7 @@ SMODS.Joker {
   end,
   calculate = function(self, card, context)
     if context.discard and context.other_card and SMODS.has_enhancement(context.other_card, "m_stone") then
-      if #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit then
+      if count_consumables() < G.consumeables.config.card_limit then
         G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
         G.E_MANAGER:add_event(Event({
           func = function()
@@ -1564,7 +1564,7 @@ SMODS.Joker {
   perishable_compat = true,
   calculate = function(self, card, context)
     if context.joker_main then
-      if context.scoring_name == "phanta_junk" and #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit then
+      if context.scoring_name == "phanta_junk" and count_consumables() < G.consumeables.config.card_limit then
         G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
         G.E_MANAGER:add_event(Event({
           trigger = 'before',
@@ -1624,7 +1624,7 @@ SMODS.Joker {
 
     if context.setting_blind and not (context.blueprint_card or card).getting_sliced then
       local destructable_tarot = {}
-      for i = 1, #G.consumeables.cards do
+      for i = 1, count_consumables() do
         if G.consumeables.cards[i].ability.set == "Tarot" and not G.consumeables.cards[i].getting_sliced and not G.consumeables.cards[i].ability.eternal then
           destructable_tarot[#destructable_tarot + 1] = G.consumeables.cards[i]
         end
@@ -2099,7 +2099,7 @@ SMODS.Joker {
   eternal_compat = true,
   perishable_compat = true,
   calculate = function(self, card, context)
-    if context.selling_card and context.card.config.center.set == "Planet" and #G.consumeables.cards + G.GAME.consumeable_buffer <= G.consumeables.config.card_limit then
+    if context.selling_card and context.card.config.center.set == "Planet" and count_consumables() <= G.consumeables.config.card_limit then
       G.E_MANAGER:add_event(Event({
         delay = 0.3,
         blockable = false,
@@ -2277,6 +2277,191 @@ SMODS.Joker {
 }
 
 SMODS.Joker {
+  key = 'hill',
+  rarity = 1,
+  atlas = 'Phanta',
+  pos = { x = 7, y = 11 },
+  cost = 5,
+  loc_vars = function(self, info_queue, card)
+    info_queue[#info_queue + 1] = G.P_CENTERS.c_phanta_brick
+    return {}
+  end,
+  blueprint_compat = true,
+  eternal_compat = true,
+  perishable_compat = true,
+  calculate = function(self, card, context)
+    if context.setting_blind and not (context.blueprint_card or card).getting_sliced and count_consumables() < G.consumeables.config.card_limit then
+      G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
+      G.E_MANAGER:add_event(Event({
+        func = function()
+          G.E_MANAGER:add_event(Event({
+            func = function()
+              local new_card = create_card("phanta_CatanResource", G.consumables, nil, nil, nil, nil, "c_phanta_brick", 'hill')
+              new_card:add_to_deck()
+              G.consumeables:emplace(new_card)
+              G.GAME.consumeable_buffer = 0
+              new_card:juice_up(0.3, 0.5)
+              return true
+            end
+          }))
+          card_eval_status_text(context.blueprint_card or card, 'extra', nil, nil, nil,
+            { message = "+1 Brick", colour = G.C.PHANTA.Resource })
+          return true
+        end
+      }))
+    end
+  end
+}
+
+SMODS.Joker {
+  key = 'forest',
+  rarity = 1,
+  atlas = 'Phanta',
+  pos = { x = 8, y = 11 },
+  cost = 5,
+  loc_vars = function(self, info_queue, card)
+    info_queue[#info_queue + 1] = G.P_CENTERS.c_phanta_lumber
+    return {}
+  end,
+  blueprint_compat = true,
+  eternal_compat = true,
+  perishable_compat = true,
+  calculate = function(self, card, context)
+    if context.setting_blind and not (context.blueprint_card or card).getting_sliced and count_consumables() < G.consumeables.config.card_limit then
+      G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
+      G.E_MANAGER:add_event(Event({
+        func = function()
+          G.E_MANAGER:add_event(Event({
+            func = function()
+              local new_card = create_card("phanta_CatanResource", G.consumables, nil, nil, nil, nil, "c_phanta_lumber", 'forest')
+              new_card:add_to_deck()
+              G.consumeables:emplace(new_card)
+              G.GAME.consumeable_buffer = 0
+              new_card:juice_up(0.3, 0.5)
+              return true
+            end
+          }))
+          card_eval_status_text(context.blueprint_card or card, 'extra', nil, nil, nil,
+            { message = "+1 Lumber", colour = G.C.PHANTA.Resource })
+          return true
+        end
+      }))
+    end
+  end
+}
+
+SMODS.Joker {
+  key = 'pasture',
+  rarity = 1,
+  atlas = 'Phanta',
+  pos = { x = 9, y = 11 },
+  cost = 5,
+  loc_vars = function(self, info_queue, card)
+    info_queue[#info_queue + 1] = G.P_CENTERS.c_phanta_wool
+    return {}
+  end,
+  blueprint_compat = true,
+  eternal_compat = true,
+  perishable_compat = true,
+  calculate = function(self, card, context)
+    if context.setting_blind and not (context.blueprint_card or card).getting_sliced and count_consumables() < G.consumeables.config.card_limit then
+      G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
+      G.E_MANAGER:add_event(Event({
+        func = function()
+          G.E_MANAGER:add_event(Event({
+            func = function()
+              local new_card = create_card("phanta_CatanResource", G.consumables, nil, nil, nil, nil, "c_phanta_wool", 'pasture')
+              new_card:add_to_deck()
+              G.consumeables:emplace(new_card)
+              G.GAME.consumeable_buffer = 0
+              new_card:juice_up(0.3, 0.5)
+              return true
+            end
+          }))
+          card_eval_status_text(context.blueprint_card or card, 'extra', nil, nil, nil,
+            { message = "+1 Wool", colour = G.C.PHANTA.Resource })
+          return true
+        end
+      }))
+    end
+  end
+}
+
+SMODS.Joker {
+  key = 'field',
+  rarity = 1,
+  atlas = 'Phanta',
+  pos = { x = 10, y = 11 },
+  cost = 5,
+  loc_vars = function(self, info_queue, card)
+    info_queue[#info_queue + 1] = G.P_CENTERS.c_phanta_grain
+    return {}
+  end,
+  blueprint_compat = true,
+  eternal_compat = true,
+  perishable_compat = true,
+  calculate = function(self, card, context)
+    if context.setting_blind and not (context.blueprint_card or card).getting_sliced and count_consumables() < G.consumeables.config.card_limit then
+      G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
+      G.E_MANAGER:add_event(Event({
+        func = function()
+          G.E_MANAGER:add_event(Event({
+            func = function()
+              local new_card = create_card("phanta_CatanResource", G.consumables, nil, nil, nil, nil, "c_phanta_grain", 'field')
+              new_card:add_to_deck()
+              G.consumeables:emplace(new_card)
+              G.GAME.consumeable_buffer = 0
+              new_card:juice_up(0.3, 0.5)
+              return true
+            end
+          }))
+          card_eval_status_text(context.blueprint_card or card, 'extra', nil, nil, nil,
+            { message = "+1 Grain", colour = G.C.PHANTA.Resource })
+          return true
+        end
+      }))
+    end
+  end
+}
+
+SMODS.Joker {
+  key = 'mountain',
+  rarity = 1,
+  atlas = 'Phanta',
+  pos = { x = 11, y = 11 },
+  cost = 5,
+  loc_vars = function(self, info_queue, card)
+    info_queue[#info_queue + 1] = G.P_CENTERS.c_phanta_ore
+    return {}
+  end,
+  blueprint_compat = true,
+  eternal_compat = true,
+  perishable_compat = true,
+  calculate = function(self, card, context)
+    if context.setting_blind and not (context.blueprint_card or card).getting_sliced and count_consumables() < G.consumeables.config.card_limit then
+      G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
+      G.E_MANAGER:add_event(Event({
+        func = function()
+          G.E_MANAGER:add_event(Event({
+            func = function()
+              local new_card = create_card("phanta_CatanResource", G.consumables, nil, nil, nil, nil, "c_phanta_ore", 'mountain')
+              new_card:add_to_deck()
+              G.consumeables:emplace(new_card)
+              G.GAME.consumeable_buffer = 0
+              new_card:juice_up(0.3, 0.5)
+              return true
+            end
+          }))
+          card_eval_status_text(context.blueprint_card or card, 'extra', nil, nil, nil,
+            { message = "+1 Ore", colour = G.C.PHANTA.Resource })
+          return true
+        end
+      }))
+    end
+  end
+}
+
+SMODS.Joker {
   key = 'goldenfiddle',
   rarity = 2,
   atlas = 'Phanta',
@@ -2291,7 +2476,7 @@ SMODS.Joker {
   eternal_compat = true,
   perishable_compat = true,
   calculate = function(self, card, context)
-    if context.setting_blind and not (context.blueprint_card or self).getting_sliced and #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit then
+    if context.setting_blind and not (context.blueprint_card or self).getting_sliced and count_consumables() < G.consumeables.config.card_limit then
       G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
       G.E_MANAGER:add_event(Event({
         func = function()
@@ -2335,7 +2520,7 @@ SMODS.Joker {
   eternal_compat = true,
   perishable_compat = true,
   calculate = function(self, card, context)
-    if context.setting_blind and not (context.blueprint_card or self).getting_sliced and #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit then
+    if context.setting_blind and not (context.blueprint_card or self).getting_sliced and count_consumables() < G.consumeables.config.card_limit then
       G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
       G.E_MANAGER:add_event(Event({
         func = function()
@@ -2378,7 +2563,7 @@ SMODS.Joker {
   eternal_compat = true,
   perishable_compat = true,
   calculate = function(self, card, context)
-    if context.setting_blind and not (context.blueprint_card or self).getting_sliced and #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit then
+    if context.setting_blind and not (context.blueprint_card or self).getting_sliced and count_consumables() < G.consumeables.config.card_limit then
       G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
       G.E_MANAGER:add_event(Event({
         func = function()
@@ -2415,7 +2600,7 @@ SMODS.Joker {
   eternal_compat = true,
   perishable_compat = true,
   calculate = function(self, card, context)
-    if context.setting_blind and not (context.blueprint_card or self).getting_sliced and #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit then
+    if context.setting_blind and not (context.blueprint_card or self).getting_sliced and count_consumables() < G.consumeables.config.card_limit then
       G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
       G.E_MANAGER:add_event(Event({
         func = function()
@@ -2452,7 +2637,7 @@ SMODS.Joker {
   eternal_compat = true,
   perishable_compat = true,
   calculate = function(self, card, context)
-    if context.setting_blind and not (context.blueprint_card or self).getting_sliced and #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit then
+    if context.setting_blind and not (context.blueprint_card or self).getting_sliced and count_consumables() < G.consumeables.config.card_limit then
       G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
       G.E_MANAGER:add_event(Event({
         func = function()
@@ -2530,7 +2715,7 @@ SMODS.Joker {
   eternal_compat = true,
   perishable_compat = true,
   calculate = function(self, card, context)
-    if context.cardarea == G.jokers and context.before and G.GAME.current_round.hands_left == 0 and not (context.blueprint_card or card).getting_sliced and #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit then
+    if context.cardarea == G.jokers and context.before and G.GAME.current_round.hands_left == 0 and not (context.blueprint_card or card).getting_sliced and count_consumables() < G.consumeables.config.card_limit then
       G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
       G.E_MANAGER:add_event(Event({
         func = function()
@@ -2573,7 +2758,7 @@ SMODS.Joker {
   eternal_compat = true,
   perishable_compat = true,
   calculate = function(self, card, context)
-    if context.setting_blind and not (context.blueprint_card or card).getting_sliced and #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit then
+    if context.setting_blind and not (context.blueprint_card or card).getting_sliced and count_consumables() < G.consumeables.config.card_limit then
       G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
       G.E_MANAGER:add_event(Event({
         func = (function()
@@ -2615,7 +2800,7 @@ SMODS.Joker {
   eternal_compat = true,
   perishable_compat = true,
   calculate = function(self, card, context)
-    if context.joker_main and #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit then
+    if context.joker_main and count_consumables() < G.consumeables.config.card_limit then
       local aces = 0
       for i = 1, #context.scoring_hand do
         if context.scoring_hand[i]:get_id() == 14 then
@@ -2658,21 +2843,20 @@ SMODS.Joker {
   pos = { x = 6, y = 2 },
   cost = 6,
   loc_vars = function(self, info_queue, card)
-    info_queue[#info_queue + 1] = G.P_CENTERS.tag_voucher
     return { vars = { card.ability.extra.no_of_planets } }
   end,
   blueprint_compat = true,
   eternal_compat = true,
   perishable_compat = true,
   calculate = function(self, card, context)
-    if context.setting_blind and #G.consumeables.cards == 0 then
+    if context.setting_blind and count_consumables() == 0 then
       G.E_MANAGER:add_event(Event({
         func = function()
           card_eval_status_text(context.blueprint_card or card, 'extra', nil, nil, nil, { message = localize { type = 'variable', key = 'a_planets', vars = { card.ability.extra.no_of_planets } }, colour = G.C.Planet })
           play_sound("timpani")
 
           for i = 1, card.ability.extra.no_of_planets do
-            if #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit then
+            if count_consumables() < G.consumeables.config.card_limit then
               local new_card = create_card("Planet", G.consumables, nil, nil, nil, nil)
               new_card:add_to_deck()
               G.consumeables:emplace(new_card)
@@ -2710,7 +2894,7 @@ SMODS.Joker {
   eternal_compat = true,
   perishable_compat = true,
   calculate = function(self, card, context)
-    if context.joker_main and #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit then
+    if context.joker_main and count_consumables() < G.consumeables.config.card_limit then
       local contains_nonface = false
       for i = 1, #G.play.cards do
         if not G.play.cards[i]:is_face() then
@@ -2802,7 +2986,7 @@ SMODS.Joker {
   eternal_compat = true,
   perishable_compat = true,
   calculate = function(self, card, context)
-    if context.cardarea == G.jokers and context.before and not (context.blueprint_card or card).getting_sliced and #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit
+    if context.cardarea == G.jokers and context.before and not (context.blueprint_card or card).getting_sliced and count_consumables() < G.consumeables.config.card_limit
         and pseudorandom('conspiracist') < G.GAME.probabilities.normal / card.ability.extra.odds and next(context.poker_hands['Full House']) then
       G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
       G.E_MANAGER:add_event(Event({
@@ -2846,7 +3030,7 @@ SMODS.Joker {
           card_eval_status_text(context.blueprint_card or card, 'extra', nil, nil, nil, { message = localize { type = 'variable', key = 'a_tarots', vars = { card.ability.extra.no_of_tarots } }, colour = G.C.Tarot })
           play_sound("timpani")
           for i = 1, card.ability.extra.no_of_tarots do
-            if #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit then
+            if count_consumables() < G.consumeables.config.card_limit then
               local new_card = create_card("Tarot", G.consumables, nil, nil, nil, nil)
               new_card:add_to_deck()
               G.consumeables:emplace(new_card)
@@ -3057,7 +3241,7 @@ SMODS.Joker {
   config = { extra = { no_of_upgrades = 1 } },
   rarity = 2,
   atlas = 'Phanta',
-  pos = { x = 8, y = 10 },
+  pos = { x = 7, y = 10 },
   cost = 5,
   loc_vars = function(self, info_queue, card)
     return { vars = { card.ability.extra.no_of_upgrades, card.ability.extra.no_of_upgrades == 1 and "" or localize("phanta_plural") } }
@@ -3756,7 +3940,7 @@ SMODS.Joker {
       return { xmult = card.ability.extra.current_xmult }
     end
 
-    if context.end_of_round and not context.individual and not context.repetition and #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit then
+    if context.end_of_round and not context.individual and not context.repetition and count_consumables() < G.consumeables.config.card_limit then
       card.ability.extra.current_xmult = card.ability.extra.current_xmult - card.ability.extra.lost_xmult
       if card.ability.extra.current_xmult <= 1 then
         G.E_MANAGER:add_event(Event({
@@ -3808,7 +3992,7 @@ SMODS.Joker {
     return { vars = { (G.GAME.probabilities.normal or 1), card.ability.extra.odds } }
   end,
   calculate = function(self, card, context)
-    if context.buying_card and context.card.config.center.set == "Joker" and pseudorandom('spectretile') < G.GAME.probabilities.normal / card.ability.extra.odds and #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit then
+    if context.buying_card and context.card.config.center.set == "Joker" and pseudorandom('spectretile') < G.GAME.probabilities.normal / card.ability.extra.odds and count_consumables() < G.consumeables.config.card_limit then
       local _card = card
       G.E_MANAGER:add_event(Event({
         func = function()

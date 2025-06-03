@@ -7,7 +7,8 @@ SMODS.Atlas {
 
 G.C.PHANTA = {
   Zodiac = HEX("4E5779"),
-  ZodiacAlt = HEX("5998ff")
+  ZodiacAlt = HEX("5998ff"),
+  Resource = HEX("AB8B59")
 }
 
 G.C.PHANTA.MISC_COLOURS = {
@@ -115,6 +116,23 @@ function count_common_jokers()
   end
 end
 
+function count_consumables()
+  if G.consumeables.get_total_count then return G.consumeables:get_total_count()
+  else return #G.consumeables.cards + G.GAME.consumeable_buffer end
+end
+
+function find_consumable(key)
+  local found = {}
+  if G.consumeables then
+    for _, card in pairs(G.consumeables.cards) do
+      if card.config.center.key == key then
+        found[#found + 1] = card
+      end
+    end
+  end
+  return found
+end
+
 local ref1 = Card.start_dissolve
 function Card:start_dissolve()
   if self.config and self.config.center and self.config.center.phanta_shatters then
@@ -126,7 +144,7 @@ end
 
 local allFolders = { "none", "items" }
 
-local allFiles = { ["none"] = {}, ["items"] = { "Jokers1", "Misc", "Partners" } }
+local allFiles = { ["none"] = {}, ["items"] = { "Jokers1", "Misc", "Partners", "Catan" } }
 
 for i = 1, #allFolders do
   if allFolders[i] == "none" then
