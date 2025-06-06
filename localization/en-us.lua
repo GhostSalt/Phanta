@@ -395,6 +395,15 @@ return {
                     "{C:inactive}(Will give {C:mult}+#2#{C:inactive} Mult){}"
                 }
             },
+            j_phanta_a1z26 = {
+                name = "A1Z26",
+                text = {
+                    "Leftmost played",
+                    "and scored card",
+                    "gives {C:mult}+#1#{} Mult if",
+                    "it is an {C:attention}Ace{}"
+                }
+            },
             j_phanta_nonuniformday = {
                 name = "Non-Uniform Day",
                 text = {
@@ -417,7 +426,16 @@ return {
                 text = {
                     "Gains {C:mult}+#1#{} Mult when a",
                     "playing card is {C:red}destroyed{}",
-                    "{C:inactive}(Currently {C:mult}+#2#{C:inactive} Mult)"
+                    "{C:inactive}(Currently {C:mult}+#2#{C:inactive} Mult){}"
+                }
+            },
+            j_phanta_target = {
+                name = "Target",
+                text = {
+                    "Gains {C:mult}+#1#{} Mult when",
+                    "{C:attention}final hand{} of",
+                    "round is played",
+                    "{C:inactive}(Currently {C:mult}+#2#{C:inactive} Mult){}"
                 }
             },
             j_phanta_teastainedjoker = {
@@ -426,7 +444,7 @@ return {
                     "{C:green}#1# in #2#{} chance to gain",
                     "{C:mult}+#3#{} Mult for each {C:attention}Lucky{}",
                     "card held in hand",
-                    "{C:inactive}(Currently {C:mult}+#4#{C:inactive} Mult)"
+                    "{C:inactive}(Currently {C:mult}+#4#{C:inactive} Mult){}"
                 }
             },
             j_phanta_teabag = {
@@ -453,7 +471,7 @@ return {
                     "This Joker gains {C:money}$#1#{} when",
                     "using a consumable, {C:attention}cashout{}",
                     "when any {C:attention}Blind{} is skipped",
-                    "{C:inactive}(Currently {C:money}$#2#{C:inactive})"
+                    "{C:inactive}(Currently {C:money}$#2#{C:inactive}){}"
                 }
             },
             j_phanta_exitsign = {
@@ -469,6 +487,15 @@ return {
                 text = {
                     "Sets Chips",
                     "to {C:chips}#1#{}"
+                }
+            },
+            j_phanta_thenecronomicon = {
+                name = 'The Necronomicon',
+                text = {
+                    "Sets Chips to {C:chips}#1#{} if",
+                    "there are no {C:attention}6s{}",
+                    "in your full deck",
+                    "{C:inactive}(Currently #2#){}"
                 }
             },
             j_phanta_stitchintime = {
@@ -502,7 +529,7 @@ return {
                     "Gives {X:mult,C:white}X#1#{} Mult for",
                     "each {C:tarot}Tarot{} card in",
                     "your {C:attention}consumable{} area",
-                    "{C:inactive}(Currently {X:mult,C:white}X#2#{C:inactive} Mult)"
+                    "{C:inactive}(Currently {X:mult,C:white}X#2#{C:inactive} Mult){}"
                 }
             },
             j_phanta_html = {
@@ -565,6 +592,15 @@ return {
                 text = {
                     "{C:phanta_zodiac}Zodiac{} cards have",
                     "{C:attention}stronger{} abilities"
+                }
+            },
+            j_phanta_calendar = {
+                name = 'Calendar',
+                text = {
+                    "The {C:phanta_zodiac}Zodiac{} card",
+                    "corresponding to today's",
+                    "date (#1#) has a",
+                    "much stronger ability"
                 }
             },
             j_phanta_grimreaper = {
@@ -642,8 +678,9 @@ return {
                 name = 'Goo',
                 text = {
                     "On {C:attention}final hand{} of",
-                    "round, adds a {C:blue}Blue{} seal",
-                    "to the {C:attention}first{} scored card"
+                    "round, adds a",
+                    "{C:blue}Blue{} seal to the",
+                    "{C:attention}first{} scored card"
                 }
 			},
             j_phanta_web = {
@@ -661,7 +698,7 @@ return {
                     "Gains {C:mult}+#1#{} Mult if",
                     "played hand contains",
                     "{C:attention}#2#{} or fewer cards",
-                    "{C:inactive}(Currently {C:mult}+#3#{C:inactive} Mult)"
+                    "{C:inactive}(Currently {C:mult}+#3#{C:inactive} Mult){}"
                 }
             },
             j_phanta_blottedjoker = {
@@ -670,7 +707,7 @@ return {
                     "Gains {C:chips}+#1#{} Chips for each",
                     "played and scored {C:attention}Bonus{}",
                     "card, {C:attention}unenhances{} them",
-                    "{C:inactive}(Currently {C:chips}+#2#{C:inactive} Chips)"
+                    "{C:inactive}(Currently {C:chips}+#2#{C:inactive} Chips){}"
                 }
             },
             j_phanta_bloodpact = {
@@ -679,7 +716,7 @@ return {
                     "Gains {C:mult}+#1#{} Mult for each",
                     "played and scored {C:attention}Mult{}",
                     "card, {C:attention}unenhances{} them",
-                    "{C:inactive}(Currently {C:mult}+#2#{C:inactive} Mult)"
+                    "{C:inactive}(Currently {C:mult}+#2#{C:inactive} Mult){}"
                 }
             },
             j_phanta_tnetennba = {
@@ -688,7 +725,7 @@ return {
                     "Gains {C:mult}+#1#{} Mult if hand is",
                     "played while the cards held",
                     "in hand contain a {C:attention}Straight{}",
-                    "{C:inactive}(Currently {C:mult}+#2#{C:inactive} Mult)",
+                    "{C:inactive}(Currently {C:mult}+#2#{C:inactive} Mult){}",
                     "{C:inactive,s:0.75}(Doesn't currently support{}",
                     "{C:inactive,s:0.75}Four Fingers or Shortcut){}"
                 }
@@ -716,7 +753,7 @@ return {
                     "If played hand contains",
                     "a {C:attention}Straight{}, gains {C:mult}+#1#{} Mult",
                     "for each unique scoring {C:attention}suit{}",
-                    "{C:inactive}(Currently {C:mult}+#2#{C:inactive} Mult)",
+                    "{C:inactive}(Currently {C:mult}+#2#{C:inactive} Mult){}",
                     "{C:inactive,s:0.75}(Doesn't currently support{}",
                     "{C:inactive,s:0.75}custom suits){}"
                 }
@@ -727,7 +764,7 @@ return {
                     "Gains {C:mult}+#1#{} Mult per hand",
                     "played that is not your",
                     "most played {C:attention}poker hand{}",
-                    "{C:inactive}(Currently {C:mult}+#2#{C:inactive} Mult)"
+                    "{C:inactive}(Currently {C:mult}+#2#{C:inactive} Mult){}"
                 }
             },
             j_phanta_crescent = {
@@ -760,7 +797,7 @@ return {
                     "Gains {C:mult}+#1#{} Mult if hand",
                     "is played while",
                     "holding any {C:tarot}Tarot{} cards",
-                    "{C:inactive}(Currently {C:mult}+#2#{C:inactive} Mult)"
+                    "{C:inactive}(Currently {C:mult}+#2#{C:inactive} Mult){}"
                 }
             },
             j_phanta_monetjoker = {
@@ -1003,7 +1040,7 @@ return {
                 text = {
                     "Gains {C:white,X:mult}X#1#{} Mult per",
                     "discarded {C:attention}Flush{}",
-                    "{C:inactive}(Currently {C:white,X:mult}X#2#{C:inactive} Mult)"
+                    "{C:inactive}(Currently {C:white,X:mult}X#2#{C:inactive} Mult){}"
                 }
             },
             j_phanta_thespear = {
@@ -1038,6 +1075,14 @@ return {
                     "{C:diamonds}Diamond{} cards, destroys one",
                     "and gains {C:mult}+#1#{} Mult",
                     "{C:inactive}(Currently {C:mult}+#2#{C:inactive} Mult){}"
+                }
+            },
+            j_phanta_corkboard = {
+                name = 'Corkboard',
+                text = {
+                    "If played hand contains",
+                    "a {C:attention}Straight{}, destroys {C:attention}1{}",
+                    "random card held in hand"
                 }
             },
             j_phanta_evidence = {
@@ -1133,7 +1178,7 @@ return {
                 text = {
                     "Gains {X:mult,C:white}X#1#{} Mult when a",
                     "{C:attention}consumable{} card is {C:attention}sold{}",
-                    "{C:inactive}(Currently {X:mult,C:white}X#2#{C:inactive} Mult)"
+                    "{C:inactive}(Currently {X:mult,C:white}X#2#{C:inactive} Mult){}"
                 }
             },
             j_phanta_dimere = {
@@ -1301,7 +1346,7 @@ return {
 				},
 			}
         },
-        Partner={
+        Partner = {
             pnr_phanta_ghost={
                 name = "Spooky",
                 text = {
@@ -1314,6 +1359,16 @@ return {
                     "to win on {C:attention}Gold{}",
                     "{C:attention}Stake{} difficulty",
                 },
+            }
+        },
+        BakeryCharm = {
+            BakeryCharm_phanta_silo = {
+                name = 'Silo',
+                text = {
+                    "When {C:attention}Blind{} is selected,",
+                    "creates a random",
+                    "{C:phanta_resource}Resource{} card"
+                }
             }
         },
         Planet = {
@@ -1657,6 +1712,8 @@ return {
             phanta_copper_grate_exposed = "Exposed",
             phanta_copper_grate_weathered = "Weathered",
             phanta_copper_grate_oxidised = "Oxidised",
+            phanta_active = "active",
+            phanta_inactive = "inactive",
             b_phanta_zodiac_cards = "Zodiac Cards",
             k_phanta_zodiac = "Zodiac",
             k_phanta_zodiac_pack = "Zodiac Pack",

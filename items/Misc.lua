@@ -917,10 +917,11 @@ SMODS.Consumable {
   pos = { x = 0, y = 0 },
   atlas = "PhantaZodiacs",
   loc_vars = function(self, info_queue, card)
-    return { vars = { count_prognosticators() > 0 and "" or localize("phanta_aries_second") } }
+    return { vars = { count_prognosticators(card) > 0 and "" or localize("phanta_aries_second") } }
   end,
+  month_range = { first = { month = 3, day = 21 }, last = { month = 4, day = 19 } },
   calculate = function(self, card, context)
-    if context.before and (count_prognosticators() > 0 or G.GAME.current_round.hands_played == 1) and count_consumables() < G.consumeables.config.card_limit then -- Progs allow Tarots to be made on all hands. (Unstackable)
+    if context.before and (count_prognosticators(card) > 0 or G.GAME.current_round.hands_played == 1) and count_consumables() < G.consumeables.config.card_limit then -- Progs allow Tarots to be made on all hands. (Unstackable)
       G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
       G.E_MANAGER:add_event(Event({
         trigger = 'before',
@@ -947,11 +948,12 @@ SMODS.Consumable {
   pos = { x = 1, y = 0 },
   atlas = "PhantaZodiacs",
   loc_vars = function(self, info_queue, card)
-    return { vars = { (count_prognosticators() * 2) + 1, count_prognosticators() > 0 and localize("phanta_plural") or "" } }
+    return { vars = { (count_prognosticators(card) * 2) + 1, count_prognosticators(card) > 0 and localize("phanta_plural") or "" } }
   end,
+  month_range = { first = { month = 4, day = 20 }, last = { month = 5, day = 20 } },
   calculate = function(self, card, context)
     if context.repetition and context.cardarea == G.play and context.other_card == context.scoring_hand[1] then
-      return { repetitions = count_prognosticators() > 0 and (count_prognosticators() * 2) + 1 } -- Progs add 2 retriggers each.
+      return { repetitions = (count_prognosticators(card) * 2) + 1 } -- Progs add 2 retriggers each.
     end
   end
 }
@@ -963,11 +965,12 @@ SMODS.Consumable {
   config = { extra = { money = 4 } },
   atlas = "PhantaZodiacs",
   loc_vars = function(self, info_queue, card)
-    return { vars = { card.ability.extra.money + (count_prognosticators() * 2) } }
+    return { vars = { card.ability.extra.money + (count_prognosticators(card) * 2) } }
   end,
+  month_range = { first = { month = 5, day = 21 }, last = { month = 6, day = 21 } },
   calculate = function(self, card, context)
     if context.before and (next(context.poker_hands['Two Pair']) or next(context.poker_hands['Full House'])) then
-      return { dollars = card.ability.extra.money + (count_prognosticators() * 2) } -- Progs add $2 each.
+      return { dollars = card.ability.extra.money + (count_prognosticators(card) * 2) } -- Progs add $2 each.
     end
   end
 }
@@ -979,11 +982,12 @@ SMODS.Consumable {
   config = { extra = { chips = 20 } },
   atlas = "PhantaZodiacs",
   loc_vars = function(self, info_queue, card)
-    return { vars = { card.ability.extra.chips + (count_prognosticators() * 30) } }
+    return { vars = { card.ability.extra.chips + (count_prognosticators(card) * 30) } }
   end,
+  month_range = { first = { month = 6, day = 22 }, last = { month = 7, day = 22 } },
   calculate = function(self, card, context)
     if context.individual and context.cardarea == G.play and context.other_card:is_suit("Clubs") then
-      return { chips = card.ability.extra.chips + (count_prognosticators() * 30) } -- Progs add 30 Chips. (hardcoded so Cryptid doesn't make this nonsensical)
+      return { chips = card.ability.extra.chips + (count_prognosticators(card) * 30) } -- Progs add 30 Chips. (hardcoded so Cryptid doesn't make this nonsensical)
     end
   end
 }
@@ -995,11 +999,12 @@ SMODS.Consumable {
   config = { extra = { mult = 2 } },
   atlas = "PhantaZodiacs",
   loc_vars = function(self, info_queue, card)
-    return { vars = { card.ability.extra.mult + (count_prognosticators() * 4) } }
+    return { vars = { card.ability.extra.mult + (count_prognosticators(card) * 4) } }
   end,
+  month_range = { first = { month = 7, day = 23 }, last = { month = 8, day = 22 } },
   calculate = function(self, card, context)
     if context.individual and context.cardarea == G.play and context.other_card:is_suit("Hearts") then
-      return { mult = card.ability.extra.mult + (count_prognosticators() * 4) } -- Progs add 4 Mult.
+      return { mult = card.ability.extra.mult + (count_prognosticators(card) * 4) } -- Progs add 4 Mult.
     end
   end
 }
@@ -1012,15 +1017,16 @@ SMODS.Consumable {
   atlas = "PhantaZodiacs",
   loc_vars = function(self, info_queue, card)
     return {
-      vars = { count_prognosticators() > 0 and localize("phanta_virgo_at_most") or "",
-        card.ability.extra.hands + count_prognosticators(),
-        count_prognosticators() > 0 and localize("phanta_plural") or "",
-        count_prognosticators() == 0 and localize("phanta_virgo_creates_a") or "",
-        count_prognosticators() > 0 and localize("phanta_virgo_creates_b") or "" }
+      vars = { count_prognosticators(card) > 0 and localize("phanta_virgo_at_most") or "",
+        card.ability.extra.hands + count_prognosticators(card),
+        count_prognosticators(card) > 0 and localize("phanta_plural") or "",
+        count_prognosticators(card) == 0 and localize("phanta_virgo_creates_a") or "",
+        count_prognosticators(card) > 0 and localize("phanta_virgo_creates_b") or "" }
     }
   end,
+  month_range = { first = { month = 8, day = 23 }, last = { month = 9, day = 22 } },
   calculate = function(self, card, context)
-    if context.end_of_round and not context.individual and not context.repetition and G.GAME.current_round.hands_played <= card.ability.extra.hands + count_prognosticators() + 1 then -- Prog makes Virgo easier to proc.
+    if context.end_of_round and not context.individual and not context.repetition and G.GAME.current_round.hands_played <= card.ability.extra.hands + count_prognosticators(card) + 1 then -- Prog makes Virgo easier to proc.
       G.E_MANAGER:add_event(Event({
         func = function()
           add_tag(Tag('tag_standard'))
@@ -1042,11 +1048,12 @@ SMODS.Consumable {
   config = { extra = { xmult = 1.1 } },
   atlas = "PhantaZodiacs",
   loc_vars = function(self, info_queue, card)
-    return { vars = { card.ability.extra.xmult + (count_prognosticators() * 0.2) } }
+    return { vars = { card.ability.extra.xmult + (count_prognosticators(card) * 0.2) } }
   end,
+  month_range = { first = { month = 9, day = 23 }, last = { month = 10, day = 23 } },
   calculate = function(self, card, context)
     if context.individual and context.cardarea == G.play and context.other_card:is_suit("Spades") then
-      return { xmult = card.ability.extra.xmult + (count_prognosticators() * 0.2) } -- Prog adds X0.2 Mult.
+      return { xmult = card.ability.extra.xmult + (count_prognosticators(card) * 0.2) } -- Prog adds X0.2 Mult.
     end
   end
 }
@@ -1058,10 +1065,11 @@ SMODS.Consumable {
   atlas = "PhantaZodiacs",
   loc_vars = function(self, info_queue, card)
     return {
-      vars = { count_prognosticators() > 0 and localize("phanta_scorpio_extra_a") or "",
-        count_prognosticators() > 0 and localize("phanta_scorpio_extra_b") or "" }
+      vars = { count_prognosticators(card) > 0 and localize("phanta_scorpio_extra_a") or "",
+        count_prognosticators(card) > 0 and localize("phanta_scorpio_extra_b") or "" }
     }
   end,
+  month_range = { first = { month = 10, day = 24 }, last = { month = 11, day = 21 } },
   calculate = function(self, card, context)
     if context.individual and context.cardarea == G.play and context.other_card:is_suit("Diamonds") and count_consumables() < G.consumeables.config.card_limit then
       G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
@@ -1076,7 +1084,7 @@ SMODS.Consumable {
             end
           end
           local card = create_card('Planet', G.consumeables, nil, nil, nil, nil,
-            count_prognosticators() > 0 and planet or nil, "scorpio") -- Prog makes the created Planets specific to the played hand.
+            count_prognosticators(card) > 0 and planet or nil, "scorpio") -- Prog makes the created Planets specific to the played hand.
           card:add_to_deck()
           G.consumeables:emplace(card)
           G.GAME.consumeable_buffer = 0
@@ -1098,25 +1106,26 @@ SMODS.Consumable {
   config = { extra = { added_discards = 1 } },
   atlas = "PhantaZodiacs",
   loc_vars = function(self, info_queue, card)
-    return { vars = { card.ability.extra.added_discards + count_prognosticators(), count_prognosticators() > 0 and localize("phanta_plural") or "" } }
+    return { vars = { card.ability.extra.added_discards + count_prognosticators(card), count_prognosticators(card) > 0 and localize("phanta_plural") or "" } }
   end,
+  month_range = { first = { month = 11, day = 21 }, last = { month = 12, day = 20 } },
   add_to_deck = function(self, card, from_debuff)
     G.GAME.round_resets.discards = G.GAME.round_resets.discards + card.ability.extra.added_discards +
-        count_prognosticators() -- Prog adds 1 discard.
-    ease_discard(card.ability.extra.added_discards + count_prognosticators())
+        count_prognosticators(card) -- Prog adds 1 discard.
+    ease_discard(card.ability.extra.added_discards + count_prognosticators(card))
   end,
   remove_from_deck = function(self, card, from_debuff)
     G.GAME.round_resets.discards = G.GAME.round_resets.discards - card.ability.extra.added_discards -
-        count_prognosticators()
-    ease_discard(-(card.ability.extra.added_discards + count_prognosticators()))
+        count_prognosticators(card)
+    ease_discard(-(card.ability.extra.added_discards + count_prognosticators(card)))
   end,
-  add_prog = function(self)
-    G.GAME.round_resets.discards = G.GAME.round_resets.discards + 1
-    ease_discard(1)
+  add_progs = function(self, count)
+    G.GAME.round_resets.discards = G.GAME.round_resets.discards + (count * card.ability.extra.added_discards)
+    ease_discard(count * card.ability.extra.added_discards)
   end,
-  remove_prog = function(self)
-    G.GAME.round_resets.discards = G.GAME.round_resets.discards - 1
-    ease_discard(-1)
+  remove_progs = function(self, count)
+    G.GAME.round_resets.discards = G.GAME.round_resets.discards - (count * card.ability.extra.added_discards)
+    ease_discard(-(count * card.ability.extra.added_discards))
   end
 }
 
@@ -1127,10 +1136,11 @@ SMODS.Consumable {
   config = { extra = { money = 2 } },
   atlas = "PhantaZodiacs",
   loc_vars = function(self, info_queue, card)
-    return { vars = { card.ability.extra.money + (count_prognosticators() * 2) } }
+    return { vars = { card.ability.extra.money + (count_prognosticators(card) * 2) } }
   end,
+  month_range = { first = { month = 12, day = 22 }, last = { month = 1, day = 19 } },
   calculate = function(self, card, context)
-    if context.reroll_shop then return { dollars = card.ability.extra.money + (count_prognosticators() * 2) } end -- Prog adds $2 to each reroll reward.
+    if context.reroll_shop then return { dollars = card.ability.extra.money + (count_prognosticators(card) * 2) } end -- Prog adds $2 to each reroll reward.
   end
 }
 
@@ -1141,23 +1151,24 @@ SMODS.Consumable {
   config = { extra = { added_hands = 1 } },
   atlas = "PhantaZodiacs",
   loc_vars = function(self, info_queue, card)
-    return { vars = { card.ability.extra.added_hands + count_prognosticators(), count_prognosticators() > 0 and localize("phanta_plural") or "" } }
+    return { vars = { card.ability.extra.added_hands + count_prognosticators(card), count_prognosticators(card) > 0 and localize("phanta_plural") or "" } }
   end,
+  month_range = { first = { month = 1, day = 20 }, last = { month = 2, day = 18 } },
   add_to_deck = function(self, card, from_debuff)
-    G.GAME.round_resets.hands = G.GAME.round_resets.hands + card.ability.extra.added_hands + count_prognosticators()
-    ease_hands_played(card.ability.extra.added_hands + count_prognosticators())
+    G.GAME.round_resets.hands = G.GAME.round_resets.hands + card.ability.extra.added_hands + count_prognosticators(card)
+    ease_hands_played(card.ability.extra.added_hands + count_prognosticators(card))
   end,
   remove_from_deck = function(self, card, from_debuff)
-    G.GAME.round_resets.hands = G.GAME.round_resets.hands - card.ability.extra.added_hands - count_prognosticators()
-    ease_hands_played(-(card.ability.extra.added_hands + count_prognosticators()))
+    G.GAME.round_resets.hands = G.GAME.round_resets.hands - card.ability.extra.added_hands - count_prognosticators(card)
+    ease_hands_played(-(card.ability.extra.added_hands + count_prognosticators(card)))
   end,
-  add_prog = function(self)
-    G.GAME.round_resets.hands = G.GAME.round_resets.hands + 1
-    ease_hands_played(1)
+  add_progs = function(self, count)
+    G.GAME.round_resets.hands = G.GAME.round_resets.hands + (count * card.ability.extra.added_hands)
+    ease_hands_played(count * card.ability.extra.added_hands)
   end,
-  remove_prog = function(self)
-    G.GAME.round_resets.hands = G.GAME.round_resets.hands - 1
-    ease_hands_played(-1)
+  remove_progs = function(self, count)
+    G.GAME.round_resets.hands = G.GAME.round_resets.hands - (count * card.ability.extra.added_hands)
+    ease_hands_played(-(count * card.ability.extra.added_hands))
   end
 }
 
@@ -1168,12 +1179,13 @@ SMODS.Consumable {
   config = { extra = { added_value = 5 } },
   atlas = "PhantaZodiacs",
   loc_vars = function(self, info_queue, card)
-    return { vars = { card.ability.extra.added_value + (count_prognosticators() * 3) } }
+    return { vars = { card.ability.extra.added_value + (count_prognosticators(card) * 3) } }
   end,
+  month_range = { first = { month = 2, day = 19 }, last = { month = 3, day = 20 } },
   calculate = function(self, card, context)
     if context.skipping_booster then
       card.ability.extra_value = card.ability.extra_value + card.ability.extra.added_value +
-          (count_prognosticators() * 3) -- Prog adds $3 extra sell value.
+          (count_prognosticators(card) * 3) -- Prog adds $3 extra sell value.
       card:set_cost()
       return {
         message = localize('k_val_up'),
@@ -1190,11 +1202,11 @@ SMODS.Consumable {
   config = { extra = { xmult = 2 } },
   atlas = "PhantaZodiacs",
   loc_vars = function(self, info_queue, card)
-    return { vars = { card.ability.extra.xmult + (count_prognosticators() * 2) } }
+    return { vars = { card.ability.extra.xmult + (count_prognosticators(card) * 2) } }
   end,
   calculate = function(self, card, context)
     if context.individual and context.cardarea == "unscored" and context.other_card:is_suit("Clubs") then
-      return { xmult = card.ability.extra.xmult + (count_prognosticators() * 2) } -- Prog adds X2 Mult.
+      return { xmult = card.ability.extra.xmult + (count_prognosticators(card) * 2) } -- Prog adds X2 Mult.
     end
   end,
 

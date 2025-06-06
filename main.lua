@@ -75,9 +75,10 @@ function get_lowest(hand)
   if #hand > 0 then return { { lowest } } else return {} end
 end
 
-function count_prognosticators()
-  return #SMODS.find_card("j_phanta_prognosticator") +
-  (G.GAME and G.GAME.selected_back and G.GAME.selected_back and G.GAME.selected_back.effect and G.GAME.selected_back.effect.center.key == "b_phanta_todayandtomorrow" and 1 or 0)
+function count_prognosticators(card)
+  return #SMODS.find_card("j_phanta_prognosticator") + 
+      ((is_current_month(card) and 2 or 0) * #SMODS.find_card("j_phanta_calendar")) +
+      (G.GAME and G.GAME.selected_back and G.GAME.selected_back and G.GAME.selected_back.effect and G.GAME.selected_back.effect.center.key == "b_phanta_todayandtomorrow" and 1 or 0)
 end
 
 function count_lucky_cards()
@@ -117,8 +118,11 @@ function count_common_jokers()
 end
 
 function count_consumables()
-  if G.consumeables.get_total_count then return G.consumeables:get_total_count()
-  else return #G.consumeables.cards + G.GAME.consumeable_buffer end
+  if G.consumeables.get_total_count then
+    return G.consumeables:get_total_count()
+  else
+    return #G.consumeables.cards + G.GAME.consumeable_buffer
+  end
 end
 
 function find_consumable(key)
@@ -133,6 +137,53 @@ function find_consumable(key)
   return found
 end
 
+function count_rank(rank)
+  local cards = {}
+  if G.deck then
+    for i = 1, #G.deck.cards do
+      if not SMODS.has_no_rank(G.deck.cards[i]) and G.deck.cards[i]:get_id() == rank then
+        cards[#cards + 1] = G.deck.cards[i]
+      end
+    end
+  end
+  return cards
+end
+
+function is_current_month(card)
+  if not card or not card.config or not card.config.center or not card.config.center.month_range then return false end
+
+  local card_range = card.config.center.month_range
+  if card_range.first.month < 0 or card_range.first.month > 12 or card_range.first.day < 0 or card_range.first.day > 31 then return false end
+  if card_range.last.month < 0 or card_range.last.month > 12 or card_range.last.day < 0 or card_range.last.day > 31 then return false end
+  -- Technically, it's possible to have dates like the 31st of February be valid, but those should work fine anyway.
+
+  local t = os.date("*t", os.time())
+
+  -- Commenting because I need to think aloud, to grasp this. Also, hi!
+  -- If the range doesn't wrap around (f <= l), then we can check if the date is <= l, AND >= f.
+  -- If the range does wrap around (f > l), then we can check if the date is <= l, OR >= f.
+  -- This works regardless of loopover. Examples:
+
+  --  . . F - - a - - L . b .
+  --  a comes after F, and before L, so it is in the range.
+  --  b comes after F, but does not come before L, so it is not in the range.
+
+  --  - a - L . . c . . F b -
+  --  a does not come after F, but it does come before L, so it is in the range.
+  --  b comes after F (and does not come before L, but irrelevant), so it is in the range.
+  --  c does not come after F, and does not come before L, so it is not in the range.
+
+  if orderify_date(card_range.first) <= orderify_date(card_range.last) then
+    return orderify_date(t) >= orderify_date(card_range.first) and orderify_date(t) <= orderify_date(card_range.last)
+  else
+    return orderify_date(t) >= orderify_date(card_range.first) or orderify_date(t) <= orderify_date(card_range.last)
+  end
+end
+
+function orderify_date(date) -- Used above, for convenience.
+  return (date.month * 100) + date.day
+end
+
 local ref1 = Card.start_dissolve
 function Card:start_dissolve()
   if self.config and self.config.center and self.config.center.phanta_shatters then
@@ -144,7 +195,7 @@ end
 
 local allFolders = { "none", "items" }
 
-local allFiles = { ["none"] = {}, ["items"] = { "Jokers1", "Misc", "Partners", "Catan" } }
+local allFiles = { ["none"] = {}, ["items"] = { "Jokers1", "Misc", "Catan" } }
 
 for i = 1, #allFolders do
   if allFolders[i] == "none" then
@@ -157,3 +208,6 @@ for i = 1, #allFolders do
     end
   end
 end
+
+if next(SMODS.find_mod('Bakery')) then assert(SMODS.load_file("items/Charm.lua"))() end
+if next(SMODS.find_mod('partner')) then assert(SMODS.load_file("items/Partners.lua"))() end

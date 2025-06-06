@@ -630,7 +630,11 @@ SMODS.Joker {
     if context.setting_blind and card.ability.extra.current_hands > 0 then
       ease_hands_played(card.ability.extra.current_hands)
       if not context.blueprint then card.ability.extra.current_hands = 0 end
-      return { message = card.ability.extra.current_hands == 1 and localize("a_hand") or localize { type = 'variable', key = 'a_hands', vars = { card.ability.extra.current_hands } }, colour = G.C.BLUE }
+      return {
+        message = card.ability.extra.current_hands == 1 and localize("a_hand") or
+            localize { type = 'variable', key = 'a_hands', vars = { card.ability.extra.current_hands } },
+        colour = G.C.BLUE
+      }
     end
   end
 }
@@ -659,7 +663,12 @@ SMODS.Joker {
     end
 
     if context.individual and context.cardarea == G.play then
-      if context.other_card == card.ability.extra.queens[1] or context.other_card == card.ability.extra.queens[2] then return { xmult = card.ability.extra.given_xmult } end
+      if context.other_card == card.ability.extra.queens[1] or context.other_card == card.ability.extra.queens[2] then
+        return {
+          xmult =
+              card.ability.extra.given_xmult
+        }
+      end
     end
   end
 }
@@ -845,7 +854,12 @@ SMODS.Joker {
   eternal_compat = true,
   perishable_compat = true,
   calculate = function(self, card, context)
-    if context.cardarea == G.play and context.individual and context.other_card == context.scoring_hand[1] and context.other_card:get_id() == 14 then return { mult = card.ability.extra.mult } end
+    if context.cardarea == G.play and context.individual and context.other_card == context.scoring_hand[1] and context.other_card:get_id() == 14 then
+      return {
+        mult =
+            card.ability.extra.mult
+      }
+    end
   end
 }
 
@@ -933,6 +947,29 @@ SMODS.Joker {
     if context.remove_playing_cards and not context.blueprint then
       card.ability.extra.current_mult = card.ability.extra.current_mult +
           (#context.removed * card.ability.extra.added_mult)
+      return { message = localize("k_upgrade_ex"), color = G.C.FILTER, card = card }
+    end
+  end
+}
+
+SMODS.Joker {
+  key = 'target',
+  config = { extra = { added_mult = 10, current_mult = 0 } },
+  loc_vars = function(self, info_queue, card)
+    return { vars = { card.ability.extra.added_mult, card.ability.extra.current_mult } }
+  end,
+  rarity = 2,
+  atlas = 'Phanta',
+  pos = { x = 7, y = 7 },
+  cost = 6,
+  blueprint_compat = true,
+  eternal_compat = true,
+  perishable_compat = false,
+  calculate = function(self, card, context)
+    if context.joker_main and card.ability.extra.current_mult > 0 then return { mult = card.ability.extra.current_mult } end
+
+    if context.cardarea == G.jokers and context.before and G.GAME.current_round.hands_left == 0 and not context.blueprint then
+      card.ability.extra.current_mult = card.ability.extra.current_mult + card.ability.extra.added_mult
       return { message = localize("k_upgrade_ex"), color = G.C.FILTER, card = card }
     end
   end
@@ -1103,6 +1140,28 @@ SMODS.Joker {
   end,
   calculate = function(self, card, context)
     if context.joker_main then
+      hand_chips = mod_chips(card.ability.extra.chips)
+      update_hand_text({ delay = 0 }, { chips = hand_chips })
+      return { message = localize("phanta_chips_equals") .. card.ability.extra.chips, colour = G.C.CHIPS, card = card }
+    end
+  end
+}
+
+SMODS.Joker {
+  key = 'thenecronomicon',
+  config = { extra = { chips = 666 } },
+  rarity = 3,
+  atlas = 'Phanta',
+  pos = { x = 9, y = 8 },
+  cost = 8,
+  blueprint_compat = true,
+  eternal_compat = true,
+  perishable_compat = true,
+  loc_vars = function(self, info_queue, card)
+    return { vars = { card.ability.extra.chips, #count_rank(6) == 0 and localize("phanta_active") or localize("phanta_inactive") } }
+  end,
+  calculate = function(self, card, context)
+    if context.joker_main and #count_rank(6) == 0 then
       hand_chips = mod_chips(card.ability.extra.chips)
       update_hand_text({ delay = 0 }, { chips = hand_chips })
       return { message = localize("phanta_chips_equals") .. card.ability.extra.chips, colour = G.C.CHIPS, card = card }
@@ -1376,8 +1435,8 @@ SMODS.Joker {
   add_to_deck = function(self, card, from_debuff)
     if G.consumeables then
       for _, card in pairs(G.consumeables.cards) do
-        if card.ability.set == "phanta_Zodiac" and card.config.center.add_prog then
-          card.config.center:add_prog()
+        if card.ability.set == "phanta_Zodiac" and card.config.center.add_progs then
+          card.config.center:add_progs()
         end
       end
     end
@@ -1385,14 +1444,14 @@ SMODS.Joker {
   remove_from_deck = function(self, card, from_debuff)
     if G.consumeables then
       for _, card in pairs(G.consumeables.cards) do
-        if card.ability.set == "phanta_Zodiac" and card.config.center.remove_prog then
-          card.config.center:remove_prog()
+        if card.ability.set == "phanta_Zodiac" and card.config.center.remove_progs then
+          card.config.center:remove_progs()
         end
       end
     end
-  end,
+  end
 }
---[[
+
 SMODS.Joker {
   key = 'calendar',
   rarity = 2,
@@ -1405,8 +1464,8 @@ SMODS.Joker {
   add_to_deck = function(self, card, from_debuff)
     if G.consumeables then
       for _, card in pairs(G.consumeables.cards) do
-        if card.ability.set == "phanta_Zodiac" and card.config.center.add_prog then
-          card.config.center:add_prog()
+        if card.ability.set == "phanta_Zodiac" and card.config.center.add_progs and is_current_month(card) then
+          card.config.center:add_progs(2)
         end
       end
     end
@@ -1414,14 +1473,14 @@ SMODS.Joker {
   remove_from_deck = function(self, card, from_debuff)
     if G.consumeables then
       for _, card in pairs(G.consumeables.cards) do
-        if card.ability.set == "phanta_Zodiac" and card.config.center.remove_prog then
-          card.config.center:remove_prog()
+        if card.ability.set == "phanta_Zodiac" and card.config.center.remove_progs and is_current_month(card) then
+          card.config.center:remove_progs(2)
         end
       end
     end
-  end,
+  end
 }
-]]--
+
 SMODS.Joker {
   key = 'grimreaper',
   rarity = 2,
@@ -1663,7 +1722,7 @@ SMODS.Joker {
   pos = { x = 1, y = 9 },
   cost = 7,
   loc_vars = function(self, info_queue, card)
-    info_queue[#info_queue + 1] = G.P_CENTERS.blue_seal
+    info_queue[#info_queue + 1] = G.P_CENTERS.s_blue_seal
     return {}
   end,
   blueprint_compat = false,
@@ -2296,7 +2355,8 @@ SMODS.Joker {
         func = function()
           G.E_MANAGER:add_event(Event({
             func = function()
-              local new_card = create_card("phanta_CatanResource", G.consumables, nil, nil, nil, nil, "c_phanta_brick", 'hill')
+              local new_card = create_card("phanta_CatanResource", G.consumables, nil, nil, nil, nil, "c_phanta_brick",
+                'hill')
               new_card:add_to_deck()
               G.consumeables:emplace(new_card)
               G.GAME.consumeable_buffer = 0
@@ -2333,7 +2393,8 @@ SMODS.Joker {
         func = function()
           G.E_MANAGER:add_event(Event({
             func = function()
-              local new_card = create_card("phanta_CatanResource", G.consumables, nil, nil, nil, nil, "c_phanta_lumber", 'forest')
+              local new_card = create_card("phanta_CatanResource", G.consumables, nil, nil, nil, nil, "c_phanta_lumber",
+                'forest')
               new_card:add_to_deck()
               G.consumeables:emplace(new_card)
               G.GAME.consumeable_buffer = 0
@@ -2370,7 +2431,8 @@ SMODS.Joker {
         func = function()
           G.E_MANAGER:add_event(Event({
             func = function()
-              local new_card = create_card("phanta_CatanResource", G.consumables, nil, nil, nil, nil, "c_phanta_wool", 'pasture')
+              local new_card = create_card("phanta_CatanResource", G.consumables, nil, nil, nil, nil, "c_phanta_wool",
+                'pasture')
               new_card:add_to_deck()
               G.consumeables:emplace(new_card)
               G.GAME.consumeable_buffer = 0
@@ -2407,7 +2469,8 @@ SMODS.Joker {
         func = function()
           G.E_MANAGER:add_event(Event({
             func = function()
-              local new_card = create_card("phanta_CatanResource", G.consumables, nil, nil, nil, nil, "c_phanta_grain", 'field')
+              local new_card = create_card("phanta_CatanResource", G.consumables, nil, nil, nil, nil, "c_phanta_grain",
+                'field')
               new_card:add_to_deck()
               G.consumeables:emplace(new_card)
               G.GAME.consumeable_buffer = 0
@@ -2444,7 +2507,8 @@ SMODS.Joker {
         func = function()
           G.E_MANAGER:add_event(Event({
             func = function()
-              local new_card = create_card("phanta_CatanResource", G.consumables, nil, nil, nil, nil, "c_phanta_ore", 'mountain')
+              local new_card = create_card("phanta_CatanResource", G.consumables, nil, nil, nil, nil, "c_phanta_ore",
+                'mountain')
               new_card:add_to_deck()
               G.consumeables:emplace(new_card)
               G.GAME.consumeable_buffer = 0
@@ -2852,7 +2916,12 @@ SMODS.Joker {
     if context.setting_blind and count_consumables() == 0 then
       G.E_MANAGER:add_event(Event({
         func = function()
-          card_eval_status_text(context.blueprint_card or card, 'extra', nil, nil, nil, { message = localize { type = 'variable', key = 'a_planets', vars = { card.ability.extra.no_of_planets } }, colour = G.C.Planet })
+          card_eval_status_text(context.blueprint_card or card, 'extra', nil, nil, nil,
+            {
+              message = localize { type = 'variable', key = 'a_planets', vars = { card.ability.extra.no_of_planets } },
+              colour =
+                  G.C.Planet
+            })
           play_sound("timpani")
 
           for i = 1, card.ability.extra.no_of_planets do
@@ -3027,7 +3096,12 @@ SMODS.Joker {
     if context.skip_blind then
       G.E_MANAGER:add_event(Event({
         func = function()
-          card_eval_status_text(context.blueprint_card or card, 'extra', nil, nil, nil, { message = localize { type = 'variable', key = 'a_tarots', vars = { card.ability.extra.no_of_tarots } }, colour = G.C.Tarot })
+          card_eval_status_text(context.blueprint_card or card, 'extra', nil, nil, nil,
+            {
+              message = localize { type = 'variable', key = 'a_tarots', vars = { card.ability.extra.no_of_tarots } },
+              colour =
+                  G.C.Tarot
+            })
           play_sound("timpani")
           for i = 1, card.ability.extra.no_of_tarots do
             if count_consumables() < G.consumeables.config.card_limit then
@@ -3419,7 +3493,7 @@ SMODS.Joker {
 
     if context.destroy_card and context.cardarea == G.play and context.destroy_card.phanta_weapon_marked_for_death then
       context.destroy_card.phanta_weapon_marked_for_death = nil
-      return true
+      return { remove = true }
     end
   end
 }
@@ -3460,7 +3534,7 @@ SMODS.Joker {
 
     if context.destroy_card and context.cardarea == G.play and context.destroy_card.phanta_weapon_marked_for_death then
       context.destroy_card.phanta_weapon_marked_for_death = nil
-      return true
+      return { remove = true }
     end
   end
 }
@@ -3494,7 +3568,7 @@ SMODS.Joker {
 
     if context.destroy_card and context.cardarea == G.play and context.destroy_card.phanta_weapon_marked_for_death then
       context.destroy_card.phanta_weapon_marked_for_death = nil
-      return true
+      return { remove = true }
     end
   end
 }
@@ -3533,7 +3607,36 @@ SMODS.Joker {
 
     if context.destroy_card and context.cardarea == G.play and context.destroy_card.phanta_weapon_marked_for_death then
       context.destroy_card.phanta_weapon_marked_for_death = nil
-      return true
+      return { remove = true }
+    end
+  end
+}
+
+SMODS.Joker {
+  key = 'corkboard',
+  rarity = 2,
+  atlas = 'Phanta',
+  pos = { x = 8, y = 5 },
+  cost = 6,
+  blueprint_compat = true,
+  eternal_compat = true,
+  perishable_compat = true,
+  calculate = function(self, card, context)
+    if (context.blueprint or context.cardarea == G.jokers) and context.before and next(context.poker_hands["Straight"]) then
+      local candidates = {}
+      for k, v in ipairs(G.hand.cards) do
+        if not v.phanta_corkboard_marked_for_death then
+          candidates[#candidates + 1] = v
+        end
+      end
+      if #candidates > 0 then
+        pseudorandom_element(candidates, pseudoseed("corkboard")).phanta_corkboard_marked_for_death = true
+      end
+    end
+
+    if context.destroy_card and context.cardarea == G.hand and context.destroy_card.phanta_corkboard_marked_for_death then
+      context.destroy_card.phanta_corkboard_marked_for_death = nil
+      return { remove = true }
     end
   end
 }
@@ -3552,7 +3655,12 @@ SMODS.Joker {
     return { vars = { card.ability.extra.added_xmult, card.ability.extra.current_xmult } }
   end,
   calculate = function(self, card, context)
-    if context.joker_main and card.ability.extra.current_xmult > 1 then return { xmult = card.ability.extra.current_xmult } end
+    if context.joker_main and card.ability.extra.current_xmult > 1 then
+      return {
+        xmult = card.ability.extra
+            .current_xmult
+      }
+    end
 
     if context.remove_playing_cards and not context.blueprint then
       local upgrade = 0
