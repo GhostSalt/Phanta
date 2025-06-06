@@ -1461,6 +1461,9 @@ SMODS.Joker {
   blueprint_compat = false,
   eternal_compat = true,
   perishable_compat = true,
+  loc_vars = function(self, info_queue, card)
+    return { vars = { table.concat(get_names_from_zodiacs(find_current_zodiacs()), ", ") } }
+  end,
   add_to_deck = function(self, card, from_debuff)
     if G.consumeables then
       for _, card in pairs(G.consumeables.cards) do
@@ -1483,10 +1486,10 @@ SMODS.Joker {
 
 SMODS.Joker {
   key = 'grimreaper',
-  rarity = 2,
+  rarity = 3,
   atlas = 'Phanta',
   pos = { x = 9, y = 4 },
-  cost = 6,
+  cost = 8,
   blueprint_compat = false,
   eternal_compat = true,
   perishable_compat = true,
@@ -1498,15 +1501,13 @@ SMODS.Joker {
     if context.destroy_card and context.cardarea == G.play and count_tarots() > 0 then
       local has_death = false
       for _, v in pairs(G.consumeables.cards) do
-        if not has_death and v.ability.set == "Tarot" and v.config.center.key == "c_death" then
-          has_death = true
-          v.grim_reaper_queued_to_destroy = true
-        end
+        if not has_death and v.ability.set == "Tarot" and v.config.center.key == "c_death" then has_death = true end
       end
 
       if has_death then return true end
     end
 
+    --[[
     if context.destroy_card and context.cardarea == G.hand and count_tarots() > 0 then
       for _, v in pairs(G.consumeables.cards) do
         if v.grim_reaper_queued_to_destroy and not v.getting_sliced then
@@ -1523,6 +1524,7 @@ SMODS.Joker {
 
       return false
     end
+    ]]--
   end
 }
 

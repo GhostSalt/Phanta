@@ -184,6 +184,22 @@ function orderify_date(date) -- Used above, for convenience.
   return (date.month * 100) + date.day
 end
 
+function find_current_zodiacs()
+  local matches = {}
+  for i, j in pairs(G.P_CENTER_POOLS.phanta_Zodiac) do
+    if is_current_month({config = {center = j}}) then matches[#matches + 1] = {config = {center = j}} end  -- Cursed solution, but works.
+  end
+  return matches
+end
+
+function get_names_from_zodiacs(cards)
+  local names = {}
+  for i = 1, #cards do
+    names[#names + 1] = localize{type = 'name_text', set = 'phanta_Zodiac', key = cards[i].config.center.key}
+  end
+  return names
+end
+
 local ref1 = Card.start_dissolve
 function Card:start_dissolve()
   if self.config and self.config.center and self.config.center.phanta_shatters then

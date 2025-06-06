@@ -597,19 +597,20 @@ return {
             j_phanta_calendar = {
                 name = 'Calendar',
                 text = {
-                    "The {C:phanta_zodiac}Zodiac{} card",
-                    "corresponding to today's",
-                    "date (#1#) has a",
-                    "much stronger ability"
+                    "All {C:phanta_zodiac}Zodiac{} cards",
+                    "corresponding to",
+                    "today's {C:attention}date{} have",
+                    "{C:attention}much stronger{} abilities",
+                    "{C:inactive}(#1#){}"
                 }
             },
             j_phanta_grimreaper = {
                 name = 'The Grim Reaper',
                 text = {
-                    "If hand is played while",
-                    "holding a copy of",
-                    "{C:purple}Death{}, {C:red}destroys{} it,",
-                    "and all played cards"
+                    "If hand is played",
+                    "while holding a copy",
+                    "of {C:purple}Death{}, destroys",
+                    "all played cards"
                 }
             },
             j_phanta_layton = {
