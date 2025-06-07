@@ -830,7 +830,7 @@ return {
                 name = 'Forest',
                 text = {
                     "When {C:attention}Blind{} is selected,",
-                    "creates a copy of {C:phanta_resource}Wood{}"
+                    "creates a copy of {C:phanta_resource}Lumber{}"
                 }
             },
             j_phanta_pasture = {
