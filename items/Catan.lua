@@ -17,7 +17,7 @@ SMODS.ConsumableType {
   secondary_colour = HEX("AB8B59"),
   collection_rows = { 5 },
   shop_rate = 0,
-  default = "phanta_brick",
+  default = "c_phanta_brick",
   can_stack = true,
   can_divide = true
 }
@@ -177,7 +177,7 @@ SMODS.ConsumableType {
   secondary_colour = HEX("DAAB64"),
   collection_rows = { 5, 5, 5 },
   shop_rate = 0,
-  default = "phanta_knight",
+  default = "c_phanta_knight1",
   can_stack = true,
   can_divide = true
 }

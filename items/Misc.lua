@@ -121,8 +121,7 @@ SMODS.Seal {
   end
 }
 
-SMODS.Consumable {
-  set = "Tarot",
+SMODS.Tarot {
   key = "grave",
   loc_txt = {
     name = 'Grave',
@@ -141,6 +140,77 @@ SMODS.Consumable {
   loc_vars = function(self, info_queue, card)
     info_queue[#info_queue + 1] = G.P_CENTERS.m_phanta_ghostcard
     return { vars = { card.ability.max_highlighted } }
+  end
+}
+
+SMODS.Tarot {
+  key = "beekeeper",
+  pos = { x = 3, y = 0 },
+  config = {
+    extra = { conv = "e_phanta_waxed" },
+    max_highlighted = 3
+  },
+  atlas = "PhantaTarots",
+  loc_vars = function(self, info_queue, card)
+    info_queue[#info_queue + 1] = G.P_CENTERS.e_phanta_waxed
+    return { vars = { card.ability.max_highlighted } }
+  end,
+  use = function(self, card, area, copier)
+    G.E_MANAGER:add_event(Event({
+      trigger = 'after',
+      delay = 0.4,
+      func = function()
+        play_sound('tarot1')
+        card:juice_up(0.3, 0.5)
+        return true
+      end
+    }))
+    for i = 1, #G.hand.highlighted do
+      local percent = 1.15 - (i - 0.999) / (#G.hand.highlighted - 0.998) * 0.3
+      G.E_MANAGER:add_event(Event({
+        trigger = 'after',
+        delay = 0.15,
+        func = function()
+          G.hand.highlighted[i]:flip()
+          play_sound('card1', percent)
+          G.hand.highlighted[i]:juice_up(0.3, 0.3)
+          return true
+        end
+      }))
+    end
+    delay(0.2)
+    for i = 1, #G.hand.highlighted do
+      G.E_MANAGER:add_event(Event({
+        trigger = 'after',
+        delay = 0.1,
+        func = function()
+          G.hand.highlighted[i]:set_edition(card.ability.extra.conv, true, true)
+          return true
+        end
+      }))
+    end
+    for i = 1, #G.hand.highlighted do
+      local percent = 0.85 + (i - 0.999) / (#G.hand.highlighted - 0.998) * 0.3
+      G.E_MANAGER:add_event(Event({
+        trigger = 'after',
+        delay = 0.15,
+        func = function()
+          G.hand.highlighted[i]:flip()
+          play_sound('tarot2', percent, 0.6)
+          G.hand.highlighted[i]:juice_up(0.3, 0.3)
+          return true
+        end
+      }))
+    end
+    G.E_MANAGER:add_event(Event({
+      trigger = 'after',
+      delay = 0.2,
+      func = function()
+        G.hand:unhighlight_all()
+        return true
+      end
+    }))
+    delay(0.5)
   end
 }
 
@@ -433,15 +503,14 @@ SMODS.Consumable {
 
 
 
---[[SMODS.Shader {
+SMODS.Shader {
   key = "waxed",
   path = "waxed.fs"
 }
 
 SMODS.Sound({
   key = "waxed_card",
-  path = "phanta_waxed_card.ogg",
-  replace = true
+  path = "phanta_waxed_card.ogg"
 })
 
 SMODS.Edition {
@@ -460,16 +529,15 @@ SMODS.Edition {
     return { vars = { self.config.xmult } }
   end,
   calculate = function(self, card, context)
-    if context.main_scoring and context.cardarea == G.play then return { xmult = self.config.xmult } end
-  end,
-  in_pool = function(v) return v.source == "standard_edition" end
-}]] --
+    if (context.main_scoring and context.cardarea == G.play) or context.post_joker then return { xmult = self.config.xmult } end
+  end
+}
 
 
 
 
 
---[[
+
 SMODS.Enhancement {
   key = "coppergratefresh",
   atlas = "PhantaEnhancements",
@@ -479,7 +547,7 @@ SMODS.Enhancement {
     return { vars = { center.ability.Xmult } }
   end,
   calculate = function(self, card, context)
-    if context.destroy_card and context.cardarea == G.play and not (card.edition and card.edition.key == 'e_phanta_waxed') then
+    if context.final_scoring_step and context.cardarea == G.play and not (card.edition and card.edition.key == 'e_phanta_waxed') then
       card:set_ability(G.P_CENTERS.m_phanta_coppergrateexposed, nil, true)
       return false
     end
@@ -499,7 +567,7 @@ SMODS.Enhancement {
     return { vars = { center.ability.Xmult, center.ability.bonus } }
   end,
   calculate = function(self, card, context)
-    if context.destroy_card and context.cardarea == G.play and not (card.edition and card.edition.key == 'e_phanta_waxed') then
+    if context.final_scoring_step and context.cardarea == G.play and not (card.edition and card.edition.key == 'e_phanta_waxed') then
       card:set_ability(G.P_CENTERS.m_phanta_coppergrateweathered, nil, true)
       return false
     end
@@ -520,7 +588,7 @@ SMODS.Enhancement {
     return { vars = { center.ability.Xmult, center.ability.bonus } }
   end,
   calculate = function(self, card, context)
-    if context.destroy_card and context.cardarea == G.play and not (card.edition and card.edition.key == 'e_phanta_waxed') then
+    if context.final_scoring_step and context.cardarea == G.play and not (card.edition and card.edition.key == 'e_phanta_waxed') then
       card:set_ability(G.P_CENTERS.m_phanta_coppergrateoxidised, nil, true)
       return false
     end
@@ -542,7 +610,7 @@ SMODS.Enhancement {
     return { vars = { center.ability.bonus } }
   end,
   calculate = function(self, card, context)
-    if context.destroy_card and context.cardarea == G.play and not (card.edition and card.edition.key == 'e_phanta_waxed') then return { remove = true } end
+    if context.destroy_card == card and context.cardarea == G.play and not (card.edition and card.edition.key == 'e_phanta_waxed') then return { remove = true } end
   end,
   set_badges = function(self, card, badges)
     badges[#badges + 1] = create_badge(localize('phanta_copper_grate_oxidised'), G.C.PHANTA.MISC_COLOURS.COPPER_OXIDISED,
@@ -550,7 +618,7 @@ SMODS.Enhancement {
   end,
   in_pool = function() return false end
 }
-]] --
+
 
 
 
@@ -561,7 +629,8 @@ SMODS.Enhancement {
 local sell_use_ref = G.UIDEF.use_and_sell_buttons
 
 function G.UIDEF.use_and_sell_buttons(card)
-  if not card or not card.ability or (card.ability.set ~= "phanta_Zodiac" and card.ability.set ~= "phanta_CatanResource") then return sell_use_ref(card) end
+  if not card or not card.ability or (card.ability.set ~= "phanta_Zodiac" and card.ability.set ~= "phanta_CatanResource") then return
+    sell_use_ref(card) end
 
   if (card.area == G.pack_cards and G.pack_cards) then
     return {
@@ -638,18 +707,18 @@ end
 
 local can_select_card_ref = G.FUNCS.can_select_card
 G.FUNCS.can_select_card = function(e)
-    local card = e.config.ref_table
-    if card.ability.set == 'phanta_Zodiac' then
-        if count_consumables() < G.consumeables.config.card_limit then
-            e.config.colour = G.C.GREEN
-            e.config.button = 'use_card'
-        else
-            e.config.colour = G.C.UI.BACKGROUND_INACTIVE
-            e.config.button = nil
-        end
+  local card = e.config.ref_table
+  if card.ability.set == 'phanta_Zodiac' then
+    if count_consumables() < G.consumeables.config.card_limit then
+      e.config.colour = G.C.GREEN
+      e.config.button = 'use_card'
     else
-        can_select_card_ref(e)
+      e.config.colour = G.C.UI.BACKGROUND_INACTIVE
+      e.config.button = nil
     end
+  else
+    can_select_card_ref(e)
+  end
 end
 
 SMODS.Atlas {
@@ -1026,7 +1095,7 @@ SMODS.Consumable {
   end,
   month_range = { first = { month = 8, day = 23 }, last = { month = 9, day = 22 } },
   calculate = function(self, card, context)
-    if context.end_of_round and not context.individual and not context.repetition and G.GAME.current_round.hands_played <= card.ability.extra.hands + count_prognosticators(card) + 1 then -- Prog makes Virgo easier to proc.
+    if context.end_of_round and not context.individual and not context.repetition and G.GAME.current_round.hands_played <= card.ability.extra.hands + count_prognosticators(card) then -- Prog makes Virgo easier to proc.
       G.E_MANAGER:add_event(Event({
         func = function()
           add_tag(Tag('tag_standard'))

@@ -76,7 +76,7 @@ function get_lowest(hand)
 end
 
 function count_prognosticators(card)
-  return #SMODS.find_card("j_phanta_prognosticator") + 
+  return #SMODS.find_card("j_phanta_prognosticator") +
       ((is_current_month(card) and 2 or 0) * #SMODS.find_card("j_phanta_calendar")) +
       (G.GAME and G.GAME.selected_back and G.GAME.selected_back and G.GAME.selected_back.effect and G.GAME.selected_back.effect.center.key == "b_phanta_todayandtomorrow" and 1 or 0)
 end
@@ -139,10 +139,10 @@ end
 
 function count_rank(rank)
   local cards = {}
-  if G.deck then
-    for i = 1, #G.deck.cards do
-      if not SMODS.has_no_rank(G.deck.cards[i]) and G.deck.cards[i]:get_id() == rank then
-        cards[#cards + 1] = G.deck.cards[i]
+  if G.playing_cards then
+    for i = 1, #G.playing_cards do
+      if not SMODS.has_no_rank(G.playing_cards[i]) and G.playing_cards[i]:get_id() == rank then
+        cards[#cards + 1] = G.playing_cards[i]
       end
     end
   end
@@ -187,7 +187,7 @@ end
 function find_current_zodiacs()
   local matches = {}
   for i, j in pairs(G.P_CENTER_POOLS.phanta_Zodiac) do
-    if is_current_month({config = {center = j}}) then matches[#matches + 1] = {config = {center = j}} end  -- Cursed solution, but works.
+    if is_current_month({ config = { center = j } }) then matches[#matches + 1] = { config = { center = j } } end -- Cursed solution, but works.
   end
   return matches
 end
@@ -195,9 +195,33 @@ end
 function get_names_from_zodiacs(cards)
   local names = {}
   for i = 1, #cards do
-    names[#names + 1] = localize{type = 'name_text', set = 'phanta_Zodiac', key = cards[i].config.center.key}
+    names[#names + 1] = localize { type = 'name_text', set = 'phanta_Zodiac', key = cards[i].config.center.key }
   end
   return names
+end
+
+function count_steel_kings()
+  local kings = {}
+  if G.playing_cards then
+    for i = 1, #G.playing_cards do
+      if SMODS.has_enhancement(G.playing_cards[i], 'm_steel') and G.playing_cards[i]:get_id() == 13 then
+        kings[#kings + 1] = G.playing_cards[i]
+      end
+    end
+  end
+  return kings
+end
+
+function is_blind_small()
+  return G.GAME.blind and G.GAME.blind:get_type() == 'Small'
+end
+
+function is_blind_big()
+  return G.GAME.blind and G.GAME.blind:get_type() == 'Big'
+end
+
+function is_blind_boss()
+  return G.GAME.blind and G.GAME.blind:get_type() == 'Boss'
 end
 
 local ref1 = Card.start_dissolve
@@ -211,7 +235,7 @@ end
 
 local allFolders = { "none", "items" }
 
-local allFiles = { ["none"] = {}, ["items"] = { "Jokers1", "Misc", "Catan" } }
+local allFiles = { ["none"] = {}, ["items"] = { "Jokers1", "Jokers2", "Legendaries", "Misc", "Catan" } }
 
 for i = 1, #allFolders do
   if allFolders[i] == "none" then
@@ -227,3 +251,44 @@ end
 
 if next(SMODS.find_mod('Bakery')) then assert(SMODS.load_file("items/Charm.lua"))() end
 if next(SMODS.find_mod('partner')) then assert(SMODS.load_file("items/Partners.lua"))() end
+
+
+local igo = Game.init_game_object
+function Game:init_game_object()
+  local ret = igo(self)
+  ret.current_round.train_station_card = { id = nil, value = nil }
+  ret.current_round.fainfol_card = { suit = 'Spades' }
+  ret.current_round.puzzle_card = { id = nil }
+  return ret
+end
+
+function SMODS.current_mod.reset_game_globals(run_start)
+  G.GAME.current_round.fainfol_card = { suit = 'Spades' }
+  local valid_cards = {}
+  for i, j in ipairs(G.playing_cards) do
+    if not SMODS.has_no_suit(j) then
+      valid_cards[#valid_cards + 1] = j
+    end
+  end
+  if valid_cards[1] then
+    local chosen_card = pseudorandom_element(valid_cards, pseudoseed('fainfol' .. G.GAME.round_resets.ante))
+    G.GAME.current_round.fainfol_card.suit = chosen_card.base.suit
+  end
+  if not G.GAME.current_round.train_station_card.id then
+    G.GAME.current_round.train_station_card.id = 2
+  elseif G.GAME.current_round.train_station_card.id == 14 then
+    G.GAME.current_round.train_station_card.id = 2
+  else
+    G.GAME.current_round.train_station_card.id = G.GAME.current_round.train_station_card.id + 1
+  end
+
+  local value_table = { '2', '3', '4', '5', '6', '7', '8', '9', '10', 'Jack', 'Queen', 'King', 'Ace' }
+  G.GAME.current_round.train_station_card.value = value_table[G.GAME.current_round.train_station_card.id - 1]
+
+  if G.playing_cards then
+    G.GAME.current_round.puzzle_card.id = pseudorandom_element(G.playing_cards,
+      pseudoseed('puzzle' .. G.GAME.round_resets.ante)):get_id()
+  else
+    G.GAME.current_round.puzzle_card.id = 2
+  end
+end

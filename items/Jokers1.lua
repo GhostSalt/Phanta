@@ -12,7 +12,7 @@ to_big = to_big or function(x) return x end
 
 SMODS.Atlas {
   key = "Phanta",
-  path = "Phanta.png",
+  path = "PhantaJokers1.png",
   px = 71,
   py = 95
 }
@@ -86,6 +86,14 @@ SMODS.Joker {
       return {
         message = localize('k_upgrade_ex'),
         colour = G.C.FILTER
+      }
+    end
+
+    if context.end_of_round and not context.individual and not context.repetition and not context.blueprint then
+      return {
+        message =
+            localize("phanta_increased"),
+        colour = G.FILTER
       }
     end
   end
@@ -201,6 +209,34 @@ SMODS.Joker {
         end
       end
       if reward > 0 then return { dollars = reward } end
+    end
+  end
+}
+
+SMODS.Joker {
+  key = 'puzzle',
+  config = { extra = { given_money = 3 } },
+  rarity = 1,
+  atlas = 'Phanta',
+  pos = { x = 11, y = 5 },
+  cost = 4,
+  loc_vars = function(self, info_queue, card)
+    return { vars = { card.ability.extra.given_money } }
+  end,
+  blueprint_compat = true,
+  eternal_compat = true,
+  perishable_compat = true,
+  calculate = function(self, card, context)
+    if context.individual and context.cardarea == G.play and context.other_card:get_id() == G.GAME.current_round.puzzle_card.id then
+      return { dollars = card.ability.extra.given_money }
+    end
+
+    if context.end_of_round and not context.individual and not context.repetition and not context.blueprint then
+      return {
+        message =
+            localize("k_reset"),
+        colour = G.FILTER
+      }
     end
   end
 }
@@ -351,10 +387,9 @@ SMODS.Joker {
   end
 }
 
---[[
 SMODS.Joker {
   key = 'timetable',
-  config = { extra = { discards = 1, hands = 1, hand_size = 1, current_blind = "small" } },
+  config = { extra = { discards = 1, hands = 1, hand_size = 1, is_happening = false } },
   loc_vars = function(self, info_queue, card)
     return { vars = { card.ability.extra.discards, card.ability.extra.hands, card.ability.extra.hand_size } }
   end,
@@ -366,54 +401,69 @@ SMODS.Joker {
   eternal_compat = true,
   perishable_compat = true,
   add_to_deck = function(self, card, from_debuff)
-    card.ability.extra.current_blind = get_previous_blind()
-    if card.ability.extra.current_blind == "small" then
-      G.GAME.round_resets.discards = G.GAME.round_resets.discards + card.ability.extra.discards
-      ease_discard(card.ability.extra.discards)
-    elseif card.ability.extra.current_blind == "big" then
-      G.GAME.round_resets.hands = G.GAME.round_resets.hands + card.ability.extra.hands
-      ease_hands_played(card.ability.extra.hands)
-    else
-      G.hand:change_size(card.ability.extra.hand_size)
-    end
+    card.ability.extra.is_happening = false
   end,
   remove_from_deck = function(self, card, from_debuff)
-    if card.ability.extra.current_blind == "small" then
-      G.GAME.round_resets.discards = G.GAME.round_resets.discards - card.ability.extra.discards
-      ease_discard(-card.ability.extra.discards)
-    elseif card.ability.extra.current_blind == "big" then
-      G.GAME.round_resets.hands = G.GAME.round_resets.hands - card.ability.extra.hands
-      ease_hands_played(-card.ability.extra.hands)
-    else
+    if is_blind_boss() and card.ability.extra.is_happening then
       G.hand:change_size(-card.ability.extra.hand_size)
+      card.ability.extra.is_happening = false
     end
   end,
   calculate = function(self, card, context)
+    if context.setting_blind then
+      if is_blind_small() then
+        G.E_MANAGER:add_event(Event({
+          func = function()
+            ease_discard(card.ability.extra.discards)
+            card_eval_status_text(card, 'extra', nil, nil, nil,
+              {
+                message = localize { type = 'variable', key = 'a_discard', vars = { card.ability.extra.discards } },
+                colour =
+                    G.C.RED
+              })
+            return true
+          end
+        }))
+      end
+      if is_blind_big() then
+        G.E_MANAGER:add_event(Event({
+          func = function()
+            ease_hands_played(card.ability.extra.hands)
+            card_eval_status_text(card, 'extra', nil, nil, nil,
+              {
+                message = localize { type = 'variable', key = 'a_hand', vars = { card.ability.extra.hands } },
+                colour = G
+                    .C.BLUE
+              })
+            return true
+          end
+        }))
+      end
+      if is_blind_boss() then
+        G.E_MANAGER:add_event(Event({
+          func = function()
+            G.hand:change_size(card.ability.extra.hand_size)
+            card_eval_status_text(card, 'extra', nil, nil, nil,
+              {
+                message = localize { type = 'variable', key = 'a_handsize', vars = { card.ability.extra.hand_size } },
+                colour =
+                    G.C.FILTER
+              })
+            return true
+          end
+        }))
+        card.ability.extra.is_happening = true
+      end
+    end
+
     if context.end_of_round and not context.individual and not context.repetition then
-      if card.ability.extra.current_blind == "small" then
-        card.ability.extra.current_blind = "big"
-
-        G.GAME.round_resets.discards = G.GAME.round_resets.discards - card.ability.extra.discards
-        G.GAME.round_resets.hands = G.GAME.round_resets.hands + card.ability.extra.hands
-        ease_discard(-card.ability.extra.discards)
-        ease_hands_played(card.ability.extra.hands)
-      elseif card.ability.extra.current_blind == "big" then
-        card.ability.extra.current_blind = "boss"
-
-        G.GAME.round_resets.hands = G.GAME.round_resets.hands - card.ability.extra.hands
-        ease_hands_played(-card.ability.extra.hands)
-        G.hand:change_size(card.ability.extra.hand_size)
-      else
-        card.ability.extra.current_blind = "small"
-
-        G.GAME.round_resets.discards = G.GAME.round_resets.discards + card.ability.extra.discards
+      if is_blind_boss() and card.ability.extra.is_happening then
         G.hand:change_size(-card.ability.extra.hand_size)
-        ease_discard(card.ability.extra.discards)
+        card.ability.extra.is_happening = false
       end
     end
   end
 }
-]] --
 
 SMODS.Joker {
   key = 'mazebean',
@@ -503,8 +553,6 @@ SMODS.Joker {
     end
   end
 }
-
-
 
 SMODS.Joker {
   key = 'playerpin',
@@ -799,6 +847,39 @@ SMODS.Joker {
     end
 
     if context.end_of_round then card.ability.extra.is_spent = false end
+  end
+}
+
+SMODS.Joker {
+  key = 'kylehyde',
+  config = { extra = { odds = 4 } },
+  loc_vars = function(self, info_queue, card)
+    info_queue[#info_queue + 1] = G.P_CENTERS.m_stone
+    return { vars = { (G.GAME.probabilities.normal or 1), card.ability.extra.odds } }
+  end,
+  rarity = 2,
+  atlas = 'Phanta',
+  pos = { x = 7, y = 6 },
+  cost = 5,
+  blueprint_compat = true,
+  eternal_compat = true,
+  perishable_compat = true,
+  calculate = function(self, card, context)
+    if context.individual and (context.other_card:is_suit("Hearts") or context.other_card:is_suit("Diamonds")) and pseudorandom('kylehyde') < G.GAME.probabilities.normal / card.ability.extra.odds then
+      local card_temp = context.other_card
+      card_temp:set_ability(G.P_CENTERS.m_stone, nil, true)
+      G.E_MANAGER:add_event(Event({
+        func = function()
+          card_temp:juice_up()
+          return true
+        end
+      }))
+      return {
+        message = "Stone",
+        colour = G.C.RED,
+        card = card
+      }
+    end
   end
 }
 
@@ -1230,28 +1311,6 @@ SMODS.Joker {
   end
 }
 
---[[SMODS.Joker {
-  key = 'html',
-  config = { extra = { mult = 1 } },
-  rarity = 1,
-  atlas = 'Phanta',
-  pos = { x = 9, y = 3 },
-  cost = 4,
-  blueprint_compat = false,
-  eternal_compat = true,
-  perishable_compat = true,
-  loc_vars = function(self, info_queue, card)
-    return { vars = { card.ability.extra.mult } }
-  end,
-  calculate = function(self, card, context)
-    if context.joker_main and G.GAME.current_round.hands_played == 0 then
-      hand_mult = mod_mult(card.ability.extra.mult)
-      update_hand_text({ delay = 0 }, { mult = hand_mult })
-      return { message = localize("phanta_mult_equals") .. card.ability.extra.mult, colour = G.C.MULT, card = card }
-    end
-  end
-}]] --
-
 SMODS.Joker {
   key = 'ghost',
   config = { extra = { x_mult = 1 } },
@@ -1317,7 +1376,6 @@ SMODS.Joker {
   end
 }
 
---[[
 SMODS.Joker {
   key = 'theapparition',
   rarity = 2,
@@ -1342,20 +1400,19 @@ SMODS.Joker {
 
 SMODS.Joker {
   key = 'willothewisp',
-  rarity = 2,
+  rarity = 3,
   atlas = 'Phanta',
   pos = { x = 6, y = 10 },
-  cost = 6,
+  cost = 8,
   blueprint_compat = true,
   eternal_compat = true,
   perishable_compat = true,
   calculate = function(self, card, context)
-    if context.individual and context.cardarea == "unscored" and context.other_card.ability.name == "Ghost Card" then
-      return { xmult = context.other_card.ability.config.h_x_mult }
+    if context.individual and context.cardarea == "unscored" and SMODS.has_enhancement(context.other_card, "m_phanta_ghostcard") then
+      return { xmult = context.other_card.ability.h_x_mult }
     end
   end
 }
-]] --
 
 SMODS.Joker {
   key = 'stickercollection',
@@ -1524,7 +1581,7 @@ SMODS.Joker {
 
       return false
     end
-    ]]--
+    ]] --
   end
 }
 
@@ -1645,6 +1702,92 @@ SMODS.Joker {
   end,
   in_pool = function()
     return G.GAME.hands["phanta_junk"].visible
+  end
+}
+
+SMODS.Joker {
+  key = 'medic',
+  rarity = 2,
+  atlas = 'Phanta',
+  pos = { x = 6, y = 6 },
+  cost = 6,
+  loc_vars = function(self, info_queue, card)
+    info_queue[#info_queue + 1] = G.P_CENTERS.c_death
+    return {}
+  end,
+  blueprint_compat = true,
+  eternal_compat = true,
+  perishable_compat = true,
+  calculate = function(self, card, context)
+    if context.cardarea == G.jokers and context.before and not (context.blueprint_card or card).getting_sliced and count_consumables() < G.consumeables.config.card_limit then
+      local contains_nonheart = false
+      for i = 1, #G.play.cards do
+        if not G.play.cards[i]:is_suit("Hearts") then
+          contains_nonheart = true
+        end
+      end
+      if not contains_nonheart then
+        G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
+        G.E_MANAGER:add_event(Event({
+          func = function()
+            local new_card = create_card("Tarot", G.consumables, nil, nil, nil, nil, "c_death", 'medic')
+            new_card:add_to_deck()
+            G.consumeables:emplace(new_card)
+            G.GAME.consumeable_buffer = 0
+            new_card:juice_up(0.3, 0.5)
+            return true
+          end
+        }))
+        return { message = "+1 Death", colour = G.C.PURPLE }
+      end
+    end
+  end
+}
+
+SMODS.Joker {
+  key = 'psychelock',
+  config = { extra = { xmult = 0.6 } },
+  rarity = 3,
+  atlas = 'Phanta',
+  pos = { x = 6, y = 11 },
+  cost = 8,
+  loc_vars = function(self, info_queue, card)
+    return { vars = { card.ability.extra.xmult } }
+  end,
+  blueprint_compat = true,
+  eternal_compat = true,
+  perishable_compat = true,
+  calculate = function(self, card, context)
+    if context.joker_main then
+      local nine_count = 0
+      for i = 1, #G.play.cards do
+        if G.play.cards[i]:get_id() == 9 then nine_count = nine_count + 1 end
+      end
+      if nine_count > 0 then
+        return { xmult = 1 + (nine_count * card.ability.extra.xmult) }
+      end
+    end
+  end
+}
+
+SMODS.Joker {
+  key = 'milesedgeworth',
+  config = { extra = { xmult = 0.5 } },
+  rarity = 3,
+  atlas = 'Phanta',
+  pos = { x = 7, y = 5 },
+  cost = 8,
+  loc_vars = function(self, info_queue, card)
+    info_queue[#info_queue + 1] = G.P_CENTERS.m_steel
+    return { vars = { card.ability.extra.xmult, 1 + (#count_steel_kings() * card.ability.extra.xmult) } }
+  end,
+  blueprint_compat = true,
+  eternal_compat = true,
+  perishable_compat = true,
+  calculate = function(self, card, context)
+    if context.joker_main and #count_steel_kings() * card.ability.extra.xmult > 0 then
+      return { xmult = 1 + (#count_steel_kings() * card.ability.extra.xmult) }
+    end
   end
 }
 
@@ -2740,33 +2883,6 @@ SMODS.Joker {
   end
 }
 
---[[SMODS.Joker {
-  key = 'forsakenscroll',
-  loc_txt = {
-    name = 'Forsaken Scroll',
-    text = {
-      "{C:inactive,s:0.75}The prophecy says:{}",
-	  "“Each used {C:tarot}#1#{}",
-	  "gives $#2#, {C:tarot}Tarot{} card",
-	  "changes every round”"
-    }
-  },
-  config = { extra = { chosen_tarot = 0, money = 6 } },
-  rarity = 1,
-  atlas = 'Phanta',
-  pos = { x = 2, y = 5 },
-  cost = 4,
-  blueprint_compat = true,
-  eternal_compat = true,
-  perishable_compat = true,
-  loc_vars = function(self, info_queue, card)
-    return { vars = { card.ability.extra.chosen_tarot, card.ability.extra.money } }
-  end,
-  calculate = function(self, card, context)
-
-  end
-}]] --
-
 SMODS.Joker {
   key = 'timepiece',
   rarity = 2,
@@ -2785,21 +2901,15 @@ SMODS.Joker {
       G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
       G.E_MANAGER:add_event(Event({
         func = function()
-          G.E_MANAGER:add_event(Event({
-            func = function()
-              local new_card = create_card("Tarot", G.consumables, nil, nil, nil, nil, "c_death", 'timepiece')
-              new_card:add_to_deck()
-              G.consumeables:emplace(new_card)
-              G.GAME.consumeable_buffer = 0
-              new_card:juice_up(0.3, 0.5)
-              return true
-            end
-          }))
-          card_eval_status_text(context.blueprint_card or card, 'extra', nil, nil, nil,
-            { message = "+1 Death", colour = G.C.PURPLE })
+          local new_card = create_card("Tarot", G.consumables, nil, nil, nil, nil, "c_death", 'timepiece')
+          new_card:add_to_deck()
+          G.consumeables:emplace(new_card)
+          G.GAME.consumeable_buffer = 0
+          new_card:juice_up(0.3, 0.5)
           return true
         end
       }))
+      return { message = "+1 Death", colour = G.C.PURPLE }
     end
   end
 }
@@ -3120,6 +3230,31 @@ SMODS.Joker {
   end
 }
 
+SMODS.Joker {
+  key = 'slidingpuzzle',
+  rarity = 2,
+  atlas = 'Phanta',
+  pos = { x = 10, y = 1 },
+  cost = 5,
+  blueprint_compat = true,
+  eternal_compat = true,
+  perishable_compat = true,
+  calculate = function(self, card, context)
+    if context.first_hand_drawn then
+      G.E_MANAGER:add_event(Event({
+        func = function()
+          SMODS.add_card { set = "Playing Card", seal = SMODS.poll_seal { key = 'slidingpuzzle_seal' .. G.GAME.round_resets.ante, mod = 10 }, edition = poll_edition('slidingpuzzle_edition' .. G.GAME.round_resets.ante, 2, true) }
+          G.hand:sort()
+          if context.blueprint_card then context.blueprint_card:juice_up() else card:juice_up() end
+          return true
+        end
+      }))
+
+      playing_card_joker_effects({ true })
+    end
+  end
+}
+
 -- This code is so jank, sorry :sob:
 SMODS.Joker {
   key = 'sudoku',
@@ -3351,6 +3486,28 @@ SMODS.Joker {
         end
       }))
     end
+  end
+}
+
+SMODS.Joker {
+  key = 'dottodot',
+  config = { extra = { xmult = 3, active = false } },
+  rarity = 2,
+  atlas = 'Phanta',
+  pos = { x = 6, y = 7 },
+  cost = 6,
+  loc_vars = function(self, info_queue, card)
+    return { vars = { card.ability.extra.xmult, (G.GAME and G.GAME.current_round and G.GAME.current_round.hands_played ~= 0 and G.GAME.last_hand_played) and localize(G.GAME.last_hand_played, 'poker_hands') or localize('phanta_unknown') } }
+  end,
+  blueprint_compat = true,
+  eternal_compat = true,
+  perishable_compat = true,
+  calculate = function(self, card, context)
+    if context.joker_main and card.ability.extra.active then
+      return { xmult = card.ability.extra.xmult }
+    end
+
+    if context.after then card.ability.extra.active = next(context.poker_hands['Straight']) end
   end
 }
 
@@ -4153,363 +4310,3 @@ SMODS.Joker {
     end
   end
 }
-
-SMODS.Joker {
-  key = 'ignaize',
-  config = { extra = { current_xmult = 1, added_xmult = 0.1 } },
-  rarity = 4,
-  atlas = 'Phanta',
-  pos = { x = 2, y = 1 },
-  soul_pos = { x = 3, y = 2,
-    draw = function(card, scale_mod, rotate_mod)
-      card.children.floating_sprite:draw_shader('dissolve', 0, nil, nil, card.children.center, scale_mod, rotate_mod, nil,
-        0.1 + 0.03 * math.sin(1.8 * G.TIMERS.REAL), nil, 0.6)
-      card.children.floating_sprite:draw_shader('dissolve', nil, nil, nil, card.children.center, scale_mod, rotate_mod)
-      card.children.floating_sprite:draw_shader('voucher', 0, nil, nil, card.children.center, scale_mod, rotate_mod, nil,
-        0.1 + 0.03 * math.sin(1.8 * G.TIMERS.REAL), nil, 0.6)
-      card.children.floating_sprite:draw_shader('voucher', nil, nil, nil, card.children.center, scale_mod, rotate_mod)
-    end },
-  cost = 20,
-  loc_vars = function(self, info_queue, card)
-    return { vars = { card.ability.extra.added_xmult, card.ability.extra.current_xmult } }
-  end,
-  blueprint_compat = true,
-  eternal_compat = true,
-  perishable_compat = false,
-  calculate = function(self, card, context)
-    if context.joker_main and card.ability.extra.current_xmult > 1 then
-      return { xmult = card.ability.extra.current_xmult }
-    end
-    if context.selling_card and context.card.config.center.set ~= "Joker" and not context.blueprint then
-      card.ability.extra.current_xmult = card.ability.extra.current_xmult + card.ability.extra.added_xmult
-      card_eval_status_text(card, 'extra', nil, nil, nil, { message = localize("k_upgrade_ex") })
-      return true
-    end
-  end
-}
-
-SMODS.Joker {
-  key = 'dimere',
-  rarity = 4,
-  atlas = 'Phanta',
-  pos = { x = 3, y = 1 },
-  soul_pos = { x = 4, y = 2,
-    draw = function(card, scale_mod, rotate_mod)
-      card.children.floating_sprite:draw_shader('dissolve', 0, nil, nil, card.children.center, scale_mod, rotate_mod, nil,
-        0.1 + 0.03 * math.sin(1.8 * G.TIMERS.REAL), nil, 0.6)
-      card.children.floating_sprite:draw_shader('dissolve', nil, nil, nil, card.children.center, scale_mod, rotate_mod)
-      card.children.floating_sprite:draw_shader('voucher', 0, nil, nil, card.children.center, scale_mod, rotate_mod, nil,
-        0.1 + 0.03 * math.sin(1.8 * G.TIMERS.REAL), nil, 0.6)
-      card.children.floating_sprite:draw_shader('voucher', nil, nil, nil, card.children.center, scale_mod, rotate_mod)
-    end },
-  cost = 20,
-  loc_vars = function(self, info_queue, card)
-    info_queue[#info_queue + 1] = G.P_CENTERS.e_negative
-    return {}
-  end,
-  blueprint_compat = true,
-  eternal_compat = true,
-  perishable_compat = true,
-  calculate = function(self, card, context)
-    if context.end_of_round and not context.individual and not context.repetition and G.GAME.blind.boss then
-      --Check if the ability should trigger (i.e. there are valid, non-Dimere Jokers)
-
-      local candidates = {}
-      for i = 1, #G.jokers.cards do
-        if G.jokers.cards[i].config.center ~= card.config.center and G.jokers.cards[i].ability.set == "Joker" and G.jokers.cards[i].edition == nil then
-          candidates[#candidates + 1] = G.jokers.cards[i]
-        end
-      end
-
-      if #candidates == 0 then
-        return nil
-      end
-
-      pseudorandom_element(candidates, pseudoseed("dimere")):set_edition { negative = true }
-      card_eval_status_text(card, 'extra', nil, nil, nil,
-        { message = "+Negative" })
-    end
-  end
-}
-
-SMODS.Joker {
-  key = 'goldor',
-  config = { extra = { money = 3, xmult = 3 } },
-  rarity = 4,
-  atlas = 'Phanta',
-  pos = { x = 4, y = 1 },
-  soul_pos = { x = 5, y = 2,
-    draw = function(card, scale_mod, rotate_mod)
-      card.children.floating_sprite:draw_shader('dissolve', 0, nil, nil, card.children.center, scale_mod, rotate_mod, nil,
-        0.1 + 0.03 * math.sin(1.8 * G.TIMERS.REAL), nil, 0.6)
-      card.children.floating_sprite:draw_shader('dissolve', nil, nil, nil, card.children.center, scale_mod, rotate_mod)
-      card.children.floating_sprite:draw_shader('voucher', 0, nil, nil, card.children.center, scale_mod, rotate_mod, nil,
-        0.1 + 0.03 * math.sin(1.8 * G.TIMERS.REAL), nil, 0.6)
-      card.children.floating_sprite:draw_shader('voucher', nil, nil, nil, card.children.center, scale_mod, rotate_mod)
-    end },
-  cost = 20,
-  loc_vars = function(self, info_queue, card)
-    info_queue[#info_queue + 1] = G.P_CENTERS.m_gold
-    return { vars = { card.ability.extra.xmult, card.ability.extra.money } }
-  end,
-  blueprint_compat = true,
-  eternal_compat = true,
-  perishable_compat = true,
-  calculate = function(self, card, context)
-    if context.individual and context.cardarea == G.play and SMODS.has_enhancement(context.other_card, "m_gold") then
-      G.GAME.dollar_buffer = (G.GAME.dollar_buffer or 0) + card.ability.extra.money
-      G.E_MANAGER:add_event(Event({
-        func = (function()
-          G.GAME.dollar_buffer = 0
-          return true
-        end)
-      }))
-      return {
-        dollars = card.ability.extra.money,
-        x_mult = card.ability.extra.xmult,
-        colour = G.C.RED,
-        card = card
-      }
-    end
-  end
-}
-
-SMODS.Joker {
-  key = 'famalia',
-  rarity = 4,
-  atlas = 'Phanta',
-  pos = { x = 5, y = 1 },
-  soul_pos = { x = 0, y = 3,
-    draw = function(card, scale_mod, rotate_mod)
-      card.children.floating_sprite:draw_shader('dissolve', 0, nil, nil, card.children.center, scale_mod, rotate_mod, nil,
-        0.1 + 0.03 * math.sin(1.8 * G.TIMERS.REAL), nil, 0.6)
-      card.children.floating_sprite:draw_shader('dissolve', nil, nil, nil, card.children.center, scale_mod, rotate_mod)
-      card.children.floating_sprite:draw_shader('voucher', 0, nil, nil, card.children.center, scale_mod, rotate_mod, nil,
-        0.1 + 0.03 * math.sin(1.8 * G.TIMERS.REAL), nil, 0.6)
-      card.children.floating_sprite:draw_shader('voucher', nil, nil, nil, card.children.center, scale_mod, rotate_mod)
-    end },
-  cost = 20,
-  loc_vars = function(self, info_queue, card)
-    --info_queue[#info_queue+1] = G.P_CENTERS.
-    return {}
-  end,
-  blueprint_compat = true,
-  eternal_compat = true,
-  perishable_compat = true,
-  calculate = function(self, card, context)
-    if context.first_hand_drawn then
-      G.E_MANAGER:add_event(Event({
-        func = function()
-          local _suit = pseudorandom_element({ 'S', 'H', 'D', 'C' }, pseudoseed('famaliasu'))
-          local _card = create_playing_card({ front = G.P_CARDS[_suit .. '_K'], center = G.P_CENTERS.c_base }, G.hand,
-            nil, nil, { G.C.SECONDARY_SET.Enhanced })
-          _card:set_seal('Purple', true)
-
-          _card:set_edition(poll_edition('famaliaed', nil, true, true, nil))
-
-          G.GAME.blind:debuff_card(_card)
-          G.hand:sort()
-          if context.blueprint_card then context.blueprint_card:juice_up() else card:juice_up() end
-          return true
-        end
-      }))
-
-      playing_card_joker_effects({ true })
-    end
-  end
-}
-
-SMODS.Joker {
-  key = 'godoor',
-  config = { extra = { added_xmult = 1, current_xmult = 1, counted_rerolls = 0 } },
-  rarity = 4,
-  atlas = 'Phanta',
-  pos = { x = 0, y = 2 },
-  soul_pos = { x = 1, y = 3,
-    draw = function(card, scale_mod, rotate_mod)
-      card.children.floating_sprite:draw_shader('dissolve', 0, nil, nil, card.children.center, scale_mod, rotate_mod, nil,
-        0.1 + 0.03 * math.sin(1.8 * G.TIMERS.REAL), nil, 0.6)
-      card.children.floating_sprite:draw_shader('dissolve', nil, nil, nil, card.children.center, scale_mod, rotate_mod)
-      card.children.floating_sprite:draw_shader('voucher', 0, nil, nil, card.children.center, scale_mod, rotate_mod, nil,
-        0.1 + 0.03 * math.sin(1.8 * G.TIMERS.REAL), nil, 0.6)
-      card.children.floating_sprite:draw_shader('voucher', nil, nil, nil, card.children.center, scale_mod, rotate_mod)
-    end },
-  cost = 20,
-  loc_vars = function(self, info_queue, card)
-    return { vars = { card.ability.extra.added_xmult, card.ability.extra.current_xmult } }
-  end,
-  blueprint_compat = true,
-  eternal_compat = true,
-  perishable_compat = false,
-  calculate = function(self, card, context)
-    if context.joker_main and card.ability.extra.current_xmult > 1 then
-      return { xmult = card.ability.extra.current_xmult }
-    end
-
-    if context.reroll_shop and not context.blueprint then
-      card.ability.extra.counted_rerolls = card.ability.extra.counted_rerolls + 1
-      if card.ability.extra.counted_rerolls == 1 then
-        return {
-          message = "Upgrade?",
-          colour = G.C.FILTER,
-          card = card
-        }
-      elseif card.ability.extra.counted_rerolls == 2 then
-        return {
-          message = "Nevermind!",
-          colour = G.C.RED,
-          card = card
-        }
-      end
-    end
-
-    if context.ending_shop and not context.blueprint then
-      if card.ability.extra.counted_rerolls == 1 then
-        card.ability.extra.current_xmult = card.ability.extra.current_xmult + card.ability.extra.added_xmult
-        card.ability.extra.counted_rerolls = 0
-        return {
-          message = localize('k_upgrade_ex'),
-          colour = G.C.FILTER,
-          card = card
-        }
-      end
-      card.ability.extra.counted_rerolls = 0
-    end
-  end
-}
-
-SMODS.Joker {
-  key = 'fainfol',
-  config = { extra = { xmult = 1.5 } },
-  rarity = 4,
-  atlas = 'Phanta',
-  pos = { x = 1, y = 2 },
-  soul_pos = { x = 2, y = 3,
-    draw = function(card, scale_mod, rotate_mod)
-      card.children.floating_sprite:draw_shader('dissolve', 0, nil, nil, card.children.center, scale_mod, rotate_mod, nil,
-        0.1 + 0.03 * math.sin(1.8 * G.TIMERS.REAL), nil, 0.6)
-      card.children.floating_sprite:draw_shader('dissolve', nil, nil, nil, card.children.center, scale_mod, rotate_mod)
-      card.children.floating_sprite:draw_shader('voucher', 0, nil, nil, card.children.center, scale_mod, rotate_mod, nil,
-        0.1 + 0.03 * math.sin(1.8 * G.TIMERS.REAL), nil, 0.6)
-      card.children.floating_sprite:draw_shader('voucher', nil, nil, nil, card.children.center, scale_mod, rotate_mod)
-    end },
-  cost = 20,
-  loc_vars = function(self, info_queue, card)
-    return {
-      vars = {
-        localize(G.GAME.current_round.fainfol_card.suit, 'suits_singular'),
-        card.ability.extra.xmult,
-        colours = { G.C.SUITS[G.GAME.current_round.fainfol_card.suit] }
-      }
-    }
-  end,
-  blueprint_compat = true,
-  eternal_compat = true,
-  perishable_compat = true,
-  calculate = function(self, card, context)
-    if context.cardarea == G.hand and not context.end_of_round and not context.repetition and context.other_card and context.other_card:is_suit(G.GAME.current_round.fainfol_card.suit) then
-      if context.other_card.debuff then
-        return {
-          message = localize('k_debuffed'),
-          colour = G.C.RED,
-          card = card,
-        }
-      else
-        return {
-          x_mult = card.ability.extra.xmult,
-          card = card
-        }
-      end
-    end
-  end
-}
-
-SMODS.Joker {
-  key = 'granwyrm',
-  config = { extra = { added_xmult = 0.8, current_unscored = 0, target_unscored = 16, current_xmult = 1 } },
-  rarity = 4,
-  atlas = 'Phanta',
-  pos = { x = 2, y = 2 },
-  --[[soul_pos = { x = 3, y = 3,
-    draw = function(card, scale_mod, rotate_mod)
-      card.ARGS.send_to_shader = card.ARGS.send_to_shader or {}
-
-      card.children.floating_sprite:draw_shader(nil, 0, nil, nil, card.children.center, scale_mod, rotate_mod, nil,
-        0.1 + 0.03 * math.sin(1.8 * G.TIMERS.REAL), nil, 0.6)
-      card.children.floating_sprite:draw_shader(nil, nil, nil, nil, card.children.center, scale_mod, rotate_mod)
-      card.children.floating_sprite:draw_shader('voucher', nil, card.ARGS.send_to_shader, nil, card.children.center,
-        scale_mod, rotate_mod, nil, 0.1 + 0.03 * math.sin(1.8 * G.TIMERS.REAL), nil, 0.6)
-    end },]] --
-  soul_pos = { x = 3, y = 3,
-    draw = function(card, scale_mod, rotate_mod)
-      card.children.floating_sprite:draw_shader('dissolve', 0, nil, nil, card.children.center, scale_mod, rotate_mod, nil,
-        0.1 + 0.03 * math.sin(1.8 * G.TIMERS.REAL), nil, 0.6)
-      card.children.floating_sprite:draw_shader('dissolve', nil, nil, nil, card.children.center, scale_mod, rotate_mod)
-      card.children.floating_sprite:draw_shader('voucher', 0, nil, nil, card.children.center, scale_mod, rotate_mod, nil,
-        0.1 + 0.03 * math.sin(1.8 * G.TIMERS.REAL), nil, 0.6)
-      card.children.floating_sprite:draw_shader('voucher', nil, nil, nil, card.children.center, scale_mod, rotate_mod)
-    end },
-  cost = 20,
-  loc_vars = function(self, info_queue, card)
-    return { vars = { card.ability.extra.added_xmult, card.ability.extra.target_unscored, card.ability.extra.target_unscored - card.ability.extra.current_unscored, card.ability.extra.current_xmult } }
-  end,
-  blueprint_compat = true,
-  eternal_compat = true,
-  perishable_compat = false,
-  calculate = function(self, card, context)
-    if context.joker_main and card.ability.extra.current_xmult > 1 then
-      return { xmult = card.ability.extra.current_xmult }
-    end
-
-    if context.individual and context.cardarea == "unscored" then
-      card.ability.extra.current_unscored = card.ability.extra.current_unscored + 1
-      if card.ability.extra.current_unscored == card.ability.extra.target_unscored then
-        card.ability.extra.current_xmult = card.ability.extra.current_xmult + card.ability.extra.added_xmult
-        card.ability.extra.current_unscored = 0
-        return {
-          message = localize { type = 'variable', key = 'a_xmult', vars = { card.ability.extra.current_xmult } },
-          colour = G.C.RED,
-          card = card
-        }
-      else
-        return {
-          message = (card.ability.extra.target_unscored - card.ability.extra.current_unscored) .. '',
-          colour = G.C.FILTER,
-          card = card
-        }
-      end
-    end
-  end
-}
-
-local igo = Game.init_game_object
-function Game:init_game_object()
-  local ret = igo(self)
-  ret.current_round.train_station_card = { id = nil, value = nil }
-  ret.current_round.fainfol_card = { suit = 'Spades' }
-  return ret
-end
-
-function SMODS.current_mod.reset_game_globals(run_start)
-  G.GAME.current_round.fainfol_card = { suit = 'Spades' }
-  local valid_cards = {}
-  for i, j in ipairs(G.playing_cards) do
-    if not SMODS.has_no_suit(j) then
-      valid_cards[#valid_cards + 1] = j
-    end
-  end
-  if valid_cards[1] then
-    local chosen_card = pseudorandom_element(valid_cards, pseudoseed('fainfol' .. G.GAME.round_resets.ante))
-    G.GAME.current_round.fainfol_card.suit = chosen_card.base.suit
-  end
-  if not G.GAME.current_round.train_station_card.id then
-    G.GAME.current_round.train_station_card.id = 2
-  elseif G.GAME.current_round.train_station_card.id == 14 then
-    G.GAME.current_round.train_station_card.id = 2
-  else
-    G.GAME.current_round.train_station_card.id = G.GAME.current_round.train_station_card.id + 1
-  end
-
-  local value_table = { '2', '3', '4', '5', '6', '7', '8', '9', '10', 'Jack', 'Queen', 'King', 'Ace' }
-  G.GAME.current_round.train_station_card.value = value_table[G.GAME.current_round.train_station_card.id - 1]
-end
