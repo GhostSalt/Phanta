@@ -1797,6 +1797,7 @@ return {
             phanta_inactive = "inactive",
             phanta_unknown = "Unknown",
             phanta_increased = "Increased",
+            phanta_azran_exclusive = "Azran Deck",
             b_phanta_zodiac_cards = "Zodiac Cards",
             k_phanta_zodiac = "Zodiac",
             k_phanta_zodiac_pack = "Zodiac Pack",

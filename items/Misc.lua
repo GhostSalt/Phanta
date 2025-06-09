@@ -144,6 +144,28 @@ SMODS.Tarot {
 }
 
 SMODS.Tarot {
+  key = "brazier",
+  loc_txt = {
+    name = 'Brazier',
+    text = {
+      "Enhances {C:attention}#1#{}",
+      "selected card into a",
+      "{C:attention}Copper Grate Card{} {C:inactive}(Fresh){}"
+    }
+  },
+  pos = { x = 2, y = 2 },
+  config = {
+    mod_conv = "m_phanta_coppergratefresh",
+    max_highlighted = 1
+  },
+  atlas = "PhantaTarots",
+  loc_vars = function(self, info_queue, card)
+    info_queue[#info_queue + 1] = G.P_CENTERS.m_phanta_coppergratefresh
+    return { vars = { card.ability.max_highlighted } }
+  end
+}
+
+SMODS.Tarot {
   key = "beekeeper",
   pos = { x = 3, y = 0 },
   config = {
@@ -323,6 +345,9 @@ SMODS.Consumable {
   end,
   in_pool = function()
     return G.GAME.selected_back.effect.center.key == "b_phanta_azran"
+  end,
+  set_badges = function(self, card, badges)
+    badges[#badges+1] = create_badge(localize('phanta_azran_exclusive'), G.C.SECONDARY_SET.Spectral, G.C.WHITE, 1)
   end
 }
 
@@ -379,6 +404,9 @@ SMODS.Consumable {
   end,
   in_pool = function()
     return G.GAME.selected_back.effect.center.key == "b_phanta_azran"
+  end,
+  set_badges = function(self, card, badges)
+    badges[#badges+1] = create_badge(localize('phanta_azran_exclusive'), G.C.SECONDARY_SET.Spectral, G.C.WHITE, 1)
   end
 }
 
@@ -416,6 +444,9 @@ SMODS.Consumable {
   end,
   in_pool = function()
     return G.GAME.selected_back.effect.center.key == "b_phanta_azran"
+  end,
+  set_badges = function(self, card, badges)
+    badges[#badges+1] = create_badge(localize('phanta_azran_exclusive'), G.C.SECONDARY_SET.Spectral, G.C.WHITE, 1)
   end
 }
 
@@ -454,6 +485,9 @@ SMODS.Consumable {
   end,
   in_pool = function()
     return G.GAME.selected_back.effect.center.key == "b_phanta_azran"
+  end,
+  set_badges = function(self, card, badges)
+    badges[#badges+1] = create_badge(localize('phanta_azran_exclusive'), G.C.SECONDARY_SET.Spectral, G.C.WHITE, 1)
   end
 }
 
@@ -495,6 +529,9 @@ SMODS.Consumable {
   end,
   in_pool = function()
     return G.GAME.selected_back.effect.center.key == "b_phanta_azran"
+  end,
+  set_badges = function(self, card, badges)
+    badges[#badges+1] = create_badge(localize('phanta_azran_exclusive'), G.C.SECONDARY_SET.Spectral, G.C.WHITE, 1)
   end
 }
 
@@ -544,7 +581,6 @@ SMODS.Enhancement {
   pos = { x = 0, y = 1 },
   config = { Xmult = 2 },
   loc_vars = function(self, info_queue, center)
-    info_queue[#info_queue + 1] = G.P_CENTERS.e_phanta_waxed
     info_queue[#info_queue + 1] = G.P_CENTERS.m_phanta_coppergrateexposed
     return { vars = { center.ability.Xmult } }
   end,
@@ -566,7 +602,6 @@ SMODS.Enhancement {
   pos = { x = 1, y = 1 },
   config = { Xmult = 1.5, bonus = 15 },
   loc_vars = function(self, info_queue, center)
-    info_queue[#info_queue + 1] = G.P_CENTERS.e_phanta_waxed
     info_queue[#info_queue + 1] = G.P_CENTERS.m_phanta_coppergrateweathered
     return { vars = { center.ability.Xmult, center.ability.bonus } }
   end,
@@ -589,7 +624,6 @@ SMODS.Enhancement {
   pos = { x = 0, y = 2 },
   config = { Xmult = 1.25, bonus = 30 },
   loc_vars = function(self, info_queue, center)
-    info_queue[#info_queue + 1] = G.P_CENTERS.e_phanta_waxed
     info_queue[#info_queue + 1] = G.P_CENTERS.m_phanta_coppergrateoxidised
     return { vars = { center.ability.Xmult, center.ability.bonus } }
   end,
