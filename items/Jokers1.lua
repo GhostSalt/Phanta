@@ -1815,6 +1815,82 @@ SMODS.Joker {
   end
 }
 
+SMODS.Sound({
+	key = "diamondaxe",
+	path = "phanta_diamondaxe.ogg",
+  replace = true
+})
+
+SMODS.Joker {
+  key = 'diamondaxe',
+  rarity = 2,
+  atlas = 'Phanta',
+  pos = { x = 10, y = 2 },
+  cost = 6,
+  loc_vars = function(self, info_queue, card)
+    info_queue[#info_queue + 1] = G.P_CENTERS.m_phanta_coppergratefresh
+    return {}
+  end,
+  blueprint_compat = true,
+  eternal_compat = true,
+  perishable_compat = true,
+  calculate = function(self, card, context)
+    if context.individual and context.cardarea == G.play and (SMODS.has_enhancement(context.other_card, "m_phanta_coppergrateexposed") or SMODS.has_enhancement(context.other_card, "m_phanta_coppergrateweathered") or SMODS.has_enhancement(context.other_card, "m_phanta_coppergrateoxidised")) then
+      if SMODS.has_enhancement(context.other_card, "m_phanta_coppergrateexposed") then
+        context.other_card:set_ability(G.P_CENTERS.m_phanta_coppergratefresh, nil, true)
+      elseif SMODS.has_enhancement(context.other_card, "m_phanta_coppergrateweathered") then
+        context.other_card:set_ability(G.P_CENTERS.m_phanta_coppergrateexposed, nil, true)
+      else
+        context.other_card:set_ability(G.P_CENTERS.m_phanta_coppergrateweathered, nil, true)
+      end
+
+      local _card = context.other_card
+
+      G.E_MANAGER:add_event(Event({
+        func = function()
+          card:juice_up()
+          _card:juice_up()
+          play_sound("phanta_diamondaxe", 1, 0.5)
+          return true
+        end
+      }))
+    end
+  end
+}
+
+SMODS.Joker {
+  key = 'honeydew',
+  rarity = 2,
+  atlas = 'Phanta',
+  pos = { x = 11, y = 9 },
+  cost = 6,
+  loc_vars = function(self, info_queue, card)
+    info_queue[#info_queue + 1] = G.P_CENTERS.e_phanta_waxed
+    return {}
+  end,
+  blueprint_compat = true,
+  eternal_compat = true,
+  perishable_compat = true,
+  calculate = function(self, card, context)
+    if context.first_hand_drawn then
+      local candidates = {}
+      for i = 1, #G.hand.cards do
+        if not (G.hand.cards[i].edition and G.hand.cards[i].edition.key ~= nil) then
+          candidates[#candidates + 1] = G
+              .hand.cards[i]
+        end
+      end
+      print(#candidates)
+      if #candidates > 0 then
+        local chosen_card = pseudorandom_element(candidates, pseudoseed("honeydew"))
+        chosen_card:set_edition("e_phanta_waxed")
+        card:juice_up()
+        return { message = localize("phanta_waxed", "labels"), colour = G.C.FILTER }
+      end
+    end
+  end
+}
+
 SMODS.Joker {
   key = 'candle',
   config = { extra = { added_xmult = 0.25, current_xmult = 1 } },

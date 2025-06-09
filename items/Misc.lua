@@ -544,10 +544,12 @@ SMODS.Enhancement {
   pos = { x = 0, y = 1 },
   config = { Xmult = 2 },
   loc_vars = function(self, info_queue, center)
+    info_queue[#info_queue + 1] = G.P_CENTERS.e_phanta_waxed
+    info_queue[#info_queue + 1] = G.P_CENTERS.m_phanta_coppergrateexposed
     return { vars = { center.ability.Xmult } }
   end,
   calculate = function(self, card, context)
-    if context.final_scoring_step and context.cardarea == G.play and not (card.edition and card.edition.key == 'e_phanta_waxed') then
+    if context.final_scoring_step and context.cardarea == G.play and not (card.edition and card.edition.key == 'e_phanta_waxed') and not #SMODS.find_card("j_phanta_diamondaxe") then
       card:set_ability(G.P_CENTERS.m_phanta_coppergrateexposed, nil, true)
       return false
     end
@@ -564,10 +566,12 @@ SMODS.Enhancement {
   pos = { x = 1, y = 1 },
   config = { Xmult = 1.5, bonus = 15 },
   loc_vars = function(self, info_queue, center)
+    info_queue[#info_queue + 1] = G.P_CENTERS.e_phanta_waxed
+    info_queue[#info_queue + 1] = G.P_CENTERS.m_phanta_coppergrateweathered
     return { vars = { center.ability.Xmult, center.ability.bonus } }
   end,
   calculate = function(self, card, context)
-    if context.final_scoring_step and context.cardarea == G.play and not (card.edition and card.edition.key == 'e_phanta_waxed') then
+    if context.final_scoring_step and context.cardarea == G.play and not (card.edition and card.edition.key == 'e_phanta_waxed') and not #SMODS.find_card("j_phanta_diamondaxe") then
       card:set_ability(G.P_CENTERS.m_phanta_coppergrateweathered, nil, true)
       return false
     end
@@ -585,10 +589,12 @@ SMODS.Enhancement {
   pos = { x = 0, y = 2 },
   config = { Xmult = 1.25, bonus = 30 },
   loc_vars = function(self, info_queue, center)
+    info_queue[#info_queue + 1] = G.P_CENTERS.e_phanta_waxed
+    info_queue[#info_queue + 1] = G.P_CENTERS.m_phanta_coppergrateoxidised
     return { vars = { center.ability.Xmult, center.ability.bonus } }
   end,
   calculate = function(self, card, context)
-    if context.final_scoring_step and context.cardarea == G.play and not (card.edition and card.edition.key == 'e_phanta_waxed') then
+    if context.final_scoring_step and context.cardarea == G.play and not (card.edition and card.edition.key == 'e_phanta_waxed') and not #SMODS.find_card("j_phanta_diamondaxe") then
       card:set_ability(G.P_CENTERS.m_phanta_coppergrateoxidised, nil, true)
       return false
     end
@@ -607,10 +613,11 @@ SMODS.Enhancement {
   pos = { x = 1, y = 2 },
   config = { bonus = 50 },
   loc_vars = function(self, info_queue, center)
+    info_queue[#info_queue + 1] = G.P_CENTERS.e_phanta_waxed
     return { vars = { center.ability.bonus } }
   end,
   calculate = function(self, card, context)
-    if context.destroy_card == card and context.cardarea == G.play and not (card.edition and card.edition.key == 'e_phanta_waxed') then return { remove = true } end
+    if context.destroy_card == card and context.cardarea == G.play and not (card.edition and card.edition.key == 'e_phanta_waxed') and not #SMODS.find_card("j_phanta_diamondaxe") then return { remove = true } end
   end,
   set_badges = function(self, card, badges)
     badges[#badges + 1] = create_badge(localize('phanta_copper_grate_oxidised'), G.C.PHANTA.MISC_COLOURS.COPPER_OXIDISED,

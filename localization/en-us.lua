@@ -703,6 +703,24 @@ return {
                     "with {C:attention}enhancements{}"
                 }
             },
+            j_phanta_diamondaxe = {
+                name = 'Diamond Axe',
+                text = {
+                    "{C:attention}Copper Grate{} cards do",
+                    "not {C:attention}oxidise{}, and this",
+                    "Joker {C:attention}deoxidises{} them when",
+                    "they are played and scored",
+                }
+            },
+            j_phanta_honeydew = {
+                name = 'Honeydew',
+                text = {
+                    "When {C:attention}round{} begins,",
+                    "adds {C:dark_edition}Waxed{} to one",
+                    "random {C:attention}base edition{}",
+                    "card in your hand"
+                }
+            },
             j_phanta_candle = {
                 name = 'Candle',
                 text = {
