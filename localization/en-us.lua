@@ -672,9 +672,9 @@ return {
             j_phanta_medic = {
                 name = 'Medic',
                 text = {
-                    "Creates a copy of",
-                    "{C:tarot}Death{} if all played",
-                    "cards are {C:hearts}Hearts{} suit",
+                    "Creates a copy of {C:tarot}Death{} if",
+                    "{C:attention}first hand{} of round contains",
+                    "{C:attention}5{} cards with {C:hearts}Hearts{} suit",
                     "{C:inactive}(Must have room){}"
                 }
             },

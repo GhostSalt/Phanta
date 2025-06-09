@@ -47,7 +47,7 @@ SMODS.Joker {
   pos = { x = 11, y = 3 },
   cost = 2,
   blueprint_compat = true,
-  eternal_compat = true,
+  eternal_compat = false,
   perishable_compat = true,
   calculate = function(self, card, context)
     if context.selling_self and #G.jokers.cards <= G.jokers.config.card_limit then
@@ -1719,14 +1719,19 @@ SMODS.Joker {
   eternal_compat = true,
   perishable_compat = true,
   calculate = function(self, card, context)
-    if context.cardarea == G.jokers and context.before and not (context.blueprint_card or card).getting_sliced and count_consumables() < G.consumeables.config.card_limit then
-      local contains_nonheart = false
+    if context.first_hand_drawn then
+      local eval = function() return G.GAME.current_round.hands_played == 0 end
+      juice_card_until(card, eval, true)
+    end
+
+    if G.GAME.current_round.hands_played == 0 and context.cardarea == G.jokers and context.before and not (context.blueprint_card or card).getting_sliced and count_consumables() < G.consumeables.config.card_limit and #G.play.cards >= 5 then
+      local counted_hearts = 0
       for i = 1, #G.play.cards do
-        if not G.play.cards[i]:is_suit("Hearts") then
-          contains_nonheart = true
+        if G.play.cards[i]:is_suit("Hearts") then
+          counted_hearts = counted_hearts + 1
         end
       end
-      if not contains_nonheart then
+      if counted_hearts >= 5 then
         G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
         G.E_MANAGER:add_event(Event({
           func = function()
