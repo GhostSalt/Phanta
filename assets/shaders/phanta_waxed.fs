@@ -56,7 +56,7 @@ vec4 effect( vec4 colour, Image texture, vec2 texture_coords, vec2 screen_coords
     vec4 tex = Texel( texture, texture_coords);
     vec2 uv = (((texture_coords)*(image_details)) - texture_details.xy*texture_details.ba)/texture_details.ba;
 
-    tex.rgb = tex.rgb * 0.25 + vec3(0.75, 0.6, 0.4 + waxed.x - waxed.x); // Making sure the waxed variable isn't optimised out. I love this game. :)
+    tex.rgb = tex.rgb * 0.25 + vec3(0.75, 0.6, 0.4 + (waxed.x * 0.000001)); // Making sure the waxed variable isn't optimised out. I love this game. :)
     tex.a *= 0.35;
 
     return dissolve_mask(tex * colour, texture_coords, uv);

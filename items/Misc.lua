@@ -505,7 +505,7 @@ SMODS.Consumable {
 
 SMODS.Shader {
   key = "waxed",
-  path = "waxed.fs"
+  path = "phanta_waxed.fs"
 }
 
 SMODS.Sound({
