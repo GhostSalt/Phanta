@@ -224,6 +224,35 @@ function is_blind_boss()
   return G.GAME.blind and G.GAME.blind:get_type() == 'Boss'
 end
 
+function count_missing_ranks()
+  if not G.playing_cards then return 0 end
+  local existing_ranks = {}
+  for i, j in pairs(G.playing_cards) do
+    local is_valid = true
+    for rank = 1, #existing_ranks do
+      if j:get_id() == existing_ranks[rank] then is_valid = false end
+    end
+    if is_valid then existing_ranks[#existing_ranks + 1] = j:get_id() end
+  end
+
+  if #existing_ranks < #G.GAME.phanta_initial_ranks then return #G.GAME.phanta_initial_ranks - #existing_ranks end
+  return 0
+end
+
+function count_base_copper_grates()
+  if not G.playing_cards then return {} end
+  local grates = {}
+  for i, j in pairs(G.playing_cards) do
+    if (SMODS.has_enhancement(j, 'm_phanta_coppergratefresh')
+    or SMODS.has_enhancement(j, 'm_phanta_coppergrateexposed')
+    or SMODS.has_enhancement(j, 'm_phanta_coppergrateweathered')
+    or SMODS.has_enhancement(j, 'm_phanta_coppergrateoxidised'))
+    and not (j.edition and j.edition.key ~= nil) then grates[#grates + 1] = j end
+  end
+
+  return grates
+end
+
 local ref1 = Card.start_dissolve
 function Card:start_dissolve()
   if self.config and self.config.center and self.config.center.phanta_shatters then
@@ -247,6 +276,21 @@ for i = 1, #allFolders do
       assert(SMODS.load_file(allFolders[i] .. "/" .. allFiles[allFolders[i]][j] .. ".lua"))()
     end
   end
+end
+
+local game_start_run_ref = Game.start_run
+
+function Game:start_run(args)
+  game_start_run_ref(self, args)
+  local existing_ranks = {}
+  for i, j in pairs(G.playing_cards) do
+    local is_valid = true
+    for rank = 1, #existing_ranks do
+      if j:get_id() == existing_ranks[rank] then is_valid = false end
+    end
+    if is_valid then existing_ranks[#existing_ranks + 1] = j:get_id() end
+  end
+  G.GAME.phanta_initial_ranks = existing_ranks
 end
 
 if next(SMODS.find_mod('Bakery')) then assert(SMODS.load_file("items/Charm.lua"))() end

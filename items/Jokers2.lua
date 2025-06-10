@@ -53,7 +53,7 @@ SMODS.Joker {
     if context.joker_main then return { mult = card.ability.extra.mult } end
     if not context.repetition
         and math.random() > card.ability.extra.rate then
-      local all_pitches = {{ 1 }, { 1, 1, 1, 1, 0.5, 2 }, { 1, 1, 2 }}
+      local all_pitches = { { 1 }, { 1, 1, 1, 1, 0.5, 2 }, { 1, 1, 2 } }
 
       local sound = math.floor(math.random() * #all_pitches)
       sound = sound < #all_pitches and sound or 1
@@ -71,6 +71,52 @@ SMODS.Joker {
           return true
         end
       }))
+    end
+  end
+}
+
+SMODS.Joker {
+  key = 'plugsocket',
+  config = { extra = { xmult = 0.25 } },
+  loc_vars = function(self, info_queue, card)
+    return { vars = { card.ability.extra.xmult, 1 + (#count_base_copper_grates() * card.ability.extra.xmult) } }
+  end,
+  rarity = 2,
+  atlas = 'Phanta2',
+  pos = { x = 3, y = 0 },
+  cost = 6,
+  blueprint_compat = true,
+  eternal_compat = true,
+  perishable_compat = true,
+  calculate = function(self, card, context)
+    if context.joker_main then
+      local copper_grates = #count_base_copper_grates()
+      if copper_grates > 0 then
+        return { xmult = 1 + (copper_grates * card.ability.extra.xmult) }
+      end
+    end
+  end
+}
+
+SMODS.Joker {
+  key = 'technojoker',
+  config = { extra = { xmult = 0.5 } },
+  loc_vars = function(self, info_queue, card)
+    return { vars = { card.ability.extra.xmult, 1 + (count_missing_ranks() * card.ability.extra.xmult) } }
+  end,
+  rarity = 3,
+  atlas = 'Phanta2',
+  pos = { x = 1, y = 0 },
+  cost = 8,
+  blueprint_compat = true,
+  eternal_compat = true,
+  perishable_compat = true,
+  calculate = function(self, card, context)
+    if context.joker_main then
+      local missing_ranks = count_missing_ranks()
+      if missing_ranks > 0 then
+        return { xmult = 1 + (missing_ranks * card.ability.extra.xmult) }
+      end
     end
   end
 }

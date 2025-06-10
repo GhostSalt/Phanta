@@ -1254,6 +1254,24 @@ return {
                     "highly annoying"
                 }
             },
+            j_phanta_plugsocket = {
+                name = 'Plug Socket',
+                text = {
+                    "{C:white,X:mult}X#1#{} Mult for each {C:dark_edition}base{}",
+                    "edition {C:attention}Copper Grate{} card",
+                    "in your {C:attention}full deck{}",
+                    "{C:inactive}(Currently {X:mult,C:white}X#2#{C:inactive} Mult){}"
+                }
+            },
+            j_phanta_technojoker = {
+                name = 'Techno Joker',
+                text = {
+                    "{C:white,X:mult}X#1#{} Mult for each",
+                    "rank {C:red}absent{} from",
+                    "your {C:attention}full deck{}",
+                    "{C:inactive}(Currently {X:mult,C:white}X#2#{C:inactive} Mult){}"
+                }
+            },
             j_phanta_ignaize = {
                 name = 'Ignaize',
                 text = {
