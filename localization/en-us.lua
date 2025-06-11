@@ -1254,6 +1254,14 @@ return {
                     "highly annoying"
                 }
             },
+            j_phanta_clapperboard={
+                name="Clapperboard",
+                text={
+                    "Reroll Boss Blind",
+                    "{C:attention}unlimited{} times,",
+                    "{C:money}$10{} per roll",
+                }
+            },
             j_phanta_plugsocket = {
                 name = 'Plug Socket',
                 text = {

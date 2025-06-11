@@ -535,6 +535,48 @@ SMODS.Consumable {
   end
 }
 
+SMODS.Consumable {
+  object_type = "Consumable",
+  set = "Spectral",
+  key = "bazaar",
+  loc_txt = {
+    name = 'Bazaar',
+    text = {
+      "Creates a",
+      "{C:attention}Voucher Tag{}"
+    }
+  },
+  pos = { x = 1, y = 2 },
+  atlas = "PhantaTarots",
+  loc_vars = function(self, info_queue, card)
+    info_queue[#info_queue + 1] = G.P_TAGS.tag_voucher
+    return {}
+  end,
+  can_use = function(self, card)
+    return true
+  end,
+  use = function(self, card, area, copier)
+    G.E_MANAGER:add_event(Event({
+      trigger = 'after',
+      delay = 0.4,
+      func = function()
+        add_tag(Tag('tag_voucher'))
+        play_sound('generic1', 0.9 + math.random() * 0.1, 0.8)
+        play_sound('holo1', 1.2 + math.random() * 0.1, 0.4)
+        card:juice_up()
+        return true
+      end
+    }))
+    delay(0.6)
+  end,
+  in_pool = function()
+    return G.GAME.selected_back.effect.center.key == "b_phanta_azran"
+  end,
+  set_badges = function(self, card, badges)
+    badges[#badges+1] = create_badge(localize('phanta_azran_exclusive'), G.C.SECONDARY_SET.Spectral, G.C.WHITE, 1)
+  end
+}
+
 
 
 

@@ -10,3 +10,19 @@ pattern = '''{n=G.UIT.R, config={align = "cm", minh = 1.75, minw = 1.5,padding =
 position = 'before'
 payload = '''phanta_add_catan_building_button(scale),'''
 match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = 'functions/UI_definitions.lua'
+pattern = '''(G.GAME.used_vouchers["v_retcon"] or G.GAME.used_vouchers["v_directors_cut"]) and'''
+position = 'at'
+payload = '''(G.GAME.used_vouchers["v_retcon"] or G.GAME.used_vouchers["v_directors_cut"] or #SMODS.find_card('j_phanta_clapperboard') > 0) and'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = 'functions/button_callbacks.lua'
+pattern = '''(G.GAME.used_vouchers["v_retcon"] or'''
+position = 'after'
+payload = '''#SMODS.find_card('j_phanta_clapperboard') > 0 or'''
+match_indent = true

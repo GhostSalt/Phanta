@@ -76,6 +76,20 @@ SMODS.Joker {
 }
 
 SMODS.Joker {
+  key = 'clapperboard',
+  rarity = 2,
+  atlas = 'Phanta2',
+  pos = { x = 4, y = 0 },
+  cost = 6,
+  blueprint_compat = true,
+  eternal_compat = true,
+  perishable_compat = true,
+  in_pool = function()
+    return #SMODS.find_card('v_retcon') == 0
+  end
+}
+
+SMODS.Joker {
   key = 'plugsocket',
   config = { extra = { xmult = 0.25 } },
   loc_vars = function(self, info_queue, card)
