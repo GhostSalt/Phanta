@@ -14,7 +14,7 @@ Bakery_API.credit(Bakery_API.Charm {
         extra = {}
     },
     calculate = function(self, card, context)
-        if context.setting_blind and not (context.blueprint_card or card).getting_sliced and count_consumables() < G.consumeables.config.card_limit then
+        if context.setting_blind and not (context.blueprint_card or card).getting_sliced then
             G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
             G.E_MANAGER:add_event(Event({
                 func = function()

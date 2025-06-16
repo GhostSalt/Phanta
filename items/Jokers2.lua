@@ -38,7 +38,7 @@ SMODS.Sound({
 
 SMODS.Joker {
   key = 'normalface',
-  config = { extra = { mult = 10, rate = 0.9 } },
+  config = { extra = { mult = 10 } },
   loc_vars = function(self, info_queue, card)
     return { vars = { card.ability.extra.mult } }
   end,
@@ -51,8 +51,7 @@ SMODS.Joker {
   perishable_compat = true,
   calculate = function(self, card, context)
     if context.joker_main then return { mult = card.ability.extra.mult } end
-    if not context.repetition
-        and math.random() > card.ability.extra.rate then
+    if not context.repetition and math.random() > 0.95 then
       local all_pitches = { { 1 }, { 1, 1, 1, 1, 0.5, 2 }, { 1, 1, 2 } }
 
       local sound = math.floor(math.random() * #all_pitches)
@@ -76,16 +75,145 @@ SMODS.Joker {
 }
 
 SMODS.Joker {
+  key = 'donpaolo',
+  rarity = 2,
+  atlas = 'Phanta2',
+  pos = { x = 6, y = 0 },
+  cost = 6,
+  blueprint_compat = false,
+  eternal_compat = true,
+  perishable_compat = true,
+  calculate = function(self, card, context)
+    if context.selling_card and context.card.config.center.set == "Tarot" and #G.hand.highlighted == 1 then
+      G.E_MANAGER:add_event(Event({
+        trigger = 'after',
+        delay = 0.2,
+        func = function()
+          card:juice_up()
+          SMODS.destroy_cards(G.hand.highlighted)
+          return true
+        end
+      }))
+    end
+  end
+}
+
+SMODS.Joker {
+  key = 'futureluke',
+  rarity = 2,
+  atlas = 'Phanta2',
+  pos = { x = 7, y = 0 },
+  cost = 6,
+  blueprint_compat = false,
+  eternal_compat = true,
+  perishable_compat = true,
+  calculate = function(self, card, context)
+    if context.selling_card and context.card.config.center.set == "Planet" and #G.hand.highlighted == 1 then
+      G.E_MANAGER:add_event(Event({
+        trigger = 'after',
+        delay = 0.2,
+        func = function()
+          card:juice_up()
+          SMODS.destroy_cards(G.hand.highlighted)
+          return true
+        end
+      }))
+    end
+  end
+}
+
+SMODS.Joker {
+  key = 'barton',
+  config = { extra = { mult = 50, requirement = 15 } },
+  rarity = 2,
+  atlas = 'Phanta2',
+  pos = { x = 8, y = 0 },
+  cost = 7,
+  blueprint_compat = true,
+  eternal_compat = true,
+  perishable_compat = true,
+  loc_vars = function(self, info_queue, card)
+    return { vars = { card.ability.extra.mult, card.ability.extra.requirement, count_unique_tarots(),
+    (next(SMODS.find_card("j_phanta_inspectorchelmey")) or count_unique_tarots() >= card.ability.extra.requirement) and localize("phanta_active") or localize("phanta_inactive") } }
+  end,
+  calculate = function(self, card, context)
+    if context.joker_main then
+      if next(SMODS.find_card("j_phanta_inspectorchelmey")) or count_unique_tarots() >= card.ability.extra.requirement then
+        return { mult = card.ability.extra.mult }
+      end
+    end
+  end
+}
+
+SMODS.Joker {
+  key = 'inspectorchelmey',
+  config = { extra = { xmult = 3, requirement = 9 } },
+  rarity = 2,
+  atlas = 'Phanta2',
+  pos = { x = 9, y = 0 },
+  cost = 7,
+  blueprint_compat = true,
+  eternal_compat = true,
+  perishable_compat = true,
+  loc_vars = function(self, info_queue, card)
+    return { vars = { card.ability.extra.xmult, card.ability.extra.requirement, count_unique_planets(),
+    (next(SMODS.find_card("j_phanta_barton")) or count_unique_planets() >= card.ability.extra.requirement) and localize("phanta_active") or localize("phanta_inactive") } }
+  end,
+  calculate = function(self, card, context)
+    if context.joker_main then
+      if next(SMODS.find_card("j_phanta_barton")) or count_unique_planets() >= card.ability.extra.requirement then
+        return { xmult = card.ability.extra.xmult }
+      end
+    end
+  end
+}
+
+SMODS.Joker {
   key = 'clapperboard',
   rarity = 2,
   atlas = 'Phanta2',
   pos = { x = 4, y = 0 },
   cost = 6,
-  blueprint_compat = true,
+  blueprint_compat = false,
   eternal_compat = true,
   perishable_compat = true,
   in_pool = function()
     return #SMODS.find_card('v_retcon') == 0
+  end
+}
+
+SMODS.Joker {
+  key = 'birthdaycard',
+  config = { extra = { added_xmult = 0.2, current_xmult = 1 } },
+  loc_vars = function(self, info_queue, card)
+    info_queue[#info_queue + 1] = G.P_CENTERS.e_phanta_waxed
+    return { vars = { card.ability.extra.added_xmult, card.ability.extra.current_xmult } }
+  end,
+  rarity = 2,
+  atlas = 'Phanta2',
+  pos = { x = 5, y = 0 },
+  cost = 5,
+  blueprint_compat = true,
+  eternal_compat = true,
+  perishable_compat = true,
+  calculate = function(self, card, context)
+    if context.joker_main and card.ability.extra.current_xmult > 1 then
+      return { xmult = card.ability.extra.current_xmult }
+    end
+
+    if context.remove_playing_cards and not context.blueprint then
+      local waxed_cards = {}
+      for i = 1, #context.removed do
+        if context.removed[i].edition and context.removed[i].edition.key == 'e_phanta_waxed' then waxed_cards[#waxed_cards + 1] =
+          context.removed[i].edition.key end
+      end
+
+      if #waxed_cards > 0 then
+        card.ability.extra.current_xmult = card.ability.extra.current_xmult +
+            (#waxed_cards * card.ability.extra.added_xmult)
+        return { message = localize("k_upgrade_ex"), colour = G.C.FILTER, card = card }
+      end
+    end
   end
 }
 

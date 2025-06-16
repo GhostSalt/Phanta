@@ -244,13 +244,33 @@ function count_base_copper_grates()
   local grates = {}
   for i, j in pairs(G.playing_cards) do
     if (SMODS.has_enhancement(j, 'm_phanta_coppergratefresh')
-    or SMODS.has_enhancement(j, 'm_phanta_coppergrateexposed')
-    or SMODS.has_enhancement(j, 'm_phanta_coppergrateweathered')
-    or SMODS.has_enhancement(j, 'm_phanta_coppergrateoxidised'))
-    and not (j.edition and j.edition.key ~= nil) then grates[#grates + 1] = j end
+          or SMODS.has_enhancement(j, 'm_phanta_coppergrateexposed')
+          or SMODS.has_enhancement(j, 'm_phanta_coppergrateweathered')
+          or SMODS.has_enhancement(j, 'm_phanta_coppergrateoxidised'))
+        and not (j.edition and j.edition.key ~= nil) then
+      grates[#grates + 1] = j
+    end
   end
 
   return grates
+end
+
+function count_unique_tarots()
+  local tarots_used = 0
+  if G.GAME and G.GAME.consumeable_usage then
+    for k, v in pairs(G.GAME.consumeable_usage) do if v.set == 'Tarot' then tarots_used = tarots_used + 1 end end
+  end
+
+  return tarots_used
+end
+
+function count_unique_planets()
+  local planets_used = 0
+  if G.GAME and G.GAME.consumeable_usage then
+    for k, v in pairs(G.GAME.consumeable_usage) do if v.set == 'Planet' then planets_used = planets_used + 1 end end
+  end
+
+  return planets_used
 end
 
 local ref1 = Card.start_dissolve

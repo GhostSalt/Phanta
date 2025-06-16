@@ -1028,7 +1028,7 @@ SMODS.Joker {
     if context.remove_playing_cards and not context.blueprint then
       card.ability.extra.current_mult = card.ability.extra.current_mult +
           (#context.removed * card.ability.extra.added_mult)
-      return { message = localize("k_upgrade_ex"), color = G.C.FILTER, card = card }
+      return { message = localize("k_upgrade_ex"), colour = G.C.FILTER, card = card }
     end
   end
 }
@@ -1051,7 +1051,7 @@ SMODS.Joker {
 
     if context.cardarea == G.jokers and context.before and G.GAME.current_round.hands_left == 0 and not context.blueprint then
       card.ability.extra.current_mult = card.ability.extra.current_mult + card.ability.extra.added_mult
-      return { message = localize("k_upgrade_ex"), color = G.C.FILTER, card = card }
+      return { message = localize("k_upgrade_ex"), colour = G.C.FILTER, card = card }
     end
   end
 }
@@ -1586,8 +1586,8 @@ SMODS.Joker {
 }
 
 SMODS.Joker {
-  key = 'layton',
-  config = { extra = { out_of_odds = 4, added_mult = 75 } },
+  key = 'professorlayton',
+  config = { extra = { out_of_odds = 4, added_mult = 50 } },
   rarity = 2,
   atlas = 'Phanta',
   pos = { x = 0, y = 8 },
@@ -1596,12 +1596,12 @@ SMODS.Joker {
   eternal_compat = true,
   perishable_compat = true,
   loc_vars = function(self, info_queue, card)
-    return { vars = { (G.GAME.probabilities.normal or 1) * count_tarots(), card.ability.extra.out_of_odds, card.ability.extra.added_mult } }
+    return { vars = { next(SMODS.find_card("j_phanta_luketriton")) and card.ability.extra.out_of_odds or ((G.GAME.probabilities.normal or 1) * count_tarots()), card.ability.extra.out_of_odds, card.ability.extra.added_mult } }
   end,
   calculate = function(self, card, context)
     if context.joker_main then
       local tarot_count = G.GAME.probabilities.normal * count_tarots()
-      if next(SMODS.find_card("j_phanta_luke")) or (tarot_count > 0 and pseudorandom('layton') < tarot_count / card.ability.extra.out_of_odds) then
+      if next(SMODS.find_card("j_phanta_luketriton")) or (tarot_count > 0 and pseudorandom('layton') < tarot_count / card.ability.extra.out_of_odds) then
         return { mult = card.ability.extra.added_mult }
       end
     end
@@ -1609,7 +1609,7 @@ SMODS.Joker {
 }
 
 SMODS.Joker {
-  key = 'luke',
+  key = 'luketriton',
   config = { extra = { out_of_odds = 4, x_mult = 3 } },
   rarity = 2,
   atlas = 'Phanta',
@@ -1619,12 +1619,12 @@ SMODS.Joker {
   eternal_compat = true,
   perishable_compat = true,
   loc_vars = function(self, info_queue, card)
-    return { vars = { (G.GAME.probabilities.normal or 1) * count_planets(), card.ability.extra.out_of_odds, card.ability.extra.x_mult } }
+    return { vars = { next(SMODS.find_card("j_phanta_professorlayton")) and card.ability.extra.out_of_odds or ((G.GAME.probabilities.normal or 1) * count_planets()), card.ability.extra.out_of_odds, card.ability.extra.x_mult } }
   end,
   calculate = function(self, card, context)
     if context.joker_main then
       local planet_count = G.GAME.probabilities.normal * count_planets()
-      if next(SMODS.find_card("j_phanta_layton")) or (planet_count > 0 and pseudorandom('luke') < planet_count / card.ability.extra.out_of_odds) then
+      if next(SMODS.find_card("j_phanta_professorlayton")) or (planet_count > 0 and pseudorandom('luke') < planet_count / card.ability.extra.out_of_odds) then
         return { xmult = card.ability.extra.x_mult }
       end
     end
@@ -1632,7 +1632,7 @@ SMODS.Joker {
 }
 
 SMODS.Joker {
-  key = 'descole',
+  key = 'jeandescole',
   rarity = 2,
   atlas = 'Phanta',
   pos = { x = 11, y = 4 },

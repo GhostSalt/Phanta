@@ -631,28 +631,28 @@ return {
                     "all played cards"
                 }
             },
-            j_phanta_layton = {
-                name = 'Layton',
+            j_phanta_professorlayton = {
+                name = 'Professor Layton',
                 text = {
                     "{C:green}#1# in #2#{} chance to",
                     "give {C:mult}+#3#{} Mult,",
                     "held {C:tarot}Tarot{} cards",
                     "increase the odds",
-                    "{C:inactive,s:0.75}(Guaranteed if with Luke){}"
+                    "{C:inactive,s:0.65}(Guaranteed if with Luke Triton){}"
                 }
             },
-            j_phanta_luke = {
-                name = 'Luke',
+            j_phanta_luketriton = {
+                name = 'Luke Triton',
                 text = {
                     "{C:green}#1# in #2#{} chance to",
                     "give {X:mult,C:white}X#3#{} Mult,",
                     "held {C:planet}Planet{} cards",
                     "increase the odds",
-                    "{C:inactive,s:0.75}(Guaranteed if with Layton){}"
+                    "{C:inactive,s:0.65}(Guaranteed if with Professor Layton){}"
                 }
             },
-            j_phanta_descole = {
-                name = 'Descole',
+            j_phanta_jeandescole = {
+                name = 'Jean Descole',
                 text = {
                     "Upon discarding a {C:attention}Stone{}",
                     "card, {C:red}destroys{} it and creates",
@@ -1262,6 +1262,15 @@ return {
                     "{C:money}$10{} per roll",
                 }
             },
+            j_phanta_birthdaycard = {
+                name = 'Birthday Card',
+                text = {
+                    "Gains {C:white,X:mult}X#1#{} Mult when",
+                    "a card with {C:dark_edition}Waxed{}",
+                    "edition is {C:red}destroyed{}",
+                    "{C:inactive}(Currently {X:mult,C:white}X#2#{C:inactive} Mult){}"
+                }
+            },
             j_phanta_plugsocket = {
                 name = 'Plug Socket',
                 text = {
@@ -1269,6 +1278,44 @@ return {
                     "edition {C:attention}Copper Grate{} card",
                     "in your {C:attention}full deck{}",
                     "{C:inactive}(Currently {X:mult,C:white}X#2#{C:inactive} Mult){}"
+                }
+            },
+            j_phanta_donpaolo = {
+                name = 'Don Paolo',
+                text = {
+                    "If a {C:attention}single{} card",
+                    "is selected, selling",
+                    "a {C:tarot}Tarot{} card will",
+                    "{C:red}destroy{} it"
+                }
+            },
+            j_phanta_futureluke = {
+                name = 'Future Luke',
+                text = {
+                    "If a {C:attention}single{} card",
+                    "is selected, selling",
+                    "a {C:planet}Planet{} card will",
+                    "{C:red}destroy{} it"
+                }
+            },
+            j_phanta_barton = {
+                name = 'Barton',
+                text = {
+                    "{C:mult}+#1#{} Mult if at least",
+                    "{C:attention}#2#{} unique {C:tarot}Tarot{} cards",
+                    "have been used this run",
+                    "{C:inactive}({C:attention}#3#/#2#{C:inactive}, #4#){}",
+                    "{C:inactive,s:0.65}(Active if with Inspector Chelmey){}"
+                }
+            },
+            j_phanta_inspectorchelmey = {
+                name = 'Inspector Chelmey',
+                text = {
+                    "{C:white,X:mult}X#1#{} Mult if at least",
+                    "{C:attention}#2#{} unique {C:planet}Planet{} cards",
+                    "have been used this run",
+                    "{C:inactive}({C:attention}#3#/#2#{C:inactive}, #4#){}",
+                    "{C:inactive,s:0.65}(Active if with Barton){}"
                 }
             },
             j_phanta_technojoker = {
