@@ -344,10 +344,10 @@ SMODS.Consumable {
     delay(0.6)
   end,
   in_pool = function()
-    return G.GAME.selected_back.effect.center.key == "b_phanta_azran"
+    return azran_active()
   end,
   set_badges = function(self, card, badges)
-    badges[#badges+1] = create_badge(localize('phanta_azran_exclusive'), G.C.SECONDARY_SET.Spectral, G.C.WHITE, 1)
+    badges[#badges + 1] = create_badge(localize('phanta_azran_exclusive'), G.C.SECONDARY_SET.Spectral, G.C.WHITE, 1)
   end
 }
 
@@ -403,10 +403,10 @@ SMODS.Consumable {
     delay(0.6)
   end,
   in_pool = function()
-    return G.GAME.selected_back.effect.center.key == "b_phanta_azran"
+    return azran_active()
   end,
   set_badges = function(self, card, badges)
-    badges[#badges+1] = create_badge(localize('phanta_azran_exclusive'), G.C.SECONDARY_SET.Spectral, G.C.WHITE, 1)
+    badges[#badges + 1] = create_badge(localize('phanta_azran_exclusive'), G.C.SECONDARY_SET.Spectral, G.C.WHITE, 1)
   end
 }
 
@@ -443,10 +443,10 @@ SMODS.Consumable {
     delay(0.6)
   end,
   in_pool = function()
-    return G.GAME.selected_back.effect.center.key == "b_phanta_azran"
+    return azran_active()
   end,
   set_badges = function(self, card, badges)
-    badges[#badges+1] = create_badge(localize('phanta_azran_exclusive'), G.C.SECONDARY_SET.Spectral, G.C.WHITE, 1)
+    badges[#badges + 1] = create_badge(localize('phanta_azran_exclusive'), G.C.SECONDARY_SET.Spectral, G.C.WHITE, 1)
   end
 }
 
@@ -484,10 +484,10 @@ SMODS.Consumable {
     delay(0.6)
   end,
   in_pool = function()
-    return G.GAME.selected_back.effect.center.key == "b_phanta_azran"
+    return azran_active()
   end,
   set_badges = function(self, card, badges)
-    badges[#badges+1] = create_badge(localize('phanta_azran_exclusive'), G.C.SECONDARY_SET.Spectral, G.C.WHITE, 1)
+    badges[#badges + 1] = create_badge(localize('phanta_azran_exclusive'), G.C.SECONDARY_SET.Spectral, G.C.WHITE, 1)
   end
 }
 
@@ -528,10 +528,10 @@ SMODS.Consumable {
     delay(0.6)
   end,
   in_pool = function()
-    return G.GAME.selected_back.effect.center.key == "b_phanta_azran"
+    return azran_active()
   end,
   set_badges = function(self, card, badges)
-    badges[#badges+1] = create_badge(localize('phanta_azran_exclusive'), G.C.SECONDARY_SET.Spectral, G.C.WHITE, 1)
+    badges[#badges + 1] = create_badge(localize('phanta_azran_exclusive'), G.C.SECONDARY_SET.Spectral, G.C.WHITE, 1)
   end
 }
 
@@ -570,10 +570,10 @@ SMODS.Consumable {
     delay(0.6)
   end,
   in_pool = function()
-    return G.GAME.selected_back.effect.center.key == "b_phanta_azran"
+    return azran_active()
   end,
   set_badges = function(self, card, badges)
-    badges[#badges+1] = create_badge(localize('phanta_azran_exclusive'), G.C.SECONDARY_SET.Spectral, G.C.WHITE, 1)
+    badges[#badges + 1] = create_badge(localize('phanta_azran_exclusive'), G.C.SECONDARY_SET.Spectral, G.C.WHITE, 1)
   end
 }
 
@@ -608,7 +608,8 @@ SMODS.Edition {
     return { vars = { self.config.xmult } }
   end,
   calculate = function(self, card, context)
-    if (context.main_scoring and context.cardarea == G.play) or context.post_joker then return { xmult = self.config.xmult } end
+    if (context.main_scoring and context.cardarea == G.play) or context.post_joker then return { xmult = self.config
+      .xmult } end
   end
 }
 
@@ -714,8 +715,10 @@ SMODS.Enhancement {
 local sell_use_ref = G.UIDEF.use_and_sell_buttons
 
 function G.UIDEF.use_and_sell_buttons(card)
-  if not card or not card.ability or (card.ability.set ~= "phanta_Zodiac" and card.ability.set ~= "phanta_CatanResource") then return
-    sell_use_ref(card) end
+  if not card or not card.ability or (card.ability.set ~= "phanta_Zodiac" and card.ability.set ~= "phanta_CatanResource") then
+    return
+        sell_use_ref(card)
+  end
 
   if (card.area == G.pack_cards and G.pack_cards) then
     return {
@@ -1420,7 +1423,7 @@ SMODS.Back {
   atlas = 'Decks',
   pos = { x = 0, y = 0 },
   calculate = function(self, back, context)
-    if context.context == 'eval' and G.GAME.last_blind and G.GAME.last_blind.boss then
+    if context.context == 'eval' and G.GAME.last_blind and (G.GAME.last_blind.boss or #SMODS.find_card("sleeve_phanta_stormcaught")) then
       G.E_MANAGER:add_event(Event({
         func = function()
           add_tag(Tag('tag_uncommon'))
@@ -1517,25 +1520,28 @@ SMODS.Back {
     if context.setting_blind and G.GAME.blind:get_type() == "Small" and G.GAME.round_resets.ante == 5 and not self.config.extra.triggered then
       G.jokers.config.card_limit = G.jokers.config.card_limit + 1
       self.config.extra.triggered = true
-      local destructable_jokers = {}
-      for i = 1, #G.jokers.cards do
-        if not G.jokers.cards[i].ability.eternal and not G.jokers.cards[i].getting_sliced then
-          destructable_jokers[#destructable_jokers + 1] =
-              G.jokers.cards[i]
-        end
-      end
-      local joker_to_destroy = #destructable_jokers > 0 and
-          pseudorandom_element(destructable_jokers, pseudoseed('tallydeck')) or nil
 
-      if joker_to_destroy and not (context.blueprint_card or self).getting_sliced then
-        joker_to_destroy.getting_sliced = true
-        G.E_MANAGER:add_event(Event({
-          func = function()
-            play_sound("phanta_tally_deck", 1, 0.75)
-            joker_to_destroy:start_dissolve({ G.C.RED }, nil, 1.6)
-            return true
+      if not #SMODS.find_card("sleeve_phanta_tally") then
+        local destructable_jokers = {}
+        for i = 1, #G.jokers.cards do
+          if not G.jokers.cards[i].ability.eternal and not G.jokers.cards[i].getting_sliced then
+            destructable_jokers[#destructable_jokers + 1] =
+                G.jokers.cards[i]
           end
-        }))
+        end
+        local joker_to_destroy = #destructable_jokers > 0 and
+            pseudorandom_element(destructable_jokers, pseudoseed('tallydeck')) or nil
+
+        if joker_to_destroy and not (context.blueprint_card or self).getting_sliced then
+          joker_to_destroy.getting_sliced = true
+          G.E_MANAGER:add_event(Event({
+            func = function()
+              play_sound("phanta_tally_deck", 1, 0.75)
+              joker_to_destroy:start_dissolve({ G.C.RED }, nil, 1.6)
+              return true
+            end
+          }))
+        end
       end
     end
   end

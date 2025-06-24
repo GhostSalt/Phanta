@@ -31,7 +31,7 @@ return {
                 name = 'Badd Deck',
                 text = {
                     "{C:red}Destroys{} all played",
-                    "cards in {C:attention}final{}",
+                    "cards on {C:attention}final{}",
                     "{C:attention}hand{} of round"
                 }
             },
@@ -1512,7 +1512,103 @@ return {
                     "Used {C:attention}Ghost{}",
                     "to win on {C:attention}Gold{}",
                     "{C:attention}Stake{} difficulty",
-                },
+                }
+            }
+        },
+        Sleeve = {
+            sleeve_phanta_stormcaught = {
+                name = "Stormcaught Sleeve",
+                text = {
+                    "Gain an {C:attention,T:tag_uncommon}Uncommon Tag{} at the start of the",
+                    "{C:attention}run{}, and after defeating each {C:attention}Boss Blind{}"
+                }
+            },
+            sleeve_phanta_stormcaught_alt = {
+                name = "Stormcaught Sleeve",
+                text = {
+                    "Gain an {C:attention,T:tag_uncommon}Uncommon Tag{} after",
+                    "defeating each {C:attention}Small or Big Blind{}"
+                }
+            },
+            sleeve_phanta_blurple = {
+                name = "Blurple Sleeve",
+                text = {
+                    "When {C:attention}Blind{} is selected, gain a",
+                    "random {C:tarot}Tarot{} or {C:planet}Planet{} card",
+                    "{C:inactive}(Must have room){}"
+                }
+            },
+            sleeve_phanta_azran = {
+                name = "Azran Sleeve",
+                text = {
+                    "Very powerful {C:spectral}Spectral{}",
+                    "cards may appear"
+                }
+            },
+            sleeve_phanta_azran_alt = {
+                name = "Azran Sleeve",
+                text = {
+                    "{C:spectral}Spectral{} cards may",
+                    "appear in the {C:attention}shop{}"
+                }
+            },
+            sleeve_phanta_badd = {
+                name = "Badd Sleeve",
+                text = {
+                    "{C:red}Destroys{} all played cards on",
+                    "{C:attention}final hand{} of round"
+                }
+            },
+            sleeve_phanta_badd_alt = {
+                name = "Badd Sleeve",
+                text = {
+                    "If {C:attention}first discard{} of round",
+                    "has only {C:attention}1{} card, {C:red}destroys{} it"
+                }
+            },
+            sleeve_phanta_silver = {
+                name = "Silver Sleeve",
+                text = {
+                    "Played and {C:attention}unscored{}",
+                    "cards give {C:money}$#1#{}",
+                    "{C:red}-#2#{} hand size"
+                }
+            },
+            sleeve_phanta_silver_alt = {
+                name = "Silver Sleeve",
+                text = {
+                    "{C:attention}+#1#{} hand size"
+                }
+            },
+            sleeve_phanta_tally = {
+                name = "Tally Sleeve",
+                text = {
+                    "The first time you select the",
+                    "{C:attention}Small Blind{} of {C:attention}Ante 5{},",
+                    "destroys {C:red}1{} Joker and gain {C:attention}+#1#{} Joker slot"
+                }
+            },
+            sleeve_phanta_tally_alt = {
+                name = "Tally Sleeve",
+                text = {
+                    "The deck no longer",
+                    "{C:red}destroys{} any Jokers"
+                }
+            },
+            sleeve_phanta_trickster = {
+                name = "Trickster Sleeve",
+                text = {
+                    "Creates a copy of {C:tarot,T:c_hanged_man}The Hanged Man{} when a",
+                    "{C:attention}playing card{} is added to your deck",
+                    "{C:inactive}(Must have room){}"
+                }
+            },
+            sleeve_phanta_barrier = {
+                name = "Barrier Sleeve",
+                text = {
+                    "When skipping a {C:attention}Booster Pack{}, gain",
+                    "{C:attention}+1{} hand size next round"
+                }
             }
         },
         BakeryCharm = {

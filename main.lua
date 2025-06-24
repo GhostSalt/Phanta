@@ -273,6 +273,10 @@ function count_unique_planets()
   return planets_used
 end
 
+function azran_active()
+  return G.GAME.selected_back.effect.center.key == "b_phanta_azran" or SMODS.find_card("sleeve_phanta_azran")
+end
+
 local ref1 = Card.start_dissolve
 function Card:start_dissolve()
   if self.config and self.config.center and self.config.center.phanta_shatters then
@@ -298,6 +302,10 @@ for i = 1, #allFolders do
   end
 end
 
+if next(SMODS.find_mod('Bakery')) then assert(SMODS.load_file("items/Charm.lua"))() end
+if next(SMODS.find_mod('partner')) then assert(SMODS.load_file("items/Partners.lua"))() end
+if next(SMODS.find_mod('CardSleeves')) then assert(SMODS.load_file("items/Sleeves.lua"))() end
+
 local game_start_run_ref = Game.start_run
 
 function Game:start_run(args)
@@ -312,9 +320,6 @@ function Game:start_run(args)
   end
   G.GAME.phanta_initial_ranks = existing_ranks
 end
-
-if next(SMODS.find_mod('Bakery')) then assert(SMODS.load_file("items/Charm.lua"))() end
-if next(SMODS.find_mod('partner')) then assert(SMODS.load_file("items/Partners.lua"))() end
 
 
 local igo = Game.init_game_object
