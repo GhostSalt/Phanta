@@ -103,6 +103,15 @@ return {
                     "{C:phanta_zodiac}Zodiac{} cards have",
                     "{C:attention}stronger{} abilities"
                 }
+            },
+            b_phanta_spectrum = {
+                name = 'Spectrum Deck',
+                text = {
+                    "Applies the effects of",
+                    "{C:red,T:b_red}Red{}, {C:blue,T:b_blue}Blue{}, {C:money,T:b_yellow}Yellow{}, {C:green,T:b_green}Green{}",
+                    "and {T:b_black}Black Deck{}, {C:attention}-#1#{}",
+                    "Booster pack each {C:attention}shop{}"
+                }
             }
         },
         Blind = {
@@ -1650,6 +1659,22 @@ return {
                 text = {
                     "{C:phanta_zodiac}Zodiac{} cards have",
                     "{C:attention}stronger{} abilities"
+                }
+            },
+            sleeve_phanta_spectrum = {
+                name = 'Spectrum Sleeve',
+                text = {
+                    "Applies the effects of",
+                    "{C:red,T:b_red}Red{}, {C:blue,T:b_blue}Blue{}, {C:money,T:b_yellow}Yellow{}, {C:green,T:b_green}Green{}",
+                    "and {T:b_black}Black Deck{}, {C:attention}-#1#{}",
+                    "Booster Pack each {C:attention}shop{}"
+                }
+            },
+            sleeve_phanta_spectrum_alt = {
+                name = 'Spectrum Sleeve',
+                text = {
+                    "The deck no longer has",
+                    "its {C:attention}Booster Pack{} downside"
                 }
             }
         },

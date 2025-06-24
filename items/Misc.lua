@@ -1476,7 +1476,7 @@ SMODS.Back {
 SMODS.Back {
   key = 'badd',
   atlas = 'Decks',
-  pos = { x = 0, y = 1 },
+  pos = { x = 3, y = 0 },
   calculate = function(self, back, context)
     if G.GAME.current_round.hands_left == 0 and context.destroy_card and (context.cardarea == G.play or context.cardarea == "unscored") then
       return { remove = true }
@@ -1487,7 +1487,7 @@ SMODS.Back {
 SMODS.Back {
   key = 'silver',
   atlas = 'Decks',
-  pos = { x = 1, y = 1 },
+  pos = { x = 4, y = 0 },
   config = { extra = { given_money = 1, minus_hand_size = 1 } },
   loc_vars = function(self, info_queue, center)
     return { vars = { self.config.extra.given_money, self.config.extra.minus_hand_size } }
@@ -1511,7 +1511,7 @@ SMODS.Sound({
 SMODS.Back {
   key = 'tally',
   atlas = 'Decks',
-  pos = { x = 2, y = 1 },
+  pos = { x = 0, y = 1 },
   config = { extra = { given_joker_slots = 1, triggered = false } },
   loc_vars = function(self, info_queue, center)
     return { vars = { self.config.extra.given_joker_slots, self.config.extra.minus_hand_size } }
@@ -1550,7 +1550,7 @@ SMODS.Back {
 SMODS.Back {
   key = 'trickster',
   atlas = 'Decks',
-  pos = { x = 0, y = 2 },
+  pos = { x = 1, y = 1 },
   calculate = function(self, back, context)
     if context.playing_card_added then
       for i = 1, #context.cards do
@@ -1581,7 +1581,7 @@ SMODS.Back {
 SMODS.Back {
   key = 'barrier',
   atlas = 'Decks',
-  pos = { x = 1, y = 2 },
+  pos = { x = 2, y = 1 },
   calculate = function(self, back, context)
     if context.skipping_booster then
       if not G.GAME.barrier_extra_hand_size then
@@ -1603,7 +1603,7 @@ SMODS.Back {
 SMODS.Back {
   key = 'poltergeist',
   atlas = 'Decks',
-  pos = { x = 2, y = 2 },
+  pos = { x = 3, y = 1 },
   config = { extra = { plus_hand_size = 2 } },
   loc_vars = function(self, info_queue, center)
     return { vars = { self.config.extra.plus_hand_size } }
@@ -1626,7 +1626,7 @@ SMODS.Back {
 SMODS.Back {
   key = 'hivis',
   atlas = 'Decks',
-  pos = { x = 0, y = 3 },
+  pos = { x = 4, y = 1 },
   config = { vouchers = { 'v_directors_cut' } },
   loc_vars = function(self, info_queue, card)
     return { vars = { localize({ type = 'name_text', set = 'Voucher', key = self.config.vouchers[1] }) } }
@@ -1636,7 +1636,7 @@ SMODS.Back {
 SMODS.Back {
   key = 'crate',
   atlas = 'Decks',
-  pos = { x = 1, y = 3 },
+  pos = { x = 0, y = 2 },
   config = { extra = { added_slots = 2 } },
   loc_vars = function(self, info_queue, card)
     return { vars = { self.config.extra.added_slots } }
@@ -1649,5 +1649,18 @@ SMODS.Back {
 SMODS.Back {
   key = 'todayandtomorrow',
   atlas = 'Decks',
-  pos = { x = 2, y = 3 }
+  pos = { x = 1, y = 2 }
+}
+
+SMODS.Back {
+  key = 'spectrum',
+  atlas = 'Decks',
+  pos = { x = 2, y = 2 },
+  config = { discards = 1, dollars = 10, joker_slot = 1, extra_hand_bonus = 2, extra_discard_bonus = 1, no_interest = true, extra = { removed_shop_slots = 1 } },
+  loc_vars = function(self, info_queue, card)
+    return { vars = { self.config.extra.removed_shop_slots } }
+  end,
+  apply = function(self, back)
+    G.GAME.starting_params.boosters_in_shop = G.GAME.starting_params.boosters_in_shop - self.config.extra.removed_shop_slots
+  end
 }

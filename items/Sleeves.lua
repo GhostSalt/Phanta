@@ -279,7 +279,7 @@ CardSleeves.Sleeve {
       end
     end
   end
-}]]--
+}]] --
 
 CardSleeves.Sleeve {
   key = "hivis",
@@ -324,4 +324,37 @@ CardSleeves.Sleeve {
   pos = { x = 1, y = 2 },
   unlocked = false,
   unlock_condition = { deck = "b_phanta_todayandtomorrow", stake = "stake_white" }
+}
+
+CardSleeves.Sleeve {
+  key = "spectrum",
+  name = "Spectrum Sleeve",
+  atlas = "PhantaSleeves",
+  pos = { x = 2, y = 2 },
+  unlocked = false,
+  unlock_condition = { deck = "b_phanta_spectrum", stake = "stake_white" },
+  loc_vars = function(self, info_queue, card)
+    if self.get_current_deck_key() == "b_phanta_spectrum" then
+      key = self.key .. "_alt"
+      self.config = { discards = 1, dollars = 10, joker_slot = 1, extra_hand_bonus = 2, extra_discard_bonus = 1, no_interest = true, extra = { added_shop_slots = 1 } }
+      return { key = key }
+    else
+      key = self.key
+      self.config = { discards = 1, dollars = 10, joker_slot = 1, extra_hand_bonus = 2, extra_discard_bonus = 1, no_interest = true, extra = { removed_shop_slots = 1 } }
+      return { key = key, vars = { self.config.extra.removed_shop_slots } }
+    end
+  end,
+  apply = function(self, back)
+    if self.config.extra.added_shop_slots then
+      G.GAME.starting_params.boosters_in_shop = G.GAME.starting_params.boosters_in_shop + self.config.extra.added_shop_slots
+    else
+      G.GAME.starting_params.discards = G.GAME.starting_params.discards + self.config.discards
+      G.GAME.starting_params.dollars.array[1] = G.GAME.starting_params.dollars.array[1] + self.config.dollars
+      G.GAME.starting_params.joker_slots = G.GAME.starting_params.joker_slots + self.config.joker_slot
+      G.GAME.modifiers.no_interest = self.config.no_interest
+      G.GAME.modifiers.money_per_hand = self.config.extra_hand_bonus
+      G.GAME.modifiers.money_per_discard = self.config.extra_discard_bonus
+      G.GAME.starting_params.boosters_in_shop = G.GAME.starting_params.boosters_in_shop - self.config.extra.removed_shop_slots
+    end
+  end
 }
