@@ -1609,6 +1609,48 @@ return {
                     "When skipping a {C:attention}Booster Pack{}, gain",
                     "{C:attention}+1{} hand size next round"
                 }
+            },
+            sleeve_phanta_poltergeist = {
+                name = 'Poltergeist Sleeve',
+                text = {
+                    "{C:attention}+#1#{} hand size",
+                    "Cards are drawn {C:attention}face down{} if the number",
+                    "of face down cards is less than {C:attention}#1#{}"
+                }
+            },
+            sleeve_phanta_poltergeist_alt = {
+                name = 'Poltergeist Sleeve',
+                text = {
+                    "{C:attention}+#1#{} hand size",
+                    "{C:attention}+#1#{} face-down cards"
+                }
+            },
+            sleeve_phanta_hivis = {
+                name = 'Hi-Vis Sleeve',
+                text = {
+                    "Start run with the",
+                    "{C:red,T:v_directors_cut}#1#{} Voucher"
+                }
+            },
+            sleeve_phanta_hivis_alt = {
+                name = 'Hi-Vis Sleeve',
+                text = {
+                    "Start run with the",
+                    "{C:red,T:v_retcon}#1#{} Voucher"
+                }
+            },
+            sleeve_phanta_crate = {
+                name = 'Crate Sleeve',
+                text = {
+                    "{C:attention}+#1#{} consumable slots"
+                }
+            },
+            sleeve_phanta_todayandtomorrow = {
+                name = 'Today & Tomorrow Sleeve',
+                text = {
+                    "{C:phanta_zodiac}Zodiac{} cards have",
+                    "{C:attention}stronger{} abilities"
+                }
             }
         },
         BakeryCharm = {

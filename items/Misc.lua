@@ -1423,7 +1423,7 @@ SMODS.Back {
   atlas = 'Decks',
   pos = { x = 0, y = 0 },
   calculate = function(self, back, context)
-    if context.context == 'eval' and G.GAME.last_blind and (G.GAME.last_blind.boss or #SMODS.find_card("sleeve_phanta_stormcaught")) then
+    if context.context == 'eval' and G.GAME.last_blind and (G.GAME.last_blind.boss or G.GAME.selected_sleeve == "sleeve_phanta_stormcaught") then
       G.E_MANAGER:add_event(Event({
         func = function()
           add_tag(Tag('tag_uncommon'))
@@ -1521,7 +1521,7 @@ SMODS.Back {
       G.jokers.config.card_limit = G.jokers.config.card_limit + 1
       self.config.extra.triggered = true
 
-      if not #SMODS.find_card("sleeve_phanta_tally") then
+      if G.GAME.selected_sleeve ~= "sleeve_phanta_tally" then
         local destructable_jokers = {}
         for i = 1, #G.jokers.cards do
           if not G.jokers.cards[i].ability.eternal and not G.jokers.cards[i].getting_sliced then
@@ -1616,7 +1616,7 @@ SMODS.Back {
       local back_cards = 0
       for i = 1, #G.hand.cards do if G.hand.cards[i].facing == 'back' then back_cards = back_cards + 1 end end
 
-      if back_cards < self.config.extra.plus_hand_size then
+      if back_cards < (G.GAME.selected_sleeve == "sleeve_phanta_poltergeist" and 2 or 1) * self.config.extra.plus_hand_size then
         return { stay_flipped = true }
       end
     end

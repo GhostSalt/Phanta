@@ -249,3 +249,79 @@ CardSleeves.Sleeve {
     end
   end
 }
+
+--[[CardSleeves.Sleeve {
+  key = "poltergeist",
+  name = "Poltergeist Sleeve",
+  atlas = "PhantaSleeves",
+  pos = { x = 3, y = 1 },
+  unlocked = false,
+  unlock_condition = { deck = "b_phanta_poltergeist", stake = "stake_white" },
+  config = { extra = { plus_hand_size = 2 } },
+  loc_vars = function(self)
+    if self.get_current_deck_key() == "b_phanta_poltergeist" then
+      key = self.key .. "_alt"
+    else
+      key = self.key
+    end
+    return { key = key, vars = { self.config.extra.plus_hand_size } }
+  end,
+  apply = function(self, back)
+    G.GAME.starting_params.hand_size = G.GAME.starting_params.hand_size + self.config.extra.plus_hand_size
+  end,
+  calculate = function(self, back, context)
+    if self.get_current_deck_key() ~= "b_phanta_poltergeist" and context.stay_flipped then
+      local back_cards = 0
+      for i = 1, #G.hand.cards do if G.hand.cards[i].facing == 'back' then back_cards = back_cards + 1 end end
+
+      if back_cards < self.config.extra.plus_hand_size then
+        return { stay_flipped = true }
+      end
+    end
+  end
+}]]--
+
+CardSleeves.Sleeve {
+  key = "hivis",
+  name = "Hi-Vis Sleeve",
+  atlas = "PhantaSleeves",
+  pos = { x = 4, y = 1 },
+  unlocked = false,
+  unlock_condition = { deck = "b_phanta_hivis", stake = "stake_white" },
+  config = { vouchers = { 'v_directors_cut' } },
+  loc_vars = function(self, info_queue, card)
+    if self.get_current_deck_key() == "b_phanta_hivis" then
+      key = self.key .. "_alt"
+      self.config = { vouchers = { 'v_retcon' } }
+    else
+      key = self.key
+      self.config = { vouchers = { 'v_directors_cut' } }
+    end
+    return { key = key, vars = { localize({ type = 'name_text', set = 'Voucher', key = self.config.vouchers[1] }) } }
+  end
+}
+
+CardSleeves.Sleeve {
+  key = "crate",
+  name = "Crate Sleeve",
+  atlas = "PhantaSleeves",
+  pos = { x = 0, y = 2 },
+  unlocked = false,
+  unlock_condition = { deck = "b_phanta_crate", stake = "stake_white" },
+  config = { extra = { added_slots = 2 } },
+  loc_vars = function(self, info_queue, card)
+    return { vars = { self.config.extra.added_slots } }
+  end,
+  apply = function(self, back)
+    G.GAME.starting_params.consumable_slots = G.GAME.starting_params.consumable_slots + self.config.extra.added_slots
+  end
+}
+
+CardSleeves.Sleeve {
+  key = "todayandtomorrow",
+  name = "Today & Tomorrow Sleeve",
+  atlas = "PhantaSleeves",
+  pos = { x = 1, y = 2 },
+  unlocked = false,
+  unlock_condition = { deck = "b_phanta_todayandtomorrow", stake = "stake_white" }
+}

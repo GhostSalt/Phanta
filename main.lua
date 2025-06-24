@@ -76,7 +76,7 @@ function get_lowest(hand)
 end
 
 function count_prognosticators(card)
-  return #SMODS.find_card("j_phanta_prognosticator") +
+  return #SMODS.find_card("j_phanta_prognosticator") + (G.GAME.selected_sleeve == "sleeve_phanta_todayandtomorrow" and 1 or 0) +
       ((is_current_month(card) and 2 or 0) * #SMODS.find_card("j_phanta_calendar")) +
       (G.GAME and G.GAME.selected_back and G.GAME.selected_back and G.GAME.selected_back.effect and G.GAME.selected_back.effect.center.key == "b_phanta_todayandtomorrow" and 1 or 0)
 end
