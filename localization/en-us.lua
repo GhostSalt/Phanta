@@ -185,6 +185,13 @@ return {
                     "Self destructs if",
                     "played and not {C:dark_edition}Waxed{}"
                 }
+            },
+            m_phanta_marblecard = {
+                name = 'Marble Card',
+                text = {
+                    "{C:white,X:mult}X#1#{} Mult if played",
+                    "and not scored"
+                }
             }
         },
         Joker = {

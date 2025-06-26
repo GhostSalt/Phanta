@@ -705,6 +705,21 @@ SMODS.Enhancement {
   in_pool = function() return false end
 }
 
+SMODS.Enhancement {
+  key = "marblecard",
+  atlas = "PhantaEnhancements",
+  pos = { x = 2, y = 0 },
+  config = { extra = { given_xmult = 2 } },
+  loc_vars = function(self, info_queue, center)
+    return { vars = { center.ability.extra.given_xmult } }
+  end,
+  calculate = function(self, card, context)
+    if context.cardarea == "unscored" and context.main_scoring then
+      return { xmult = card.ability.extra.given_xmult }
+    end
+  end
+}
+
 
 
 
