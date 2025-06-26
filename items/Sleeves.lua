@@ -88,7 +88,7 @@ CardSleeves.Sleeve {
   end
 }
 
---[[CardSleeves.Sleeve {
+CardSleeves.Sleeve {
   key = "badd",
   name = "Badd Sleeve",
   atlas = "PhantaSleeves",
@@ -107,11 +107,11 @@ CardSleeves.Sleeve {
       return { remove = true }
     end
 
-    if context.discard then
+    if self.get_current_deck_key() == "b_phanta_badd" and context.discard and G.GAME.current_round.discards_used <= 0 and #context.full_hand == 1 then
       return { remove = true }
     end
   end
-}]] --
+}
 
 CardSleeves.Sleeve {
   key = "silver",
@@ -250,7 +250,7 @@ CardSleeves.Sleeve {
   end
 }
 
---[[CardSleeves.Sleeve {
+CardSleeves.Sleeve {
   key = "poltergeist",
   name = "Poltergeist Sleeve",
   atlas = "PhantaSleeves",
@@ -279,7 +279,7 @@ CardSleeves.Sleeve {
       end
     end
   end
-}]] --
+}
 
 CardSleeves.Sleeve {
   key = "hivis",
