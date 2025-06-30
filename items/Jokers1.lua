@@ -885,14 +885,6 @@ SMODS.Joker {
 
 SMODS.Joker {
   key = 'inception',
-  loc_txt = {
-    name = 'Inception',
-    text = {
-      "{C:mult}+#1#{} Mult per hand",
-      "played this {C:attention}Blind{}",
-      "{C:inactive}(Will give {C:mult}+#2#{C:inactive} Mult){}"
-    }
-  },
   config = { extra = { current_mult = 0, added_mult = 6 } },
   rarity = 1,
   atlas = 'Phanta',
@@ -1212,7 +1204,7 @@ SMODS.Joker {
   rarity = 1,
   atlas = 'Phanta',
   pos = { x = 6, y = 1 },
-  cost = 6,
+  cost = 4,
   blueprint_compat = false,
   eternal_compat = true,
   perishable_compat = true,
@@ -1420,7 +1412,7 @@ SMODS.Joker {
   rarity = 2,
   atlas = 'Phanta',
   pos = { x = 2, y = 10 },
-  cost = 6,
+  cost = 5,
   loc_vars = function(self, info_queue, card)
     return { vars = { card.ability.extra.retriggers } }
   end,
@@ -1485,7 +1477,7 @@ SMODS.Joker {
   rarity = 2,
   atlas = 'Phanta',
   pos = { x = 9, y = 10 },
-  cost = 6,
+  cost = 5,
   blueprint_compat = false,
   eternal_compat = true,
   perishable_compat = true,
@@ -1514,7 +1506,7 @@ SMODS.Joker {
   rarity = 2,
   atlas = 'Phanta',
   pos = { x = 10, y = 10 },
-  cost = 6,
+  cost = 5,
   blueprint_compat = false,
   eternal_compat = true,
   perishable_compat = true,
@@ -1591,7 +1583,7 @@ SMODS.Joker {
   rarity = 2,
   atlas = 'Phanta',
   pos = { x = 0, y = 8 },
-  cost = 7,
+  cost = 6,
   blueprint_compat = true,
   eternal_compat = true,
   perishable_compat = true,
@@ -1614,7 +1606,7 @@ SMODS.Joker {
   rarity = 2,
   atlas = 'Phanta',
   pos = { x = 1, y = 8 },
-  cost = 7,
+  cost = 6,
   blueprint_compat = true,
   eternal_compat = true,
   perishable_compat = true,
@@ -1636,7 +1628,7 @@ SMODS.Joker {
   rarity = 2,
   atlas = 'Phanta',
   pos = { x = 11, y = 4 },
-  cost = 7,
+  cost = 6,
   blueprint_compat = false,
   eternal_compat = true,
   perishable_compat = true,
@@ -1826,7 +1818,7 @@ SMODS.Joker {
   rarity = 2,
   atlas = 'Phanta',
   pos = { x = 10, y = 2 },
-  cost = 6,
+  cost = 5,
   loc_vars = function(self, info_queue, card)
     info_queue[#info_queue + 1] = G.P_CENTERS.m_phanta_coppergratefresh
     return {}
@@ -1888,6 +1880,9 @@ SMODS.Joker {
         return { message = localize("phanta_waxed", "labels"), colour = G.C.FILTER }
       end
     end
+  end,
+  set_badges = function(self, card, badges)
+    badges[#badges+1] = create_badge(localize('credit_goat3730'), G.C.PHANTA.MISC_COLOURS.PHANTA, G.C.WHITE, 1)
   end
 }
 
@@ -1897,7 +1892,7 @@ SMODS.Joker {
   rarity = 2,
   atlas = 'Phanta',
   pos = { x = 5, y = 7 },
-  cost = 7,
+  cost = 6,
   blueprint_compat = true,
   eternal_compat = true,
   perishable_compat = false,
@@ -1946,7 +1941,7 @@ SMODS.Joker {
   rarity = 2,
   atlas = 'Phanta',
   pos = { x = 1, y = 9 },
-  cost = 7,
+  cost = 6,
   loc_vars = function(self, info_queue, card)
     info_queue[#info_queue + 1] = G.P_CENTERS.s_blue_seal
     return {}
@@ -2027,7 +2022,7 @@ SMODS.Joker {
 
 SMODS.Joker {
   key = 'blottedjoker',
-  config = { extra = { added_chips = 20, current_chips = 0 } },
+  config = { extra = { added_chips = 30, current_chips = 0 } },
   rarity = 2,
   atlas = 'Phanta',
   pos = { x = 11, y = 0 },
@@ -2076,7 +2071,7 @@ SMODS.Joker {
 
 SMODS.Joker {
   key = 'bloodpact',
-  config = { extra = { added_mult = 5, current_mult = 0 } },
+  config = { extra = { added_mult = 4, current_mult = 0 } },
   rarity = 2,
   atlas = 'Phanta',
   pos = { x = 3, y = 5 },
@@ -2159,7 +2154,7 @@ SMODS.Joker {
   rarity = 1,
   atlas = 'Phanta',
   pos = { x = 9, y = 1 },
-  cost = 7,
+  cost = 4,
   loc_vars = function(self, info_queue, card)
     return { vars = { card.ability.extra.given_mult } }
   end,
@@ -2235,14 +2230,6 @@ SMODS.Joker {
 
 SMODS.Joker {
   key = 'tricolour',
-  loc_txt = {
-    name = 'Tricolour',
-    text = {
-      "{C:mult}+#1#{} Mult if played",
-      "hand contains exactly",
-      "{C:attention}3{} unique scoring {C:attention}suits{}"
-    }
-  },
   config = { extra = { mult = 17 } },
   rarity = 1,
   atlas = 'Phanta',
@@ -2445,7 +2432,7 @@ SMODS.Joker {
   rarity = 2,
   atlas = 'Phanta',
   pos = { x = 3, y = 10 },
-  cost = 6,
+  cost = 4,
   loc_vars = function(self, info_queue, card)
     return { vars = { card.ability.extra.money, card.ability.extra.jokers_required, card.ability.extra.jokers_required - card.ability.extra.joker_tally } }
   end,
@@ -2531,7 +2518,7 @@ SMODS.Joker {
 
 SMODS.Joker {
   key = 'charcoaljoker',
-  config = { extra = { added_mult = 2, current_mult = 0 } },
+  config = { extra = { added_mult = 3, current_mult = 0 } },
   rarity = 2,
   atlas = 'Phanta',
   pos = { x = 4, y = 5 },
@@ -3473,7 +3460,7 @@ SMODS.Joker {
 
 SMODS.Joker {
   key = 'thepolicemun',
-  config = { extra = { no_of_upgrades = 2 } },
+  config = { extra = { no_of_upgrades = 3 } },
   rarity = 2,
   atlas = 'Phanta',
   pos = { x = 8, y = 4 },
@@ -4372,7 +4359,7 @@ SMODS.Joker {
   atlas = 'Phanta',
   pos = { x = 8, y = 0 },
   soul_pos = { x = 9, y = 0 },
-  cost = 8,
+  cost = 9,
   blueprint_compat = true,
   eternal_compat = true,
   perishable_compat = true,
