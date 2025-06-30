@@ -37,6 +37,7 @@ SMODS.PokerHand {
     { 'S_2', true }
   },
   evaluate = function(parts, hand)
+    if not Phanta.config["junk_enabled"] then return false end
     local lowest = get_lowest(hand)
     if next(lowest) and #hand >= 5 then return lowest else return {} end
   end
@@ -61,6 +62,9 @@ SMODS.Consumable {
         colours = { (to_big(G.GAME.hands["phanta_junk"].level) == to_big(1) and G.C.UI.TEXT_DARK or G.C.HAND_LEVELS[math.min(7, G.GAME.hands["phanta_junk"].level)]) }
       }
     }
+  end,
+  in_pool = function()
+    return Phanta.config["junk_enabled"]
   end
 }
 
@@ -608,8 +612,12 @@ SMODS.Edition {
     return { vars = { self.config.xmult } }
   end,
   calculate = function(self, card, context)
-    if (context.main_scoring and context.cardarea == G.play) or context.post_joker then return { xmult = self.config
-      .xmult } end
+    if (context.main_scoring and context.cardarea == G.play) or context.post_joker then
+      return {
+        xmult = self.config
+            .xmult
+      }
+    end
   end
 }
 
@@ -1676,6 +1684,7 @@ SMODS.Back {
     return { vars = { self.config.extra.removed_shop_slots } }
   end,
   apply = function(self, back)
-    G.GAME.starting_params.boosters_in_shop = G.GAME.starting_params.boosters_in_shop - self.config.extra.removed_shop_slots
+    G.GAME.starting_params.boosters_in_shop = G.GAME.starting_params.boosters_in_shop -
+        self.config.extra.removed_shop_slots
   end
 }

@@ -261,7 +261,7 @@ SMODS.Joker {
     end
   end,
   in_pool = function()
-    return G.GAME.hands["phanta_junk"].visible
+    return G.GAME.hands["phanta_junk"].visible and Phanta.config["junk_enabled"]
   end
 }
 
@@ -1428,7 +1428,7 @@ SMODS.Joker {
     end
   end,
   in_pool = function()
-    return G.GAME.hands["phanta_junk"].visible
+    return G.GAME.hands["phanta_junk"].visible and Phanta.config["junk_enabled"]
   end
 }
 
@@ -1693,7 +1693,7 @@ SMODS.Joker {
     end
   end,
   in_pool = function()
-    return G.GAME.hands["phanta_junk"].visible
+    return G.GAME.hands["phanta_junk"].visible and Phanta.config["junk_enabled"]
   end
 }
 

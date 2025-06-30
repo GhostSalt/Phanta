@@ -363,3 +363,36 @@ function SMODS.current_mod.reset_game_globals(run_start)
     G.GAME.current_round.puzzle_card.id = 2
   end
 end
+
+if not Phanta then Phanta = {} end
+Phanta.config = SMODS.current_mod.config
+
+local phantaConfigTab = function()
+	phanta_nodes = {
+	}
+	config = { n = G.UIT.R, config = { align = "tm", padding = 0 }, nodes = { { n = G.UIT.C, config = { align = "tm", padding = 0.05 }, nodes = {} } } }
+	phanta_nodes[#phanta_nodes + 1] = config
+	phanta_nodes[#phanta_nodes + 1] = create_toggle({
+		label = localize("phanta_junk_enabled"),
+		active_colour = HEX("40c76d"),
+		ref_table = Phanta.config,
+		ref_value = "junk_enabled",
+		callback = function()
+        end,
+	})
+	return {
+		n = G.UIT.ROOT,
+		config = {
+			emboss = 0.05,
+			minh = 6,
+			r = 0.1,
+			minw = 10,
+			align = "cm",
+			padding = 0.2,
+			colour = G.C.BLACK,
+		},
+		nodes = phanta_nodes,
+	}
+end
+
+SMODS.current_mod.config_tab = phantaConfigTab
