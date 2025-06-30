@@ -643,7 +643,7 @@ SMODS.Enhancement {
   key = "coppergrateexposed",
   atlas = "PhantaEnhancements",
   pos = { x = 1, y = 1 },
-  config = { Xmult = 1.5, bonus = 15 },
+  config = { Xmult = 1.75, bonus = 15 },
   loc_vars = function(self, info_queue, center)
     info_queue[#info_queue + 1] = G.P_CENTERS.m_phanta_coppergrateweathered
     return { vars = { center.ability.Xmult, center.ability.bonus } }

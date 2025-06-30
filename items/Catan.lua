@@ -583,7 +583,7 @@ SMODS.Consumable {
   key = "yearofplenty",
   pos = { x = 1, y = 1 },
   cost = 6,
-  config = { extra = { money = 20 } },
+  config = { extra = { money = 30 } },
   atlas = "PhantaCatan",
   loc_vars = function(self, info_queue, card)
     return { vars = { card.ability.extra.money } }

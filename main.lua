@@ -305,6 +305,7 @@ end
 if next(SMODS.find_mod('Bakery')) then assert(SMODS.load_file("items/Charm.lua"))() end
 if next(SMODS.find_mod('partner')) then assert(SMODS.load_file("items/Partners.lua"))() end
 if next(SMODS.find_mod('CardSleeves')) then assert(SMODS.load_file("items/Sleeves.lua"))() end
+if next(SMODS.find_mod('artbox')) then assert(SMODS.load_file("items/ArtBox.lua"))() end
 
 local game_start_run_ref = Game.start_run
 

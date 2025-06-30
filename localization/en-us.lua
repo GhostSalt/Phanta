@@ -141,7 +141,7 @@ return {
             e_phanta_waxed = {
                 name = "Waxed",
                 text = {
-                    "{X:mult,C:white} X#1# {} Mult",
+                    "{X:mult,C:white}X#1#{} Mult",
                 },
             }
         },
@@ -425,7 +425,7 @@ return {
                 name = 'Inception',
                 text = {
                     "{C:mult}+#1#{} Mult per hand",
-                    "played this {C:attention}Blind{}",
+                    "played this {C:attention}round{}",
                     "{C:inactive}(Will give {C:mult}+#2#{C:inactive} Mult){}"
                 }
             },
@@ -499,6 +499,14 @@ return {
                     "increases the odds"
                 }
             },
+            j_phanta_exitsign = {
+                name = 'Exit Sign',
+                text = {
+                    "Earn {C:money}$#1#{} when hand",
+                    "is played if {C:blue}0{} hands",
+                    "and {C:red}0{} discards remain"
+                }
+            },
             j_phanta_task = {
                 name = 'Task',
                 text = {
@@ -506,14 +514,6 @@ return {
                     "using a consumable, {C:attention}cashout{}",
                     "when any {C:attention}Blind{} is skipped",
                     "{C:inactive}(Currently {C:money}$#2#{C:inactive}){}"
-                }
-            },
-            j_phanta_exitsign = {
-                name = 'Exit Sign',
-                text = {
-                    "Earn {C:money}$#1#{} when hand",
-                    "is played if {C:blue}0{} hands",
-                    "and {C:red}0{} discards remain"
                 }
             },
             j_phanta_saltcircle = {
