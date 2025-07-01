@@ -2076,7 +2076,9 @@ return {
 
             credit_goat3730 = "OC by goat3730",
 
-            phanta_junk_enabled = "Enable Junk (Poker Hand)"
+            phanta_junk_enabled = "Enable Junk (Poker Hand)",
+            phanta_zodiac_enabled = "Zodiac Cards",
+            phanta_catan_enabled = "Settlers of Catan Content"
         },
         labels = {
             phanta_ghostcard = "Ghost Card",
