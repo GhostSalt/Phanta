@@ -1485,7 +1485,7 @@ SMODS.Joker {
     if G.consumeables then
       for _, card in pairs(G.consumeables.cards) do
         if card.ability.set == "phanta_Zodiac" and card.config.center.add_progs then
-          card.config.center:add_progs()
+          card.config.center:add_progs(1)
         end
       end
     end
@@ -1494,7 +1494,7 @@ SMODS.Joker {
     if G.consumeables then
       for _, card in pairs(G.consumeables.cards) do
         if card.ability.set == "phanta_Zodiac" and card.config.center.remove_progs then
-          card.config.center:remove_progs()
+          card.config.center:remove_progs(1)
         end
       end
     end

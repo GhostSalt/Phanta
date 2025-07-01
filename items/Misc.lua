@@ -1300,12 +1300,12 @@ SMODS.Consumable {
     ease_discard(-(card.ability.extra.added_discards + count_prognosticators(card)))
   end,
   add_progs = function(self, count)
-    G.GAME.round_resets.discards = G.GAME.round_resets.discards + (count * card.ability.extra.added_discards)
-    ease_discard(count * card.ability.extra.added_discards)
+    G.GAME.round_resets.discards = G.GAME.round_resets.discards + (count * self.config.extra.added_discards)
+    ease_discard(count * self.config.extra.added_discards)
   end,
   remove_progs = function(self, count)
-    G.GAME.round_resets.discards = G.GAME.round_resets.discards - (count * card.ability.extra.added_discards)
-    ease_discard(-(count * card.ability.extra.added_discards))
+    G.GAME.round_resets.discards = G.GAME.round_resets.discards - (count * self.config.extra.added_discards)
+    ease_discard(-(count * self.config.extra.added_discards))
   end
 }
 
@@ -1343,12 +1343,12 @@ SMODS.Consumable {
     ease_hands_played(-(card.ability.extra.added_hands + count_prognosticators(card)))
   end,
   add_progs = function(self, count)
-    G.GAME.round_resets.hands = G.GAME.round_resets.hands + (count * card.ability.extra.added_hands)
-    ease_hands_played(count * card.ability.extra.added_hands)
+    G.GAME.round_resets.hands = G.GAME.round_resets.hands + (count * self.config.extra.added_hands)
+    ease_hands_played(count * self.config.extra.added_hands)
   end,
   remove_progs = function(self, count)
-    G.GAME.round_resets.hands = G.GAME.round_resets.hands - (count * card.ability.extra.added_hands)
-    ease_hands_played(-(count * card.ability.extra.added_hands))
+    G.GAME.round_resets.hands = G.GAME.round_resets.hands - (count * self.config.extra.added_hands)
+    ease_hands_played(-(count * self.config.extra.added_hands))
   end
 }
 
