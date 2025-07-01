@@ -77,7 +77,8 @@ function get_lowest(hand)
 end
 
 function count_prognosticators(card)
-  return #SMODS.find_card("j_phanta_prognosticator") + (G.GAME.selected_sleeve == "sleeve_phanta_todayandtomorrow" and 1 or 0) +
+  return #SMODS.find_card("j_phanta_prognosticator") +
+      (G.GAME.selected_sleeve == "sleeve_phanta_todayandtomorrow" and 1 or 0) +
       ((is_current_month(card) and 2 or 0) * #SMODS.find_card("j_phanta_calendar")) +
       (G.GAME and G.GAME.selected_back and G.GAME.selected_back and G.GAME.selected_back.effect and G.GAME.selected_back.effect.center.key == "b_phanta_todayandtomorrow" and 1 or 0)
 end
@@ -323,7 +324,6 @@ function Game:start_run(args)
   G.GAME.phanta_initial_ranks = existing_ranks
 end
 
-
 local igo = Game.init_game_object
 function Game:init_game_object()
   local ret = igo(self)
@@ -368,31 +368,73 @@ if not Phanta then Phanta = {} end
 Phanta.config = SMODS.current_mod.config
 
 local phantaConfigTab = function()
-	phanta_nodes = {
-	}
-	config = { n = G.UIT.R, config = { align = "tm", padding = 0 }, nodes = { { n = G.UIT.C, config = { align = "tm", padding = 0.05 }, nodes = {} } } }
-	phanta_nodes[#phanta_nodes + 1] = config
-	phanta_nodes[#phanta_nodes + 1] = create_toggle({
-		label = localize("phanta_junk_enabled"),
-		active_colour = HEX("40c76d"),
-		ref_table = Phanta.config,
-		ref_value = "junk_enabled",
-		callback = function()
-        end,
-	})
-	return {
-		n = G.UIT.ROOT,
-		config = {
-			emboss = 0.05,
-			minh = 6,
-			r = 0.1,
-			minw = 10,
-			align = "cm",
-			padding = 0.2,
-			colour = G.C.BLACK,
-		},
-		nodes = phanta_nodes,
-	}
+  phanta_nodes = {
+  }
+  config = { n = G.UIT.R, config = { align = "tm", padding = 0 }, nodes = { { n = G.UIT.C, config = { align = "tm", padding = 0.05 }, nodes = {} } } }
+  phanta_nodes[#phanta_nodes + 1] = config
+  phanta_nodes[#phanta_nodes + 1] = create_toggle({
+    label = localize("phanta_junk_enabled"),
+    active_colour = HEX("40c76d"),
+    ref_table = Phanta.config,
+    ref_value = "junk_enabled",
+    callback = function()
+    end,
+  })
+  phanta_nodes[#phanta_nodes + 1] = create_toggle({
+    label = localize("phanta_zodiac_enabled"),
+    active_colour = HEX("40c76d"),
+    ref_table = Phanta.config,
+    ref_value = "zodiac_enabled",
+    callback = function()
+    end,
+  })
+  phanta_nodes[#phanta_nodes + 1] = create_toggle({
+    label = localize("phanta_catan_enabled"),
+    active_colour = HEX("40c76d"),
+    ref_table = Phanta.config,
+    ref_value = "catan_enabled",
+    callback = function()
+    end,
+  })
+  return {
+    n = G.UIT.ROOT,
+    config = {
+      emboss = 0.05,
+      minh = 6,
+      r = 0.1,
+      minw = 10,
+      align = "cm",
+      padding = 0.2,
+      colour = G.C.BLACK,
+    },
+    nodes = phanta_nodes,
+  }
+end
+
+local update_ref = Game.update
+function Game:update(dt)
+  if not G.GAME.phanta_zodiac_rate_cache then G.GAME.phanta_zodiac_rate_cache = 0 end
+  if not G.GAME.phanta_catanresource_rate_cache then G.GAME.phanta_catanresource_rate_cache = 0 end
+  if not G.GAME.phanta_catandevelopmentcard_rate_cache then G.GAME.phanta_catandevelopmentcard_rate_cache = 0 end
+  if not G.GAME.phanta_catanbuilding_rate_cache then G.GAME.phanta_catanbuilding_rate_cache = 0 end
+
+  if Phanta.config["zodiac_enabled"] then
+    G.GAME.phanta_zodiac_rate = G.GAME.phanta_zodiac_rate_cache
+  else
+    G.GAME.phanta_zodiac_rate = 0
+  end
+
+  if Phanta.config["catan_enabled"] then
+    G.GAME.phanta_catanresource_rate = G.GAME.phanta_catanresource_rate_cache
+    G.GAME.phanta_catandevelopmentcard_rate = G.GAME.phanta_catandevelopmentcard_rate_cache
+    G.GAME.phanta_catanbuilding_rate = G.GAME.phanta_catanbuilding_rate_cache
+  else
+    G.GAME.phanta_catanresource_rate = 0
+    G.GAME.phanta_catandevelopmentcard_rate = 0
+    G.GAME.phanta_catanbuilding_rate = 0
+  end
+
+  return update_ref(self, dt)
 end
 
 SMODS.current_mod.config_tab = phantaConfigTab

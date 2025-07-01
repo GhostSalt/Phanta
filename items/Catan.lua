@@ -19,7 +19,10 @@ SMODS.ConsumableType {
   shop_rate = 0,
   default = "c_phanta_brick",
   can_stack = true,
-  can_divide = true
+  can_divide = true,
+  in_pool = function()
+    return Phanta.config["catan_enabled"]
+  end
 }
 
 SMODS.UndiscoveredSprite({
@@ -179,7 +182,10 @@ SMODS.ConsumableType {
   shop_rate = 0,
   default = "c_phanta_knight1",
   can_stack = true,
-  can_divide = true
+  can_divide = true,
+  in_pool = function()
+    return Phanta.config["catan_enabled"]
+  end
 }
 
 SMODS.UndiscoveredSprite({
@@ -656,7 +662,10 @@ SMODS.ConsumableType {
   shop_rate = 0,
   default = "phanta_knight",
   can_stack = true,
-  can_divide = true
+  can_divide = true,
+  in_pool = function()
+    return Phanta.config["catan_enabled"]
+  end
 }
 
 SMODS.UndiscoveredSprite({
@@ -804,19 +813,23 @@ SMODS.Consumable {
 
 
 function phanta_add_catan_building_button(scale)
-  return {
-    n = G.UIT.R,
-    config = { id = 'phanta_catan_building', align = "cm", minh = 1.2, minw = 1.5, padding = 0.05, r = 0.1, hover = true, colour = G.C.PHANTA.Resource, button = "run_phanta_catan_menu", shadow = true },
-    nodes = {
-      {
-        n = G.UIT.R,
-        config = { align = "cm", padding = 0, maxw = 1.4 },
-        nodes = {
-          { n = G.UIT.T, config = { text = localize('b_phanta_catanbuilding'), scale = scale, colour = G.C.UI.TEXT_LIGHT, shadow = true } }
+  if Phanta.config["catan_enabled"] then
+    return {
+      n = G.UIT.R,
+      config = { id = 'phanta_catan_building', align = "cm", minh = 1.2, minw = 1.5, padding = 0.05, r = 0.1, hover = true, colour = G.C.PHANTA.Resource, button = "run_phanta_catan_menu", shadow = true },
+      nodes = {
+        {
+          n = G.UIT.R,
+          config = { align = "cm", padding = 0, maxw = 1.4 },
+          nodes = {
+            { n = G.UIT.T, config = { text = localize('b_phanta_catanbuilding'), scale = scale, colour = G.C.UI.TEXT_LIGHT, shadow = true } }
+          }
         }
       }
     }
-  }
+  else
+    return nil
+  end
 end
 
 G.FUNCS.run_phanta_catan_menu = function(e)
@@ -974,7 +987,7 @@ end
 local context_ref = SMODS.calculate_context
 
 function SMODS.calculate_context(context, return_table)
-  if context and context.starting_shop then
+  if context and context.starting_shop and Phanta.config["catan_enabled"] then
     for i = 1, (G.GAME.PhantaCatan and G.GAME.PhantaCatan.no_of_resources_in_shop or 0) + 1 do
       local key = pseudorandom_element(G.P_CENTER_POOLS.phanta_CatanResource, pseudoseed('monopolychosenresource')).key
       local card = SMODS.create_card { key = key, area = G.shop_booster }
@@ -1011,6 +1024,9 @@ SMODS.Voucher {
         return true
       end
     }))
+  end,
+  in_pool = function()
+    return Phanta.config["catan_enabled"]
   end
 }
 
@@ -1034,6 +1050,9 @@ SMODS.Voucher {
         return true
       end
     }))
+  end,
+  in_pool = function()
+    return Phanta.config["catan_enabled"]
   end
 }
 

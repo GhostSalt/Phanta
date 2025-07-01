@@ -844,10 +844,13 @@ SMODS.ConsumableType {
   primary_colour = HEX("4076cf"),
   secondary_colour = HEX("5998ff"),
   collection_rows = { 4, 4 },
-  shop_rate = (G.GAME and G.GAME.selected_back and G.GAME.selected_back.effect and G.GAME.selected_back.effect.center and G.GAME.selected_back.effect.center.key) == "b_phanta_todayandtomorrow" and 1 or 0,
+  shop_rate = 0,
   default = "phanta_aries",
   can_stack = true,
-  can_divide = true
+  can_divide = true,
+  in_pool = function()
+    return Phanta.config["zodiac_enabled"]
+  end
 }
 
 SMODS.UndiscoveredSprite({
@@ -905,7 +908,10 @@ SMODS.Booster {
     return { vars = { card.config.center.config.choose, card.ability.extra } }
   end,
   group_key = "k_phanta_zodiac_pack",
-  select_card = "consumeables"
+  select_card = "consumeables",
+  in_pool = function()
+    return Phanta.config["zodiac_enabled"]
+  end
 }
 
 SMODS.Booster {
@@ -927,7 +933,10 @@ SMODS.Booster {
     return { vars = { card.config.center.config.choose, card.ability.extra } }
   end,
   group_key = "k_phanta_zodiac_pack",
-  select_card = "consumeables"
+  select_card = "consumeables",
+  in_pool = function()
+    return Phanta.config["zodiac_enabled"]
+  end
 }
 
 SMODS.Booster {
@@ -949,7 +958,10 @@ SMODS.Booster {
     return { vars = { card.config.center.config.choose, card.ability.extra } }
   end,
   group_key = "k_phanta_zodiac_pack",
-  select_card = "consumeables"
+  select_card = "consumeables",
+  in_pool = function()
+    return Phanta.config["zodiac_enabled"]
+  end
 }
 
 SMODS.Booster {
@@ -971,7 +983,10 @@ SMODS.Booster {
     return { vars = { card.config.center.config.choose, card.ability.extra } }
   end,
   group_key = "k_phanta_zodiac_pack",
-  select_card = "consumeables"
+  select_card = "consumeables",
+  in_pool = function()
+    return Phanta.config["zodiac_enabled"]
+  end
 }
 
 SMODS.Booster {
@@ -993,7 +1008,10 @@ SMODS.Booster {
     return { vars = { card.config.center.config.choose, card.ability.extra } }
   end,
   group_key = "k_phanta_zodiac_pack",
-  select_card = "consumeables"
+  select_card = "consumeables",
+  in_pool = function()
+    return Phanta.config["zodiac_enabled"]
+  end
 }
 
 SMODS.Booster {
@@ -1015,7 +1033,10 @@ SMODS.Booster {
     return { vars = { card.config.center.config.choose, card.ability.extra } }
   end,
   group_key = "k_phanta_zodiac_pack",
-  select_card = "consumeables"
+  select_card = "consumeables",
+  in_pool = function()
+    return Phanta.config["zodiac_enabled"]
+  end
 }
 
 SMODS.Booster {
@@ -1037,7 +1058,10 @@ SMODS.Booster {
     return { vars = { card.config.center.config.choose, card.ability.extra } }
   end,
   group_key = "k_phanta_zodiac_pack",
-  select_card = "consumeables"
+  select_card = "consumeables",
+  in_pool = function()
+    return Phanta.config["zodiac_enabled"]
+  end
 }
 
 SMODS.Booster {
@@ -1059,7 +1083,10 @@ SMODS.Booster {
     return { vars = { card.config.center.config.choose, card.ability.extra } }
   end,
   group_key = "k_phanta_zodiac_pack",
-  select_card = "consumeables"
+  select_card = "consumeables",
+  in_pool = function()
+    return Phanta.config["zodiac_enabled"]
+  end
 }
 
 SMODS.Tag {
@@ -1088,6 +1115,9 @@ SMODS.Tag {
       tag.triggered = true
       return true
     end
+  end,
+  in_pool = function()
+    return Phanta.config["zodiac_enabled"]
   end
 }
 

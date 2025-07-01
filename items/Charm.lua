@@ -20,8 +20,10 @@ Bakery_API.credit(Bakery_API.Charm {
                 func = function()
                     G.E_MANAGER:add_event(Event({
                         func = function()
-                            local key = pseudorandom_element(G.P_CENTER_POOLS.phanta_CatanResource, pseudoseed('monopolychosenresource')).key
-                            local new_card = create_card("phanta_CatanResource", G.consumables, nil, nil, nil, nil, key, 'silo')
+                            local key = pseudorandom_element(G.P_CENTER_POOLS.phanta_CatanResource,
+                                pseudoseed('monopolychosenresource')).key
+                            local new_card = create_card("phanta_CatanResource", G.consumables, nil, nil, nil, nil, key,
+                                'silo')
                             new_card:add_to_deck()
                             G.consumeables:emplace(new_card)
                             G.GAME.consumeable_buffer = 0
@@ -35,5 +37,8 @@ Bakery_API.credit(Bakery_API.Charm {
                 end
             }))
         end
+    end,
+    in_pool = function()
+        return Phanta.config["catan_enabled"]
     end
 })

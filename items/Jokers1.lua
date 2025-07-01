@@ -1498,6 +1498,9 @@ SMODS.Joker {
         end
       end
     end
+  end,
+  in_pool = function()
+    return Phanta.config["zodiac_enabled"]
   end
 }
 
@@ -1530,6 +1533,9 @@ SMODS.Joker {
         end
       end
     end
+  end,
+  in_pool = function()
+    return Phanta.config["zodiac_enabled"]
   end
 }
 
@@ -2583,6 +2589,9 @@ SMODS.Joker {
         end
       }))
     end
+  end,
+  in_pool = function()
+    return Phanta.config["catan_enabled"]
   end
 }
 
@@ -2621,6 +2630,9 @@ SMODS.Joker {
         end
       }))
     end
+  end,
+  in_pool = function()
+    return Phanta.config["catan_enabled"]
   end
 }
 
@@ -2659,6 +2671,9 @@ SMODS.Joker {
         end
       }))
     end
+  end,
+  in_pool = function()
+    return Phanta.config["catan_enabled"]
   end
 }
 
@@ -2697,6 +2712,9 @@ SMODS.Joker {
         end
       }))
     end
+  end,
+  in_pool = function()
+    return Phanta.config["catan_enabled"]
   end
 }
 
@@ -2735,6 +2753,9 @@ SMODS.Joker {
         end
       }))
     end
+  end,
+  in_pool = function()
+    return Phanta.config["catan_enabled"]
   end
 }
 
