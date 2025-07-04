@@ -1693,6 +1693,15 @@ return {
                     "creates a random",
                     "{C:phanta_resource}Resource{} card"
                 }
+            },
+            BakeryCharm_phanta_timingiseverything = {
+                name = 'Timing is Everything',
+                text = {
+                    "Has the ability of",
+                    "the {C:phanta_zodiac}Zodiac{} card",
+                    "corresponding to today's",
+                    "date, but much stronger"
+                }
             }
         },
         Planet = {
@@ -2024,6 +2033,144 @@ return {
                     "{C:attention}Negative Tags{}"
                 }
             }
+        },
+        phanta_StarterPack = {
+            c_phanta_performerpack = {
+                name = "Performer Pack",
+                text = {
+                    "Contains:",
+                    "1 {C:attention}Mult{} Jack of Hearts",
+                    "{C:attention}Random{} 2, 3, 4, 5 of Hearts"
+                }
+            },
+            c_phanta_polyculepack = {
+                name = "Polycule Pack",
+                text = {
+                    "Contains:",
+                    "1 {C:attention}random{} Queen of Hearts",
+                    "3 {C:attention}random{} Queens",
+                    "1 {C:attention}random{} Ace of Hearts",
+                }
+            },
+            c_phanta_powerhousepack = {
+                name = "Powerhouse Pack",
+                text = {
+                    "Contains:",
+                    "2 {C:attention}Red Seal Steel{}",
+                    "King of Hearts",
+                    "2 {C:attention}random{} cards"
+                }
+            },
+            c_phanta_passionatepack = {
+                name = "Passionate Pack",
+                text = {
+                    "Contains:",
+                    "2 {C:attention}random{} Hearts",
+                    "1 {C:dark_edition}Polychrome{} Heart",
+                    "2 {C:attention}Stone{} cards"
+                }
+            },
+            c_phanta_plazapack = {
+                name = "Plaza Pack",
+                text = {
+                    "Contains:",
+                    "1 {C:attention}Bonus{} Queen of Clubs",
+                    "3 {C:attention}random face{} cards",
+                }
+            },
+            c_phanta_palacepack = {
+                name = "Palace Pack",
+                text = {
+                    "Contains:",
+                    "2 {C:attention}Glass{} King of Clubs",
+                    "3 {C:attention}Stone{} cards",
+                }
+            },
+            c_phanta_plentifulpack = {
+                name = "Plentiful Pack",
+                text = {
+                    "Contains:",
+                    "2 {C:attention}random{} Jack of Clubs",
+                    "1 {C:attention}Steel{} card",
+                    "1 {C:attention}Gold{} card",
+                    "1 {C:attention}Glass{} card",
+                }
+            },
+            c_phanta_partypack = {
+                name = "Party Pack",
+                text = {
+                    "Contains:",
+                    "4 {C:attention}random{} Clubs",
+                    "1 {C:dark_edition}Holographic{} Club"
+                }
+            },
+            c_phanta_pilfererpack = {
+                name = "Pilferer Pack",
+                text = {
+                    "Contains:",
+                    "2 {C:attention}Mult{} Jack of Diamonds",
+                    "1 {C:blue}Purple{} seal Jack",
+                    "1 {C:attention}random{} Queen",
+                }
+            },
+            c_phanta_prettypack = {
+                name = "Pretty Pack",
+                text = {
+                    "Contains:",
+                    "2 {C:attention}Bonus{} Queen of Diamonds",
+                    "1 {C:blue}Blue{} seal Queen",
+                    "1 {C:attention}random{} Jack",
+                }
+            },
+            c_phanta_privilegedpack = {
+                name = "Privileged Pack",
+                text = {
+                    "Contains:",
+                    "2 {C:attention}Gold{} King of Diamonds",
+                    "3 {C:attention}random Glass{} cards",
+                }
+            },
+            c_phanta_pompouspack = {
+                name = "Pompous Pack",
+                text = {
+                    "Contains:",
+                    "3 {C:attention}random{} Diamonds",
+                    "2 {C:attention}Gold Seal{} Diamonds"
+                }
+            },
+            c_phanta_piratepack = {
+                name = "Pirate Pack",
+                text = {
+                    "Contains:",
+                    "3 {C:attention}Lucky{} Jack of Spades",
+                    "1 {C:attention}Gold{} Ace of Diamonds",
+                    "1 {C:attention}Steel{} King of Spades"
+                }
+            },
+            c_phanta_punitivepack = {
+                name = "Punitive Pack",
+                text = {
+                    "Contains:",
+                    "2 {C:attention}Foil{} Queen of Spades",
+                    "3 {C:attention}random{} cards"
+                }
+            },
+            c_phanta_presidentpack = {
+                name = "President Pack",
+                text = {
+                    "Contains:",
+                    "2 {C:attention}random{} King of Spades",
+                    "2 {C:attention}random{} Kings"
+                }
+            },
+            c_phanta_pointypack = {
+                name = "Pointy Pack",
+                text = {
+                    "Contains:",
+                    "4 {C:attention}random{} Spades",
+                    "1 {C:dark_edition}Foil{} Spade"
+                }
+            }
         }
     },
     misc = {
@@ -2078,7 +2225,8 @@ return {
 
             phanta_junk_enabled = "Enable Junk (Poker Hand)",
             phanta_zodiac_enabled = "Zodiac Cards",
-            phanta_catan_enabled = "Settlers of Catan Content"
+            phanta_catan_enabled = "Settlers of Catan Content",
+            phanta_starter_pack_enabled = "Starter Packs"
         },
         labels = {
             phanta_ghostcard = "Ghost Card",

@@ -290,7 +290,7 @@ end
 
 local allFolders = { "none", "items" }
 
-local allFiles = { ["none"] = {}, ["items"] = { "Jokers1", "Jokers2", "Legendaries", "Misc", "Catan" } }
+local allFiles = { ["none"] = {}, ["items"] = { "Jokers1", "Jokers2", "Legendaries", "Misc", "Catan", "StarterPack" } }
 
 for i = 1, #allFolders do
   if allFolders[i] == "none" then
@@ -393,6 +393,14 @@ local phantaConfigTab = function()
     active_colour = HEX("40c76d"),
     ref_table = Phanta.config,
     ref_value = "catan_enabled",
+    callback = function()
+    end,
+  })
+  phanta_nodes[#phanta_nodes + 1] = create_toggle({
+    label = localize("phanta_starter_pack_enabled"),
+    active_colour = HEX("40c76d"),
+    ref_table = Phanta.config,
+    ref_value = "starter_pack_enabled",
     callback = function()
     end,
   })

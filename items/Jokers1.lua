@@ -677,10 +677,11 @@ SMODS.Joker {
 
     if context.setting_blind and card.ability.extra.current_hands > 0 then
       ease_hands_played(card.ability.extra.current_hands)
+      local temp_hands = card.ability.extra.current_hands
       if not context.blueprint then card.ability.extra.current_hands = 0 end
       return {
         message = card.ability.extra.current_hands == 1 and localize("a_hand") or
-            localize { type = 'variable', key = 'a_hands', vars = { card.ability.extra.current_hands } },
+            localize { type = 'variable', key = 'a_hands', vars = { temp_hands } },
         colour = G.C.BLUE
       }
     end
@@ -1814,8 +1815,8 @@ SMODS.Joker {
 }
 
 SMODS.Sound({
-	key = "diamondaxe",
-	path = "phanta_diamondaxe.ogg",
+  key = "diamondaxe",
+  path = "phanta_diamondaxe.ogg",
   replace = true
 })
 
@@ -1888,7 +1889,7 @@ SMODS.Joker {
     end
   end,
   set_badges = function(self, card, badges)
-    badges[#badges+1] = create_badge(localize('credit_goat3730'), G.C.PHANTA.MISC_COLOURS.PHANTA, G.C.WHITE, 1)
+    badges[#badges + 1] = create_badge(localize('credit_goat3730'), G.C.PHANTA.MISC_COLOURS.PHANTA, G.C.WHITE, 1)
   end
 }
 
