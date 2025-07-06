@@ -1270,6 +1270,15 @@ return {
                     "highly annoying"
                 }
             },
+            j_phanta_heartbreak            = {
+                name = 'Heartbreak',
+                text = {
+                    "Played cards with {C:hearts}Hearts{}",
+                    "suit give {C:white,X:mult}X#1#{} Mult when",
+                    "scored, each has a {C:green}#2# in #3#{}",
+                    "chance to be {C:red}destroyed{}"
+                }
+            },
             j_phanta_donpaolo              = {
                 name = 'Don Paolo',
                 text = {
@@ -1308,6 +1317,15 @@ return {
                     "{C:inactive,s:0.65}(Active if with Barton){}"
                 }
             },
+            j_phanta_snoinches          = {
+                name = "Snoinches",
+                text = {
+                    "After hand is",
+                    "played, {C:attention}draw{} the",
+                    "{C:attention}leftmost{} played card",
+                    "back to your {C:attention}hand{}"
+                }
+            },
             j_phanta_clapperboard          = {
                 name = "Clapperboard",
                 text = {
@@ -1332,6 +1350,15 @@ return {
                     "edition {C:attention}Copper Grate{} card",
                     "in your {C:attention}full deck{}",
                     "{C:inactive}(Currently {X:mult,C:white}X#2#{C:inactive} Mult){}"
+                }
+            },
+            j_phanta_neonjoker           = {
+                name = 'Neon Joker',
+                text = {
+                    "{C:white,X:mult}X#1#{} Mult if hand",
+                    "is played with at",
+                    "least {C:attention}4 distinct{}",
+                    "{C:attention}suits{} held in hand"
                 }
             },
             j_phanta_technojoker           = {
@@ -2109,7 +2136,7 @@ return {
                 text = {
                     "Contains:",
                     "2 {C:attention}Mult{} Jack of Diamonds",
-                    "1 {C:blue}Purple{} seal Jack",
+                    "1 {C:purple}Purple{} seal Jack",
                     "1 {C:attention}random{} Queen",
                 }
             },
@@ -2222,11 +2249,16 @@ return {
             created_blue_seal = "Blue Seal",
 
             credit_goat3730 = "OC by goat3730",
+            credit_bobisnotaperson = "OC by bobisnotaperson",
 
             phanta_junk_enabled = "Enable Junk (Poker Hand)",
             phanta_zodiac_enabled = "Zodiac Cards",
             phanta_catan_enabled = "Settlers of Catan Content",
-            phanta_starter_pack_enabled = "Starter Packs"
+            phanta_starter_pack_enabled = "Starter Packs",
+
+            phanta_credit_1 = "Mod by GhostSalt",
+            phanta_credit_2 = "Ability brainstorming: BakersDozenBagels",
+            phanta_credit_3 = "and help from the Balatro Discord server"
         },
         labels = {
             phanta_ghostcard = "Ghost Card",

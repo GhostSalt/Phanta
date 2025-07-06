@@ -445,4 +445,52 @@ function Game:update(dt)
   return update_ref(self, dt)
 end
 
+SMODS.current_mod.extra_tabs = function()
+  return {
+    {
+      label = 'Credits',
+      tab_definition_function = function()
+        return {
+          n = G.UIT.ROOT,
+          config = {
+            emboss = 0.05,
+            minh = 6,
+            r = 0.1,
+            minw = 10,
+            align = "cm",
+            padding = 0.2,
+            colour = G.C.BLACK,
+          },
+          nodes = {
+            {
+              n = G.UIT.C,
+              config = { align = "cm" },
+              nodes = {
+                {
+                  n = G.UIT.R,
+                  config = { align = "cm", padding = 0.05 },
+                  nodes = {
+                    { n = G.UIT.T, config = { text = localize("phanta_credit_1"), colour = G.C.UI.TEXT_LIGHT, scale = 0.5 } } }
+                },
+                {
+                  n = G.UIT.R,
+                  config = { align = "cm", padding = 0.05 },
+                  nodes = {
+                    { n = G.UIT.T, config = { text = localize("phanta_credit_2"), colour = G.C.UI.TEXT_LIGHT, scale = 0.4 } } }
+                },
+                {
+                  n = G.UIT.R,
+                  config = { align = "cm", padding = 0.05 },
+                  nodes = {
+                    { n = G.UIT.T, config = { text = localize("phanta_credit_3"), colour = G.C.UI.TEXT_LIGHT, scale = 0.4 } } }
+                }
+              }
+            }
+          }
+        }
+      end,
+    }
+  }
+end
+
 SMODS.current_mod.config_tab = phantaConfigTab

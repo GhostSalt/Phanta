@@ -1,6 +1,6 @@
 SMODS.Atlas {
-  key = "PhantaStarterPacks",
-  path = "PhantaStarterPacks.png",
+  key = "PhantaStarterPacks1",
+  path = "PhantaStarterPacks1.png",
   px = 71,
   py = 95
 }
@@ -21,9 +21,9 @@ SMODS.ConsumableType {
 
 SMODS.UndiscoveredSprite({
   key = "phanta_StarterPack",
-  atlas = "PhantaStarterPacks",
-  path = "PhantaStarterPacks.png",
-  pos = { x = 0, y = 0 },
+  atlas = "PhantaStarterPacks1",
+  path = "PhantaStarterPacks1.png",
+  pos = { x = 4, y = 0 },
   px = 71,
   py = 95,
 }):register()
@@ -121,7 +121,7 @@ SMODS.Consumable {
     { count = 1, rank = "3",             suit = "Hearts" },
     { count = 1, rank = "4",             suit = "Hearts" },
     { count = 1, rank = "5",             suit = "Hearts" } } },
-  atlas = "PhantaStarterPacks",
+  atlas = "PhantaStarterPacks1",
   loc_vars = function(self, info_queue, card)
     info_queue[#info_queue + 1] = G.P_CENTERS.m_mult
   end
@@ -136,7 +136,7 @@ SMODS.Consumable {
     { count = 1, rank = "Queen", suit = "Hearts" },
     { count = 3, rank = "Queen" },
     { count = 1, rank = "Ace", suit = "Hearts" } } },
-  atlas = "PhantaStarterPacks"
+  atlas = "PhantaStarterPacks1"
 }
 
 SMODS.Consumable {
@@ -147,7 +147,7 @@ SMODS.Consumable {
   config = { starter_cards = {
     { count = 2, enhancement = "m_steel", seal = "Red", rank = "King", suit = "Hearts" },
     { count = 2 } } },
-  atlas = "PhantaStarterPacks",
+  atlas = "PhantaStarterPacks1",
   loc_vars = function(self, info_queue, card)
     info_queue[#info_queue + 1] = G.P_CENTERS.m_steel
   end
@@ -162,7 +162,7 @@ SMODS.Consumable {
     { count = 2, suit = "Hearts" },
     { count = 1, edition = "e_polychrome", suit = "Hearts" },
     { count = 2, enhancement = "m_stone" } } },
-  atlas = "PhantaStarterPacks",
+  atlas = "PhantaStarterPacks1",
   loc_vars = function(self, info_queue, card)
     info_queue[#info_queue + 1] = G.P_CENTERS.e_polychrome
     info_queue[#info_queue + 1] = G.P_CENTERS.m_stone
@@ -179,7 +179,7 @@ SMODS.Consumable {
     { count = 1, enhancement = "m_steel" },
     { count = 1, enhancement = "m_gold" },
     { count = 1, enhancement = "m_glass" } } },
-  atlas = "PhantaStarterPacks",
+  atlas = "PhantaStarterPacks1",
   loc_vars = function(self, info_queue, card)
     info_queue[#info_queue + 1] = G.P_CENTERS.m_steel
     info_queue[#info_queue + 1] = G.P_CENTERS.m_gold
@@ -195,7 +195,7 @@ SMODS.Consumable {
   config = { starter_cards = {
     { count = 1, enhancement = "m_bonus", suit = "Clubs", rank = "Queen" },
     { count = 3, rank = "Face" } } },
-  atlas = "PhantaStarterPacks",
+  atlas = "PhantaStarterPacks1",
   loc_vars = function(self, info_queue, card)
     info_queue[#info_queue + 1] = G.P_CENTERS.m_glass
     info_queue[#info_queue + 1] = G.P_CENTERS.m_stone
@@ -210,7 +210,7 @@ SMODS.Consumable {
   config = { starter_cards = {
     { count = 2, enhancement = "m_glass", suit = "Clubs", rank = "King" },
     { count = 3, enhancement = "m_stone", suit = "Clubs" } } },
-  atlas = "PhantaStarterPacks",
+  atlas = "PhantaStarterPacks1",
   loc_vars = function(self, info_queue, card)
     info_queue[#info_queue + 1] = G.P_CENTERS.m_glass
     info_queue[#info_queue + 1] = G.P_CENTERS.m_stone
@@ -225,7 +225,7 @@ SMODS.Consumable {
   config = { starter_cards = {
     { count = 4, suit = "Clubs" },
     { count = 1, edition = "e_holo", suit = "Clubs" } } },
-  atlas = "PhantaStarterPacks",
+  atlas = "PhantaStarterPacks1",
   loc_vars = function(self, info_queue, card)
     info_queue[#info_queue + 1] = G.P_CENTERS.e_holo
   end
@@ -240,7 +240,7 @@ SMODS.Consumable {
     { count = 2, enhancement = "m_mult", rank = "Jack", suit = "Diamonds" },
     { count = 1, seal = "Purple",        rank = "Jack" },
     { count = 1, rank = "Queen" } } },
-  atlas = "PhantaStarterPacks",
+  atlas = "PhantaStarterPacks1",
   loc_vars = function(self, info_queue, card)
     info_queue[#info_queue + 1] = G.P_CENTERS.m_mult
     info_queue[#info_queue + 1] = G.P_CENTERS.s_purple
@@ -256,7 +256,7 @@ SMODS.Consumable {
     { count = 2, enhancement = "m_bonus", rank = "Queen", suit = "Diamonds" },
     { count = 1, seal = "Blue",           rank = "Queen" },
     { count = 1, rank = "Jack" } } },
-  atlas = "PhantaStarterPacks",
+  atlas = "PhantaStarterPacks1",
   loc_vars = function(self, info_queue, card)
     info_queue[#info_queue + 1] = G.P_CENTERS.m_bonus
     info_queue[#info_queue + 1] = G.P_CENTERS.s_blue
@@ -271,7 +271,7 @@ SMODS.Consumable {
   config = { starter_cards = {
     { count = 2, enhancement = "m_gold", rank = "King", suit = "Diamonds" },
     { count = 3, enhancement = "m_glass" } } },
-  atlas = "PhantaStarterPacks",
+  atlas = "PhantaStarterPacks1",
   loc_vars = function(self, info_queue, card)
     info_queue[#info_queue + 1] = G.P_CENTERS.m_gold
     info_queue[#info_queue + 1] = G.P_CENTERS.m_glass
@@ -286,7 +286,7 @@ SMODS.Consumable {
   config = { starter_cards = {
     { count = 3, suit = "Diamonds" },
     { count = 2, seal = "Gold",    suit = "Diamonds" } } },
-  atlas = "PhantaStarterPacks",
+  atlas = "PhantaStarterPacks1",
   loc_vars = function(self, info_queue, card)
     info_queue[#info_queue + 1] = G.P_CENTERS.s_blue_seal
   end
@@ -301,7 +301,7 @@ SMODS.Consumable {
     { count = 2, enhancement = "m_lucky", rank = "Jack", suit = "Spades" },
     { count = 1, enhancement = "m_gold",  rank = "Ace",  suit = "Diamonds" },
     { count = 1, enhancement = "m_steel", rank = "King", suit = "Spades" } } },
-  atlas = "PhantaStarterPacks",
+  atlas = "PhantaStarterPacks1",
   loc_vars = function(self, info_queue, card)
     info_queue[#info_queue + 1] = G.P_CENTERS.m_lucky
     info_queue[#info_queue + 1] = G.P_CENTERS.m_gold
@@ -317,7 +317,7 @@ SMODS.Consumable {
   config = { starter_cards = {
     { count = 2, suit = "Spades", edition = "e_foil", rank = "Queen" },
     { count = 3 } } },
-  atlas = "PhantaStarterPacks",
+  atlas = "PhantaStarterPacks1",
   loc_vars = function(self, info_queue, card)
     info_queue[#info_queue + 1] = G.P_CENTERS.e_foil
   end
@@ -331,7 +331,7 @@ SMODS.Consumable {
   config = { starter_cards = {
     { count = 2, suit = "Spades", rank = "King" },
     { count = 2, rank = "King" } } },
-  atlas = "PhantaStarterPacks"
+  atlas = "PhantaStarterPacks1"
 }
 
 SMODS.Consumable {
@@ -342,7 +342,7 @@ SMODS.Consumable {
   config = { starter_cards = {
     { count = 4, suit = "Spades" },
     { count = 1, edition = "e_foil", suit = "Spades" } } },
-  atlas = "PhantaStarterPacks",
+  atlas = "PhantaStarterPacks1",
   loc_vars = function(self, info_queue, card)
     info_queue[#info_queue + 1] = G.P_CENTERS.e_foil
   end
@@ -370,7 +370,7 @@ function SMODS.calculate_context(context, return_table)
       key = G.GAME.PhantaStarterPacks.ante_pack
     end
     G.GAME.PhantaStarterPacks.ante_pack = key
-    local card = SMODS.create_card { key = key, area = G.shop_booster }
+    local card = SMODS.create_card { key = key, area = G.shop_booster, bypass_discovery_center = true, bypass_discovery_ui = true }
     G.shop_booster:emplace(card)
     create_shop_card_ui(card)
   end

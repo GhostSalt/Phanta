@@ -75,6 +75,31 @@ SMODS.Joker {
 }
 
 SMODS.Joker {
+  key = 'heartbreak',
+  config = { extra = { xmult = 1.5, odds = 2 } },
+  rarity = 2,
+  atlas = 'Phanta2',
+  pos = { x = 0, y = 1 },
+  cost = 6,
+  loc_vars = function(self, info_queue, card)
+    return { vars = { card.ability.extra.xmult, (G.GAME.probabilities.normal or 1), card.ability.extra.odds } }
+  end,
+  blueprint_compat = true,
+  eternal_compat = true,
+  perishable_compat = true,
+  calculate = function(self, card, context)
+    if context.individual and context.cardarea == G.play and context.other_card:is_suit("Hearts") then
+      return { xmult = card.ability.extra.xmult }
+    end
+
+    if context.destroy_card and context.cardarea == G.play and context.destroy_card:is_suit("Hearts")
+        and pseudorandom('heartbreak') < G.GAME.probabilities.normal / card.ability.extra.odds then
+      return { remove = true }
+    end
+  end
+}
+
+SMODS.Joker {
   key = 'donpaolo',
   rarity = 2,
   atlas = 'Phanta2',
@@ -133,8 +158,11 @@ SMODS.Joker {
   eternal_compat = true,
   perishable_compat = true,
   loc_vars = function(self, info_queue, card)
-    return { vars = { card.ability.extra.mult, card.ability.extra.requirement, count_unique_tarots(),
-    (next(SMODS.find_card("j_phanta_inspectorchelmey")) or count_unique_tarots() >= card.ability.extra.requirement) and localize("phanta_active") or localize("phanta_inactive") } }
+    return {
+      vars = { card.ability.extra.mult, card.ability.extra.requirement, count_unique_tarots(),
+        (next(SMODS.find_card("j_phanta_inspectorchelmey")) or count_unique_tarots() >= card.ability.extra.requirement) and
+        localize("phanta_active") or localize("phanta_inactive") }
+    }
   end,
   calculate = function(self, card, context)
     if context.joker_main then
@@ -156,8 +184,11 @@ SMODS.Joker {
   eternal_compat = true,
   perishable_compat = true,
   loc_vars = function(self, info_queue, card)
-    return { vars = { card.ability.extra.xmult, card.ability.extra.requirement, count_unique_planets(),
-    (next(SMODS.find_card("j_phanta_barton")) or count_unique_planets() >= card.ability.extra.requirement) and localize("phanta_active") or localize("phanta_inactive") } }
+    return {
+      vars = { card.ability.extra.xmult, card.ability.extra.requirement, count_unique_planets(),
+        (next(SMODS.find_card("j_phanta_barton")) or count_unique_planets() >= card.ability.extra.requirement) and
+        localize("phanta_active") or localize("phanta_inactive") }
+    }
   end,
   calculate = function(self, card, context)
     if context.joker_main then
@@ -167,6 +198,46 @@ SMODS.Joker {
     end
   end
 }
+
+SMODS.Joker {
+  key = 'zeroii',
+  config = { extra = { odds = 3 } },
+  rarity = 2,
+  atlas = 'Phanta2',
+  pos = { x = 1, y = 1 },
+  cost = 6,
+  blueprint_compat = true,
+  eternal_compat = true,
+  perishable_compat = true,
+  loc_vars = function(self, info_queue, card)
+    return { vars = { card.ability.extra.odds } }
+  end,
+  calculate = function(self, card, context)
+    if context.discard and G.GAME.current_round.discards_used <= 0 and pseudorandom('zeroii') < G.GAME.probabilities.normal / card.ability.extra.odds then
+      return { remove = true }
+    end
+  end
+}
+
+--[[SMODS.Joker {
+  key = 'snoinches',
+  rarity = 2,
+  atlas = 'Phanta2',
+  pos = { x = 11, y = 0 },
+  cost = 5,
+  blueprint_compat = true,
+  eternal_compat = true,
+  perishable_compat = true,
+  calculate = function(self, card, context)
+    if context.after and G.play.cards and G.play.cards[1] then
+      draw_card(G.play, G.hand, 90, 'up', true, G.play.cards[1])
+      return { message = "Mrrrp", colour = G.C.GOLD, card = card }
+    end
+  end,
+  set_badges = function(self, card, badges)
+    badges[#badges + 1] = create_badge(localize('credit_bobisnotaperson'), G.C.PHANTA.MISC_COLOURS.PHANTA, G.C.WHITE, 1)
+  end
+}]] --
 
 SMODS.Joker {
   key = 'clapperboard',
@@ -204,8 +275,10 @@ SMODS.Joker {
     if context.remove_playing_cards and not context.blueprint then
       local waxed_cards = {}
       for i = 1, #context.removed do
-        if context.removed[i].edition and context.removed[i].edition.key == 'e_phanta_waxed' then waxed_cards[#waxed_cards + 1] =
-          context.removed[i].edition.key end
+        if context.removed[i].edition and context.removed[i].edition.key == 'e_phanta_waxed' then
+          waxed_cards[#waxed_cards + 1] =
+              context.removed[i].edition.key
+        end
       end
 
       if #waxed_cards > 0 then
@@ -235,6 +308,42 @@ SMODS.Joker {
       local copper_grates = #count_base_copper_grates()
       if copper_grates > 0 then
         return { xmult = 1 + (copper_grates * card.ability.extra.xmult) }
+      end
+    end
+  end
+}
+
+SMODS.Joker {
+  key = 'neonjoker',
+  config = { extra = { xmult = 3 } },
+  rarity = 2,
+  atlas = 'Phanta2',
+  pos = { x = 10, y = 0 },
+  cost = 6,
+  loc_vars = function(self, info_queue, card)
+    return { vars = { card.ability.extra.xmult } }
+  end,
+  blueprint_compat = true,
+  eternal_compat = true,
+  perishable_compat = true,
+  calculate = function(self, card, context)
+    if context.joker_main then
+      local wilds = 0
+      local counted_suits = {}
+      for i = 1, #G.hand.cards do
+        if not SMODS.has_any_suit(G.hand.cards[i]) then
+          local is_new = true
+          for j = 1, #counted_suits do
+            if G.hand.cards[i].base.suit == counted_suits[j] then is_new = false end
+          end
+          if is_new then counted_suits[#counted_suits + 1] = G.hand.cards[i].base.suit end
+        else
+          wilds = wilds + 1
+        end
+      end
+
+      if #counted_suits + wilds >= 4 then
+        return { xmult = card.ability.extra.xmult }
       end
     end
   end
