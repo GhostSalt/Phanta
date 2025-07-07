@@ -104,6 +104,13 @@ return {
                     "{C:attention}stronger{} abilities"
                 }
             },
+            b_phanta_hazel = {
+                name = 'Hazel Deck',
+                text = {
+                    "All {C:attention}Boss Blinds{} are",
+                    "the {C:attention,T:bl_final_acorn}Amber Acorn{}"
+                }
+            },
             b_phanta_spectrum = {
                 name = 'Spectrum Deck',
                 text = {

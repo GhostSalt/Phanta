@@ -1706,9 +1706,25 @@ SMODS.Back {
 }
 
 SMODS.Back {
+  key = 'hazel',
+  atlas = 'Decks',
+  pos = { x = 2, y = 2 }
+}
+
+local get_new_boss_ref = get_new_boss
+
+function get_new_boss()
+  if G.GAME and G.GAME.selected_back and G.GAME.selected_back and G.GAME.selected_back.effect and G.GAME.selected_back.effect.center.key == "b_phanta_hazel" then
+    return "bl_final_acorn"
+  else
+    return get_new_boss_ref()
+  end
+end
+
+SMODS.Back {
   key = 'spectrum',
   atlas = 'Decks',
-  pos = { x = 2, y = 2 },
+  pos = { x = 3, y = 2 },
   config = { discards = 1, dollars = 10, joker_slot = 1, extra_hand_bonus = 2, extra_discard_bonus = 1, no_interest = true, extra = { removed_shop_slots = 1 } },
   loc_vars = function(self, info_queue, card)
     return { vars = { self.config.extra.removed_shop_slots } }
