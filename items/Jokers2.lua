@@ -100,6 +100,30 @@ SMODS.Joker {
 }
 
 SMODS.Joker {
+  key = 'distance',
+  config = { extra = { chips = 250 } },
+  rarity = 3,
+  atlas = 'Phanta2',
+  pos = { x = 2, y = 1 },
+  cost = 7,
+  loc_vars = function(self, info_queue, card)
+    return { vars = { card.ability.extra.chips } }
+  end,
+  blueprint_compat = true,
+  eternal_compat = true,
+  perishable_compat = true,
+  add_to_deck = function(self, card, from_debuff)
+    change_shop_size(-1)
+  end,
+  remove_from_deck = function(self, card, from_debuff)
+    change_shop_size(1)
+  end,
+  calculate = function(self, card, context)
+    if context.joker_main then return { chips = card.ability.extra.chips } end
+  end
+}
+
+SMODS.Joker {
   key = 'donpaolo',
   rarity = 2,
   atlas = 'Phanta2',

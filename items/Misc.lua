@@ -1788,30 +1788,19 @@ SMODS.Back {
   pos = { x = 2, y = 3 },
   config = { extra_hand_bonus = 0, extra = { extra_interest = 1 } },
   loc_vars = function(self, info_queue, card)
-    return { vars = { self.config.extra.extra_interest, self.config.extra_hand_bonus } }
+    return { vars = { self.config.extra.extra_interest + 1, self.config.extra_hand_bonus } }
   end,
   apply = function(self, back)
     G.GAME.interest_amount = G.GAME.interest_amount + self.config.extra.extra_interest
   end
 }
 
---[[
 SMODS.Back {
   key = 'pitchblack',
   atlas = 'Decks',
-  pos = { x = 2, y = 3 },
-  config = { extra = { extra_slots = 1 } },
+  pos = { x = 3, y = 3 },
+  config = { vouchers = { 'v_overstock_norm' } },
   loc_vars = function(self, info_queue, card)
-    return { vars = { self.config.extra.extra_slots } }
-  end,
-  calculate = function(self, back, context)
-    if context.card_added and (context.card_added.edition.key == "e_holo" or context.card_added.edition.key == "e_polychrome") then
-      G.jokers.config.card_limit = G.jokers.config.card_limit + self.config.extra.extra_slots
-    end
-    
-    if ((context.selling_card and context.card.config.center.set == "Joker")) and (context.card_added.edition.key == "e_holo" or context.card_added.edition.key == "e_polychrome") then
-      G.jokers.config.card_limit = G.jokers.config.card_limit - self.config.extra.extra_slots
-    end
+    return { vars = { localize({ type = 'name_text', set = 'Voucher', key = self.config.vouchers[1] }) } }
   end
 }
-]]--

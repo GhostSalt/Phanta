@@ -156,9 +156,8 @@ return {
             b_phanta_pitchblack = {
                 name = 'Pitch Black Deck',
                 text = {
-                    "{C:dark_edition,T:e_holo}Holographic{} and {C:dark_edition,T:e_polychrome}Polychrome{}",
-                    "Jokers give {C:attention}+#1#{}",
-                    "Joker slot"
+                    "Start run with the",
+                    "{C:red,T:v_overstock_norm}#1#{} Voucher"
                 }
             }
         },
@@ -1327,6 +1326,14 @@ return {
                     "chance to be {C:red}destroyed{}"
                 }
             },
+            j_phanta_distance              = {
+                name = 'Distance',
+                text = {
+                    "{C:chips}+#1#{} Chips,",
+                    "{C:attention}-1{} card slot",
+                    "in the shop"
+                }
+            },
             j_phanta_donpaolo              = {
                 name = 'Don Paolo',
                 text = {
@@ -1365,7 +1372,7 @@ return {
                     "{C:inactive,s:0.65}(Active if with Barton){}"
                 }
             },
-            j_phanta_snoinches          = {
+            j_phanta_snoinches             = {
                 name = "Snoinches",
                 text = {
                     "After hand is",
@@ -1400,7 +1407,7 @@ return {
                     "{C:inactive}(Currently {X:mult,C:white}X#2#{C:inactive} Mult){}"
                 }
             },
-            j_phanta_neonjoker           = {
+            j_phanta_neonjoker             = {
                 name = 'Neon Joker',
                 text = {
                     "{C:white,X:mult}X#1#{} Mult if hand",
