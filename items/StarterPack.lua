@@ -371,6 +371,7 @@ function SMODS.calculate_context(context, return_table)
     end
     G.GAME.PhantaStarterPacks.ante_pack = key
     local card = SMODS.create_card { key = key, area = G.shop_booster, bypass_discovery_center = true, bypass_discovery_ui = true }
+    card["shop_booster"] = true
     G.shop_booster:emplace(card)
     create_shop_card_ui(card)
   end

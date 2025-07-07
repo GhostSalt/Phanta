@@ -991,6 +991,7 @@ function SMODS.calculate_context(context, return_table)
     for i = 1, (G.GAME.PhantaCatan and G.GAME.PhantaCatan.no_of_resources_in_shop or 0) + 1 do
       local key = pseudorandom_element(G.P_CENTER_POOLS.phanta_CatanResource, pseudoseed('shopchosenresource')).key
       local card = SMODS.create_card { key = key, area = G.shop_booster, bypass_discovery_center = true, bypass_discovery_ui = true }
+      card["shop_booster"] = true
       G.shop_booster:emplace(card)
       create_shop_card_ui(card)
     end

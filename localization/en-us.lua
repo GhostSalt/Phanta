@@ -119,6 +119,45 @@ return {
                     "and {T:b_black}Black Deck{}, {C:attention}-#1#{}",
                     "Booster pack each {C:attention}shop{}"
                 }
+            },
+            b_phanta_bloodred = {
+                name = 'Blood Red Deck',
+                text = {
+                    "{C:red}+#1#{} discards",
+                    "when selecting",
+                    "any {C:attention}Boss Blind{}"
+                }
+            },
+            b_phanta_deepblue = {
+                name = 'Deep Blue Deck',
+                text = {
+                    "{C:blue}+#1#{} hands",
+                    "when selecting",
+                    "any {C:attention}Boss Blind{}"
+                }
+            },
+            b_phanta_canaryyellow = {
+                name = 'Canary Yellow Deck',
+                text = {
+                    ""
+                }
+            },
+            b_phanta_meangreen = {
+                name = 'Mean Green Deck',
+                text = {
+                    "Earn {C:money}$#1#{} of interest for",
+                    "every {C:money}$#2#{} you have at",
+                    "end of round, earn {C:money}$#3#{}",
+                    "per remaining {C:blue}Hand{}"
+                }
+            },
+            b_phanta_pitchblack = {
+                name = 'Pitch Black Deck',
+                text = {
+                    "{C:dark_edition,T:e_holo}Holographic{} and {C:dark_edition,T:e_polychrome}Polychrome{}",
+                    "Jokers give {C:attention}+#1#{}",
+                    "Joker slot"
+                }
             }
         },
         Blind = {
@@ -1541,14 +1580,38 @@ return {
                     "learn what it does",
                 },
             },
-            undiscovered_phanta_resource = {
+            undiscovered_phanta_catanresource = {
                 name = "Not Discovered",
                 text = {
                     "Obtain this card in",
                     "an unseeded run to",
                     "learn what it does",
                 },
-            }
+            },
+            undiscovered_phanta_catandevelopmentcard = {
+                name = "Not Discovered",
+                text = {
+                    "Obtain this card in",
+                    "an unseeded run to",
+                    "learn what it does",
+                },
+            },
+            undiscovered_phanta_catanbuilding = {
+                name = "Not Discovered",
+                text = {
+                    "Obtain this card in",
+                    "an unseeded run to",
+                    "learn what it does",
+                },
+            },
+            undiscovered_phanta_starterpack = {
+                name = "Not Discovered",
+                text = {
+                    "Open this pack",
+                    "in an unseeded run",
+                    "to learn what it does"
+                },
+            },
         },
         Partner = {
             pnr_phanta_ghost = {
@@ -2243,6 +2306,8 @@ return {
                 "City: Settlement, Grain, Grain, Ore, Ore, Ore",
                 "Development Card: Wool, Grain, Ore"
             },
+            b_phanta_starterpack_cards = "Starter Packs",
+            k_phanta_starterpack = "Starter Pack",
             plus_standard_tag = '+Standard Tag',
             phanta_aries_second = "second ",
             phanta_plural = "s",
