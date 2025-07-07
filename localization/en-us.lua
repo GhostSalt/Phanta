@@ -139,15 +139,17 @@ return {
             b_phanta_canaryyellow = {
                 name = 'Canary Yellow Deck',
                 text = {
-                    ""
+                    "Start run with",
+                    "a copy of",
+                    "{C:attention,T:j_mail}Main-In Rebate{}"
                 }
             },
             b_phanta_meangreen = {
                 name = 'Mean Green Deck',
                 text = {
                     "Earn {C:money}$#1#{} of interest for",
-                    "every {C:money}$#2#{} you have at",
-                    "end of round, earn {C:money}$#3#{}",
+                    "every {C:money}$5{} you have at",
+                    "end of round, earn {C:money}$#2#{}",
                     "per remaining {C:blue}Hand{}"
                 }
             },

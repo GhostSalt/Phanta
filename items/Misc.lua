@@ -1734,3 +1734,84 @@ SMODS.Back {
         self.config.extra.removed_shop_slots
   end
 }
+
+SMODS.Back {
+  key = 'bloodred',
+  atlas = 'Decks',
+  pos = { x = 4, y = 2 },
+  config = { extra = { discards = 3 } },
+  loc_vars = function(self, info_queue, card)
+    return { vars = { self.config.extra.discards } }
+  end,
+  calculate = function(self, back, context)
+    if context.setting_blind and is_blind_boss() then
+      G.E_MANAGER:add_event(Event({
+        func = function()
+          ease_discard(self.config.extra.discards)
+          return true
+        end
+      }))
+    end
+  end
+}
+
+SMODS.Back {
+  key = 'deepblue',
+  atlas = 'Decks',
+  pos = { x = 0, y = 3 },
+  config = { extra = { hands = 3 } },
+  loc_vars = function(self, info_queue, card)
+    return { vars = { self.config.extra.hands } }
+  end,
+  calculate = function(self, back, context)
+    if context.setting_blind and is_blind_boss() then
+      G.E_MANAGER:add_event(Event({
+        func = function()
+          ease_hands_played(self.config.extra.hands)
+          return true
+        end
+      }))
+    end
+  end
+}
+
+SMODS.Back {
+  key = 'canaryyellow',
+  atlas = 'Decks',
+  pos = { x = 1, y = 3 },
+  config = { jokers = { 'j_mail' } }
+}
+
+SMODS.Back {
+  key = 'meangreen',
+  atlas = 'Decks',
+  pos = { x = 2, y = 3 },
+  config = { extra_hand_bonus = 0, extra = { extra_interest = 1 } },
+  loc_vars = function(self, info_queue, card)
+    return { vars = { self.config.extra.extra_interest, self.config.extra_hand_bonus } }
+  end,
+  apply = function(self, back)
+    G.GAME.interest_amount = G.GAME.interest_amount + self.config.extra.extra_interest
+  end
+}
+
+--[[
+SMODS.Back {
+  key = 'pitchblack',
+  atlas = 'Decks',
+  pos = { x = 2, y = 3 },
+  config = { extra = { extra_slots = 1 } },
+  loc_vars = function(self, info_queue, card)
+    return { vars = { self.config.extra.extra_slots } }
+  end,
+  calculate = function(self, back, context)
+    if context.card_added and (context.card_added.edition.key == "e_holo" or context.card_added.edition.key == "e_polychrome") then
+      G.jokers.config.card_limit = G.jokers.config.card_limit + self.config.extra.extra_slots
+    end
+    
+    if ((context.selling_card and context.card.config.center.set == "Joker")) and (context.card_added.edition.key == "e_holo" or context.card_added.edition.key == "e_polychrome") then
+      G.jokers.config.card_limit = G.jokers.config.card_limit - self.config.extra.extra_slots
+    end
+  end
+}
+]]--
