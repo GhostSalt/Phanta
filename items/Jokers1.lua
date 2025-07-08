@@ -9,6 +9,7 @@ local rotate_mod = 0.05 * math.sin(1.219 * G.TIMERS.REAL) +
 SMODS.current_mod.optional_features = { cardareas = { unscored = true } }
 
 to_big = to_big or function(x) return x end
+to_number = to_number or function(x) return x end
 
 SMODS.Atlas {
   key = "Phanta",
@@ -3532,7 +3533,7 @@ SMODS.Joker {
   perishable_compat = true,
   calculate = function(self, card, context)
     if context.joker_main then
-      return { mult = (G.GAME.hands["Straight"].level * card.ability.extra.mult_per_straight):to_number() }
+      return { mult = to_number(G.GAME.hands["Straight"].level * card.ability.extra.mult_per_straight) }
     end
   end
 }
