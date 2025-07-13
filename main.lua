@@ -313,15 +313,21 @@ local game_start_run_ref = Game.start_run
 
 function Game:start_run(args)
   game_start_run_ref(self, args)
-  local existing_ranks = {}
-  for i, j in pairs(G.playing_cards) do
-    local is_valid = true
-    for _, rank in ipairs(existing_ranks) do
-      if j:get_id() == rank then is_valid = false end
+  G.E_MANAGER:add_event(Event({
+    func = function()
+      if not G.playing_cards then return false end
+      local existing_ranks = {}
+      for i, j in pairs(G.playing_cards) do
+        local is_valid = true
+        for _, rank in ipairs(existing_ranks) do
+          if j:get_id() == rank then is_valid = false end
+        end
+        if is_valid then existing_ranks[#existing_ranks + 1] = j:get_id() end
+      end
+      G.GAME.phanta_initial_ranks = existing_ranks
+      return true
     end
-    if is_valid then existing_ranks[#existing_ranks + 1] = j:get_id() end
-  end
-  G.GAME.phanta_initial_ranks = existing_ranks
+  }))
 end
 
 local igo = Game.init_game_object
