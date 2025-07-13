@@ -442,6 +442,30 @@ function Game:update(dt)
     G.GAME.phanta_catanbuilding_rate = 0
   end
 
+
+  for k, v in pairs(G.P_CENTERS) do
+    if v.phanta_anim then
+      if not v.phanta_anim.t then v.phanta_anim.t = 0 end
+      if not v.phanta_anim.length then
+        v.phanta_anim.length = 0
+        for _, frame in ipairs(v.phanta_anim) do
+          v.phanta_anim.length = v.phanta_anim.length + (frame.t or 0)
+        end
+      end
+      v.phanta_anim.t = (v.phanta_anim.t + dt) % v.phanta_anim.length
+      local ix = 0
+      local t_tally = 0
+      for _, frame in ipairs(v.phanta_anim) do
+        ix = ix + 1
+        t_tally = t_tally + frame.t
+        if t_tally > v.phanta_anim.t then break end
+      end
+      v.pos.x = v.phanta_anim[ix].x
+      v.pos.y = v.phanta_anim[ix].y
+    end
+  end
+
+
   return update_ref(self, dt)
 end
 

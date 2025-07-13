@@ -382,6 +382,7 @@ SMODS.Joker {
   rarity = 3,
   atlas = 'Phanta2',
   pos = { x = 1, y = 0 },
+  phanta_anim = { { x = 1, y = 0, t = 0.5 }, { x = 2, y = 0, t = 0.5 } },
   cost = 8,
   blueprint_compat = true,
   eternal_compat = true,
