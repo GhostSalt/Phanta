@@ -316,8 +316,8 @@ function Game:start_run(args)
   local existing_ranks = {}
   for i, j in pairs(G.playing_cards) do
     local is_valid = true
-    for rank = 1, #existing_ranks do
-      if j:get_id() == existing_ranks[rank] then is_valid = false end
+    for _, rank in ipairs(existing_ranks) do
+      if j:get_id() == rank then is_valid = false end
     end
     if is_valid then existing_ranks[#existing_ranks + 1] = j:get_id() end
   end
