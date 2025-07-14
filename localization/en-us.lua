@@ -1317,6 +1317,15 @@ return {
                     "highly annoying"
                 }
             },
+            j_phanta_fanta            = {
+                name = 'Fanta',
+                text = {
+                    "Sell this Joker to",
+                    "add a {C:attention}Gold Seal{}",
+                    "to {C:attention}1{} random",
+                    "card in your hand"
+                }
+            },
             j_phanta_heartbreak            = {
                 name = 'Heartbreak',
                 text = {
@@ -2327,10 +2336,11 @@ return {
             phanta_scorpio_extra_b = "played hand ",
             phanta_lucky = "Lucky",
             a_hand = "+1 Hand",
-            created_blue_seal = "Blue Seal",
+            phanta_created_blue_seal = "+Blue Seal",
+            phanta_created_gold_seal = "+Gold Seal",
 
             credit_goat3730 = "OC by goat3730",
-            credit_bobisnotaperson = "OC by bobisnotaperson",
+            credit_bobisnotaperson = "bobisnotaperson's Truesona",
 
             phanta_junk_enabled = "Enable Junk (Poker Hand)",
             phanta_zodiac_enabled = "Zodiac Cards",

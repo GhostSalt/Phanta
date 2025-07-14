@@ -1951,7 +1951,7 @@ SMODS.Joker {
   pos = { x = 1, y = 9 },
   cost = 6,
   loc_vars = function(self, info_queue, card)
-    info_queue[#info_queue + 1] = G.P_CENTERS.s_blue_seal
+    info_queue[#info_queue + 1] = G.P_SEALS["Blue"]
     return {}
   end,
   blueprint_compat = false,
@@ -1966,7 +1966,7 @@ SMODS.Joker {
           return true
         end
       }))
-      return { message = localize("created_blue_seal"), colour = G.C.BLUE, card = card }
+      return { message = localize("phanta_created_blue_seal"), colour = G.C.BLUE, card = card }
     end
   end
 }

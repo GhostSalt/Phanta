@@ -75,6 +75,45 @@ SMODS.Joker {
 }
 
 SMODS.Joker {
+  key = 'fanta',
+  rarity = 1,
+  atlas = 'Phanta2',
+  pos = { x = 3, y = 1 },
+  cost = 4,
+  loc_vars = function(self, info_queue, card)
+    info_queue[#info_queue + 1] = G.P_SEALS["Gold"]
+    return { main_end = { { n = G.UIT.C, config = { align = "bm", minh = 0.4 }, nodes = 
+    { { n = G.UIT.C, config = { ref_table = self, align = "m", colour = G.hand and G.hand.cards and #G.hand.cards > 0 and G.C.GREEN or G.C.RED, r = 0.05, padding = 0.06 }, 
+    nodes = { { n = G.UIT.T, config = { text = ' ' .. localize(G.hand and G.hand.cards and #G.hand.cards > 0 and 'phanta_active' or 'phanta_inactive') .. ' ', colour = G.C.UI.TEXT_LIGHT, scale = 0.32 * 0.9 } } } } } } } }
+  end,
+  blueprint_compat = true,
+  eternal_compat = true,
+  perishable_compat = true,
+  calculate = function(self, card, context)
+    if context.selling_self and G.hand and G.hand.cards and #G.hand.cards > 0 then
+      local conv_card = pseudorandom_element(G.hand.cards, pseudoseed('fantacard'))
+      G.E_MANAGER:add_event(Event({
+        func = function()
+          play_sound('tarot1')
+          card:juice_up(0.3, 0.5)
+          card_eval_status_text(context.blueprint_card or card, 'extra', nil, nil, nil, { message = localize("phanta_created_gold_seal"), colour = G.C.GOLD, card = card })
+          return true
+        end
+      }))
+
+      G.E_MANAGER:add_event(Event({
+        trigger = 'after',
+        delay = 0.1,
+        func = function()
+          conv_card:set_seal("Gold", nil, true)
+          return true
+        end
+      }))
+    end
+  end
+}
+
+SMODS.Joker {
   key = 'heartbreak',
   config = { extra = { xmult = 1.5, odds = 2 } },
   rarity = 2,
