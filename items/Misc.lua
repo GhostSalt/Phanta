@@ -740,7 +740,7 @@ local sell_use_ref = G.UIDEF.use_and_sell_buttons
 function G.UIDEF.use_and_sell_buttons(card)
   if not card or not card.ability or (card.ability.set ~= "phanta_Zodiac" and card.ability.set ~= "phanta_CatanResource") then
     return
-        sell_use_ref(card)
+        sell_use_ref(card, self)
   end
 
   if (card.area == G.pack_cards and G.pack_cards) then
