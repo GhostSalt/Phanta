@@ -75,6 +75,25 @@ SMODS.Joker {
 }
 
 SMODS.Joker {
+  key = 'absentjoker',
+  config = { extra = { mult = 15 } },
+  loc_vars = function(self, info_queue, card)
+    return { vars = { card.ability.extra.mult } }
+  end,
+  rarity = 1,
+  atlas = 'Phanta2',
+  pos = { x = 4, y = 1 },
+  phanta_anim = { { x = 4, y = 1, t = 2 }, { x = 5, y = 1, t = 0.15 }, { x = 4, y = 1, t = 0.25 }, { x = 5, y = 1, t = 0.15 }, { x = 4, y = 1, t = 0.25 }, { x = 5, y = 1, t = 0.15 } },
+  cost = 4,
+  blueprint_compat = true,
+  eternal_compat = true,
+  perishable_compat = true,
+  calculate = function(self, card, context)
+    if context.joker_main and G.jokers.config.card_limit - #G.jokers.cards == 1 then return { mult = card.ability.extra.mult } end
+  end
+}
+
+SMODS.Joker {
   key = 'fanta',
   rarity = 1,
   atlas = 'Phanta2',
@@ -82,9 +101,18 @@ SMODS.Joker {
   cost = 4,
   loc_vars = function(self, info_queue, card)
     info_queue[#info_queue + 1] = G.P_SEALS["Gold"]
-    return { main_end = { { n = G.UIT.C, config = { align = "bm", minh = 0.4 }, nodes = 
-    { { n = G.UIT.C, config = { ref_table = self, align = "m", colour = G.hand and G.hand.cards and #G.hand.cards > 0 and G.C.GREEN or G.C.RED, r = 0.05, padding = 0.06 }, 
-    nodes = { { n = G.UIT.T, config = { text = ' ' .. localize(G.hand and G.hand.cards and #G.hand.cards > 0 and 'phanta_active' or 'phanta_inactive') .. ' ', colour = G.C.UI.TEXT_LIGHT, scale = 0.32 * 0.9 } } } } } } } }
+    return {
+      main_end = { {
+        n = G.UIT.C,
+        config = { align = "bm", minh = 0.4 },
+        nodes =
+        { {
+          n = G.UIT.C,
+          config = { ref_table = self, align = "m", colour = G.hand and G.hand.cards and #G.hand.cards > 0 and G.C.GREEN or G.C.RED, r = 0.05, padding = 0.06 },
+          nodes = { { n = G.UIT.T, config = { text = ' ' .. localize(G.hand and G.hand.cards and #G.hand.cards > 0 and 'phanta_active' or 'phanta_inactive') .. ' ', colour = G.C.UI.TEXT_LIGHT, scale = 0.32 * 0.9 } } }
+        } }
+      } }
+    }
   end,
   blueprint_compat = true,
   eternal_compat = true,
@@ -96,7 +124,8 @@ SMODS.Joker {
         func = function()
           play_sound('tarot1')
           card:juice_up(0.3, 0.5)
-          card_eval_status_text(context.blueprint_card or card, 'extra', nil, nil, nil, { message = localize("phanta_created_gold_seal"), colour = G.C.GOLD, card = card })
+          card_eval_status_text(context.blueprint_card or card, 'extra', nil, nil, nil,
+            { message = localize("phanta_created_gold_seal"), colour = G.C.GOLD, card = card })
           return true
         end
       }))
@@ -286,7 +315,7 @@ SMODS.Joker {
   key = 'snoinches',
   rarity = 2,
   atlas = 'Phanta2',
-  pos = { x = 11, y = 0 },
+  pos = { x = 11, y = 1 },
   cost = 5,
   blueprint_compat = true,
   eternal_compat = true,
@@ -382,6 +411,23 @@ SMODS.Joker {
   rarity = 2,
   atlas = 'Phanta2',
   pos = { x = 10, y = 0 },
+  phanta_anim = { 
+    { x = 10, y = 0, t = 0.9 }, { x = 11, y = 0, t = 0.1 },
+    { x = 10, y = 0, t = 0.1 }, { x = 11, y = 0, t = 0.1 },
+    { x = 10, y = 0, t = 0.5 }, { x = 11, y = 0, t = 0.1 },
+    { x = 10, y = 0, t = 1.6 }, { x = 11, y = 0, t = 0.1 },
+    { x = 10, y = 0, t = 0.4 }, { x = 11, y = 0, t = 0.1 },
+    { x = 10, y = 0, t = 0.2 }, { x = 11, y = 0, t = 0.1 },
+    { x = 10, y = 0, t = 1.1 }, { x = 11, y = 0, t = 0.1 },
+    { x = 10, y = 0, t = 1.5 }, { x = 11, y = 0, t = 0.1 },
+    { x = 10, y = 0, t = 0.5 }, { x = 11, y = 0, t = 0.1 },
+    { x = 10, y = 0, t = 0.8 }, { x = 11, y = 0, t = 0.1 },
+    { x = 10, y = 0, t = 0.1 }, { x = 11, y = 0, t = 0.1 },
+    { x = 10, y = 0, t = 0.1 }, { x = 11, y = 0, t = 0.1 },
+    { x = 10, y = 0, t = 1.4 }, { x = 11, y = 0, t = 0.1 },
+    { x = 10, y = 0, t = 0.2 }, { x = 11, y = 0, t = 0.1 },
+    { x = 10, y = 0, t = 1.3 }, { x = 11, y = 0, t = 0.1 }
+  },
   cost = 6,
   loc_vars = function(self, info_queue, card)
     return { vars = { card.ability.extra.xmult } }

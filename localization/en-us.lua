@@ -1317,7 +1317,15 @@ return {
                     "highly annoying"
                 }
             },
-            j_phanta_fanta            = {
+            j_phanta_absentjoker           = {
+                name = 'Absent Joker',
+                text = {
+                    "{C:mult}+#1#{} Mult if",
+                    "exactly {C:attention}1{} Joker",
+                    "slot is {C:attention}empty{}"
+                }
+            },
+            j_phanta_fanta                 = {
                 name = 'Fanta',
                 text = {
                     "Sell this Joker to",
