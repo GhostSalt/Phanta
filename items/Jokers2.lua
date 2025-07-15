@@ -302,7 +302,7 @@ SMODS.Joker {
   eternal_compat = true,
   perishable_compat = true,
   loc_vars = function(self, info_queue, card)
-    return { vars = { card.ability.extra.odds } }
+    return { vars = { (G.GAME.probabilities.normal or 1), card.ability.extra.odds } }
   end,
   calculate = function(self, card, context)
     if context.discard and G.GAME.current_round.discards_used <= 0 and pseudorandom('zeroii') < G.GAME.probabilities.normal / card.ability.extra.odds then

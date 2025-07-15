@@ -1389,6 +1389,15 @@ return {
                     "{C:inactive,s:0.65}(Active if with Barton){}"
                 }
             },
+            j_phanta_zeroii                = {
+                name = 'Zero II',
+                text = {
+                    "On first {C:red}discard{} of",
+                    "round, each discarded",
+                    "card has a {C:green}#1# in #2#{}",
+                    "chance to be {C:red}destroyed{}"
+                }
+            },
             j_phanta_snoinches             = {
                 name = "Snoinches",
                 text = {
