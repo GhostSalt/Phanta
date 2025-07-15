@@ -104,8 +104,17 @@ SMODS.Joker {
   key = 'hintcoin',
   config = { extra = { money = 5 } },
   rarity = 1,
-  atlas = 'Phanta',
-  pos = { x = 6, y = 4 },
+  atlas = 'PhantaLaytonAnims',
+  pos = { x = 0, y = 7 },--[[
+  phanta_anim = {
+    { x = 0, y = 7, t = 4 },
+    { x = 1, y = 7, t = 0.15 },
+    { x = 2, y = 7, t = 0.15 },
+    { x = 3, y = 7, t = 1 },
+    { x = 2, y = 7, t = 0.15 },
+    { x = 1, y = 7, t = 0.15 },
+},
+  phanta_requires_aura = true,]]--
   cost = 4,
   blueprint_compat = true,
   eternal_compat = true,
@@ -218,8 +227,25 @@ SMODS.Joker {
   key = 'puzzle',
   config = { extra = { given_money = 3 } },
   rarity = 1,
-  atlas = 'Phanta',
-  pos = { x = 11, y = 5 },
+  atlas = 'PhantaLaytonAnims',
+  pos = { x = 0, y = 8 },
+  phanta_anim = {
+    { x = 6, y = 8, t = 0.05 },
+    { x = 5, y = 8, t = 0.05 },
+    { x = 0, y = 8, t = 0.05 },
+    { x = 1, y = 8, t = 0.05 },
+    { x = 2, y = 8, t = 0.05 },
+    { x = 3, y = 8, t = 0.05 },
+    { x = 4, y = 8, t = 0.05 },
+    { x = 3, y = 8, t = 0.05 },
+    { x = 2, y = 8, t = 0.05 },
+    { x = 1, y = 8, t = 0.05 },
+    { x = 0, y = 8, t = 4 },
+    { x = 4, y = 7, t = 0.1 },
+    { x = 5, y = 7, t = 0.1 },
+    { x = 6, y = 7, t = 0.5 },
+},
+  phanta_requires_aura = true,
   cost = 4,
   loc_vars = function(self, info_queue, card)
     return { vars = { card.ability.extra.given_money } }
@@ -1585,12 +1611,32 @@ SMODS.Joker {
   end
 }
 
+
+
+
+SMODS.Atlas {
+  key = "PhantaLaytonAnims",
+  path = "PhantaLaytonAnims.png",
+  px = 71,
+  py = 95
+}
+
 SMODS.Joker {
   key = 'professorlayton',
   config = { extra = { out_of_odds = 4, added_mult = 50 } },
   rarity = 2,
-  atlas = 'Phanta',
-  pos = { x = 0, y = 8 },
+  atlas = 'PhantaLaytonAnims',
+  pos = { x = 0, y = 0 },
+  phanta_anim = {
+    { x = 0, y = 0, t = 1.6 }, { x = 1, y = 0, t = 0.1 },
+    { x = 0, y = 0, t = 0.1 }, { x = 1, y = 0, t = 0.1 },
+    { x = 0, y = 0, t = 2.4 }, { x = 1, y = 0, t = 0.1 },
+    { x = 0, y = 0, t = 2.1 }, { x = 1, y = 0, t = 0.1 },
+    { x = 0, y = 0, t = 1.2 }, { x = 1, y = 0, t = 0.1 }, { x = 0, y = 0, t = 0.3 }, 
+    { x = 2, y = 0, t = 0.15 }, { x = 3, y = 0, t = 0.25 },
+    { x = 4, y = 0, t = 0.25 }, { x = 3, y = 0, t = 0.25 }, { x = 4, y = 0, t = 0.2 }, { x = 3, y = 0, t = 0.35 }, { x = 2, y = 0, t = 0.15 },  { x = 1, y = 0, t = 0.1 }
+},
+  phanta_requires_aura = true,
   cost = 6,
   blueprint_compat = true,
   eternal_compat = true,
@@ -1612,8 +1658,25 @@ SMODS.Joker {
   key = 'luketriton',
   config = { extra = { out_of_odds = 4, x_mult = 3 } },
   rarity = 2,
-  atlas = 'Phanta',
-  pos = { x = 1, y = 8 },
+  atlas = 'PhantaLaytonAnims',
+  pos = { x = 0, y = 1 },
+  phanta_anim = {
+    { x = 0, y = 1, t = 1.4 }, { x = 1, y = 1, t = 0.1 },
+    { x = 0, y = 1, t = 1.9 }, { x = 1, y = 1, t = 0.1 },
+    { x = 0, y = 1, t = 0.1 }, { x = 1, y = 1, t = 0.1 },
+    { x = 0, y = 1, t = 0.1 }, { x = 1, y = 1, t = 0.1 },
+    { x = 0, y = 1, t = 2.4 }, { x = 1, y = 1, t = 0.1 },
+    { x = 0, y = 1, t = 1.6 }, { x = 1, y = 1, t = 0.1 }, { x = 0, y = 1, t = 0.5 },
+    { x = 2, y = 1, t = 0.7 }, { x = 3, y = 1, t = 0.8 },
+    { x = 5, y = 1, t = 0.15 }, { x = 4, y = 1, t = 0.15 },
+    { x = 5, y = 1, t = 0.15 }, { x = 4, y = 1, t = 0.15 },
+    { x = 5, y = 1, t = 0.15 }, { x = 4, y = 1, t = 0.15 },
+    { x = 5, y = 1, t = 0.15 }, { x = 4, y = 1, t = 0.15 },
+    { x = 5, y = 1, t = 0.15 }, { x = 4, y = 1, t = 0.15 },
+    { x = 5, y = 1, t = 0.15 }, { x = 4, y = 1, t = 0.15 },
+    { x = 3, y = 1, t = 0.6 }, { x = 2, y = 1, t = 0.2 },
+},
+  phanta_requires_aura = true,
   cost = 6,
   blueprint_compat = true,
   eternal_compat = true,
@@ -1634,8 +1697,23 @@ SMODS.Joker {
 SMODS.Joker {
   key = 'jeandescole',
   rarity = 2,
-  atlas = 'Phanta',
-  pos = { x = 11, y = 4 },
+  atlas = 'PhantaLaytonAnims',
+  pos = { x = 0, y = 6 },
+  phanta_anim = {
+    { x = 0, y = 6, t = 3 },
+    { x = 1, y = 6, t = 0.15 },
+    { x = 2, y = 6, t = 0.15 },
+    { x = 3, y = 6, t = 0.175 },
+    { x = 4, y = 6, t = 0.175 },
+    { x = 5, y = 6, t = 0.2 },
+    { x = 6, y = 6, t = 0.2 },
+    { x = 5, y = 6, t = 0.2 },
+    { x = 4, y = 6, t = 0.175 },
+    { x = 3, y = 6, t = 0.175 },
+    { x = 2, y = 6, t = 0.15 },
+    { x = 1, y = 6, t = 0.15 }
+},
+  phanta_requires_aura = true,
   cost = 6,
   blueprint_compat = false,
   eternal_compat = true,

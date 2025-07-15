@@ -308,6 +308,7 @@ if next(SMODS.find_mod('Bakery')) then assert(SMODS.load_file("items/Charm.lua")
 if next(SMODS.find_mod('partner')) then assert(SMODS.load_file("items/Partners.lua"))() end
 if next(SMODS.find_mod('CardSleeves')) then assert(SMODS.load_file("items/Sleeves.lua"))() end
 if next(SMODS.find_mod('artbox')) then assert(SMODS.load_file("items/ArtBox.lua"))() end
+local aura_enabled = next(SMODS.find_mod('Aura'))
 
 local game_start_run_ref = Game.start_run
 
@@ -450,7 +451,7 @@ function Game:update(dt)
 
 
   for k, v in pairs(G.P_CENTERS) do
-    if v.phanta_anim then
+    if v.phanta_anim and (not v.phanta_requires_aura or aura_enabled) then
       if not v.phanta_anim.t then v.phanta_anim.t = 0 end
       if not v.phanta_anim.length then
         v.phanta_anim.length = 0
