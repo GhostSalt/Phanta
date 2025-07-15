@@ -2302,6 +2302,29 @@ return {
                     "4 {C:attention}random{} Spades",
                     "1 {C:dark_edition}Foil{} Spade"
                 }
+            },
+            c_phanta_paranormalpack = {
+                name = "Paranormal Pack",
+                text = {
+                    "Contains:",
+                    "3 {C:attention}Ghost{} cards",
+                    "1 {C:attention}Ghost{} seal card"
+                }
+            },
+            c_phanta_potmakerpack = {
+                name = "Potmaker Pack",
+                text = {
+                    "Contains:",
+                    "1 {C:dark_edition}Waxed{} {C:attention}Copper Grate{} card",
+                    "3 {C:attention}Copper Grate{} cards"
+                }
+            },
+            c_phanta_plinthmakerpack = {
+                name = "Plinthmaker Pack",
+                text = {
+                    "Contains:",
+                    "4 {C:attention}Marble{} cards"
+                }
             }
         }
     },

@@ -170,6 +170,28 @@ SMODS.Tarot {
 }
 
 SMODS.Tarot {
+  key = "sculptor",
+  loc_txt = {
+    name = 'Sculptor',
+    text = {
+      "Enhances {C:attention}#1#{}",
+      "selected card into a",
+      "{C:attention}Marble Card{}"
+    }
+  },
+  pos = { x = 3, y = 2 },
+  config = {
+    mod_conv = "m_phanta_marblecard",
+    max_highlighted = 1
+  },
+  atlas = "PhantaTarots",
+  loc_vars = function(self, info_queue, card)
+    info_queue[#info_queue + 1] = G.P_CENTERS.m_phanta_marblecard
+    return { vars = { card.ability.max_highlighted } }
+  end
+}
+
+SMODS.Tarot {
   key = "beekeeper",
   pos = { x = 3, y = 0 },
   config = {

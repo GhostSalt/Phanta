@@ -149,7 +149,7 @@ SMODS.Consumable {
     { count = 2 } } },
   atlas = "PhantaStarterPacks1",
   loc_vars = function(self, info_queue, card)
-    info_queue[#info_queue + 1] = G.P_CENTERS.m_steel
+    info_queue[#info_queue + 1] = G.P_SEALS["Red"]
   end
 }
 
@@ -243,7 +243,7 @@ SMODS.Consumable {
   atlas = "PhantaStarterPacks1",
   loc_vars = function(self, info_queue, card)
     info_queue[#info_queue + 1] = G.P_CENTERS.m_mult
-    info_queue[#info_queue + 1] = G.P_CENTERS.s_purple
+    info_queue[#info_queue + 1] = G.P_SEALS["Purple"]
   end
 }
 
@@ -259,7 +259,7 @@ SMODS.Consumable {
   atlas = "PhantaStarterPacks1",
   loc_vars = function(self, info_queue, card)
     info_queue[#info_queue + 1] = G.P_CENTERS.m_bonus
-    info_queue[#info_queue + 1] = G.P_CENTERS.s_blue
+    info_queue[#info_queue + 1] = G.P_SEALS["Blue"]
   end
 }
 
@@ -288,7 +288,7 @@ SMODS.Consumable {
     { count = 2, seal = "Gold",    suit = "Diamonds" } } },
   atlas = "PhantaStarterPacks1",
   loc_vars = function(self, info_queue, card)
-    info_queue[#info_queue + 1] = G.P_CENTERS.s_blue_seal
+    info_queue[#info_queue + 1] = G.P_SEALS["Gold"]
   end
 }
 
@@ -345,6 +345,64 @@ SMODS.Consumable {
   atlas = "PhantaStarterPacks1",
   loc_vars = function(self, info_queue, card)
     info_queue[#info_queue + 1] = G.P_CENTERS.e_foil
+  end
+}
+
+
+
+
+
+
+
+
+
+
+SMODS.Atlas {
+  key = "PhantaStarterPacks2",
+  path = "PhantaStarterPacks2.png",
+  px = 71,
+  py = 95
+}
+
+SMODS.Consumable {
+  set = "phanta_StarterPack",
+  key = "paranormalpack",
+  pos = { x = 0, y = 0 },
+  cost = 8,
+  config = { starter_cards = {
+    { count = 3, enhancement = "m_phanta_ghostcard" },
+    { count = 1, seal = "phanta_ghostseal" }, } },
+  atlas = "PhantaStarterPacks2",
+  loc_vars = function(self, info_queue, card)
+    info_queue[#info_queue + 1] = G.P_CENTERS.m_phanta_ghostcard
+    info_queue[#info_queue + 1] = G.P_SEALS["phanta_ghostseal"]
+  end
+}
+
+SMODS.Consumable {
+  set = "phanta_StarterPack",
+  key = "potmakerpack",
+  pos = { x = 1, y = 0 },
+  cost = 8,
+  config = { starter_cards = {
+    { count = 1, enhancement = "m_phanta_coppergratefresh", edition = "e_phanta_waxed" },
+    { count = 3, enhancement = "m_phanta_coppergratefresh" } } },
+  atlas = "PhantaStarterPacks2",
+  loc_vars = function(self, info_queue, card)
+    info_queue[#info_queue + 1] = G.P_CENTERS.e_phanta_waxed
+    info_queue[#info_queue + 1] = G.P_CENTERS.m_phanta_coppergratefresh
+  end
+}
+
+SMODS.Consumable {
+  set = "phanta_StarterPack",
+  key = "plinthmakerpack",
+  pos = { x = 2, y = 0 },
+  cost = 8,
+  config = { starter_cards = { { count = 4, enhancement = "m_phanta_marblecard" } } },
+  atlas = "PhantaStarterPacks2",
+  loc_vars = function(self, info_queue, card)
+    info_queue[#info_queue + 1] = G.P_CENTERS.m_phanta_marblecard
   end
 }
 
