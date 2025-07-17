@@ -18,6 +18,27 @@ SMODS.Atlas {
   py = 95
 }
 
+SMODS.Atlas {
+  key = "PhantaLaytonAnims",
+  path = "PhantaLaytonAnims.png",
+  px = 71,
+  py = 95
+}
+
+SMODS.Atlas {
+  key = "PhantaMiscAnims1",
+  path = "PhantaMiscAnims1.png",
+  px = 71,
+  py = 95
+}
+
+SMODS.Atlas {
+  key = "PhantaKnowledgeOfTheCollegeAnim",
+  path = "PhantaKnowledgeOfTheCollegeAnim.png",
+  px = 71,
+  py = 95
+}
+
 SMODS.Joker {
   key = 'bootleg',
   config = { extra = { chips = 30, mult = 2 } },
@@ -105,7 +126,7 @@ SMODS.Joker {
   config = { extra = { money = 5 } },
   rarity = 1,
   atlas = 'PhantaLaytonAnims',
-  pos = { x = 0, y = 7 },--[[
+  pos = { x = 0, y = 7 }, --[[
   phanta_anim = {
     { x = 0, y = 7, t = 4 },
     { x = 1, y = 7, t = 0.15 },
@@ -114,7 +135,7 @@ SMODS.Joker {
     { x = 2, y = 7, t = 0.15 },
     { x = 1, y = 7, t = 0.15 },
 },
-  phanta_requires_aura = true,]]--
+  phanta_requires_aura = true,]] --
   cost = 4,
   blueprint_compat = true,
   eternal_compat = true,
@@ -244,7 +265,7 @@ SMODS.Joker {
     { x = 4, y = 7, t = 0.1 },
     { x = 5, y = 7, t = 0.1 },
     { x = 6, y = 7, t = 0.5 },
-},
+  },
   phanta_requires_aura = true,
   cost = 4,
   loc_vars = function(self, info_queue, card)
@@ -354,8 +375,12 @@ SMODS.Joker {
 SMODS.Joker {
   key = 'oracle',
   rarity = 1,
-  atlas = 'Phanta',
-  pos = { x = 2, y = 8 },
+  atlas = 'PhantaMiscAnims1',
+  pos = { x = 4, y = 11 },
+  phanta_anim = {
+    { xrange = { first = 4, last = 11 }, y = 11, t = 0.2 }
+  },
+  phanta_requires_aura = true,
   cost = 4,
   blueprint_compat = false,
   eternal_compat = true,
@@ -1060,8 +1085,28 @@ SMODS.Joker {
     return { vars = { card.ability.extra.added_mult, card.ability.extra.current_mult } }
   end,
   rarity = 2,
-  atlas = 'Phanta',
-  pos = { x = 7, y = 7 },
+  atlas = 'PhantaMiscAnims1',
+  pos = { x = 0, y = 0 },
+  phanta_anim = {
+    { x = 0, y = 0, t = 2 },
+    { x = 1, y = 0, t = 0.1 },
+    { x = 2, y = 0, t = 0.1 },
+    { x = 3, y = 0, t = 0.1 },
+    { x = 4, y = 0, t = 0.1 },
+    { x = 5, y = 0, t = 0.1 },
+    { x = 6, y = 0, t = 1 },
+    { x = 7, y = 0, t = 0.1 }, { x = 8, y = 0, t = 0.1 },
+    { x = 9, y = 0, t = 0.1 }, { x = 10, y = 0, t = 0.1 }, { x = 11, y = 0, t = 0.1 },
+    { x = 0, y = 1, t = 0.1 }, { x = 1, y = 1, t = 0.1 }, { x = 2, y = 1, t = 0.1 },
+    { x = 3, y = 1, t = 0.1 }, { x = 4, y = 1, t = 0.1 }, { x = 5, y = 1, t = 0.1 },
+    { x = 6, y = 1, t = 0.1 }, { x = 7, y = 1, t = 0.1 }, { x = 8, y = 1, t = 0.1 },
+    { x = 9, y = 1, t = 0.1 }, { x = 10, y = 1, t = 0.1 }, { x = 11, y = 1, t = 0.1 },
+    { x = 0, y = 2, t = 0.1 }, { x = 1, y = 2, t = 0.1 }, { x = 2, y = 2, t = 0.1 },
+    { x = 3, y = 2, t = 0.1 }, { x = 4, y = 2, t = 0.1 }, { x = 5, y = 2, t = 0.1 },
+    { x = 6, y = 2, t = 0.1 }, { x = 7, y = 2, t = 0.1 }, { x = 8, y = 2, t = 0.1 },
+    { x = 9, y = 2, t = 0.1 }, { x = 10, y = 2, t = 0.1 }, { x = 11, y = 2, t = 0.1 },
+  },
+  phanta_requires_aura = true,
   cost = 6,
   blueprint_compat = true,
   eternal_compat = true,
@@ -1203,8 +1248,31 @@ SMODS.Joker {
   key = 'task',
   config = { extra = { added_money = 1, current_money = 0 } },
   rarity = 2,
-  atlas = 'Phanta',
-  pos = { x = 5, y = 10 },
+  atlas = 'PhantaMiscAnims1',
+  pos = { x = 0, y = 3 },
+  phanta_anim = {
+    { x = 0,                          y = 3, t = 4 },
+    { x = 1,                          y = 3, t = 0.1 },
+    { x = 2,                          y = 3, t = 0.075 },
+    { x = 3,                          y = 3, t = 0.075 },
+    { x = 4,                          y = 3, t = 0.15 },
+    { x = 5,                          y = 3, t = 0.075 },
+    { x = 6,                          y = 3, t = 0.075 },
+    { x = 7,                          y = 3, t = 0.5 },
+    { x = 8,                          y = 3, t = 0.1 },
+    { x = 9,                          y = 3, t = 0.1 },
+    { x = 10,                         y = 3, t = 0.1 },
+    { x = 11,                         y = 3, t = 0.1 },
+    { x = 0,                          y = 4, t = 0.1 },
+    { x = 1,                          y = 4, t = 0.9 },
+    { xrange = { first = 2, last = 6 }, y = 4, t = 0.075 },
+    { x = 7,                          y = 4, t = 0.8 },
+    { x = 8,                          y = 4, t = 0.3 },
+    { x = 9,                          y = 4, t = 0.5 },
+    { x = 10,                         y = 4, t = 1 },
+    { x = 11,                         y = 4, t = 0.1 }
+  },
+  phanta_requires_aura = true,
   cost = 5,
   blueprint_compat = true,
   eternal_compat = true,
@@ -1380,8 +1448,13 @@ SMODS.Joker {
   key = 'knowledgeofthecollege',
   config = { extra = { given_xmult = 3 } },
   rarity = 3,
-  atlas = 'Phanta',
-  pos = { x = 9, y = 7 },
+  atlas = 'PhantaKnowledgeOfTheCollegeAnim',
+  pos = { x = 0, y = 0 },
+  phanta_anim = {
+    { xrange = { first = 0, last = 11 }, yrange = { first = 0, last = 4 }, t = 0.15 },
+    { xrange = { first = 0, last = 10 }, y = 5,                            t = 0.15 }
+  },
+  phanta_requires_aura = true,
   cost = 7,
   blueprint_compat = true,
   eternal_compat = true,
@@ -1611,16 +1684,6 @@ SMODS.Joker {
   end
 }
 
-
-
-
-SMODS.Atlas {
-  key = "PhantaLaytonAnims",
-  path = "PhantaLaytonAnims.png",
-  px = 71,
-  py = 95
-}
-
 SMODS.Joker {
   key = 'professorlayton',
   config = { extra = { out_of_odds = 4, added_mult = 50 } },
@@ -1632,10 +1695,10 @@ SMODS.Joker {
     { x = 0, y = 0, t = 0.1 }, { x = 1, y = 0, t = 0.1 },
     { x = 0, y = 0, t = 2.4 }, { x = 1, y = 0, t = 0.1 },
     { x = 0, y = 0, t = 2.1 }, { x = 1, y = 0, t = 0.1 },
-    { x = 0, y = 0, t = 1.2 }, { x = 1, y = 0, t = 0.1 }, { x = 0, y = 0, t = 0.3 }, 
+    { x = 0, y = 0, t = 1.2 }, { x = 1, y = 0, t = 0.1 }, { x = 0, y = 0, t = 0.3 },
     { x = 2, y = 0, t = 0.15 }, { x = 3, y = 0, t = 0.25 },
-    { x = 4, y = 0, t = 0.25 }, { x = 3, y = 0, t = 0.25 }, { x = 4, y = 0, t = 0.2 }, { x = 3, y = 0, t = 0.35 }, { x = 2, y = 0, t = 0.15 },  { x = 1, y = 0, t = 0.1 }
-},
+    { x = 4, y = 0, t = 0.25 }, { x = 3, y = 0, t = 0.25 }, { x = 4, y = 0, t = 0.2 }, { x = 3, y = 0, t = 0.35 }, { x = 2, y = 0, t = 0.15 }, { x = 1, y = 0, t = 0.1 }
+  },
   phanta_requires_aura = true,
   cost = 6,
   blueprint_compat = true,
@@ -1675,7 +1738,7 @@ SMODS.Joker {
     { x = 5, y = 1, t = 0.15 }, { x = 4, y = 1, t = 0.15 },
     { x = 5, y = 1, t = 0.15 }, { x = 4, y = 1, t = 0.15 },
     { x = 3, y = 1, t = 0.6 }, { x = 2, y = 1, t = 0.2 },
-},
+  },
   phanta_requires_aura = true,
   cost = 6,
   blueprint_compat = true,
@@ -1712,7 +1775,7 @@ SMODS.Joker {
     { x = 3, y = 6, t = 0.175 },
     { x = 2, y = 6, t = 0.15 },
     { x = 1, y = 6, t = 0.15 }
-},
+  },
   phanta_requires_aura = true,
   cost = 6,
   blueprint_compat = false,
@@ -1831,8 +1894,24 @@ SMODS.Joker {
   key = 'psychelock',
   config = { extra = { xmult = 0.6 } },
   rarity = 3,
-  atlas = 'Phanta',
-  pos = { x = 6, y = 11 },
+  atlas = 'PhantaMiscAnims1',
+  pos = { x = 0, y = 5 },
+  phanta_anim = {
+    { x = 0, y = 5, t = 0.13 }, { x = 1, y = 5, t = 0.13 }, { x = 2, y = 5, t = 0.13 }, { x = 3, y = 5, t = 0.13 }, { x = 4, y = 5, t = 0.13 },
+    { x = 0, y = 5, t = 0.13 }, { x = 1, y = 5, t = 0.13 }, { x = 2, y = 5, t = 0.13 }, { x = 3, y = 5, t = 0.13 }, { x = 4, y = 5, t = 0.13 },
+    { x = 0, y = 5, t = 0.13 }, { x = 1, y = 5, t = 0.06 }, { x = 5, y = 5, t = 0.06 }, { x = 6, y = 5, t = 0.06 }, { x = 7, y = 5, t = 0.06 }, { x = 3, y = 5, t = 0.13 }, { x = 4, y = 5, t = 0.13 },
+    { x = 0, y = 5, t = 0.13 }, { x = 1, y = 5, t = 0.13 }, { x = 2, y = 5, t = 0.13 }, { x = 3, y = 5, t = 0.13 }, { x = 4, y = 5, t = 0.13 },
+
+    { x = 0, y = 5, t = 0.13 }, { x = 8, y = 5, t = 0.13 }, { x = 9, y = 5, t = 0.13 }, { x = 10, y = 5, t = 0.13 }, { x = 11, y = 5, t = 0.13 }, { x = 0, y = 6, t = 0.13 },
+    { x = 1, y = 6, t = 0.06 }, { x = 2, y = 6, t = 0.06 }, { x = 3, y = 6, t = 0.06 }, { x = 4, y = 6, t = 0.06 }, { x = 3, y = 5, t = 0.13 }, { x = 5, y = 6, t = 0.13 },
+
+    { x = 0, y = 5, t = 0.13 }, { x = 8, y = 5, t = 0.13 }, { x = 9, y = 5, t = 0.13 }, { x = 10, y = 5, t = 0.13 }, { x = 11, y = 5, t = 0.13 }, { x = 0, y = 6, t = 0.13 },
+    { x = 1, y = 6, t = 0.06 }, { x = 2, y = 6, t = 0.06 }, { x = 3, y = 6, t = 0.06 }, { x = 4, y = 6, t = 0.06 }, { x = 3, y = 5, t = 0.13 }, { x = 5, y = 6, t = 0.13 },
+
+    { x = 0, y = 5, t = 0.13 }, { x = 8, y = 5, t = 0.13 }, { x = 9, y = 5, t = 0.13 }, { x = 10, y = 5, t = 0.13 }, { x = 11, y = 5, t = 0.13 }, { x = 0, y = 6, t = 0.13 },
+    { x = 1, y = 6, t = 0.06 }, { x = 2, y = 6, t = 0.06 }, { x = 3, y = 6, t = 0.06 }, { x = 4, y = 6, t = 0.06 }, { x = 3, y = 5, t = 0.13 }, { x = 5, y = 6, t = 0.13 },
+  },
+  phanta_requires_aura = true,
   cost = 8,
   loc_vars = function(self, info_queue, card)
     return { vars = { card.ability.extra.xmult } }
@@ -2648,7 +2727,7 @@ SMODS.Joker {
   eternal_compat = true,
   perishable_compat = true,
   calculate = function(self, card, context)
-    if context.setting_blind and not (context.blueprint_card or card).getting_sliced and count_consumables() < G.consumeables.config.card_limit then
+    if context.setting_blind and not (context.blueprint_card or card).getting_sliced then
       G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
       G.E_MANAGER:add_event(Event({
         func = function()
@@ -2689,7 +2768,7 @@ SMODS.Joker {
   eternal_compat = true,
   perishable_compat = true,
   calculate = function(self, card, context)
-    if context.setting_blind and not (context.blueprint_card or card).getting_sliced and count_consumables() < G.consumeables.config.card_limit then
+    if context.setting_blind and not (context.blueprint_card or card).getting_sliced then
       G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
       G.E_MANAGER:add_event(Event({
         func = function()
@@ -2730,7 +2809,7 @@ SMODS.Joker {
   eternal_compat = true,
   perishable_compat = true,
   calculate = function(self, card, context)
-    if context.setting_blind and not (context.blueprint_card or card).getting_sliced and count_consumables() < G.consumeables.config.card_limit then
+    if context.setting_blind and not (context.blueprint_card or card).getting_sliced then
       G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
       G.E_MANAGER:add_event(Event({
         func = function()
@@ -2771,7 +2850,7 @@ SMODS.Joker {
   eternal_compat = true,
   perishable_compat = true,
   calculate = function(self, card, context)
-    if context.setting_blind and not (context.blueprint_card or card).getting_sliced and count_consumables() < G.consumeables.config.card_limit then
+    if context.setting_blind and not (context.blueprint_card or card).getting_sliced then
       G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
       G.E_MANAGER:add_event(Event({
         func = function()
@@ -2812,7 +2891,7 @@ SMODS.Joker {
   eternal_compat = true,
   perishable_compat = true,
   calculate = function(self, card, context)
-    if context.setting_blind and not (context.blueprint_card or card).getting_sliced and count_consumables() < G.consumeables.config.card_limit then
+    if context.setting_blind and not (context.blueprint_card or card).getting_sliced then
       G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
       G.E_MANAGER:add_event(Event({
         func = function()
@@ -2886,8 +2965,12 @@ SMODS.Joker {
 SMODS.Joker {
   key = 'reverie',
   rarity = 2,
-  atlas = 'Phanta',
-  pos = { x = 5, y = 0 },
+  atlas = 'PhantaMiscAnims1',
+  pos = { x = 6, y = 6 },
+  phanta_anim = {
+    { xrange = { first = 6, last = 9 }, y = 6, t = 0.1 }
+  },
+  phanta_requires_aura = true,
   cost = 6,
   loc_vars = function(self, info_queue, card)
     info_queue[#info_queue + 1] = G.P_CENTERS.c_temperance

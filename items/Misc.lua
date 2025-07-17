@@ -1180,12 +1180,12 @@ SMODS.Consumable {
   pos = { x = 1, y = 0 },
   atlas = "PhantaZodiacs",
   loc_vars = function(self, info_queue, card)
-    return { vars = { (count_prognosticators(card) * 2) + 1, count_prognosticators(card) > 0 and localize("phanta_plural") or "" } }
+    return { vars = { count_prognosticators(card) + 1, count_prognosticators(card) > 0 and localize("phanta_plural") or "" } }
   end,
   month_range = { first = { month = 4, day = 20 }, last = { month = 5, day = 20 } },
   calculate = function(self, card, context)
     if context.repetition and context.cardarea == G.play and context.other_card == context.scoring_hand[1] then
-      return { repetitions = (count_prognosticators(card) * 2) + 1 } -- Progs add 2 retriggers each.
+      return { repetitions = count_prognosticators(card) + 1 } -- Progs add 1 retrigger each.
     end
   end
 }

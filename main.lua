@@ -276,7 +276,7 @@ function count_unique_planets()
 end
 
 function azran_active()
-  return G.GAME.selected_back.effect.center.key == "b_phanta_azran" or SMODS.find_card("sleeve_phanta_azran")
+  return G.GAME.selected_back.effect.center.key == "b_phanta_azran" or (G.GAME and G.GAME.selected_sleeve == "sleeve_phanta_azran")
 end
 
 local ref1 = Card.start_dissolve
@@ -329,6 +329,13 @@ function Game:start_run(args)
       return true
     end
   }))
+end
+
+local cfbs = G.FUNCS.check_for_buy_space
+
+G.FUNCS.check_for_buy_space = function(card)
+  if card.config.center.set == "phanta_CatanResource" then return true end
+  return cfbs(card)
 end
 
 local igo = Game.init_game_object
@@ -452,6 +459,7 @@ function Game:update(dt)
 
   for k, v in pairs(G.P_CENTERS) do
     if v.phanta_anim and (not v.phanta_requires_aura or aura_enabled) then
+      v.phanta_anim = format_phanta_anim(v.phanta_anim)
       if not v.phanta_anim.t then v.phanta_anim.t = 0 end
       if not v.phanta_anim.length then
         v.phanta_anim.length = 0
@@ -474,6 +482,26 @@ function Game:update(dt)
 
 
   return update_ref(self, dt)
+end
+
+function format_phanta_anim(anim)
+  if not anim then return {} end
+  local new_anim = {}
+  for _, frame in ipairs(anim) do
+    if frame and (frame.x or (frame.xrange and frame.xrange.first and frame.xrange.last)) and (frame.y or (frame.yrange and frame.yrange.first and frame.yrange.last)) then
+      local firsty = frame.y or frame.yrange.first
+      local lasty = frame.y or frame.yrange.last
+      for y = firsty, lasty do
+        local firstx = frame.x or frame.xrange.first
+        local lastx = frame.x or frame.xrange.last
+        for x = firstx, lastx do
+          new_anim[#new_anim + 1] = { x = x, y = y, t = frame.t or 0 }
+        end
+      end
+    end
+  end
+  new_anim.t = anim.t
+  return new_anim
 end
 
 SMODS.current_mod.extra_tabs = function()

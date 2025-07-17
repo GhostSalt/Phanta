@@ -89,7 +89,12 @@ SMODS.Joker {
   eternal_compat = true,
   perishable_compat = true,
   calculate = function(self, card, context)
-    if context.joker_main and G.jokers.config.card_limit - #G.jokers.cards == 1 then return { mult = card.ability.extra.mult } end
+    if context.joker_main and G.jokers.config.card_limit - #G.jokers.cards == 1 then
+      return {
+        mult = card.ability.extra
+            .mult
+      }
+    end
   end
 }
 
@@ -146,8 +151,13 @@ SMODS.Joker {
   key = 'heartbreak',
   config = { extra = { xmult = 1.5, odds = 2 } },
   rarity = 2,
-  atlas = 'Phanta2',
-  pos = { x = 0, y = 1 },
+  atlas = 'PhantaMiscAnims1',
+  pos = { x = 0, y = 9 },
+  phanta_anim = {
+    { xrange = { first = 0, last = 11 }, yrange = { first = 9, last = 10 }, t = 0.1 },
+    { xrange = { first = 0, last = 3 },  y = 11,                            t = 0.1 }
+  },
+  phanta_requires_aura = true,
   cost = 6,
   loc_vars = function(self, info_queue, card)
     return { vars = { card.ability.extra.xmult, (G.GAME.probabilities.normal or 1), card.ability.extra.odds } }
@@ -204,8 +214,8 @@ SMODS.Joker {
     { x = 0, y = 2, t = 2.9 }, { x = 1, y = 2, t = 0.1 },
     { x = 2, y = 2, t = 0.1 }, { x = 3, y = 2, t = 0.1 }, { x = 4, y = 2, t = 0.8 },
     { x = 3, y = 2, t = 0.1 }, { x = 4, y = 2, t = 0.4 }, { x = 3, y = 2, t = 0.1 }, { x = 4, y = 2, t = 0.4 },
-    { x = 3, y = 2, t = 0.1 }, { x = 2, y = 2, t = 0.1 }, { x = 1, y = 2, t = 0.1 }, 
-},
+    { x = 3, y = 2, t = 0.1 }, { x = 2, y = 2, t = 0.1 }, { x = 1, y = 2, t = 0.1 },
+  },
   phanta_requires_aura = true,
   cost = 6,
   blueprint_compat = false,
@@ -241,7 +251,7 @@ SMODS.Joker {
     { x = 2, y = 3, t = 0.1 }, { x = 1, y = 3, t = 0.2 },
     { x = 2, y = 3, t = 0.1 }, { x = 1, y = 3, t = 0.2 },
     { x = 2, y = 3, t = 0.1 }, { x = 1, y = 3, t = 0.3 },
-},
+  },
   phanta_requires_aura = true,
   cost = 6,
   blueprint_compat = false,
@@ -278,7 +288,7 @@ SMODS.Joker {
     { x = 3, y = 4, t = 0.2 }, { x = 0, y = 4, t = 0.2 }, { x = 4, y = 4, t = 0.2 }, { x = 0, y = 4, t = 0.05 },
     { x = 3, y = 4, t = 0.2 }, { x = 0, y = 4, t = 0.2 }, { x = 4, y = 4, t = 0.2 }, { x = 0, y = 4, t = 0.05 },
     { x = 3, y = 4, t = 0.2 }, { x = 0, y = 4, t = 0.2 }, { x = 4, y = 4, t = 0.2 }, { x = 0, y = 4, t = 0.05 }
-},
+  },
   phanta_requires_aura = true,
   cost = 6,
   blueprint_compat = true,
@@ -314,9 +324,9 @@ SMODS.Joker {
     { x = 2, y = 5, t = 2.1 }, { x = 3, y = 5, t = 0.1 },
     { x = 4, y = 5, t = 2.7 }, { x = 5, y = 5, t = 0.1 },
     { x = 4, y = 5, t = 0.9 }, { x = 5, y = 5, t = 0.1 },
-    { x = 4, y = 5, t = 1.8 }, { x = 5, y = 5, t = 0.1 }, { x = 4, y = 5, t = 0.4 }, 
+    { x = 4, y = 5, t = 1.8 }, { x = 5, y = 5, t = 0.1 }, { x = 4, y = 5, t = 0.4 },
     { x = 3, y = 5, t = 0.1 }, { x = 1, y = 5, t = 0.3 },
-},
+  },
   phanta_requires_aura = true,
   cost = 6,
   blueprint_compat = true,
@@ -458,7 +468,7 @@ SMODS.Joker {
   rarity = 2,
   atlas = 'Phanta2',
   pos = { x = 10, y = 0 },
-  phanta_anim = { 
+  phanta_anim = {
     { x = 10, y = 0, t = 0.9 }, { x = 11, y = 0, t = 0.1 },
     { x = 10, y = 0, t = 0.1 }, { x = 11, y = 0, t = 0.1 },
     { x = 10, y = 0, t = 0.5 }, { x = 11, y = 0, t = 0.1 },
