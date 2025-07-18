@@ -1415,6 +1415,15 @@ return {
                     "{C:money}$10{} per roll",
                 }
             },
+            j_phanta_agentboard            = {
+                name = "Agent Board",
+                text = {
+                    "Earn {C:money}$#1#{} at the end",
+                    "of the round for each",
+                    "held copy of {C:green}Settlement{}",
+                    "{C:inactive}(Will give {C:money}$#2#{C:inactive}){}"
+                }
+            },
             j_phanta_birthdaycard          = {
                 name = 'Birthday Card',
                 text = {
@@ -2039,106 +2048,181 @@ return {
             c_phanta_knight1 = {
                 name = "Knight",
                 text = {
-                    "Disables the current",
-                    "{C:attention}Boss Blind{}"
+                    {
+                        "Disables the current",
+                        "{C:attention}Boss Blind{}"
+                    },
+                    {
+                        "{C:attention}+#1#{} consumable slot"
+                    }
                 }
             },
             c_phanta_knight2 = {
                 name = "Knight",
                 text = {
-                    "Disables the current",
-                    "{C:attention}Boss Blind{}"
+                    {
+                        "Disables the current",
+                        "{C:attention}Boss Blind{}"
+                    },
+                    {
+                        "{C:attention}+#1#{} consumable slot"
+                    }
                 }
             },
             c_phanta_knight3 = {
                 name = "Knight",
                 text = {
-                    "Disables the current",
-                    "{C:attention}Boss Blind{}"
+                    {
+                        "Disables the current",
+                        "{C:attention}Boss Blind{}"
+                    },
+                    {
+                        "{C:attention}+#1#{} consumable slot"
+                    }
                 }
             },
             c_phanta_knight4 = {
                 name = "Knight",
                 text = {
-                    "Disables the current",
-                    "{C:attention}Boss Blind{}"
+                    {
+                        "Disables the current",
+                        "{C:attention}Boss Blind{}"
+                    },
+                    {
+                        "{C:attention}+#1#{} consumable slot"
+                    }
                 }
             },
             c_phanta_knight5 = {
                 name = "Knight",
                 text = {
-                    "Disables the current",
-                    "{C:attention}Boss Blind{}"
+                    {
+                        "Disables the current",
+                        "{C:attention}Boss Blind{}"
+                    },
+                    {
+                        "{C:attention}+#1#{} consumable slot"
+                    }
                 }
             },
             c_phanta_knight6 = {
                 name = "Knight",
                 text = {
-                    "Disables the current",
-                    "{C:attention}Boss Blind{}"
+                    {
+                        "Disables the current",
+                        "{C:attention}Boss Blind{}"
+                    },
+                    {
+                        "{C:attention}+#1#{} consumable slot"
+                    }
                 }
             },
             c_phanta_knight7 = {
                 name = "Knight",
                 text = {
-                    "Disables the current",
-                    "{C:attention}Boss Blind{}"
+                    {
+                        "Disables the current",
+                        "{C:attention}Boss Blind{}"
+                    },
+                    {
+                        "{C:attention}+#1#{} consumable slot"
+                    }
                 }
             },
             c_phanta_library = {
                 name = "Library",
                 text = {
-                    "Creates a free",
-                    "{C:attention}Double Tag{}"
+                    {
+                        "Creates a free",
+                        "{C:attention}Double Tag{}"
+                    },
+                    {
+                        "{C:attention}+#1#{} consumable slot"
+                    }
                 }
             },
             c_phanta_market = {
                 name = "Market",
                 text = {
-                    "Creates a free",
-                    "{C:attention}Double Tag{}"
+                    {
+                        "Creates a free",
+                        "{C:attention}Double Tag{}"
+                    },
+                    {
+                        "{C:attention}+#1#{} consumable slot"
+                    }
                 }
             },
             c_phanta_greathall = {
                 name = "Great Hall",
                 text = {
-                    "Creates a free",
-                    "{C:attention}Double Tag{}"
+                    {
+                        "Creates a free",
+                        "{C:attention}Double Tag{}"
+                    },
+                    {
+                        "{C:attention}+#1#{} consumable slot"
+                    }
                 }
             },
             c_phanta_chapel = {
                 name = "Chapel",
                 text = {
-                    "Creates a free",
-                    "{C:attention}Double Tag{}"
+                    {
+                        "Creates a free",
+                        "{C:attention}Double Tag{}"
+                    },
+                    {
+                        "{C:attention}+#1#{} consumable slot"
+                    }
                 }
             },
             c_phanta_university = {
                 name = "University",
                 text = {
-                    "Creates a free",
-                    "{C:attention}Double Tag{}"
+                    {
+                        "Creates a free",
+                        "{C:attention}Double Tag{}"
+                    },
+                    {
+                        "{C:attention}+#1#{} consumable slot"
+                    }
                 }
             },
             c_phanta_monopoly = {
                 name = "Monopoly",
                 text = {
-                    "Creates {C:attention}#1#{} copies",
-                    "of a random",
-                    "{C:phanta_catanresource}Resource{} type"
+                    {
+                        "Creates {C:attention}#1#{} copies",
+                        "of a random",
+                        "{C:phanta_catanresource}Resource{} type"
+                    },
+                    {
+                        "{C:attention}+#2#{} consumable slot"
+                    }
                 }
             },
             c_phanta_yearofplenty = {
                 name = "Year of Plenty",
                 text = {
-                    "Earn {C:money}$#1#{}"
+                    {
+                        "Earn {C:money}$#1#{}"
+                    },
+                    {
+                        "{C:attention}+#2#{} consumable slot"
+                    }
                 }
             },
             c_phanta_roadbuilding = {
                 name = "Road Building",
                 text = {
-                    "Creates {C:attention}#1#{} copies of {C:phanta_catanbuilding}Road{}",
-                    "{C:inactive}(Must have room){}"
+                    {
+                        "Creates {C:attention}#1#{} copies of {C:phanta_catanbuilding}Road{}",
+                        "{C:inactive}(Must have room){}"
+                    },
+                    {
+                        "{C:attention}+#2#{} consumable slot"
+                    }
                 }
             }
         },
@@ -2146,23 +2230,38 @@ return {
             c_phanta_road = {
                 name = "Road",
                 text = {
-                    "Enhances {C:attention}#1#{}",
-                    "selected cards to",
-                    "{C:attention}random enhancements{}",
+                    {
+                        "Enhances {C:attention}#1#{}",
+                        "selected cards to",
+                        "{C:attention}random enhancements{}",
+                    },
+                    {
+                        "{C:attention}+#2#{} consumable slot"
+                    }
                 }
             },
             c_phanta_settlement = {
                 name = "Settlement",
                 text = {
-                    "Creates a free",
-                    "{C:attention}Rare Tag{}"
+                    {
+                        "Creates a free",
+                        "{C:attention}Rare Tag{}"
+                    },
+                    {
+                        "{C:attention}+#2#{} consumable slot"
+                    }
                 }
             },
             c_phanta_city = {
                 name = "City",
                 text = {
-                    "Creates {C:attention}#1#{} free",
-                    "{C:attention}Negative Tags{}"
+                    {
+                        "Creates {C:attention}#1#{} free",
+                        "{C:attention}Negative Tags{}"
+                    },
+                    {
+                        "{C:attention}+#2#{} consumable slot"
+                    }
                 }
             }
         },

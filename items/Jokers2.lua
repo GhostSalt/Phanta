@@ -403,6 +403,24 @@ SMODS.Joker {
 }
 
 SMODS.Joker {
+  key = 'agentboard',
+  config = { extra = { money = 4 } },
+  rarity = 2,
+  atlas = 'Phanta2',
+  pos = { x = 6, y = 1 },
+  cost = 5,
+  blueprint_compat = false,
+  eternal_compat = true,
+  perishable_compat = true,
+  loc_vars = function(self, info_queue, card)
+    return { vars = { card.ability.extra.money, card.ability.extra.money * count_settlements() } }
+  end,
+  calc_dollar_bonus = function(self, card)
+    if count_settlements() > 0 then return card.ability.extra.money * count_settlements() end
+  end
+}
+
+SMODS.Joker {
   key = 'birthdaycard',
   config = { extra = { added_xmult = 0.2, current_xmult = 1 } },
   loc_vars = function(self, info_queue, card)

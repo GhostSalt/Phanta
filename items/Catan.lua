@@ -1,7 +1,7 @@
 SMODS.current_mod.optional_features = { cardareas = { unscored = true } }
 
 function is_boss_active()
-  return G.GAME.blind and ((not G.GAME.blind.disabled) and (G.GAME.blind:get_type() == 'Boss'))
+  return G and G.GAME and G.GAME.blind and ((not G.GAME.blind.disabled) and (G.GAME.blind:get_type() == 'Boss'))
 end
 
 SMODS.Atlas {
@@ -39,27 +39,7 @@ SMODS.Consumable {
   key = "brick",
   pos = { x = 0, y = 0 },
   cost = 2,
-  config = { extra = { added_slots = 1 } },
-  atlas = "PhantaCatan",
-  loc_vars = function(self, info_queue, card)
-    return { vars = { card.ability.extra.added_slots } }
-  end,
-  add_to_deck = function(self, card, from_debuff)
-    G.E_MANAGER:add_event(Event({
-      func = function()
-        G.consumeables.config.card_limit = G.consumeables.config.card_limit + card.ability.extra.added_slots
-        return true
-      end
-    }))
-  end,
-  remove_from_deck = function(self, card, from_debuff)
-    G.E_MANAGER:add_event(Event({
-      func = function()
-        G.consumeables.config.card_limit = G.consumeables.config.card_limit - card.ability.extra.added_slots
-        return true
-      end
-    }))
-  end
+  atlas = "PhantaCatan"
 }
 
 SMODS.Consumable {
@@ -67,27 +47,7 @@ SMODS.Consumable {
   key = "lumber",
   pos = { x = 1, y = 0 },
   cost = 2,
-  config = { extra = { added_slots = 1 } },
-  atlas = "PhantaCatan",
-  loc_vars = function(self, info_queue, card)
-    return { vars = { card.ability.extra.added_slots } }
-  end,
-  add_to_deck = function(self, card, from_debuff)
-    G.E_MANAGER:add_event(Event({
-      func = function()
-        G.consumeables.config.card_limit = G.consumeables.config.card_limit + card.ability.extra.added_slots
-        return true
-      end
-    }))
-  end,
-  remove_from_deck = function(self, card, from_debuff)
-    G.E_MANAGER:add_event(Event({
-      func = function()
-        G.consumeables.config.card_limit = G.consumeables.config.card_limit - card.ability.extra.added_slots
-        return true
-      end
-    }))
-  end
+  atlas = "PhantaCatan"
 }
 
 SMODS.Consumable {
@@ -95,27 +55,7 @@ SMODS.Consumable {
   key = "wool",
   pos = { x = 2, y = 0 },
   cost = 2,
-  config = { extra = { added_slots = 1 } },
-  atlas = "PhantaCatan",
-  loc_vars = function(self, info_queue, card)
-    return { vars = { card.ability.extra.added_slots } }
-  end,
-  add_to_deck = function(self, card, from_debuff)
-    G.E_MANAGER:add_event(Event({
-      func = function()
-        G.consumeables.config.card_limit = G.consumeables.config.card_limit + card.ability.extra.added_slots
-        return true
-      end
-    }))
-  end,
-  remove_from_deck = function(self, card, from_debuff)
-    G.E_MANAGER:add_event(Event({
-      func = function()
-        G.consumeables.config.card_limit = G.consumeables.config.card_limit - card.ability.extra.added_slots
-        return true
-      end
-    }))
-  end
+  atlas = "PhantaCatan"
 }
 
 SMODS.Consumable {
@@ -123,27 +63,7 @@ SMODS.Consumable {
   key = "grain",
   pos = { x = 3, y = 0 },
   cost = 2,
-  config = { extra = { added_slots = 1 } },
-  atlas = "PhantaCatan",
-  loc_vars = function(self, info_queue, card)
-    return { vars = { card.ability.extra.added_slots } }
-  end,
-  add_to_deck = function(self, card, from_debuff)
-    G.E_MANAGER:add_event(Event({
-      func = function()
-        G.consumeables.config.card_limit = G.consumeables.config.card_limit + card.ability.extra.added_slots
-        return true
-      end
-    }))
-  end,
-  remove_from_deck = function(self, card, from_debuff)
-    G.E_MANAGER:add_event(Event({
-      func = function()
-        G.consumeables.config.card_limit = G.consumeables.config.card_limit - card.ability.extra.added_slots
-        return true
-      end
-    }))
-  end
+  atlas = "PhantaCatan"
 }
 
 SMODS.Consumable {
@@ -151,27 +71,7 @@ SMODS.Consumable {
   key = "ore",
   pos = { x = 4, y = 0 },
   cost = 2,
-  config = { extra = { added_slots = 1 } },
-  atlas = "PhantaCatan",
-  loc_vars = function(self, info_queue, card)
-    return { vars = { card.ability.extra.added_slots } }
-  end,
-  add_to_deck = function(self, card, from_debuff)
-    G.E_MANAGER:add_event(Event({
-      func = function()
-        G.consumeables.config.card_limit = G.consumeables.config.card_limit + card.ability.extra.added_slots
-        return true
-      end
-    }))
-  end,
-  remove_from_deck = function(self, card, from_debuff)
-    G.E_MANAGER:add_event(Event({
-      func = function()
-        G.consumeables.config.card_limit = G.consumeables.config.card_limit - card.ability.extra.added_slots
-        return true
-      end
-    }))
-  end
+  atlas = "PhantaCatan"
 }
 
 SMODS.ConsumableType {
@@ -407,8 +307,7 @@ SMODS.Consumable {
   cost = 6,
   atlas = "PhantaCatan",
   loc_vars = function(self, info_queue, card)
-    info_queue[#info_queue + 1] = G.P_TAGS.tag_double
-    return {}
+    return { relevant = { G.P_TAGS.tag_double } }
   end,
   can_use = function(self, card)
     return true
@@ -436,8 +335,7 @@ SMODS.Consumable {
   cost = 6,
   atlas = "PhantaCatan",
   loc_vars = function(self, info_queue, card)
-    info_queue[#info_queue + 1] = G.P_TAGS.tag_double
-    return {}
+    return { relevant = { G.P_TAGS.tag_double } }
   end,
   can_use = function(self, card)
     return true
@@ -465,8 +363,7 @@ SMODS.Consumable {
   cost = 6,
   atlas = "PhantaCatan",
   loc_vars = function(self, info_queue, card)
-    info_queue[#info_queue + 1] = G.P_TAGS.tag_double
-    return {}
+    return { relevant = { G.P_TAGS.tag_double } }
   end,
   can_use = function(self, card)
     return true
@@ -494,8 +391,7 @@ SMODS.Consumable {
   cost = 6,
   atlas = "PhantaCatan",
   loc_vars = function(self, info_queue, card)
-    info_queue[#info_queue + 1] = G.P_TAGS.tag_double
-    return {}
+    return { relevant = { G.P_TAGS.tag_double } }
   end,
   can_use = function(self, card)
     return true
@@ -523,8 +419,7 @@ SMODS.Consumable {
   cost = 6,
   atlas = "PhantaCatan",
   loc_vars = function(self, info_queue, card)
-    info_queue[#info_queue + 1] = G.P_TAGS.tag_double
-    return {}
+    return { relevant = { G.P_TAGS.tag_double } }
   end,
   can_use = function(self, card)
     return true
@@ -618,8 +513,7 @@ SMODS.Consumable {
   config = { extra = { no_of_cards = 2 } },
   atlas = "PhantaCatan",
   loc_vars = function(self, info_queue, card)
-    info_queue[#info_queue + 1] = G.P_CENTERS.c_phanta_road
-    return { vars = { card.ability.extra.no_of_cards } }
+    return { vars = { card.ability.extra.no_of_cards }, relevant = { SMODS.Centers["c_phanta_road"] } }
   end,
   can_use = function(self, card)
     return count_consumables() <= G.consumeables.config.card_limit
@@ -756,8 +650,7 @@ SMODS.Consumable {
   cost = 8,
   atlas = "PhantaCatan",
   loc_vars = function(self, info_queue, card)
-    info_queue[#info_queue + 1] = G.P_TAGS.tag_rare
-    return {}
+    return { relevant = { G.P_TAGS.tag_rare } }
   end,
   can_use = function(self, card)
     return true
@@ -786,8 +679,7 @@ SMODS.Consumable {
   config = { extra = { no_of_tags = 2 } },
   atlas = "PhantaCatan",
   loc_vars = function(self, info_queue, card)
-    info_queue[#info_queue + 1] = G.P_TAGS.tag_negative
-    return { vars = { card.ability.extra.no_of_tags } }
+    return { vars = { card.ability.extra.no_of_tags }, relevant = { G.P_TAGS.tag_negative } }
   end,
   can_use = function(self, card)
     return true
@@ -811,6 +703,57 @@ SMODS.Consumable {
 
 
 
+
+
+
+
+
+for k, v in pairs(SMODS.Centers) do
+  if v.set == "phanta_CatanResource" or v.set == "phanta_CatanDevelopmentCard" or v.set == "phanta_CatanBuilding" then
+    if not v.config then v.config = {} end
+    if not v.config.extra then v.config.extra = {} end
+    v.config.extra.added_slots = 1
+
+    if v.loc_vars then
+      local vars = v:loc_vars({}, v:create_fake_card())
+      v.loc_vars = function(self, info_queue, card)
+        local new_vars = vars
+        if not new_vars then new_vars = {} end
+        if not new_vars.vars then new_vars.vars = {} end
+        new_vars.vars[#new_vars.vars + 1] = card.ability.extra.added_slots
+        local relevant = vars.relevant
+
+        if relevant then
+          for _, r in ipairs(relevant) do
+            info_queue[#info_queue + 1] = r
+          end
+        end
+        return new_vars
+      end
+    else
+      v.loc_vars = function(self, info_queue, card)
+        return { vars = { card.ability.extra.added_slots } }
+      end
+    end
+
+    v.add_to_deck = function(self, card, from_debuff)
+      G.E_MANAGER:add_event(Event({
+        func = function()
+          G.consumeables.config.card_limit = G.consumeables.config.card_limit + card.ability.extra.added_slots
+          return true
+        end
+      }))
+    end
+    v.remove_from_deck = function(self, card, from_debuff)
+      G.E_MANAGER:add_event(Event({
+        func = function()
+          G.consumeables.config.card_limit = G.consumeables.config.card_limit - card.ability.extra.added_slots
+          return true
+        end
+      }))
+    end
+  end
+end
 
 function phanta_add_catan_building_button(scale)
   if Phanta.config["catan_enabled"] then

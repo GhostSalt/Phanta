@@ -279,6 +279,10 @@ function azran_active()
   return G.GAME.selected_back.effect.center.key == "b_phanta_azran" or (G.GAME and G.GAME.selected_sleeve == "sleeve_phanta_azran")
 end
 
+function count_settlements()
+  return #SMODS.find_card("c_phanta_settlement")
+end
+
 local ref1 = Card.start_dissolve
 function Card:start_dissolve()
   if self.config and self.config.center and self.config.center.phanta_shatters then
