@@ -1696,6 +1696,31 @@ return {
                     "to win on {C:attention}Gold{}",
                     "{C:attention}Stake{} difficulty",
                 }
+            },
+            pnr_phanta_nojoke = {
+                name = "Serious",
+                text = {
+                    "Straight starts",
+                    "at {C:attention}level #1#{}"
+                },
+                unlock = {
+                    "Used {C:attention}No Joke{}",
+                    "to win on {C:attention}Gold{}",
+                    "{C:attention}Stake{} difficulty",
+                }
+            },
+            pnr_phanta_nojoke_1 = {
+                name = "Serious",
+                text = {
+                    "When {C:attention}Boss Blind{} is",
+                    "selected, upgrades {C:attention}Straight{}",
+                    "by {C:attention}#2#{} level"
+                },
+                unlock = {
+                    "Used {C:attention}No Joke{}",
+                    "to win on {C:attention}Gold{}",
+                    "{C:attention}Stake{} difficulty",
+                }
             }
         },
         Sleeve = {
