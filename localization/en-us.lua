@@ -1670,6 +1670,32 @@ return {
                     "to win on {C:attention}Gold{}",
                     "{C:attention}Stake{} difficulty",
                 }
+            },
+            pnr_phanta_cutcorners = {
+                name = "Rushed",
+                text = {
+                    "Vanilla hands with",
+                    "{C:attention}4{} or fewer {C:attention}scoring{}",
+                    "{C:attention}cards{} start at {C:attention}level #1#{}"
+                },
+                unlock = {
+                    "Used {C:attention}Cut Corners{}",
+                    "to win on {C:attention}Gold{}",
+                    "{C:attention}Stake{} difficulty",
+                }
+            },
+            pnr_phanta_cutcorners_1 = {
+                name = "Rushed",
+                text = {
+                    "{C:white,X:mult}X#2#{} Mult if hand is",
+                    "played with at most",
+                    "{C:blue}#3#{} hands remaining"
+                },
+                unlock = {
+                    "Used {C:attention}Cut Corners{}",
+                    "to win on {C:attention}Gold{}",
+                    "{C:attention}Stake{} difficulty",
+                }
             }
         },
         Sleeve = {

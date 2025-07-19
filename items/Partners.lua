@@ -18,16 +18,18 @@ Partner_API.Partner {
   end,
   atlas = "PhantaPartners",
   individual_quips = true,
-  config = { extra = { related_card = "j_phanta_ghost", xmult = 1.5 } },
+  config = { extra = { xmult = 1.5 } },
+  link_config = { j_phanta_ghost = 1 },
   loc_vars = function(self, info_queue, card)
     local benefits = 0
-    if next(SMODS.find_card(card.ability.extra.related_card)) then benefits = 0.5 end
+    --[[if next(SMODS.find_card(card.ability.extra.related_card))]] -- then benefits = 0.5 end
+    if link_level == 1 then benefits = 0.5 end
     return { vars = { card.ability.extra.xmult + benefits } }
   end,
   calculate = function(self, card, context)
     if context.other_consumeable and context.other_consumeable.ability.set == "Tarot" then
       local benefits = 0
-      if next(SMODS.find_card(card.ability.extra.related_card)) then benefits = 0.5 end
+      if link_level == 1 then benefits = 0.5 end
       return { xmult = card.ability.extra.xmult + benefits }
     end
   end,
@@ -50,14 +52,18 @@ Partner_API.Partner {
   discovered = true,
   pos = { x = 1, y = 0 },
   atlas = "PhantaPartners",
-  config = { extra = { related_card = "j_phanta_cutcorners", levels = 1, all_hands = { "High Card", "Pair", "Two Pair", "Three of a Kind", "Four of a Kind" } } },
+  config = { extra = { levels = 1, all_hands = { "High Card", "Pair", "Two Pair", "Three of a Kind", "Four of a Kind" }, xmult = 2, hand_threshold = 4 } },
+  link_config = { j_phanta_cutcorners = 1 },
   loc_vars = function(self, info_queue, card)
-    local benefits = 0
-    if next(SMODS.find_card(card.ability.extra.related_card)) then benefits = 0.5 end
-    return { vars = {  } }
+    local link_level = self:get_link_level()
+    local key = self.key
+    if link_level == 1 then key = key .. "_" .. link_level end
+    return { key = key, vars = { card.ability.extra.levels + 1, card.ability.extra.xmult, card.ability.extra.hand_threshold } }
   end,
   calculate = function(self, card, context)
-
+    if self:get_link_level() == 1 and context.joker_main and G.GAME.current_round.hands_left < card.ability.extra.hand_threshold then
+      return { xmult = card.ability.extra.xmult }
+    end
   end,
   calculate_begin = function(self, card)
     for k, v in pairs(G.GAME.hands) do
