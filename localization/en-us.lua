@@ -1936,7 +1936,7 @@ return {
         },
         Tag = {
             tag_phanta_sol = {
-                name = "Sol",
+                name = "Sol Tag",
                 text = {
                     "Gives a free",
                     "{C:phanta_zodiac}Jumbo Zodiac Pack{}"

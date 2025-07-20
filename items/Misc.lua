@@ -603,6 +603,90 @@ SMODS.Consumable {
   end
 }
 
+SMODS.Consumable {
+  object_type = "Consumable",
+  set = "Spectral",
+  key = "handprint",
+  loc_txt = {
+    name = 'Handprint',
+    text = {
+      "Permanently gain",
+      "{C:blue}+#1#{} hand per round"
+    }
+  },
+  pos = { x = 0, y = 3 },
+  config = { extra = { added_hands = 1 } },
+  atlas = "PhantaTarots",
+  loc_vars = function(self, info_queue, card)
+    return { vars = { card.ability.extra.added_hands } }
+  end,
+  can_use = function(self, card)
+    return true
+  end,
+  use = function(self, card, area, copier)
+    G.E_MANAGER:add_event(Event({
+      trigger = 'after',
+      delay = 0.4,
+      func = function()
+        play_sound('timpani')
+        card:juice_up()
+        G.GAME.round_resets.hands = G.GAME.round_resets.hands + card.ability.extra.added_hands
+        ease_hands_played(card.ability.extra.added_hands)
+        return true
+      end
+    }))
+    delay(0.6)
+  end,
+  in_pool = function()
+    return azran_active()
+  end,
+  set_badges = function(self, card, badges)
+    badges[#badges + 1] = create_badge(localize('phanta_azran_exclusive'), G.C.SECONDARY_SET.Spectral, G.C.WHITE, 1)
+  end
+}
+
+SMODS.Consumable {
+  object_type = "Consumable",
+  set = "Spectral",
+  key = "exile",
+  loc_txt = {
+    name = 'Exile',
+    text = {
+      "Permanently gain",
+      "{C:red}+#1#{} discard per round"
+    }
+  },
+  pos = { x = 1, y = 3 },
+  config = { extra = { added_discards = 1 } },
+  atlas = "PhantaTarots",
+  loc_vars = function(self, info_queue, card)
+    return { vars = { card.ability.extra.added_discards } }
+  end,
+  can_use = function(self, card)
+    return true
+  end,
+  use = function(self, card, area, copier)
+    G.E_MANAGER:add_event(Event({
+      trigger = 'after',
+      delay = 0.4,
+      func = function()
+        play_sound('timpani')
+        card:juice_up()
+        G.GAME.round_resets.discards = G.GAME.round_resets.discards + card.ability.extra.added_discards
+        ease_discard(card.ability.extra.added_discards)
+        return true
+      end
+    }))
+    delay(0.6)
+  end,
+  in_pool = function()
+    return azran_active()
+  end,
+  set_badges = function(self, card, badges)
+    badges[#badges + 1] = create_badge(localize('phanta_azran_exclusive'), G.C.SECONDARY_SET.Spectral, G.C.WHITE, 1)
+  end
+}
+
 
 
 

@@ -1080,7 +1080,7 @@ SMODS.Joker {
 
 SMODS.Joker {
   key = 'target',
-  config = { extra = { added_mult = 10, current_mult = 0 } },
+  config = { extra = { added_mult = 8, current_mult = 0 } },
   loc_vars = function(self, info_queue, card)
     return { vars = { card.ability.extra.added_mult, card.ability.extra.current_mult } }
   end,
