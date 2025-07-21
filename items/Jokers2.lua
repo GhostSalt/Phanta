@@ -157,7 +157,6 @@ SMODS.Joker {
     { xrange = { first = 0, last = 11 }, yrange = { first = 9, last = 10 }, t = 0.1 },
     { xrange = { first = 0, last = 3 },  y = 11,                            t = 0.1 }
   },
-  phanta_requires_aura = true,
   cost = 6,
   loc_vars = function(self, info_queue, card)
     return { vars = { card.ability.extra.xmult, (G.GAME.probabilities.normal or 1), card.ability.extra.odds } }
@@ -216,7 +215,6 @@ SMODS.Joker {
     { x = 3, y = 2, t = 0.1 }, { x = 4, y = 2, t = 0.4 }, { x = 3, y = 2, t = 0.1 }, { x = 4, y = 2, t = 0.4 },
     { x = 3, y = 2, t = 0.1 }, { x = 2, y = 2, t = 0.1 }, { x = 1, y = 2, t = 0.1 },
   },
-  phanta_requires_aura = true,
   cost = 6,
   blueprint_compat = false,
   eternal_compat = true,
@@ -252,7 +250,6 @@ SMODS.Joker {
     { x = 2, y = 3, t = 0.1 }, { x = 1, y = 3, t = 0.2 },
     { x = 2, y = 3, t = 0.1 }, { x = 1, y = 3, t = 0.3 },
   },
-  phanta_requires_aura = true,
   cost = 6,
   blueprint_compat = false,
   eternal_compat = true,
@@ -289,7 +286,6 @@ SMODS.Joker {
     { x = 3, y = 4, t = 0.2 }, { x = 0, y = 4, t = 0.2 }, { x = 4, y = 4, t = 0.2 }, { x = 0, y = 4, t = 0.05 },
     { x = 3, y = 4, t = 0.2 }, { x = 0, y = 4, t = 0.2 }, { x = 4, y = 4, t = 0.2 }, { x = 0, y = 4, t = 0.05 }
   },
-  phanta_requires_aura = true,
   cost = 6,
   blueprint_compat = true,
   eternal_compat = true,
@@ -327,7 +323,6 @@ SMODS.Joker {
     { x = 4, y = 5, t = 1.8 }, { x = 5, y = 5, t = 0.1 }, { x = 4, y = 5, t = 0.4 },
     { x = 3, y = 5, t = 0.1 }, { x = 1, y = 5, t = 0.3 },
   },
-  phanta_requires_aura = true,
   cost = 6,
   blueprint_compat = true,
   eternal_compat = true,

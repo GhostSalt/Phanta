@@ -2608,6 +2608,7 @@ return {
             phanta_zodiac_enabled = "Zodiac Cards",
             phanta_catan_enabled = "Settlers of Catan Content",
             phanta_starter_pack_enabled = "Starter Packs",
+            phanta_disable_animations = "Disable Animations",
 
             phanta_credit_1 = "Mod by GhostSalt",
             phanta_credit_2 = "Ability brainstorming: BakersDozenBagels",

@@ -33,6 +33,13 @@ SMODS.Atlas {
 }
 
 SMODS.Atlas {
+  key = "PhantaMiscAnims2",
+  path = "PhantaMiscAnims2.png",
+  px = 71,
+  py = 95
+}
+
+SMODS.Atlas {
   key = "PhantaKnowledgeOfTheCollegeAnim",
   path = "PhantaKnowledgeOfTheCollegeAnim.png",
   px = 71,
@@ -134,8 +141,7 @@ SMODS.Joker {
     { x = 3, y = 7, t = 1 },
     { x = 2, y = 7, t = 0.15 },
     { x = 1, y = 7, t = 0.15 },
-},
-  phanta_requires_aura = true,]] --
+},]] --
   cost = 4,
   blueprint_compat = true,
   eternal_compat = true,
@@ -266,7 +272,6 @@ SMODS.Joker {
     { x = 5, y = 7, t = 0.1 },
     { x = 6, y = 7, t = 0.5 },
   },
-  phanta_requires_aura = true,
   cost = 4,
   loc_vars = function(self, info_queue, card)
     return { vars = { card.ability.extra.given_money } }
@@ -380,7 +385,6 @@ SMODS.Joker {
   phanta_anim = {
     { xrange = { first = 4, last = 11 }, y = 11, t = 0.2 }
   },
-  phanta_requires_aura = true,
   cost = 4,
   blueprint_compat = false,
   eternal_compat = true,
@@ -1106,7 +1110,6 @@ SMODS.Joker {
     { x = 6, y = 2, t = 0.1 }, { x = 7, y = 2, t = 0.1 }, { x = 8, y = 2, t = 0.1 },
     { x = 9, y = 2, t = 0.1 }, { x = 10, y = 2, t = 0.1 }, { x = 11, y = 2, t = 0.1 },
   },
-  phanta_requires_aura = true,
   cost = 6,
   blueprint_compat = true,
   eternal_compat = true,
@@ -1272,7 +1275,6 @@ SMODS.Joker {
     { x = 10,                         y = 4, t = 1 },
     { x = 11,                         y = 4, t = 0.1 }
   },
-  phanta_requires_aura = true,
   cost = 5,
   blueprint_compat = true,
   eternal_compat = true,
@@ -1454,7 +1456,6 @@ SMODS.Joker {
     { xrange = { first = 0, last = 11 }, yrange = { first = 0, last = 4 }, t = 0.15 },
     { xrange = { first = 0, last = 10 }, y = 5,                            t = 0.15 }
   },
-  phanta_requires_aura = true,
   cost = 7,
   blueprint_compat = true,
   eternal_compat = true,
@@ -1699,7 +1700,6 @@ SMODS.Joker {
     { x = 2, y = 0, t = 0.15 }, { x = 3, y = 0, t = 0.25 },
     { x = 4, y = 0, t = 0.25 }, { x = 3, y = 0, t = 0.25 }, { x = 4, y = 0, t = 0.2 }, { x = 3, y = 0, t = 0.35 }, { x = 2, y = 0, t = 0.15 }, { x = 1, y = 0, t = 0.1 }
   },
-  phanta_requires_aura = true,
   cost = 6,
   blueprint_compat = true,
   eternal_compat = true,
@@ -1739,7 +1739,6 @@ SMODS.Joker {
     { x = 5, y = 1, t = 0.15 }, { x = 4, y = 1, t = 0.15 },
     { x = 3, y = 1, t = 0.6 }, { x = 2, y = 1, t = 0.2 },
   },
-  phanta_requires_aura = true,
   cost = 6,
   blueprint_compat = true,
   eternal_compat = true,
@@ -1776,7 +1775,6 @@ SMODS.Joker {
     { x = 2, y = 6, t = 0.15 },
     { x = 1, y = 6, t = 0.15 }
   },
-  phanta_requires_aura = true,
   cost = 6,
   blueprint_compat = false,
   eternal_compat = true,
@@ -1911,7 +1909,6 @@ SMODS.Joker {
     { x = 0, y = 5, t = 0.13 }, { x = 8, y = 5, t = 0.13 }, { x = 9, y = 5, t = 0.13 }, { x = 10, y = 5, t = 0.13 }, { x = 11, y = 5, t = 0.13 }, { x = 0, y = 6, t = 0.13 },
     { x = 1, y = 6, t = 0.06 }, { x = 2, y = 6, t = 0.06 }, { x = 3, y = 6, t = 0.06 }, { x = 4, y = 6, t = 0.06 }, { x = 3, y = 5, t = 0.13 }, { x = 5, y = 6, t = 0.13 },
   },
-  phanta_requires_aura = true,
   cost = 8,
   loc_vars = function(self, info_queue, card)
     return { vars = { card.ability.extra.xmult } }
@@ -2970,7 +2967,6 @@ SMODS.Joker {
   phanta_anim = {
     { xrange = { first = 6, last = 9 }, y = 6, t = 0.1 }
   },
-  phanta_requires_aura = true,
   cost = 6,
   loc_vars = function(self, info_queue, card)
     info_queue[#info_queue + 1] = G.P_CENTERS.c_temperance
@@ -3646,8 +3642,23 @@ SMODS.Joker {
   key = 'thepolicemun',
   config = { extra = { no_of_upgrades = 3 } },
   rarity = 2,
-  atlas = 'Phanta',
-  pos = { x = 8, y = 4 },
+  atlas = 'PhantaMiscAnims2',
+  pos = { x = 0, y = 0 },
+  phanta_anim = {
+    { x = 0, y = 0, t = 0.125 }, { x = 1, y = 0, t = 0.125 }, { x = 2, y = 0, t = 0.125 },
+    { x = 0, y = 0, t = 0.125 }, { x = 1, y = 0, t = 0.125 }, { x = 2, y = 0, t = 0.125 },
+    { x = 0, y = 0, t = 0.125 }, { x = 1, y = 0, t = 0.125 }, { x = 2, y = 0, t = 0.125 },
+    { x = 0, y = 0, t = 0.125 }, { x = 1, y = 0, t = 0.125 }, { x = 2, y = 0, t = 0.125 },
+    { x = 0, y = 0, t = 0.0125 }, { x = 3, y = 0, t = 0.1 }, { x = 0, y = 0, t = 0.0125 }, { x = 1, y = 0, t = 0.125 }, { x = 2, y = 0, t = 0.125 },
+    { x = 0, y = 0, t = 0.125 }, { x = 1, y = 0, t = 0.125 }, { x = 2, y = 0, t = 0.125 },
+    { x = 0, y = 0, t = 0.125 }, { x = 1, y = 0, t = 0.125 }, { x = 2, y = 0, t = 0.125 },
+    { x = 0, y = 0, t = 0.025 }, { x = 3, y = 0, t = 0.1 }, { x = 1, y = 0, t = 0.125 }, { x = 2, y = 0, t = 0.125 },
+    { x = 3, y = 0, t = 0.1 }, { x = 0, y = 0, t = 0.025 }, { x = 1, y = 0, t = 0.125 }, { x = 2, y = 0, t = 0.125 },
+    { x = 0, y = 0, t = 0.125 }, { x = 1, y = 0, t = 0.125 }, { x = 2, y = 0, t = 0.125 },
+    { x = 0, y = 0, t = 0.125 }, { x = 1, y = 0, t = 0.125 }, { x = 2, y = 0, t = 0.125 },
+    { x = 0, y = 0, t = 0.125 }, { x = 1, y = 0, t = 0.125 }, { x = 2, y = 0, t = 0.125 },
+    { x = 0, y = 0, t = 0.125 }, { x = 1, y = 0, t = 0.125 }, { x = 2, y = 0, t = 0.125 },
+  },
   cost = 6,
   loc_vars = function(self, info_queue, card)
     return { vars = { card.ability.extra.no_of_upgrades } }

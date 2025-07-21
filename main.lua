@@ -276,7 +276,8 @@ function count_unique_planets()
 end
 
 function azran_active()
-  return G.GAME.selected_back.effect.center.key == "b_phanta_azran" or (G.GAME and G.GAME.selected_sleeve == "sleeve_phanta_azran")
+  return G.GAME.selected_back.effect.center.key == "b_phanta_azran" or
+      (G.GAME and G.GAME.selected_sleeve == "sleeve_phanta_azran")
 end
 
 function count_settlements()
@@ -422,6 +423,14 @@ local phantaConfigTab = function()
     callback = function()
     end,
   })
+  phanta_nodes[#phanta_nodes + 1] = create_toggle({
+    label = localize("phanta_disable_animations"),
+    active_colour = HEX("40c76d"),
+    ref_table = Phanta.config,
+    ref_value = "animations_disabled",
+    callback = function()
+    end,
+  })
   return {
     n = G.UIT.ROOT,
     config = {
@@ -461,29 +470,38 @@ function Game:update(dt)
   end
 
 
-  for k, v in pairs(G.P_CENTERS) do
-    if v.phanta_anim and (not v.phanta_requires_aura or aura_enabled) then
-      v.phanta_anim = format_phanta_anim(v.phanta_anim)
-      if not v.phanta_anim.t then v.phanta_anim.t = 0 end
-      if not v.phanta_anim.length then
-        v.phanta_anim.length = 0
-        for _, frame in ipairs(v.phanta_anim) do
-          v.phanta_anim.length = v.phanta_anim.length + (frame.t or 0)
+  if not Phanta.config["animations_disabled"] then
+    for k, v in pairs(G.P_CENTERS) do
+      if not v.default_pos then v.default_pos = v.pos end
+      if v.phanta_anim and (not v.phanta_requires_aura or aura_enabled) then
+        v.phanta_anim = format_phanta_anim(v.phanta_anim)
+        if not v.phanta_anim.t then v.phanta_anim.t = 0 end
+        if not v.phanta_anim.length then
+          v.phanta_anim.length = 0
+          for _, frame in ipairs(v.phanta_anim) do
+            v.phanta_anim.length = v.phanta_anim.length + (frame.t or 0)
+          end
         end
+        v.phanta_anim.t = (v.phanta_anim.t + dt) % v.phanta_anim.length
+        local ix = 0
+        local t_tally = 0
+        for _, frame in ipairs(v.phanta_anim) do
+          ix = ix + 1
+          t_tally = t_tally + frame.t
+          if t_tally > v.phanta_anim.t then break end
+        end
+        v.pos.x = v.phanta_anim[ix].x
+        v.pos.y = v.phanta_anim[ix].y
       end
-      v.phanta_anim.t = (v.phanta_anim.t + dt) % v.phanta_anim.length
-      local ix = 0
-      local t_tally = 0
-      for _, frame in ipairs(v.phanta_anim) do
-        ix = ix + 1
-        t_tally = t_tally + frame.t
-        if t_tally > v.phanta_anim.t then break end
+    end
+  else
+    for k, v in pairs(G.P_CENTERS) do
+      if not v.default_pos then v.default_pos = v.pos end
+      if v and v.pos and v.phanta_anim and v.phanta_anim[1] then
+        v.pos = v.default_pos
       end
-      v.pos.x = v.phanta_anim[ix].x
-      v.pos.y = v.phanta_anim[ix].y
     end
   end
-
 
   return update_ref(self, dt)
 end
