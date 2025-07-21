@@ -1909,13 +1909,13 @@ return {
                 name = 'Canary Yellow Sleeve',
                 text = {
                     "Start run with a copy",
-                    "of {C:attention,T:j_mail}Main-In Rebate{}"
+                    "of {C:attention,T:j_mail}Mail-In Rebate{}"
                 }
             },
             sleeve_phanta_canaryyellow_alt = {
                 name = 'Canary Yellow Sleeve',
                 text = {
-                    "{C:attention,T:j_mail}Main-In Rebate{} is",
+                    "{C:attention,T:j_mail}Mail-In Rebate{} is",
                     "{C:dark_edition}Negative{} and {C:eternal}Eternal{}"
                 }
             },
