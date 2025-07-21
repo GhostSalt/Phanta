@@ -82,7 +82,7 @@ CardSleeves.Sleeve {
     key = self.key
     if self.get_current_deck_key() == "b_phanta_azran" then
       key = self.key .. "_alt"
-      self.config = { spectral_rate = 2 }
+      self.config = { spectral_rate = 2, consumables = { 'c_phanta_shard' } }
     end
     return { key = key }
   end
@@ -327,10 +327,29 @@ CardSleeves.Sleeve {
 }
 
 CardSleeves.Sleeve {
+  key = "hazel",
+  name = "Hazel Sleeve",
+  atlas = "PhantaSleeves",
+  pos = { x = 2, y = 2 },
+  unlocked = false,
+  unlock_condition = { deck = "b_phanta_hazel", stake = "stake_white" }
+}
+
+local get_new_boss_ref = get_new_boss
+
+function get_new_boss()
+  if G.GAME and G.GAME.selected_sleeve == "sleeve_phanta_hazel" then
+    return "bl_final_acorn"
+  else
+    return get_new_boss_ref()
+  end
+end
+
+CardSleeves.Sleeve {
   key = "spectrum",
   name = "Spectrum Sleeve",
   atlas = "PhantaSleeves",
-  pos = { x = 2, y = 2 },
+  pos = { x = 3, y = 2 },
   unlocked = false,
   unlock_condition = { deck = "b_phanta_spectrum", stake = "stake_white" },
   loc_vars = function(self, info_queue, card)
@@ -346,7 +365,8 @@ CardSleeves.Sleeve {
   end,
   apply = function(self, back)
     if self.config.extra.added_shop_slots then
-      G.GAME.starting_params.boosters_in_shop = G.GAME.starting_params.boosters_in_shop + self.config.extra.added_shop_slots
+      G.GAME.starting_params.boosters_in_shop = G.GAME.starting_params.boosters_in_shop +
+      self.config.extra.added_shop_slots
     else
       G.GAME.starting_params.discards = G.GAME.starting_params.discards + self.config.discards
       G.GAME.starting_params.dollars.array[1] = G.GAME.starting_params.dollars.array[1] + self.config.dollars
@@ -354,7 +374,134 @@ CardSleeves.Sleeve {
       G.GAME.modifiers.no_interest = self.config.no_interest
       G.GAME.modifiers.money_per_hand = self.config.extra_hand_bonus
       G.GAME.modifiers.money_per_discard = self.config.extra_discard_bonus
-      G.GAME.starting_params.boosters_in_shop = G.GAME.starting_params.boosters_in_shop - self.config.extra.removed_shop_slots
+      G.GAME.starting_params.boosters_in_shop = G.GAME.starting_params.boosters_in_shop -
+      self.config.extra.removed_shop_slots
     end
+  end
+}
+
+CardSleeves.Sleeve {
+  key = 'bloodred',
+  atlas = 'PhantaSleeves',
+  pos = { x = 4, y = 2 },
+  unlocked = false,
+  unlock_condition = { deck = "b_phanta_bloodred", stake = "stake_white" },
+  config = { extra = { discards = 3 } },
+  loc_vars = function(self, info_queue, card)
+    if self.get_current_deck_key() == "b_phanta_bloodred" then
+      self.config = { extra = { hands = 2 } }
+    else
+      self.config = { extra = { hands = 3 } }
+    end
+    return { vars = { self.config.extra.hands } }
+  end,
+  calculate = function(self, sleeve, context)
+    if context.setting_blind and is_blind_boss() then
+      G.E_MANAGER:add_event(Event({
+        func = function()
+          ease_discard(self.config.extra.discards)
+          return true
+        end
+      }))
+    end
+  end
+}
+
+CardSleeves.Sleeve {
+  key = 'deepblue',
+  atlas = 'PhantaSleeves',
+  pos = { x = 0, y = 3 },
+  unlocked = false,
+  unlock_condition = { deck = "b_phanta_deepblue", stake = "stake_white" },
+  config = { extra = { hands = 3 } },
+  loc_vars = function(self, info_queue, card)
+    if self.get_current_deck_key() == "b_phanta_deepblue" then
+      key = self.key .. "_alt"
+      self.config = { extra = { hands = 2 } }
+    else
+      key = self.key
+      self.config = { extra = { hands = 3 } }
+    end
+    return { vars = { self.config.extra.hands } }
+  end,
+  calculate = function(self, sleeve, context)
+    if context.setting_blind and is_blind_boss() then
+      G.E_MANAGER:add_event(Event({
+        func = function()
+          ease_hands_played(self.config.extra.hands)
+          return true
+        end
+      }))
+    end
+  end
+}
+
+CardSleeves.Sleeve {
+  key = 'canaryyellow',
+  atlas = 'PhantaSleeves',
+  pos = { x = 1, y = 3 },
+  unlocked = false,
+  unlock_condition = { deck = "b_phanta_canaryyellow", stake = "stake_white" },
+  loc_vars = function(self, info_queue, card)
+    if self.get_current_deck_key() == "b_phanta_canaryyellow" then
+      key = self.key .. "_alt"
+    else
+      key = self.key
+    end
+    return { key = key }
+  end,
+  apply = function(self, sleeve)
+    if self.get_current_deck_key() ~= "b_phanta_canaryyellow" then
+      G.E_MANAGER:add_event(Event({
+        func = function()
+          if G.jokers then
+            local card = SMODS.create_card({ set = "Joker", area = G.jokers, key = "j_mail", no_edition = true })
+            card:add_to_deck()
+            card:start_materialize()
+            G.jokers:emplace(card)
+            return true
+          end
+        end
+      }))
+    end
+  end
+}
+
+CardSleeves.Sleeve {
+  key = 'meangreen',
+  atlas = 'PhantaSleeves',
+  pos = { x = 2, y = 3 },
+  unlocked = false,
+  unlock_condition = { deck = "b_phanta_meangreen", stake = "stake_white" },
+  config = { extra_hand_bonus = 0, extra = { extra_interest = 1 } },
+  loc_vars = function(self, info_queue, card)
+    if self.get_current_deck_key() == "b_phanta_meangreen" then
+      key = self.key .. "_alt"
+    else
+      key = self.key
+    end
+    return { key = key, vars = { self.config.extra.extra_interest + 1, self.config.extra_hand_bonus, self.config.extra.extra_interest } }
+  end,
+  apply = function(self, sleeve)
+    G.GAME.interest_amount = G.GAME.interest_amount + self.config.extra.extra_interest
+  end
+}
+
+CardSleeves.Sleeve {
+  key = 'pitchblack',
+  atlas = 'PhantaSleeves',
+  pos = { x = 3, y = 3 },
+  unlocked = false,
+  unlock_condition = { deck = "b_phanta_pitchblack", stake = "stake_white" },
+  config = { vouchers = { 'v_overstock_norm' } },
+  loc_vars = function(self, info_queue, card)
+    if self.get_current_deck_key() == "b_phanta_pitchblack" or self.get_current_deck_key() == "b_zodiac" then
+      key = self.key .. "_alt"
+      self.config = { vouchers = { 'v_overstock_plus' } }
+    else
+      key = self.key
+      self.config = { vouchers = { 'v_overstock_norm' } }
+    end
+    return { key = key, vars = { localize({ type = 'name_text', set = 'Voucher', key = self.config.vouchers[1] }) } }
   end
 }

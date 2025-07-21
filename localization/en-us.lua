@@ -1757,7 +1757,8 @@ return {
                 name = "Azran Sleeve",
                 text = {
                     "{C:spectral}Spectral{} cards may",
-                    "appear in the {C:attention}shop{}"
+                    "appear in the {C:attention}shop{},",
+                    "start with a {C:spectral,T:c_phanta_shard}Shard{} card"
                 }
             },
             sleeve_phanta_badd = {
@@ -1860,6 +1861,20 @@ return {
                     "{C:attention}stronger{} abilities"
                 }
             },
+            sleeve_phanta_hazel = {
+                name = 'Hazel Sleeve',
+                text = {
+                    "All {C:attention}Boss Blinds{} are",
+                    "the {C:attention,T:bl_final_acorn}Amber Acorn{}"
+                }
+            },
+            sleeve_phanta_hazel_alt = {
+                name = 'Hazel Sleeve',
+                text = {
+                    "All {C:attention}Blinds{} are",
+                    "the {C:attention,T:bl_final_acorn}Amber Acorn{}"
+                }
+            },
             sleeve_phanta_spectrum = {
                 name = 'Spectrum Sleeve',
                 text = {
@@ -1874,6 +1889,63 @@ return {
                 text = {
                     "The deck no longer has",
                     "its {C:attention}Booster Pack{} downside"
+                }
+            },
+            sleeve_phanta_bloodred = {
+                name = 'Blood Red Sleeve',
+                text = {
+                    "{C:red}+#1#{} discards when selecting",
+                    "any {C:attention}Boss Blind{}"
+                }
+            },
+            sleeve_phanta_deepblue = {
+                name = 'Deep Blue Sleeve',
+                text = {
+                    "{C:blue}+#1#{} hands when selecting",
+                    "any {C:attention}Boss Blind{}"
+                }
+            },
+            sleeve_phanta_canaryyellow = {
+                name = 'Canary Yellow Sleeve',
+                text = {
+                    "Start run with a copy",
+                    "of {C:attention,T:j_mail}Main-In Rebate{}"
+                }
+            },
+            sleeve_phanta_canaryyellow_alt = {
+                name = 'Canary Yellow Sleeve',
+                text = {
+                    "{C:attention,T:j_mail}Main-In Rebate{} is",
+                    "{C:dark_edition}Negative{} and {C:eternal}Eternal{}"
+                }
+            },
+            sleeve_phanta_meangreen = {
+                name = 'Mean Green Sleeve',
+                text = {
+                    "Earn {C:money}$#1#{} of interest for",
+                    "every {C:money}$5{} you have at",
+                    "end of round, earn {C:money}$#2#{}",
+                    "per remaining {C:blue}Hand{}"
+                }
+            },
+            sleeve_phanta_meangreen_alt = {
+                name = 'Mean Green Sleeve',
+                text = {
+                    "Earn {C:money}$#3#{} more interest"
+                }
+            },
+            sleeve_phanta_pitchblack = {
+                name = 'Pitch Black Sleeve',
+                text = {
+                    "Start run with the",
+                    "{C:red,T:v_overstock_norm}#1#{} Voucher"
+                }
+            },
+            sleeve_phanta_pitchblack_alt = {
+                name = 'Pitch Black Sleeve',
+                text = {
+                    "Start run with the",
+                    "{C:red,T:v_overstock_plus}#1#{} Voucher"
                 }
             }
         },

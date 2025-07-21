@@ -1885,7 +1885,24 @@ SMODS.Back {
   key = 'canaryyellow',
   atlas = 'Decks',
   pos = { x = 1, y = 3 },
-  config = { jokers = { 'j_mail' } }
+  apply = function(self, back)
+    G.E_MANAGER:add_event(Event({
+      func = function()
+        if G.jokers then
+          local edition = G.GAME and G.GAME.selected_sleeve == "sleeve_phanta_canaryyellow" and "e_negative" or nil
+          local no_edition = G.GAME and G.GAME.selected_sleeve == "sleeve_phanta_canaryyellow" and nil or true
+          local card = SMODS.create_card({ set = "Joker", area = G.jokers, key = "j_mail", no_edition = no_edition, edition = edition })
+          card:add_to_deck()
+          card:start_materialize()
+          if G.GAME and G.GAME.selected_sleeve == "sleeve_phanta_canaryyellow" and "e_negative" then
+            card:set_eternal(true)
+          end
+          G.jokers:emplace(card)
+          return true
+        end
+      end
+    }))
+  end
 }
 
 SMODS.Back {
