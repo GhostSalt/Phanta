@@ -141,7 +141,7 @@ return {
                 text = {
                     "Start run with",
                     "a copy of",
-                    "{C:attention,T:j_mail}Main-In Rebate{}"
+                    "{C:attention,T:j_mail}Mail-In Rebate{}"
                 }
             },
             b_phanta_meangreen = {
