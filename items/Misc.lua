@@ -1841,6 +1841,13 @@ SMODS.Back {
   end
 }
 
+
+
+SMODS.Sound({
+  key = "charged_deck",
+  path = "phanta_charged_deck.ogg"
+})
+
 SMODS.Back {
   key = 'bloodred',
   atlas = 'Decks',
@@ -1854,6 +1861,7 @@ SMODS.Back {
       G.E_MANAGER:add_event(Event({
         func = function()
           ease_discard(self.config.extra.discards)
+          play_sound('phanta_charged_deck', 1, 0.75)
           return true
         end
       }))
@@ -1874,6 +1882,7 @@ SMODS.Back {
       G.E_MANAGER:add_event(Event({
         func = function()
           ease_hands_played(self.config.extra.hands)
+          play_sound('phanta_charged_deck', 1, 0.75)
           return true
         end
       }))

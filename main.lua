@@ -349,6 +349,13 @@ function Game:init_game_object()
   ret.current_round.train_station_card = { id = nil, value = nil }
   ret.current_round.fainfol_card = { suit = 'Spades' }
   ret.current_round.puzzle_card = { id = nil }
+
+  for k, v in pairs(G.P_CENTERS) do
+    v.phanta_set_anim_state = function(self, state)
+      self.phanta_anim_current_state = state
+      self.phanta_anim_t = 0
+    end
+  end
   return ret
 end
 
@@ -473,25 +480,33 @@ function Game:update(dt)
   if not Phanta.config["animations_disabled"] then
     for k, v in pairs(G.P_CENTERS) do
       if not v.default_pos then v.default_pos = v.pos end
-      if v.phanta_anim and (not v.phanta_requires_aura or aura_enabled) then
-        v.phanta_anim = format_phanta_anim(v.phanta_anim)
-        if not v.phanta_anim.t then v.phanta_anim.t = 0 end
-        if not v.phanta_anim.length then
-          v.phanta_anim.length = 0
-          for _, frame in ipairs(v.phanta_anim) do
-            v.phanta_anim.length = v.phanta_anim.length + (frame.t or 0)
+      if (v.phanta_anim_states or v.phanta_anim) and (not v.phanta_requires_aura or aura_enabled) then
+        v.phanta_anim = format_phanta_anim(v.phanta_anim_states and v.phanta_anim_current_state and v.phanta_anim_states[v.phanta_anim_current_state] and v.phanta_anim_states[v.phanta_anim_current_state].anim or v.phanta_anim)
+        if v.phanta_anim == nil then
+          v.pos = v.default_pos
+        else
+          local loop = v.phanta_anim_states and v.phanta_anim_current_state and v.phanta_anim_states[v.phanta_anim_current_state] and v.phanta_anim_states[v.phanta_anim_current_state].loop
+          if loop == nil then loop = true end
+          if not v.phanta_anim_t then v.phanta_anim_t = 0 end
+          if not v.phanta_anim.length then
+            v.phanta_anim.length = 0
+            for _, frame in ipairs(v.phanta_anim) do
+              v.phanta_anim.length = v.phanta_anim.length + (frame.t or 0)
+            end
           end
+          v.phanta_anim_t = v.phanta_anim_t + dt
+          if not loop and v.phanta_anim_t >= v.phanta_anim.length then v.phanta_anim_t = v.phanta_anim.length
+          elseif loop then v.phanta_anim_t = v.phanta_anim_t % v.phanta_anim.length end
+          local ix = 0
+          local t_tally = 0
+          for _, frame in ipairs(v.phanta_anim) do
+            ix = ix + 1
+            t_tally = t_tally + frame.t
+            if t_tally > v.phanta_anim_t then break end
+          end
+          v.pos.x = v.phanta_anim[ix].x
+          v.pos.y = v.phanta_anim[ix].y
         end
-        v.phanta_anim.t = (v.phanta_anim.t + dt) % v.phanta_anim.length
-        local ix = 0
-        local t_tally = 0
-        for _, frame in ipairs(v.phanta_anim) do
-          ix = ix + 1
-          t_tally = t_tally + frame.t
-          if t_tally > v.phanta_anim.t then break end
-        end
-        v.pos.x = v.phanta_anim[ix].x
-        v.pos.y = v.phanta_anim[ix].y
       end
     end
   else
@@ -507,7 +522,7 @@ function Game:update(dt)
 end
 
 function format_phanta_anim(anim)
-  if not anim then return {} end
+  if not anim then return nil end
   local new_anim = {}
   for _, frame in ipairs(anim) do
     if frame and (frame.x or (frame.xrange and frame.xrange.first and frame.xrange.last)) and (frame.y or (frame.yrange and frame.yrange.first and frame.yrange.last)) then
