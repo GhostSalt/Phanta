@@ -355,6 +355,11 @@ function Game:init_game_object()
       self.phanta_anim_current_state = state
       self.phanta_anim_t = 0
     end
+    
+    v.phanta_set_anim_extra_state = function(self, state)
+      self.phanta_anim_extra_current_state = state
+      self.phanta_anim_extra_t = 0
+    end
   end
   return ret
 end
@@ -453,6 +458,35 @@ local phantaConfigTab = function()
   }
 end
 
+
+
+
+
+
+local css = Card.set_sprites
+function Card:set_sprites(c, f)
+  css(self, c, f)
+  if self.config.center and self.config.center.pos_extra then
+    if not self.children.front then
+      self.children.front = Sprite(self.T.x, self.T.y, self.T.w, self.T.h, G.ASSET_ATLAS[self.config.center.atlas],
+        self.config.center.pos_extra)
+      self.children.front.states.hover = self.states.hover
+      self.children.front.states.click = self.states.click
+      self.children.front.states.drag = self.states.drag
+      self.children.front.states.collide.can = false
+      self.children.front:set_role({ major = self, role_type = 'Glued', draw_major = self })
+    else
+      self.children.front:set_sprite_pos(self.config.center.pos_extra)
+    end
+  end
+end
+
+local cd = Card.draw
+function Card:draw(layer)
+  if self.config and self.config.center and self.config.center.pos_extra then self:set_sprites() end
+  cd(self, layer)
+end
+
 local update_ref = Game.update
 function Game:update(dt)
   if not G.GAME.phanta_zodiac_rate_cache then G.GAME.phanta_zodiac_rate_cache = 0 end
@@ -476,49 +510,100 @@ function Game:update(dt)
     G.GAME.phanta_catanbuilding_rate = 0
   end
 
-
   if not Phanta.config["animations_disabled"] then
     for k, v in pairs(G.P_CENTERS) do
       if not v.default_pos then v.default_pos = v.pos end
-      if (v.phanta_anim_states or v.phanta_anim) and (not v.phanta_requires_aura or aura_enabled) then
-        v.phanta_anim = format_phanta_anim(v.phanta_anim_states and v.phanta_anim_current_state and v.phanta_anim_states[v.phanta_anim_current_state] and v.phanta_anim_states[v.phanta_anim_current_state].anim or v.phanta_anim)
-        if v.phanta_anim == nil then
-          v.pos = v.default_pos
-        else
-          local loop = v.phanta_anim_states and v.phanta_anim_current_state and v.phanta_anim_states[v.phanta_anim_current_state] and v.phanta_anim_states[v.phanta_anim_current_state].loop
-          if loop == nil then loop = true end
-          if not v.phanta_anim_t then v.phanta_anim_t = 0 end
-          if not v.phanta_anim.length then
-            v.phanta_anim.length = 0
-            for _, frame in ipairs(v.phanta_anim) do
-              v.phanta_anim.length = v.phanta_anim.length + (frame.t or 0)
-            end
-          end
-          v.phanta_anim_t = v.phanta_anim_t + dt
-          if not loop and v.phanta_anim_t >= v.phanta_anim.length then v.phanta_anim_t = v.phanta_anim.length
-          elseif loop then v.phanta_anim_t = v.phanta_anim_t % v.phanta_anim.length end
-          local ix = 0
-          local t_tally = 0
-          for _, frame in ipairs(v.phanta_anim) do
-            ix = ix + 1
-            t_tally = t_tally + frame.t
-            if t_tally > v.phanta_anim_t then break end
-          end
-          v.pos.x = v.phanta_anim[ix].x
-          v.pos.y = v.phanta_anim[ix].y
-        end
-      end
+      if not v.default_pos_extra then v.default_pos_extra = v.pos_extra end
+      handle_phanta_anim(v, dt)
+      handle_phanta_anim_extra(v, dt)
     end
   else
     for k, v in pairs(G.P_CENTERS) do
       if not v.default_pos then v.default_pos = v.pos end
-      if v and v.pos and v.phanta_anim and v.phanta_anim[1] then
-        v.pos = v.default_pos
-      end
+      if not v.default_pos_extra then v.default_pos_extra = v.pos_extra end
+      v.pos = v.default_pos
+      v.pos_extra = v.default_pos_extra
     end
   end
 
   return update_ref(self, dt)
+end
+
+function handle_phanta_anim(v, dt)
+  if (v.phanta_anim_states or v.phanta_anim) and (not v.phanta_requires_aura or aura_enabled) then
+    v.phanta_anim = format_phanta_anim(v.phanta_anim_states and v.phanta_anim_current_state and
+      v.phanta_anim_states[v.phanta_anim_current_state] and v.phanta_anim_states[v.phanta_anim_current_state].anim or
+      v.phanta_anim)
+    if v.phanta_anim == nil then
+      v.pos = v.default_pos
+    else
+      local loop = v.phanta_anim_states and v.phanta_anim_current_state and
+          v.phanta_anim_states[v.phanta_anim_current_state] and v.phanta_anim_states[v.phanta_anim_current_state].loop
+      if loop == nil then loop = true end
+      if not v.phanta_anim_t then v.phanta_anim_t = 0 end
+      if not v.phanta_anim.length then
+        v.phanta_anim.length = 0
+        for _, frame in ipairs(v.phanta_anim) do
+          v.phanta_anim.length = v.phanta_anim.length + (frame.t or 0)
+        end
+      end
+      v.phanta_anim_t = v.phanta_anim_t + dt
+      if not loop and v.phanta_anim_t >= v.phanta_anim.length then
+        v.phanta_anim_t = v.phanta_anim.length
+      elseif loop then
+        v.phanta_anim_t = v.phanta_anim_t % v.phanta_anim.length
+      end
+      local ix = 0
+      local t_tally = 0
+      for _, frame in ipairs(v.phanta_anim) do
+        ix = ix + 1
+        t_tally = t_tally + frame.t
+        if t_tally > v.phanta_anim_t then break end
+      end
+      v.pos.x = v.phanta_anim[ix].x
+      v.pos.y = v.phanta_anim[ix].y
+    end
+  end
+end
+
+function handle_phanta_anim_extra(v, dt)
+  if (v.phanta_anim_extra_states or v.phanta_anim_extra) and (not v.phanta_requires_aura or aura_enabled) then
+    v.phanta_anim_extra = format_phanta_anim(v.phanta_anim_extra_states and v.phanta_anim_extra_current_state and
+      v.phanta_anim_extra_states[v.phanta_anim_extra_current_state] and
+      v.phanta_anim_extra_states[v.phanta_anim_extra_current_state].anim or
+      v.phanta_anim_extra)
+    if v.phanta_anim_extra == nil then
+      v.pos_extra = v.default_pos_extra
+    else
+      local loop = v.phanta_anim_extra_states and v.phanta_anim_extra_current_state and
+          v.phanta_anim_extra_states[v.phanta_anim_extra_current_state] and
+          v.phanta_anim_extra_states[v.phanta_anim_extra_current_state].loop
+      if loop == nil then loop = true end
+      if not v.phanta_anim_extra_t then v.phanta_anim_extra_t = 0 end
+      if not v.phanta_anim_extra.length then
+        v.phanta_anim_extra.length = 0
+        for _, frame in ipairs(v.phanta_anim_extra) do
+          v.phanta_anim_extra.length = v.phanta_anim_extra.length + (frame.t or 0)
+        end
+      end
+      v.phanta_anim_extra_t = v.phanta_anim_extra_t + dt
+      if not loop and v.phanta_anim_extra_t >= v.phanta_anim_extra.length then
+        v.phanta_anim_extra_t = v.phanta_anim_extra.length
+      elseif loop then
+        v.phanta_anim_extra_t = v.phanta_anim_extra_t % v.phanta_anim_extra.length
+      end
+      local ix = 0
+      local t_tally = 0
+      for _, frame in ipairs(v.phanta_anim_extra) do
+        ix = ix + 1
+        t_tally = t_tally + frame.t
+        if t_tally > v.phanta_anim_extra_t then break end
+      end
+      if not v.pos_extra then v.pos_extra = {} end
+      v.pos_extra.x = v.phanta_anim_extra[ix].x
+      v.pos_extra.y = v.phanta_anim_extra[ix].y
+    end
+  end
 end
 
 function format_phanta_anim(anim)
@@ -528,10 +613,10 @@ function format_phanta_anim(anim)
     if frame and (frame.x or (frame.xrange and frame.xrange.first and frame.xrange.last)) and (frame.y or (frame.yrange and frame.yrange.first and frame.yrange.last)) then
       local firsty = frame.y or frame.yrange.first
       local lasty = frame.y or frame.yrange.last
-      for y = firsty, lasty do
+      for y = firsty, lasty, firsty <= lasty and 1 or -1 do
         local firstx = frame.x or frame.xrange.first
         local lastx = frame.x or frame.xrange.last
-        for x = firstx, lastx do
+        for x = firstx, lastx, firstx <= lastx and 1 or -1 do
           new_anim[#new_anim + 1] = { x = x, y = y, t = frame.t or 0 }
         end
       end

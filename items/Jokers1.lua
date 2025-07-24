@@ -40,6 +40,13 @@ SMODS.Atlas {
 }
 
 SMODS.Atlas {
+  key = "PhantaMiscAnims3",
+  path = "PhantaMiscAnims3.png",
+  px = 71,
+  py = 95
+}
+
+SMODS.Atlas {
   key = "PhantaKnowledgeOfTheCollegeAnim",
   path = "PhantaKnowledgeOfTheCollegeAnim.png",
   px = 71,
@@ -414,11 +421,11 @@ SMODS.Joker {
   pos = { x = 10, y = 10 },
   phanta_anim = {
     { xrange = { first = 10, last = 11 }, y = 10, t = 0.05 },
-    { xrange = { first = 0, last = 8 }, y = 11, t = 0.05 },
-    { x = 9, y = 11, t = 0.5 },
-    { x = 10, y = 11, t = 0.2 },
-    { x = 11, y = 11, t = 0.05 },
-    { xrange = { first = 0, last = 2 }, y = 12, t = 0.05 }
+    { xrange = { first = 0, last = 8 },   y = 11, t = 0.05 },
+    { x = 9,                              y = 11, t = 0.5 },
+    { x = 10,                             y = 11, t = 0.2 },
+    { x = 11,                             y = 11, t = 0.05 },
+    { xrange = { first = 0, last = 2 },   y = 12, t = 0.05 }
   },
   cost = 4,
   blueprint_compat = false,
@@ -437,8 +444,17 @@ SMODS.Joker {
 SMODS.Joker {
   key = 'detective',
   rarity = 2,
-  atlas = 'Phanta',
-  pos = { x = 6, y = 5 },
+  atlas = 'PhantaMiscAnims3',
+  pos = { x = 0, y = 1 },
+  phanta_anim = {
+    { x = 0, y = 2, t = 0.9 },
+    { x = 1, y = 2, t = 0.3 }, { x = 0, y = 2, t = 0.6 },
+    { x = 2, y = 2, t = 0.3 }, { x = 0, y = 2, t = 0.9 },
+    { x = 1, y = 2, t = 0.2 }, { x = 0, y = 2, t = 0.2 },
+    { x = 2, y = 2, t = 1.3 }, { x = 0, y = 2, t = 0.2 }, { x = 1, y = 2, t = 1.8 },
+    { x = 0, y = 2, t = 0.3 }, { xrange = { first = 3, last = 6 }, y = 2, t = 0.1 }, { x = 0, y = 2, t = 0.1 }, { xrange = { first = 3, last = 6 }, y = 2, t = 0.1 },
+    { x = 0, y = 2, t = 1.4 }, { xrange = { first = 3, last = 6 }, y = 2, t = 0.1 },
+  },
   cost = 5,
   blueprint_compat = false,
   eternal_compat = true,
@@ -540,7 +556,7 @@ SMODS.Joker {
   pos = { x = 8, y = 10 },
   cost = 6,
   blueprint_compat = false,
-  eternal_compat = true,
+  eternal_compat = false,
   perishable_compat = false,
   calculate = function(self, card, context)
     if context.selling_self then
@@ -1961,8 +1977,17 @@ SMODS.Joker {
 SMODS.Joker {
   key = 'apollosbracelet',
   rarity = 3,
-  atlas = 'Phanta',
-  pos = { x = 4, y = 10 },
+  atlas = 'PhantaMiscAnims3',
+  pos = { x = 7, y = 2 },
+  pos_extra = { x = 11, y = 3 },
+  phanta_anim = {
+    { xrange = { first = 7, last = 11 }, y = 2, t = 0.125 },
+    { xrange = { first = 0, last = 10 }, y = 3, t = 0.125 },
+  },
+  phanta_anim_extra = {
+    { x = 11,                           y = 3, t = 0.15 },
+    { xrange = { first = 0, last = 4 }, y = 4, t = 0.15 },
+  },
   cost = 8,
   blueprint_compat = true,
   eternal_compat = true,
@@ -2023,8 +2048,27 @@ SMODS.Joker {
 SMODS.Joker {
   key = 'honeydew',
   rarity = 2,
-  atlas = 'Phanta',
-  pos = { x = 11, y = 9 },
+  atlas = 'PhantaMiscAnims3',
+  pos = { x = 0, y = 0 },
+  pos_extra = { x = 9, y = 0 },
+  phanta_anim = {
+    { xrange = { first = 0, last = 11 }, y = 0, t = 0.125 },
+    { xrange = { first = 0, last = 5 },  y = 1, t = 0.125 },
+  },
+  phanta_anim_extra = {
+    { x = 6, y = 1, t = 0.9 }, { x = 7, y = 1, t = 0.1 },
+    { x = 6, y = 1, t = 0.3 }, { x = 7, y = 1, t = 0.1 },
+    { x = 6, y = 1, t = 1.6 }, { x = 7, y = 1, t = 0.1 },
+    { x = 6, y = 1, t = 1.9 }, { x = 7, y = 1, t = 0.1 },
+    { x = 6, y = 1, t = 0.3 }, { x = 7, y = 1, t = 0.1 },
+    { x = 6, y = 1, t = 0.6 }, { x = 7, y = 1, t = 0.1 },
+    { x = 6, y = 1, t = 0.15 }, { x = 8, y = 1, t = 0.15 }, { x = 9, y = 1, t = 0.15 }, { x = 8, y = 1, t = 0.15 },
+    { x = 6, y = 1, t = 0.15 }, { x = 8, y = 1, t = 0.15 }, { x = 9, y = 1, t = 0.15 }, { x = 8, y = 1, t = 0.15 },
+    { x = 6, y = 1, t = 0.05 }, { x = 7, y = 1, t = 0.1 }, { x = 8, y = 1, t = 0.15 }, { x = 9, y = 1, t = 0.15 }, { x = 8, y = 1, t = 0.15 },
+    { x = 6, y = 1, t = 1.7 }, { x = 7, y = 1, t = 0.1 },
+    { x = 6, y = 1, t = 0.3 }, { x = 7, y = 1, t = 0.1 },
+    { x = 6, y = 1, t = 0.2 }, { x = 7, y = 1, t = 0.1 }, { x = 10, y = 1, t = 0.1 }, { x = 11, y = 1, t = 0.1 }, { x = 10, y = 1, t = 0.1 },
+  },
   cost = 6,
   loc_vars = function(self, info_queue, card)
     info_queue[#info_queue + 1] = G.P_CENTERS.e_phanta_waxed
@@ -2298,7 +2342,7 @@ SMODS.Joker {
     { x = 3, y = 12, t = 0.6 }, { x = 4, y = 12, t = 0.1 },
     { x = 5, y = 12, t = 1.6 }, { x = 4, y = 12, t = 0.05 }, { x = 7, y = 12, t = 0.05 },
     { x = 8, y = 12, t = 0.8 }, { x = 7, y = 12, t = 0.1 },
-    { x = 8, y = 12, t = 1.7 }, { x = 7, y = 12, t = 0.1 }, 
+    { x = 8, y = 12, t = 1.7 }, { x = 7, y = 12, t = 0.1 },
     { x = 6, y = 12, t = 0.3 }, { x = 7, y = 12, t = 0.1 },
     { x = 6, y = 12, t = 1.4 }, { x = 7, y = 12, t = 0.1 }, { x = 4, y = 12, t = 0.05 },
     { x = 9, y = 12, t = 0.9 }, { x = 10, y = 12, t = 0.1 },
@@ -2417,9 +2461,9 @@ SMODS.Joker {
   atlas = 'PhantaMiscAnims2',
   pos = { x = 2, y = 8 },
   phanta_anim = {
-    { xrange = { first = 2, last = 11 }, y = 8, t = 0.05 },
-    { xrange = { first = 0, last = 11 }, y = 9, t = 0.05 },
-    { xrange = { first = 0, last = 9 }, y = 10, t = 0.05 },
+    { xrange = { first = 2, last = 11 }, y = 8,  t = 0.05 },
+    { xrange = { first = 0, last = 11 }, y = 9,  t = 0.05 },
+    { xrange = { first = 0, last = 9 },  y = 10, t = 0.05 },
   },
   cost = 5,
   loc_vars = function(self, info_queue, card)
@@ -3288,8 +3332,26 @@ SMODS.Joker {
   key = 'spaceinvader',
   config = { extra = { no_of_planets = 2 } },
   rarity = 2,
-  atlas = 'Phanta',
+  atlas = 'PhantaMiscAnims3',
   pos = { x = 6, y = 2 },
+  phanta_anim = {
+    { xrange = { first = 5, last = 5 }, y = 4, t = 1 }
+  },
+  phanta_anim_extra_states = {
+    ["crab"] = {
+      anim = {
+        { xrange = { first = 0, last = 1 }, y = 5, t = 0.5 }
+      }, loop = true },
+    ["squid"] = {
+      anim = {
+        { xrange = { first = 2, last = 3 }, y = 5, t = 0.5 }
+      }, loop = true },
+    ["octopus"] = {
+      anim = {
+        { xrange = { first = 4, last = 5 }, y = 5, t = 0.5 }
+      }, loop = true },
+  },
+  phanta_anim_extra_current_state = nil,
   cost = 6,
   loc_vars = function(self, info_queue, card)
     return { vars = { card.ability.extra.no_of_planets } }
@@ -3327,13 +3389,10 @@ SMODS.Joker {
       return
     end
     local c = card or {}
-    c.ability = c.ability or {}
-    c.ability.space_invader_x = c.ability.space_invader_x or pseudorandom(pseudoseed("spaceinvaderx"), 6, 8)
-    if card and card.children and card.children.center and card.children.center.set_sprite_pos then
-      card.children.center:set_sprite_pos({
-        x = c.ability.space_invader_x,
-        y = c.config.center.pos.y
-      })
+    local choices = { "crab", "squid", "octopus" }
+    if not c.phanta_anim_extra_current_state then
+      local choice = pseudorandom_element(choices, pseudoseed("spaceinvaderchoice"))
+      self:phanta_set_anim_extra_state(choice)
     end
   end
 }
@@ -3786,18 +3845,18 @@ SMODS.Joker {
   phanta_anim_states = {
     ["drawing"] = {
       anim = {
-      { xrange = { first = 5, last = 11 }, y = 0, t = 0.025 }, { xrange = { first = 0, last = 4 }, y = 1, t = 0.025 }, { x = 4, y = 1, t = 0.2 },
-      { xrange = { first = 5, last = 11 }, y = 1, t = 0.025 }, { xrange = { first = 0, last = 6 }, y = 2, t = 0.025 }, { x = 6, y = 2, t = 0.2 },
-      { xrange = { first = 7, last = 11 }, y = 2, t = 0.025 }, { x = 0, y = 3, t = 0.025 }, { x = 0, y = 3, t = 0.2 },
-      { xrange = { first = 1, last = 11 }, y = 3, t = 0.025 }, { xrange = { first = 0, last = 11 }, y = 4, t = 0.025 }, { xrange = { first = 0, last = 10 }, y = 5, t = 0.025 }, { x = 10, y = 5, t = 0.2 },
-      { x = 11,                            y = 5, t = 0.025 }, { xrange = { first = 0, last = 4 }, y = 6, t = 0.025 }, { x = 4, y = 6, t = 0.2 },
-      { xrange = { first = 5, last = 11 }, y = 6, t = 0.025 }, { xrange = { first = 0, last = 6 }, y = 7, t = 0.025 }, { x = 6, y = 7, t = 0.2 },
-      { xrange = { first = 7, last = 9 },  y = 7, t = 0.025 }, { x = 9, y = 7, t = 1 }
-    }, loop = false },
+        { xrange = { first = 5, last = 11 }, y = 0, t = 0.025 }, { xrange = { first = 0, last = 4 }, y = 1, t = 0.025 }, { x = 4, y = 1, t = 0.2 },
+        { xrange = { first = 5, last = 11 }, y = 1, t = 0.025 }, { xrange = { first = 0, last = 6 }, y = 2, t = 0.025 }, { x = 6, y = 2, t = 0.2 },
+        { xrange = { first = 7, last = 11 }, y = 2, t = 0.025 }, { x = 0, y = 3, t = 0.025 }, { x = 0, y = 3, t = 0.2 },
+        { xrange = { first = 1, last = 11 }, y = 3, t = 0.025 }, { xrange = { first = 0, last = 11 }, y = 4, t = 0.025 }, { xrange = { first = 0, last = 10 }, y = 5, t = 0.025 }, { x = 10, y = 5, t = 0.2 },
+        { x = 11,                            y = 5, t = 0.025 }, { xrange = { first = 0, last = 4 }, y = 6, t = 0.025 }, { x = 4, y = 6, t = 0.2 },
+        { xrange = { first = 5, last = 11 }, y = 6, t = 0.025 }, { xrange = { first = 0, last = 6 }, y = 7, t = 0.025 }, { x = 6, y = 7, t = 0.2 },
+        { xrange = { first = 7, last = 9 }, y = 7, t = 0.025 }, { x = 9, y = 7, t = 1 }
+      }, loop = false },
     ["fading"] = {
       anim = {
-      { xrange = { first = 10, last = 11 }, y = 7, t = 0.025 }, { xrange = { first = 0, last = 1 }, y = 8, t = 0.025 }, { x = 4, y = 0, t = 1 }
-    }, loop = false }
+        { xrange = { first = 10, last = 11 }, y = 7, t = 0.025 }, { xrange = { first = 0, last = 1 }, y = 8, t = 0.025 }, { x = 4, y = 0, t = 1 }
+      }, loop = false }
   },
   phanta_anim_current_state = nil,
   cost = 6,
