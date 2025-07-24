@@ -1407,6 +1407,14 @@ return {
                     "chance to be {C:red}destroyed{}"
                 }
             },
+            j_phanta_valantgramarye             = {
+                name = "Valant Gramarye",
+                text = {
+                    "{C:attention}Straights{} count as",
+                    "{C:attention}Straight Flushes{}",
+                    "and vice versa"
+                }
+            },
             j_phanta_snoinches             = {
                 name = "Snoinches",
                 text = {

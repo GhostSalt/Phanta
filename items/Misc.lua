@@ -1891,8 +1891,14 @@ SMODS.Back {
         if G.jokers then
           local edition = G.GAME and G.GAME.selected_sleeve == "sleeve_phanta_canaryyellow" and "e_negative" or nil
           local no_edition = G.GAME and G.GAME.selected_sleeve == "sleeve_phanta_canaryyellow" and nil or true
-          local card = SMODS.create_card({ set = "Joker", area = G.jokers, key = "j_mail", no_edition = no_edition, edition =
-          edition })
+          local card = SMODS.create_card({
+            set = "Joker",
+            area = G.jokers,
+            key = "j_mail",
+            no_edition = no_edition,
+            edition =
+                edition
+          })
           card:add_to_deck()
           card:start_materialize()
           if G.GAME and G.GAME.selected_sleeve == "sleeve_phanta_canaryyellow" and "e_negative" then
@@ -1958,7 +1964,7 @@ SMODS.PokerHand:take_ownership('Full House', {
       end
       if ace_counter >= 2 then return parts._all_pairs end
     end
-    
+
     if (#parts._3 < 1 and not (G.GAME.selected_partner == "pnr_phanta_conspiracist" and next(SMODS.find_card("j_phanta_conspiracist")))) or #parts._2 < 2 then return {} end
     return parts._all_pairs
   end

@@ -363,6 +363,25 @@ SMODS.Joker {
   end
 }
 
+SMODS.Joker {
+  key = 'valantgramarye',
+  rarity = 2,
+  atlas = 'Phanta2',
+  pos = { x = 8, y = 1 },
+  cost = 5,
+  blueprint_compat = false,
+  eternal_compat = true,
+  perishable_compat = true,
+  calculate = function(self, card, context)
+    if context.evaluate_poker_hand and context.scoring_name == "Straight" then
+      return { replace_scoring_name = "Straight Flush" }
+    end
+    if context.evaluate_poker_hand and context.scoring_name == "Straight Flush" then
+      return { replace_scoring_name = "Straight" }
+    end
+  end
+}
+
 --[[SMODS.Joker {
   key = 'snoinches',
   rarity = 2,
