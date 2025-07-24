@@ -410,7 +410,16 @@ SMODS.Joker {
   cost = 4,
   blueprint_compat = false,
   eternal_compat = true,
-  perishable_compat = true
+  perishable_compat = true,
+  calculate = function(self, card, context)
+    if context.evaluate_poker_hand then
+      local ace_counter = 0
+      for _, card in ipairs(context.scoring_hand) do
+        if card:get_id() == 14 then ace_counter = ace_counter + 1 end
+      end
+      if ace_counter >= 2 then return { replace_scoring_name = "Full House" } end
+    end
+  end
 }
 
 SMODS.Joker {

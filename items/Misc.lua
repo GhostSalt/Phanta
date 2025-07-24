@@ -1957,14 +1957,6 @@ SMODS.PokerHand:take_ownership('High Card', {
 
 SMODS.PokerHand:take_ownership('Full House', {
   evaluate = function(parts, hand)
-    if next(SMODS.find_card("j_phanta_bloodyace")) then
-      local ace_counter = 0
-      for _, card in ipairs(hand) do
-        if card:get_id() == 14 then ace_counter = ace_counter + 1 end
-      end
-      if ace_counter >= 2 then return parts._all_pairs end
-    end
-
     if (#parts._3 < 1 and not (G.GAME.selected_partner == "pnr_phanta_conspiracist" and next(SMODS.find_card("j_phanta_conspiracist")))) or #parts._2 < 2 then return {} end
     return parts._all_pairs
   end
