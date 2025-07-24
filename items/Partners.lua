@@ -89,6 +89,48 @@ Partner_API.Partner {
 }
 
 Partner_API.Partner {
+  key = "conspiracist",
+  name = "Conspiracist Partner",
+  unlocked = false,
+  discovered = true,
+  pos = { x = 2, y = 0 },
+  atlas = "PhantaPartners",
+  config = { extra = { no_of_earths = 2 } },
+  link_config = { j_phanta_conspiracist = 1 },
+  loc_vars = function(self, info_queue, card)
+    local link_level = self:get_link_level()
+    local key = self.key
+    if link_level == 1 then key = key .. "_" .. link_level end
+    return { key = key, vars = { card.ability.extra.no_of_earths } }
+  end,
+  calculate_begin = function(self, card)
+    for i = 1, card.ability.extra.no_of_earths do
+      G.E_MANAGER:add_event(Event({
+        func = function()
+          local new_card = create_card("Planet", G.consumables, nil, nil, nil, nil, "c_earth", 'conspiracist')
+          new_card:set_edition({ negative = true })
+          new_card:add_to_deck()
+          G.consumeables:emplace(new_card)
+          new_card:juice_up(0.3, 0.5)
+          return true
+        end
+      }))
+    end
+  end,
+  check_for_unlock = function(self, args)
+    for _, v in pairs(G.P_CENTER_POOLS["Joker"]) do
+      if v.key == "j_phanta_nojoke" then
+        if get_joker_win_sticker(v, true) >= 8 then
+          return true
+        end
+        break
+      end
+    end
+  end
+}
+
+
+Partner_API.Partner {
   key = "nojoke",
   name = "No Joke Partner",
   unlocked = false,

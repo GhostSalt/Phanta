@@ -68,15 +68,6 @@ SMODS.Consumable {
   end
 }
 
-SMODS.PokerHand:take_ownership('High Card', {
-  example = {
-    { 'S_A', true },
-    { 'D_Q', false },
-    { 'D_9', false },
-    { 'C_4', false },
-  },
-}, true)
-
 SMODS.Enhancement {
   key = "ghostcard",
   atlas = "PhantaEnhancements",
@@ -1900,7 +1891,8 @@ SMODS.Back {
         if G.jokers then
           local edition = G.GAME and G.GAME.selected_sleeve == "sleeve_phanta_canaryyellow" and "e_negative" or nil
           local no_edition = G.GAME and G.GAME.selected_sleeve == "sleeve_phanta_canaryyellow" and nil or true
-          local card = SMODS.create_card({ set = "Joker", area = G.jokers, key = "j_mail", no_edition = no_edition, edition = edition })
+          local card = SMODS.create_card({ set = "Joker", area = G.jokers, key = "j_mail", no_edition = no_edition, edition =
+          edition })
           card:add_to_deck()
           card:start_materialize()
           if G.GAME and G.GAME.selected_sleeve == "sleeve_phanta_canaryyellow" and "e_negative" then
@@ -1936,3 +1928,38 @@ SMODS.Back {
     return { vars = { localize({ type = 'name_text', set = 'Voucher', key = self.config.vouchers[1] }) } }
   end
 }
+
+
+
+
+
+
+
+
+
+
+
+
+SMODS.PokerHand:take_ownership('High Card', {
+  example = {
+    { 'S_A', true },
+    { 'D_Q', false },
+    { 'D_9', false },
+    { 'C_4', false },
+  },
+}, true)
+
+SMODS.PokerHand:take_ownership('Full House', {
+  evaluate = function(parts, hand)
+    if next(SMODS.find_card("j_phanta_bloodyace")) then
+      local ace_counter = 0
+      for _, card in ipairs(hand) do
+        if card:get_id() == 14 then ace_counter = ace_counter + 1 end
+      end
+      if ace_counter >= 2 then return parts._all_pairs end
+    end
+    
+    if (#parts._3 < 1 and not (G.GAME.selected_partner == "pnr_phanta_conspiracist" and next(SMODS.find_card("j_phanta_conspiracist")))) or #parts._2 < 2 then return {} end
+    return parts._all_pairs
+  end
+}, true)

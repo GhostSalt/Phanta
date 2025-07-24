@@ -384,6 +384,17 @@ SMODS.Joker {
 }]] --
 
 SMODS.Joker {
+  key = 'bloodyace',
+  rarity = 1,
+  atlas = 'Phanta2',
+  pos = { x = 7, y = 1 },
+  cost = 4,
+  blueprint_compat = false,
+  eternal_compat = true,
+  perishable_compat = true
+}
+
+SMODS.Joker {
   key = 'clapperboard',
   rarity = 2,
   atlas = 'Phanta2',

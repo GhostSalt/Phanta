@@ -274,6 +274,15 @@ return {
                     "{C:attention}second{} hand"
                 }
             },
+            j_phanta_dollarsign            = {
+                name = 'Dollar Sign',
+                text = {
+                    "When hand is played,",
+                    "earn {C:money}$#1#{} if your total",
+                    "{C:money}money{} contains a {C:attention}5{}",
+                    "in any position"
+                }
+            },
             j_phanta_yellow                = {
                 name = 'Yellow',
                 text = {
@@ -1407,6 +1416,14 @@ return {
                     "back to your {C:attention}hand{}"
                 }
             },
+            j_phanta_bloodyace             = {
+                name = "Bloody Ace",
+                text = {
+                    "Hands containing",
+                    "{C:attention}2 Aces{} count as",
+                    "{C:attention}Full Houses{}"
+                }
+            },
             j_phanta_clapperboard          = {
                 name = "Clapperboard",
                 text = {
@@ -1693,6 +1710,31 @@ return {
                 },
                 unlock = {
                     "Used {C:attention}Cut Corners{}",
+                    "to win on {C:attention}Gold{}",
+                    "{C:attention}Stake{} difficulty",
+                }
+            },
+            pnr_phanta_conspiracist = {
+                name = "Theorist",
+                text = {
+                    "Start with {C:attention}#1#{}",
+                    "{C:dark_edition}Negative{} copies",
+                    "of {C:planet}Earth{}"
+                },
+                unlock = {
+                    "Used {C:attention}Conspiracist{}",
+                    "to win on {C:attention}Gold{}",
+                    "{C:attention}Stake{} difficulty",
+                }
+            },
+            pnr_phanta_conspiracist_1 = {
+                name = "Theorist",
+                text = {
+                    "All {C:attention}Two Pairs{}",
+                    "count as {C:attention}Full Houses{}"
+                },
+                unlock = {
+                    "Used {C:attention}Conspiracist{}",
                     "to win on {C:attention}Gold{}",
                     "{C:attention}Stake{} difficulty",
                 }

@@ -157,8 +157,31 @@ SMODS.Joker {
     return { vars = { card.ability.extra.money } }
   end,
   calculate = function(self, card, context)
-    if context.joker_main and G.GAME.current_round.hands_played == 1 then
+    if context.before and G.GAME.current_round.hands_played == 1 then
       return { dollars = card.ability.extra.money }
+    end
+  end
+}
+
+SMODS.Joker {
+  key = 'dollarsign',
+  config = { extra = { money = 5 } },
+  rarity = 1,
+  atlas = 'Phanta',
+  pos = { x = 10, y = 0 },
+  cost = 5,
+  blueprint_compat = true,
+  eternal_compat = true,
+  perishable_compat = true,
+  loc_vars = function(self, info_queue, card)
+    return { vars = { card.ability.extra.money } }
+  end,
+  calculate = function(self, card, context)
+    if context.before then
+      local money_string = tostring(G.GAME.dollars)
+      for i = 1, #money_string do
+        if string.sub(money_string, i, i) == '5' then return { dollars = card.ability.extra.money } end
+      end
     end
   end
 }
@@ -3499,26 +3522,20 @@ SMODS.Joker {
   eternal_compat = true,
   perishable_compat = true,
   calculate = function(self, card, context)
-    if context.cardarea == G.jokers and context.before and not (context.blueprint_card or card).getting_sliced and count_consumables() < G.consumeables.config.card_limit
+    if context.before and not (context.blueprint_card or card).getting_sliced and count_consumables() < G.consumeables.config.card_limit
         and pseudorandom('conspiracist') < G.GAME.probabilities.normal / card.ability.extra.odds and next(context.poker_hands['Full House']) then
       G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
       G.E_MANAGER:add_event(Event({
         func = function()
-          G.E_MANAGER:add_event(Event({
-            func = function()
-              local new_card = create_card("Planet", G.consumables, nil, nil, nil, nil, "c_earth", 'conspiracist')
-              new_card:add_to_deck()
-              G.consumeables:emplace(new_card)
-              G.GAME.consumeable_buffer = 0
-              new_card:juice_up(0.3, 0.5)
-              return true
-            end
-          }))
-          card_eval_status_text(context.blueprint_card or card, 'extra', nil, nil, nil,
-            { message = "+1 Earth", colour = G.C.BLUE })
+          local new_card = create_card("Planet", G.consumables, nil, nil, nil, nil, "c_earth", 'conspiracist')
+          new_card:add_to_deck()
+          G.consumeables:emplace(new_card)
+          G.GAME.consumeable_buffer = 0
+          new_card:juice_up(0.3, 0.5)
           return true
         end
       }))
+      return { message = "+1 Earth", colour = G.C.BLUE }
     end
   end
 }
