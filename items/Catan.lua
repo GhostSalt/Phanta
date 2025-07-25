@@ -794,6 +794,13 @@ function create_phanta_catan_menu()
     minw = 5,
     focus_args = { snap_to = true }
   })
+  local four_to_one_trade = UIBox_button({
+    button = 'phanta_catan_four_to_one_first',
+    func = 'phanta_catan_can_four_to_one',
+    label = { localize('b_phanta_catanfourtoone') },
+    minw = 5,
+    focus_args = { snap_to = true }
+  })
 
   local t = create_UIBox_generic_options({
     infotip = localize("phanta_catan_menu_infotip"),
@@ -801,10 +808,317 @@ function create_phanta_catan_menu()
       road,
       settlement,
       city,
-      developmentcard
+      developmentcard,
+      four_to_one_trade
     }
   })
   return t
+end
+
+local four_trade = nil
+local one_trade = nil
+
+function create_phanta_catan_four_to_one_first()
+  local brick = UIBox_button({
+    button = 'phanta_catan_assign_four_brick',
+    func = 'phanta_catan_can_trade_brick',
+    label = { localize { type = 'name_text', set = 'phanta_CatanResource', key = 'c_phanta_brick' } },
+    minw = 5,
+    focus_args = { snap_to = true }
+  })
+  local lumber = UIBox_button({
+    button = 'phanta_catan_assign_four_lumber',
+    func = 'phanta_catan_can_trade_lumber',
+    label = { localize { type = 'name_text', set = 'phanta_CatanResource', key = 'c_phanta_lumber' } },
+    minw = 5,
+    focus_args = { snap_to = true }
+  })
+  local wool = UIBox_button({
+    button = 'phanta_catan_assign_four_wool',
+    func = 'phanta_catan_can_trade_wool',
+    label = { localize { type = 'name_text', set = 'phanta_CatanResource', key = 'c_phanta_wool' } },
+    minw = 5,
+    focus_args = { snap_to = true }
+  })
+  local grain = UIBox_button({
+    button = 'phanta_catan_assign_four_grain',
+    func = 'phanta_catan_can_trade_grain',
+    label = { localize { type = 'name_text', set = 'phanta_CatanResource', key = 'c_phanta_grain' } },
+    minw = 5,
+    focus_args = { snap_to = true }
+  })
+  local ore = UIBox_button({
+    button = 'phanta_catan_assign_four_ore',
+    func = 'phanta_catan_can_trade_ore',
+    label = { localize { type = 'name_text', set = 'phanta_CatanResource', key = 'c_phanta_ore' } },
+    minw = 5,
+    focus_args = { snap_to = true }
+  })
+
+  local t = create_UIBox_generic_options({
+    infotip = localize("phanta_catan_menu_four_info"),
+    contents = {
+      brick,
+      lumber,
+      wool,
+      grain,
+      ore
+    },
+    back_func = "phanta_catan_return_to_building"
+  })
+  return t
+end
+
+function create_phanta_catan_four_to_one_second()
+  local brick = UIBox_button({
+    button = 'phanta_catan_trade_for_brick',
+    func = 'phanta_catan_can_trade_for_brick',
+    label = { localize { type = 'name_text', set = 'phanta_CatanResource', key = 'c_phanta_brick' } },
+    minw = 5,
+    focus_args = { snap_to = true }
+  })
+  local lumber = UIBox_button({
+    button = 'phanta_catan_trade_for_lumber',
+    func = 'phanta_catan_can_trade_for_lumber',
+    label = { localize { type = 'name_text', set = 'phanta_CatanResource', key = 'c_phanta_lumber' } },
+    minw = 5,
+    focus_args = { snap_to = true }
+  })
+  local wool = UIBox_button({
+    button = 'phanta_catan_trade_for_wool',
+    func = 'phanta_catan_can_trade_for_wool',
+    label = { localize { type = 'name_text', set = 'phanta_CatanResource', key = 'c_phanta_wool' } },
+    minw = 5,
+    focus_args = { snap_to = true }
+  })
+  local grain = UIBox_button({
+    button = 'phanta_catan_trade_for_grain',
+    func = 'phanta_catan_can_trade_for_grain',
+    label = { localize { type = 'name_text', set = 'phanta_CatanResource', key = 'c_phanta_grain' } },
+    minw = 5,
+    focus_args = { snap_to = true }
+  })
+  local ore = UIBox_button({
+    button = 'phanta_catan_trade_for_ore',
+    func = 'phanta_catan_can_trade_for_ore',
+    label = { localize { type = 'name_text', set = 'phanta_CatanResource', key = 'c_phanta_ore' } },
+    minw = 5,
+    focus_args = { snap_to = true }
+  })
+
+  local t = create_UIBox_generic_options({
+    infotip = localize("phanta_catan_menu_one_info"),
+    contents = {
+      brick,
+      lumber,
+      wool,
+      grain,
+      ore
+    },
+    back_func = "phanta_catan_return_to_four"
+  })
+  return t
+end
+
+G.FUNCS.phanta_catan_return_to_building = function(e)
+  four_trade = nil
+  one_trade = nil
+  G.SETTINGS.paused = true
+  G.FUNCS.overlay_menu {
+    definition = create_phanta_catan_menu()
+  }
+end
+
+G.FUNCS.phanta_catan_return_to_four = function(e)
+  one_trade = nil
+  G.SETTINGS.paused = true
+  G.FUNCS.overlay_menu {
+    definition = create_phanta_catan_four_to_one_first()
+  }
+end
+
+G.FUNCS.phanta_catan_can_four_to_one = function(e)
+  return false
+end
+
+G.FUNCS.phanta_catan_four_to_one_first = function(e)
+  if G.OVERLAY_MENU then G.FUNCS.exit_overlay_menu() end
+  G.SETTINGS.paused = true
+  G.FUNCS.overlay_menu {
+    definition = create_phanta_catan_four_to_one_first()
+  }
+end
+
+G.FUNCS.phanta_catan_can_trade_brick = function(e)
+  if #find_consumable("c_phanta_brick") < 4 then
+    e.config.colour = G.C.UI.BACKGROUND_INACTIVE
+    e.config.button = nil
+  end
+end
+
+G.FUNCS.phanta_catan_can_trade_lumber = function(e)
+  if #find_consumable("c_phanta_lumber") < 4 then
+    e.config.colour = G.C.UI.BACKGROUND_INACTIVE
+    e.config.button = nil
+  end
+end
+
+G.FUNCS.phanta_catan_can_trade_wool = function(e)
+  if #find_consumable("c_phanta_wool") < 4 then
+    e.config.colour = G.C.UI.BACKGROUND_INACTIVE
+    e.config.button = nil
+  end
+end
+
+G.FUNCS.phanta_catan_can_trade_grain = function(e)
+  if #find_consumable("c_phanta_grain") < 4 then
+    e.config.colour = G.C.UI.BACKGROUND_INACTIVE
+    e.config.button = nil
+  end
+end
+
+G.FUNCS.phanta_catan_can_trade_ore = function(e)
+  if #find_consumable("c_phanta_ore") < 4 then
+    e.config.colour = G.C.UI.BACKGROUND_INACTIVE
+    e.config.button = nil
+  end
+end
+
+G.FUNCS.phanta_catan_assign_four_brick = function(e)
+  four_trade = "c_phanta_brick"
+  if G.OVERLAY_MENU then G.FUNCS.exit_overlay_menu() end
+  G.SETTINGS.paused = true
+  G.FUNCS.overlay_menu {
+    definition = create_phanta_catan_four_to_one_second()
+  }
+end
+
+G.FUNCS.phanta_catan_assign_four_lumber = function(e)
+  four_trade = "c_phanta_lumber"
+  if G.OVERLAY_MENU then G.FUNCS.exit_overlay_menu() end
+  G.SETTINGS.paused = true
+  G.FUNCS.overlay_menu {
+    definition = create_phanta_catan_four_to_one_second()
+  }
+end
+
+G.FUNCS.phanta_catan_assign_four_wool = function(e)
+  four_trade = "c_phanta_wool"
+  if G.OVERLAY_MENU then G.FUNCS.exit_overlay_menu() end
+  G.SETTINGS.paused = true
+  G.FUNCS.overlay_menu {
+    definition = create_phanta_catan_four_to_one_second()
+  }
+end
+
+G.FUNCS.phanta_catan_assign_four_grain = function(e)
+  four_trade = "c_phanta_grain"
+  if G.OVERLAY_MENU then G.FUNCS.exit_overlay_menu() end
+  G.SETTINGS.paused = true
+  G.FUNCS.overlay_menu {
+    definition = create_phanta_catan_four_to_one_second()
+  }
+end
+
+G.FUNCS.phanta_catan_assign_four_ore = function(e)
+  four_trade = "c_phanta_ore"
+  if G.OVERLAY_MENU then G.FUNCS.exit_overlay_menu() end
+  G.SETTINGS.paused = true
+  G.FUNCS.overlay_menu {
+    definition = create_phanta_catan_four_to_one_second()
+  }
+end
+
+
+
+
+
+
+G.FUNCS.phanta_catan_can_trade_for_brick = function(e)
+  if four_trade == "c_phanta_brick" then
+    e.config.colour = G.C.UI.BACKGROUND_INACTIVE
+    e.config.button = nil
+  end
+end
+
+G.FUNCS.phanta_catan_can_trade_for_lumber = function(e)
+  if four_trade == "c_phanta_lumber" then
+    e.config.colour = G.C.UI.BACKGROUND_INACTIVE
+    e.config.button = nil
+  end
+end
+
+G.FUNCS.phanta_catan_can_trade_for_wool = function(e)
+  if four_trade == "c_phanta_wool" then
+    e.config.colour = G.C.UI.BACKGROUND_INACTIVE
+    e.config.button = nil
+  end
+end
+
+G.FUNCS.phanta_catan_can_trade_for_grain = function(e)
+  if four_trade == "c_phanta_grain" then
+    e.config.colour = G.C.UI.BACKGROUND_INACTIVE
+    e.config.button = nil
+  end
+end
+
+G.FUNCS.phanta_catan_can_trade_for_ore = function(e)
+  if four_trade == "c_phanta_ore" then
+    e.config.colour = G.C.UI.BACKGROUND_INACTIVE
+    e.config.button = nil
+  end
+end
+
+G.FUNCS.phanta_catan_trade_for_brick = function(e)
+  one_trade = "c_phanta_brick"
+  phanta_catan_perform_trade(e)
+end
+
+G.FUNCS.phanta_catan_trade_for_lumber = function(e)
+  one_trade = "c_phanta_lumber"
+  phanta_catan_perform_trade(e)
+end
+
+G.FUNCS.phanta_catan_trade_for_wool = function(e)
+  one_trade = "c_phanta_wool"
+  phanta_catan_perform_trade(e)
+end
+
+G.FUNCS.phanta_catan_trade_for_grain = function(e)
+  one_trade = "c_phanta_grain"
+  phanta_catan_perform_trade(e)
+end
+
+G.FUNCS.phanta_catan_trade_for_ore = function(e)
+  one_trade = "c_phanta_ore"
+  phanta_catan_perform_trade(e)
+end
+
+function phanta_catan_perform_trade(e)
+  local resources = { find_consumable(four_trade)[1], find_consumable(four_trade)[2], find_consumable(four_trade)[3],
+    find_consumable(four_trade)[4] }
+  for i = 1, #resources do
+    resources[i].getting_sliced = true
+  end
+  G.E_MANAGER:add_event(Event({
+    delay = 0.3,
+    blockable = false,
+    func = function()
+      for i = 1, #resources do
+        resources[i]:start_dissolve({ G.C.RED }, nil, 1.6)
+      end
+      local new_card = create_card("phanta_CatanBuilding", G.consumables, nil, nil, nil, nil, one_trade,
+        'catan_perform_trade')
+      new_card:add_to_deck()
+      G.consumeables:emplace(new_card)
+      return true
+    end
+  }))
+  if G.OVERLAY_MENU then G.FUNCS.exit_overlay_menu() end
+  G.SETTINGS.paused = true
+  G.FUNCS.overlay_menu {
+    definition = create_phanta_catan_menu()
+  }
 end
 
 G.FUNCS.phanta_catan_craft_road = function(e)
@@ -826,6 +1140,11 @@ G.FUNCS.phanta_catan_craft_road = function(e)
       return true
     end
   }))
+  if G.OVERLAY_MENU then G.FUNCS.exit_overlay_menu() end
+  G.SETTINGS.paused = true
+  G.FUNCS.overlay_menu {
+    definition = create_phanta_catan_menu()
+  }
 end
 
 G.FUNCS.phanta_catan_craft_settlement = function(e)
@@ -848,6 +1167,11 @@ G.FUNCS.phanta_catan_craft_settlement = function(e)
       return true
     end
   }))
+  if G.OVERLAY_MENU then G.FUNCS.exit_overlay_menu() end
+  G.SETTINGS.paused = true
+  G.FUNCS.overlay_menu {
+    definition = create_phanta_catan_menu()
+  }
 end
 
 G.FUNCS.phanta_catan_craft_city = function(e)
@@ -868,9 +1192,14 @@ G.FUNCS.phanta_catan_craft_city = function(e)
         'craft_city')
       new_card:add_to_deck()
       G.consumeables:emplace(new_card)
-      return true
+      G.SETTINGS.paused = true
+      G.FUNCS.overlay_menu {
+        definition = create_phanta_catan_menu()
+      }
     end
   }))
+  if G.OVERLAY_MENU then G.FUNCS.exit_overlay_menu() end
+  create_phanta_catan_menu()
 end
 
 G.FUNCS.phanta_catan_craft_development_card = function(e)
@@ -893,6 +1222,11 @@ G.FUNCS.phanta_catan_craft_development_card = function(e)
       return true
     end
   }))
+  if G.OVERLAY_MENU then G.FUNCS.exit_overlay_menu() end
+  G.SETTINGS.paused = true
+  G.FUNCS.overlay_menu {
+    definition = create_phanta_catan_menu()
+  }
 end
 
 G.FUNCS.phanta_catan_can_craft_road = function(e)

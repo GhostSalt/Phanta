@@ -1407,7 +1407,7 @@ return {
                     "chance to be {C:red}destroyed{}"
                 }
             },
-            j_phanta_valantgramarye             = {
+            j_phanta_valantgramarye        = {
                 name = "Valant Gramarye",
                 text = {
                     "{C:attention}Straights{} count as",
@@ -2635,6 +2635,15 @@ return {
                 "Settlement: Brick, Lumber, Grain, Wool",
                 "City: Settlement, Grain, Grain, Ore, Ore, Ore",
                 "Development Card: Wool, Grain, Ore"
+            },
+            b_phanta_catanfourtoone = "4:1 Trade",
+            phanta_catan_menu_four_info = {
+                "Trade four of the same Resource to",
+                "receive one Resource of your choice.",
+                "Select the Resource to trade."
+            },
+            phanta_catan_menu_one_info = {
+                "Select the Resource to receive."
             },
             b_phanta_starterpack_cards = "Starter Packs",
             k_phanta_starterpack = "Starter Pack",
