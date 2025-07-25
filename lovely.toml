@@ -6,14 +6,6 @@ priority = 0
 [[patches]]
 [patches.pattern]
 target = 'functions/UI_definitions.lua'
-pattern = '''{n=G.UIT.R, config={align = "cm", minh = 1.75, minw = 1.5,padding = 0.05, r = 0.1, hover = true, colour = G.C.ORANGE, button = "options", shadow = true}, nodes={'''
-position = 'before'
-payload = '''phanta_add_catan_building_button(scale),'''
-match_indent = true
-
-[[patches]]
-[patches.pattern]
-target = 'functions/UI_definitions.lua'
 pattern = '''(G.GAME.used_vouchers["v_retcon"] or G.GAME.used_vouchers["v_directors_cut"]) and'''
 position = 'at'
 payload = '''(G.GAME.used_vouchers["v_retcon"] or G.GAME.used_vouchers["v_directors_cut"] or #SMODS.find_card('j_phanta_clapperboard') > 0) and'''

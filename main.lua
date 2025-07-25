@@ -7,8 +7,7 @@ SMODS.Atlas {
 
 G.C.PHANTA = {
   Zodiac = HEX("4E5779"),
-  ZodiacAlt = HEX("5998ff"),
-  Resource = HEX("AB8B59")
+  ZodiacAlt = HEX("5998ff")
 }
 
 G.C.PHANTA.MISC_COLOURS = {
@@ -280,10 +279,6 @@ function azran_active()
       (G.GAME and G.GAME.selected_sleeve == "sleeve_phanta_azran")
 end
 
-function count_settlements()
-  return #SMODS.find_card("c_phanta_settlement")
-end
-
 local ref1 = Card.start_dissolve
 function Card:start_dissolve()
   if self.config and self.config.center and self.config.center.phanta_shatters then
@@ -295,7 +290,7 @@ end
 
 local allFolders = { "none", "items" }
 
-local allFiles = { ["none"] = {}, ["items"] = { "Jokers1", "Jokers2", "Legendaries", "Misc", "Catan", "StarterPack" } }
+local allFiles = { ["none"] = {}, ["items"] = { "Jokers1", "Jokers2", "Legendaries", "Misc", "StarterPack" } }
 
 for i = 1, #allFolders do
   if allFolders[i] == "none" then
@@ -334,13 +329,6 @@ function Game:start_run(args)
       return true
     end
   }))
-end
-
-local cfbs = G.FUNCS.check_for_buy_space
-
-G.FUNCS.check_for_buy_space = function(card)
-  if card.config.center.set == "phanta_CatanResource" then return true end
-  return cfbs(card)
 end
 
 local igo = Game.init_game_object
@@ -420,14 +408,6 @@ local phantaConfigTab = function()
     end,
   })
   phanta_nodes[#phanta_nodes + 1] = create_toggle({
-    label = localize("phanta_catan_enabled"),
-    active_colour = HEX("40c76d"),
-    ref_table = Phanta.config,
-    ref_value = "catan_enabled",
-    callback = function()
-    end,
-  })
-  phanta_nodes[#phanta_nodes + 1] = create_toggle({
     label = localize("phanta_starter_pack_enabled"),
     active_colour = HEX("40c76d"),
     ref_table = Phanta.config,
@@ -490,24 +470,11 @@ end
 local update_ref = Game.update
 function Game:update(dt)
   if not G.GAME.phanta_zodiac_rate_cache then G.GAME.phanta_zodiac_rate_cache = 0 end
-  if not G.GAME.phanta_catanresource_rate_cache then G.GAME.phanta_catanresource_rate_cache = 0 end
-  if not G.GAME.phanta_catandevelopmentcard_rate_cache then G.GAME.phanta_catandevelopmentcard_rate_cache = 0 end
-  if not G.GAME.phanta_catanbuilding_rate_cache then G.GAME.phanta_catanbuilding_rate_cache = 0 end
 
   if Phanta.config["zodiac_enabled"] then
     G.GAME.phanta_zodiac_rate = G.GAME.phanta_zodiac_rate_cache
   else
     G.GAME.phanta_zodiac_rate = 0
-  end
-
-  if Phanta.config["catan_enabled"] then
-    G.GAME.phanta_catanresource_rate = G.GAME.phanta_catanresource_rate_cache
-    G.GAME.phanta_catandevelopmentcard_rate = G.GAME.phanta_catandevelopmentcard_rate_cache
-    G.GAME.phanta_catanbuilding_rate = G.GAME.phanta_catanbuilding_rate_cache
-  else
-    G.GAME.phanta_catanresource_rate = 0
-    G.GAME.phanta_catandevelopmentcard_rate = 0
-    G.GAME.phanta_catanbuilding_rate = 0
   end
 
   if not Phanta.config["animations_disabled"] then
