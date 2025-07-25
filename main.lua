@@ -337,19 +337,17 @@ function Game:init_game_object()
   ret.current_round.train_station_card = { id = nil, value = nil }
   ret.current_round.fainfol_card = { suit = 'Spades' }
   ret.current_round.puzzle_card = { id = nil }
-
-  for k, v in pairs(G.P_CENTERS) do
-    v.phanta_set_anim_state = function(self, state)
-      self.phanta_anim_current_state = state
-      self.phanta_anim_t = 0
-    end
-    
-    v.phanta_set_anim_extra_state = function(self, state)
-      self.phanta_anim_extra_current_state = state
-      self.phanta_anim_extra_t = 0
-    end
-  end
   return ret
+end
+
+function Card:phanta_set_anim_state(state)
+  self.config.center.phanta_anim_current_state = state
+  self.config.center.phanta_anim_t = 0
+end
+
+function Card:phanta_set_anim_extra_state(state)
+  self.config.center.phanta_anim_extra_current_state = state
+  self.config.center.phanta_anim_extra_t = 0
 end
 
 function SMODS.current_mod.reset_game_globals(run_start)

@@ -3210,7 +3210,7 @@ SMODS.Joker {
     local choices = { "crab", "squid", "octopus" }
     if not c.phanta_anim_extra_current_state then
       local choice = pseudorandom_element(choices, pseudoseed("spaceinvaderchoice"))
-      self:phanta_set_anim_extra_state(choice)
+      card:phanta_set_anim_extra_state(choice)
     end
   end
 }
@@ -3686,9 +3686,9 @@ SMODS.Joker {
     if context.after then
       local was_straight = next(context.poker_hands['Straight'])
       if card.ability.extra.active and not was_straight then
-        self:phanta_set_anim_state("fading")
+        card:phanta_set_anim_state("fading")
       elseif not card.ability.extra.active and was_straight then
-        self:phanta_set_anim_state("drawing")
+        card:phanta_set_anim_state("drawing")
       end
       card.ability.extra.active = was_straight
     end
