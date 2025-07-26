@@ -229,11 +229,13 @@ function count_missing_ranks()
   if not G.playing_cards then return 0 end
   local existing_ranks = {}
   for i, j in pairs(G.playing_cards) do
-    local is_valid = true
-    for rank = 1, #existing_ranks do
-      if j:get_id() == existing_ranks[rank] then is_valid = false end
+    if not SMODS.has_no_rank(j) then
+      local is_valid = true
+      for rank = 1, #existing_ranks do
+        if j:get_id() == existing_ranks[rank] then is_valid = false end
+      end
+      if is_valid then existing_ranks[#existing_ranks + 1] = j:get_id() end
     end
-    if is_valid then existing_ranks[#existing_ranks + 1] = j:get_id() end
   end
 
   if #existing_ranks < #G.GAME.phanta_initial_ranks then return #G.GAME.phanta_initial_ranks - #existing_ranks end
