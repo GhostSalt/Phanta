@@ -1502,12 +1502,22 @@ SMODS.Consumable {
   end
 }
 
+
+
+SMODS.Atlas {
+  key = "PhantaZodiacUpgradesDarkHour",
+  path = "PhantaZodiacUpgradesDarkHour.png",
+  px = 71,
+  py = 95,
+}
+
 SMODS.Consumable {
   set = "phanta_Zodiac",
   key = "darkhour",
   pos = { x = 0, y = 3 },
   config = { extra = { xmult = 2 } },
   atlas = "PhantaZodiacs",
+  atlas_extra = "phanta_PhantaZodiacUpgradesDarkHour",
   loc_vars = function(self, info_queue, card)
     return { vars = { card.ability.extra.xmult + (count_prognosticators(card) * 2) } }
   end,

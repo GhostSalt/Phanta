@@ -151,9 +151,9 @@ function count_rank(rank)
 end
 
 function is_current_month(card)
-  if not card or not card.config or not card.config.center or not card.config.center.month_range then return false end
+  if not card or (not card.month_range and (not card.config or not card.config.center or not card.config.center.month_range)) then return false end
 
-  local card_range = card.config.center.month_range
+  local card_range = card.month_range or card.config.center.month_range
   if card_range.first.month < 0 or card_range.first.month > 12 or card_range.first.day < 0 or card_range.first.day > 31 then return false end
   if card_range.last.month < 0 or card_range.last.month > 12 or card_range.last.day < 0 or card_range.last.day > 31 then return false end
   -- Technically, it's possible to have dates like the 31st of February be valid, but those should work fine anyway.
@@ -310,6 +310,68 @@ if next(SMODS.find_mod('CardSleeves')) then assert(SMODS.load_file("items/Sleeve
 if next(SMODS.find_mod('artbox')) then assert(SMODS.load_file("items/ArtBox.lua"))() end
 local aura_enabled = next(SMODS.find_mod('Aura'))
 
+
+
+SMODS.Atlas {
+  key = "PhantaZodiacUpgrades",
+  path = "PhantaZodiacUpgrades.png",
+  px = 71,
+  py = 95,
+}
+
+for k, v in pairs(SMODS.Centers) do
+  if v.set == "phanta_Zodiac" then
+    if not v.atlas_extra then v.atlas_extra = "phanta_PhantaZodiacUpgrades" end
+    v.phanta_anim_extra_states = {
+      ["0"] = {
+        anim = {
+          { x = 0, y = 0, t = 1 } }
+      },
+      ["1"] = {
+        anim = {
+          { xrange = { first = 0, last = 3 }, y = 1, t = 0.1 },
+          { xrange = { first = 2, last = 1 }, y = 1, t = 0.1 }
+        }
+      },
+      ["2"] = {
+        anim = {
+          { xrange = { first = 0, last = 3 }, y = 2, t = 0.1 },
+          { xrange = { first = 2, last = 1 }, y = 2, t = 0.1 }
+        }
+      },
+      ["3"] = {
+        anim = {
+          { xrange = { first = 0, last = 3 }, y = 3, t = 0.1 },
+          { xrange = { first = 2, last = 1 }, y = 3, t = 0.1 }
+        }
+      },
+      ["4+"] = {
+        anim = {
+          { xrange = { first = 0, last = 3 }, y = 4, t = 0.1 },
+          { xrange = { first = 2, last = 1 }, y = 4, t = 0.1 }
+        }
+      }
+    }
+    v.phanta_anim_extra_current_state = "0"
+  end
+end
+
+function SMODS.Consumable:phanta_update_zodiac_level_anim()
+  if not self.discovered and not self.params.bypass_discovery_center then
+    return
+  end
+  local progs = count_prognosticators(self)
+  local state = "0"
+  if progs == 1 then state = "1" end
+  if progs == 2 then state = "2" end
+  if progs == 3 then state = "3" end
+  if progs >= 4 then state = "4+" end
+
+  if state ~= self.phanta_anim_extra_current_state then
+    self:phanta_set_anim_extra_state(state)
+  end
+end
+
 local game_start_run_ref = Game.start_run
 
 function Game:start_run(args)
@@ -348,6 +410,16 @@ end
 function Card:phanta_set_anim_extra_state(state)
   self.config.center.phanta_anim_extra_current_state = state
   self.config.center.phanta_anim_extra_t = 0
+end
+
+function SMODS.Center:phanta_set_anim_state(state)
+  self.config.center.phanta_anim_current_state = state
+  self.config.center.phanta_anim_t = 0
+end
+
+function SMODS.Center:phanta_set_anim_extra_state(state)
+  self.phanta_anim_extra_current_state = state
+  self.phanta_anim_extra_t = 0
 end
 
 function SMODS.current_mod.reset_game_globals(run_start)
@@ -446,7 +518,8 @@ function Card:set_sprites(c, f)
   css(self, c, f)
   if self.config.center and self.config.center.pos_extra then
     if not self.children.front then
-      self.children.front = Sprite(self.T.x, self.T.y, self.T.w, self.T.h, G.ASSET_ATLAS[self.config.center.atlas],
+      self.children.front = Sprite(self.T.x, self.T.y, self.T.w, self.T.h,
+        G.ASSET_ATLAS[self.config.center.atlas_extra or self.config.center.atlas],
         self.config.center.pos_extra)
       self.children.front.states.hover = self.states.hover
       self.children.front.states.click = self.states.click
@@ -481,6 +554,8 @@ function Game:update(dt)
       if not v.default_pos_extra then v.default_pos_extra = v.pos_extra end
       handle_phanta_anim(v, dt)
       handle_phanta_anim_extra(v, dt)
+
+      if v.set == 'phanta_Zodiac' then v:phanta_update_zodiac_level_anim() end
     end
   else
     for k, v in pairs(G.P_CENTERS) do
