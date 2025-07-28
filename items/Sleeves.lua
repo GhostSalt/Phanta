@@ -282,6 +282,37 @@ CardSleeves.Sleeve {
 }
 
 CardSleeves.Sleeve {
+  key = "invisible",
+  name = "Invisible Sleeve",
+  atlas = "PhantaSleeves",
+  pos = { x = 4, y = 3 },
+  unlocked = false,
+  unlock_condition = { deck = "b_phanta_invisible", stake = "stake_white" },
+  config = { extra = { plus_hand_size = 2 } },
+  loc_vars = function(self)
+    if self.get_current_deck_key() == "b_phanta_invisible" then
+      key = self.key .. "_alt"
+    else
+      key = self.key
+    end
+    return { key = key }
+  end,
+  apply = function(self, back)
+    G.E_MANAGER:add_event(Event({
+      func = function()
+        for i = 1, #G.playing_cards do
+          if G.playing_cards[i]:get_id() == 14 and G.playing_cards[i]:is_suit("Spades") then
+            if self.get_current_deck_key() == "b_phanta_invisible" then G.playing_cards[i]:set_ability(G.P_CENTERS["m_phanta_ghostcard"])
+            else G.playing_cards[i]:set_seal("phanta_ghostseal", true, true) end
+          end
+        end
+        return true
+      end,
+    }))
+  end
+}
+
+CardSleeves.Sleeve {
   key = "hivis",
   name = "Hi-Vis Sleeve",
   atlas = "PhantaSleeves",

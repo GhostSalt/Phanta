@@ -84,7 +84,7 @@ return {
                 name = 'Invisible Deck',
                 text = {
                     "The {C:attention}Ace{} of {C:spades}Spades{}",
-                    "starts with a {C:attention}Ghost Seal{}"
+                    "starts with a {C:attention,T:phanta_ghostseal_seal}Ghost Seal{}"
                 }
             },
             b_phanta_hivis = {
@@ -1821,6 +1821,20 @@ return {
                 text = {
                     "{C:attention}+#1#{} hand size",
                     "{C:attention}+#1#{} face-down cards"
+                }
+            },
+            sleeve_phanta_invisible = {
+                name = 'Invisible Sleeve',
+                text = {
+                    "The {C:attention}Ace{} of {C:spades}Spades{}",
+                    "starts with a {C:attention,T:phanta_ghostseal_seal}Ghost Seal{}"
+                }
+            },
+            sleeve_phanta_invisible_alt = {
+                name = 'Invisible Sleeve',
+                text = {
+                    "The {C:attention}Ace{} of {C:spades}Spades{}",
+                    "starts as a {C:attention,T:m_phanta_ghostcard}Ghost Card{}"
                 }
             },
             sleeve_phanta_hivis = {
