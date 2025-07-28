@@ -359,7 +359,7 @@ for k, v in pairs(SMODS.Centers) do
 end
 
 function SMODS.Consumable:phanta_update_zodiac_level_anim()
-  if not self.discovered and not self.params.bypass_discovery_center then
+  if not self.discovered and not (self.params and self.params.bypass_discovery_center) then
     return
   end
   local progs = count_prognosticators(self)
