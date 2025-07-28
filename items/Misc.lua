@@ -90,8 +90,7 @@ SMODS.Seal {
     name = 'Ghost Seal',
     text = {
       "Creates a {C:spectral}Spectral{} card",
-      "if played and not scored",
-      "on {C:attention}final hand{} of round",
+      "when played and unscored",
       "{C:inactive}(Must have room){}"
     }
   },
@@ -100,7 +99,7 @@ SMODS.Seal {
   pos = { x = 1, y = 0 },
 
   calculate = function(self, card, context)
-    if context.cardarea == "unscored" and context.main_scoring and G.GAME.current_round.hands_left == 0 and count_consumables() < G.consumeables.config.card_limit then
+    if context.cardarea == "unscored" and context.main_scoring and count_consumables() < G.consumeables.config.card_limit then
       G.E_MANAGER:add_event(Event({
         func = function()
           if count_consumables() < G.consumeables.config.card_limit then
@@ -266,7 +265,7 @@ SMODS.Consumable {
   },
   pos = { x = 1, y = 0 },
   config = {
-    mod_conv = "phanta_ghost_seal",
+    mod_conv = "phanta_ghostseal_seal",
     max_highlighted = 1
   },
   atlas = "PhantaTarots",
@@ -1780,6 +1779,24 @@ SMODS.Back {
         return { stay_flipped = true }
       end
     end
+  end
+}
+
+SMODS.Back {
+  key = 'invisible',
+  atlas = 'Decks',
+  pos = { x = 4, y = 3 },
+  apply = function(self, back)
+    G.E_MANAGER:add_event(Event({
+      func = function()
+        for i = 1, #G.playing_cards do
+          if G.playing_cards[i]:get_id() == 14 and G.playing_cards[i]:is_suit("Spades") then
+            G.playing_cards[i]:set_seal("phanta_ghostseal", true, true)
+          end
+        end
+        return true
+      end,
+    }))
   end
 }
 

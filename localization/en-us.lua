@@ -80,6 +80,13 @@ return {
                     "cards is less than {C:attention}#1#{}"
                 }
             },
+            b_phanta_invisible = {
+                name = 'Invisible Deck',
+                text = {
+                    "The {C:attention}Ace{} of {C:spades}Spades{}",
+                    "starts with a {C:attention}Ghost Seal{}"
+                }
+            },
             b_phanta_hivis = {
                 name = 'Hi-Vis Deck',
                 text = {
