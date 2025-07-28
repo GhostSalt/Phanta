@@ -3762,7 +3762,7 @@ SMODS.Joker {
 }
 
 SMODS.Joker {
-  key = 'emotionaldamage',
+  key = 'plumber',
   config = { extra = { added_xmult = 0.2, current_xmult = 1 } },
   rarity = 3,
   atlas = 'Phanta',

@@ -1153,11 +1153,11 @@ return {
                     "{C:white,X:mult}X#1#{} Mult when scored"
                 }
             },
-            j_phanta_emotionaldamage       = {
-                name = 'Emotional Damage',
+            j_phanta_plumber       = {
+                name = 'Plumber',
                 text = {
-                    "Gains {C:white,X:mult}X#1#{} Mult per",
-                    "discarded {C:attention}Flush{}",
+                    "Gains {C:white,X:mult}X#1#{} Mult for",
+                    "each discarded {C:attention}Flush{}",
                     "{C:inactive}(Currently {C:white,X:mult}X#2#{C:inactive} Mult){}"
                 }
             },
