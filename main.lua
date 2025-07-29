@@ -238,7 +238,7 @@ function count_missing_ranks()
     end
   end
 
-  if #existing_ranks < #G.GAME.phanta_initial_ranks then return #G.GAME.phanta_initial_ranks - #existing_ranks end
+  if G.GAME and G.GAME.phanta_initial_ranks and #existing_ranks < #G.GAME.phanta_initial_ranks then return #G.GAME.phanta_initial_ranks - #existing_ranks end
   return 0
 end
 

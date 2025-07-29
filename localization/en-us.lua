@@ -1952,6 +1952,24 @@ return {
                 }
             }
         },
+        Voucher = {
+            v_phanta_tabloid = {
+                name = "Tabloid",
+                text = {
+                    "{C:diamonds}The Star{}, {C:clubs}The Moon{},",
+                    "{C:hearts}The Sun{} and {C:spades}The World{}",
+                    "cannot appear"
+                }
+            },
+            v_phanta_broadcast = {
+                name = "Broadcast",
+                text = {
+                    "{C:spectral}Ouija{}, {C:spectral}Sigil{},",
+                    "{C:spectral}Hex{} and {C:spectral}Ankh{}",
+                    "cannot appear"
+                }
+            }
+        },
         BakeryCharm = {
             BakeryCharm_phanta_timingiseverything = {
                 name = 'Timing is Everything',
