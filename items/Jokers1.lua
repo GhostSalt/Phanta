@@ -2125,7 +2125,7 @@ SMODS.Joker {
 
 SMODS.Joker {
   key = 'candle',
-  config = { extra = { added_xmult = 0.25, current_xmult = 1 } },
+  config = { extra = { added_xmult = 0.25, current_xmult = 1, is_contestant = true } },
   rarity = 2,
   atlas = 'Phanta',
   pos = { x = 5, y = 7 },
@@ -2169,6 +2169,11 @@ SMODS.Joker {
         return nil, true
       end
     end
+  end,
+  set_badges = function(self, card, badges)
+    if next(SMODS.find_mod("GSBFDI")) then
+      badges[#badges + 1] = create_badge(localize('contestant_joker_badge'), G.C.BFDI.MISC_COLOURS.BFDI_GREEN, G.C.WHITE, 1)
+    end
   end
 }
 
@@ -2196,6 +2201,11 @@ SMODS.Joker {
         end
       }))
       return { message = localize("phanta_created_blue_seal"), colour = G.C.BLUE, card = card }
+    end
+  end,
+  set_badges = function(self, card, badges)
+    if next(SMODS.find_mod("GSBFDI")) then
+      badges[#badges + 1] = create_badge(localize('contestant_joker_badge'), G.C.BFDI.MISC_COLOURS.BFDI_GREEN, G.C.WHITE, 1)
     end
   end
 }
