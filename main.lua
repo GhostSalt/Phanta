@@ -5,6 +5,9 @@ SMODS.Atlas {
   py = 34
 }
 
+G.Phanta = {}
+G.Phanta.centers = {}
+
 G.C.PHANTA = {
   Zodiac = HEX("4E5779"),
   ZodiacAlt = HEX("5998ff")
@@ -314,6 +317,11 @@ local aura_enabled = next(SMODS.find_mod('Aura'))
 
 
 
+--Then, order everything.
+assert(SMODS.load_file("items/Ordering.lua"))()
+
+
+
 SMODS.Atlas {
   key = "PhantaZodiacUpgrades",
   path = "PhantaZodiacUpgrades.png",
@@ -518,7 +526,7 @@ end
 local css = Card.set_sprites
 function Card:set_sprites(c, f)
   css(self, c, f)
-  if self.config.center and self.config.center.pos_extra then
+  if self.config.center and self.config.center.pos_extra and (self.config.center.discovered or (self.params and self.params.bypass_discovery_center)) then
     if not self.children.front then
       self.children.front = Sprite(self.T.x, self.T.y, self.T.w, self.T.h,
         G.ASSET_ATLAS[self.config.center.atlas_extra or self.config.center.atlas],

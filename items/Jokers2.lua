@@ -36,8 +36,7 @@ SMODS.Sound({
   end
 })
 
-SMODS.Joker {
-  key = 'normalface',
+G.Phanta.centers["normalface"] = {
   config = { extra = { mult = 10 } },
   loc_vars = function(self, info_queue, card)
     return { vars = { card.ability.extra.mult } }
@@ -74,8 +73,310 @@ SMODS.Joker {
   end
 }
 
-SMODS.Joker {
-  key = 'absentjoker',
+
+
+-- Debug function
+function list_peekaboo_abilities()
+  local the_list = {}
+  for i = 1, #G.jokers.cards do
+    if G.jokers.cards[i].config.center.key == "j_phanta_peekaboo" then
+      local card = G.jokers.cards[i]
+      local abilities = {
+        "+1 hand",
+        "+1 discard",
+        "+1 hand size",
+        "+1 shop size",
+
+        "Chosen suit (" .. card.ability.extra.chosen_suit .. ") gives +3 Mult",
+        "Face cards give +5 Mult",
+        "Chosen rank (ID " .. card.ability.extra.chosen_rank .. ") gives +7 Mult",
+        "Unscored cards give +6 Mult",
+
+        "Chosen suit (" .. card.ability.extra.chosen_suit .. ") gives +20 Chips",
+        "Face cards give +40 Chips",
+        "Chosen rank (ID " .. card.ability.extra.chosen_rank .. ") gives +60 Chips",
+        "Unscored cards give +50 Chips",
+
+        "Chosen suit (" .. card.ability.extra.chosen_suit .. ") gives +$1",
+        "Face cards give +$2",
+        "Chosen rank (ID " .. card.ability.extra.chosen_rank .. ") gives +$3",
+        "Unscored cards give +$1",
+
+        "Chosen suit (" .. card.ability.extra.chosen_suit .. ") gives +$2 when discarded",
+        "Face cards give +$3 when discarded",
+        "Chosen rank (ID " .. card.ability.extra.chosen_rank .. ") gives +$4 when discarded",
+
+        "+100 Chips on second hand",
+        "+15 Mult on second hand",
+        "X2 Mult on second hand",
+        "+$5 Mult on second hand",
+
+        "$4 at end of round",
+
+        "+Tarot when Blind is selected",
+        "+Planet when Blind is selected",
+        "+Spectral when Blind is selected",
+
+        "+Double Tag when obtained",
+        "Becomes Foil when obtained",
+        "Becomes Holographic when obtained",
+        "Becomes Polychrome when obtained",
+        "Becomes Negative when obtained"
+      }
+
+      for i = 1, #card.ability.extra.all_abilities do
+        if card.ability.extra.all_abilities[i] == card.ability.extra.chosen_ability then
+          the_list[#the_list + 1] = abilities[i]
+        end
+      end
+    end
+  end
+
+  if #the_list == 0 then return nil else return the_list end
+end
+
+G.Phanta.centers["peekaboo"] = {
+  config = {
+    extra = {
+      mult = 4,
+      all_abilities = {
+
+        { unconditional = true,        hands = 1 },
+        { unconditional = true,        discards = 1 },
+        { unconditional = true,        hand_size = 1 },
+        { unconditional = true,        shop_size = 1 },
+
+        { area_condition = "Play",     suit_condition = "Random", mult = 3 },
+        { area_condition = "Play",     rank_condition = "Face",   mult = 5 },
+        { area_condition = "Play",     rank_condition = "Random", mult = 7 },
+        { area_condition = "Unscored", unconditional = true,      mult = 6 },
+
+        { area_condition = "Play",     suit_condition = "Random", chips = 20 },
+        { area_condition = "Play",     rank_condition = "Face",   chips = 40 },
+        { area_condition = "Play",     rank_condition = "Random", chips = 60 },
+        { area_condition = "Unscored", unconditional = true,      chips = 50 },
+
+        { area_condition = "Play",     suit_condition = "Random", money = 1 },
+        { area_condition = "Play",     rank_condition = "Face",   money = 2 },
+        { area_condition = "Play",     rank_condition = "Random", money = 3 },
+        { area_condition = "Unscored", unconditional = true,      money = 1 },
+
+        { area_condition = "Discard",  suit_condition = "Random", money = 2 },
+        { area_condition = "Discard",  rank_condition = "Face",   money = 3 },
+        { area_condition = "Discard",  rank_condition = "Random", money = 4 },
+
+        { hands_played = 2,            chips = 100 },
+        { hands_played = 2,            mult = 15 },
+        { hands_played = 2,            xmult = 2 },
+        { hands_played = 2,            money = 5 },
+
+        { unconditional = true,        eormoney = 4 },
+
+        { unconditional = true,        tarot = true },
+        { unconditional = true,        planet = true },
+        { unconditional = true,        spectral = true }, --Intentionally busted.
+
+        { unconditional = true,        double_tag = true },
+        { unconditional = true,        foil = true },
+        { unconditional = true,        holographic = true },
+        { unconditional = true,        polychrome = true },
+        { unconditional = true,        negative = true },
+      }
+    }
+  },
+  loc_vars = function(self, info_queue, card)
+    return { vars = { card.ability.extra.mult } }
+  end,
+  rarity = 1,
+  atlas = 'PhantaMiscAnims3',
+  pos = { x = 6, y = 5 },
+  phanta_anim = {
+    { x = 6, y = 5, t = 0.9 }, { x = 5, y = 7, t = 0.1 },
+    { x = 6, y = 5, t = 1.7 }, { x = 5, y = 7, t = 0.1 }, { x = 6, y = 5, t = 0.1 }, { x = 5, y = 7, t = 0.1 },
+    { x = 6, y = 5, t = 2.6 }, { x = 5, y = 7, t = 0.1 },
+    { x = 6, y = 5, t = 1.4 }, { x = 5, y = 7, t = 0.1 },
+    { x = 1, y = 7, t = 0.8 }, { x = 6, y = 5, t = 0.1 },
+    { x = 2, y = 7, t = 0.3 }, { x = 5, y = 7, t = 0.1 }, { x = 2, y = 7, t = 0.4 },
+    { xrange = { first = 6, last = 11 }, y = 5, t = 0.05 },
+    { xrange = { first = 0, last = 2 },  y = 6, t = 0.05 },
+    { x = 3,                             y = 6, t = 1 },
+    { xrange = { first = 4, last = 11 }, y = 6, t = 0.05 },
+
+    { x = 0,                             y = 7, t = 0.9 }, { x = 6, y = 7, t = 0.1 },
+    { x = 0, y = 7, t = 1.7 }, { x = 6, y = 7, t = 0.1 }, { x = 0, y = 7, t = 0.1 }, { x = 6, y = 7, t = 0.1 },
+    { x = 0, y = 7, t = 2.6 }, { x = 6, y = 7, t = 0.1 },
+    { x = 0, y = 7, t = 1.4 }, { x = 6, y = 7, t = 0.1 },
+    { x = 3, y = 7, t = 0.8 }, { x = 0, y = 7, t = 0.1 },
+    { x = 4,                             y = 7, t = 0.3 }, { x = 6, y = 7, t = 0.1 }, { x = 4, y = 7, t = 0.4 },
+    { xrange = { first = 11, last = 4 }, y = 6, t = 0.05 },
+    { x = 3,                             y = 6, t = 1 },
+    { xrange = { first = 2, last = 0 },  y = 6, t = 0.05 },
+    { xrange = { first = 11, last = 6 }, y = 5, t = 0.05 },
+  },
+  cost = 4,
+  blueprint_compat = true,
+  eternal_compat = true,
+  perishable_compat = true,
+  calculate = function(self, card, context)
+    if context.joker_main and not (card.ability.extra.chosen_ability.hands_played and G.GAME.current_round.hands_played ~= 1) then
+      local bonus = { mult = card.ability.extra.mult }
+      bonus.chips = card.ability.extra.chosen_ability.chips
+      bonus.mult = bonus.mult + (card.ability.extra.chosen_ability.mult or 0)
+      bonus.xmult = card.ability.extra.chosen_ability.xmult
+      bonus.dollars = card.ability.extra.chosen_ability.money
+      return bonus
+    elseif context.joker_main then
+      return { mult = card.ability.extra.mult }
+    end
+
+    if context.individual and (
+          (card.ability.extra.chosen_ability.area_condition == "Unscored" and context.cardarea == "unscored")
+          or (card.ability.extra.chosen_ability.area_condition == "Play" and context.cardarea == G.play)) and
+        (card.ability.extra.chosen_ability.unconditional or
+          (card.ability.extra.chosen_ability.suit_condition and (
+            (card.ability.extra.chosen_ability.suit_condition == "Random" and context.other_card:is_suit(card.ability.extra.chosen_suit))
+            or (card.ability.extra.chosen_ability.suit_condition ~= "Random" and context.other_card:is_suit(card.ability.extra.chosen_ability.suit_condition))
+          ))
+          or (card.ability.extra.chosen_ability.rank_condition and (
+            (card.ability.extra.chosen_ability.rank_condition == "Face" and context.other_card:is_face())
+            or (card.ability.extra.chosen_ability.rank_condition ~= "Random" and context.other_card:get_id() == card.ability.extra.chosen_ability.rank_condition)
+            or (card.ability.extra.chosen_ability.rank_condition == "Random" and context.other_card:get_id() == card.ability.extra.chosen_rank)
+          ))) then
+      return {
+        chips = card.ability.extra.chosen_ability.chips,
+        mult = card.ability.extra.chosen_ability.mult,
+        xmult = card.ability.extra.chosen_ability.xmult,
+        dollars = card.ability.extra.chosen_ability.money
+      }
+    end
+
+    if context.discard and card.ability.extra.chosen_ability.area_condition == "Discard" and
+        (card.ability.extra.chosen_ability.unconditional or
+          (card.ability.extra.chosen_ability.suit_condition and (
+            (card.ability.extra.chosen_ability.suit_condition == "Random" and context.other_card:is_suit(card.ability.extra.chosen_suit))
+            or (card.ability.extra.chosen_ability.suit_condition ~= "Random" and context.other_card:is_suit(card.ability.extra.chosen_ability.suit_condition))
+          ))
+          or (card.ability.extra.chosen_ability.rank_condition and (
+            (card.ability.extra.chosen_ability.rank_condition == "Face" and context.other_card:is_face())
+            or (card.ability.extra.chosen_ability.rank_condition ~= "Random" and context.other_card:get_id() == card.ability.extra.chosen_ability.rank_condition)
+            or (card.ability.extra.chosen_ability.rank_condition == "Random" and context.other_card:get_id() == card.ability.extra.chosen_rank)
+          ))
+        ) then
+      return {
+        dollars = card.ability.extra.chosen_ability.money
+      }
+    end
+
+    if context.setting_blind and not (context.blueprint_card or self).getting_sliced and count_consumables() < G.consumeables.config.card_limit
+        and (card.ability.extra.chosen_ability.tarot or card.ability.extra.chosen_ability.planet or card.ability.extra.chosen_ability.spectral) then
+      G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
+      G.E_MANAGER:add_event(Event({
+        func = (function()
+          G.E_MANAGER:add_event(Event({
+            func = function()
+              local set = card.ability.extra.chosen_ability.tarot and "Tarot" or
+                  card.ability.extra.chosen_ability.planet and "Planet" or
+                  card.ability.extra.chosen_ability.spectral and "Spectral"
+              local card = create_card(set, G.consumeables, nil, nil, nil, nil, nil, 'peekabooconsumable')
+              card:add_to_deck()
+              G.consumeables:emplace(card)
+              G.GAME.consumeable_buffer = 0
+              return true
+            end
+          }))
+          local loc = card.ability.extra.chosen_ability.tarot and "k_plus_tarot" or
+              card.ability.extra.chosen_ability.planet and "k_plus_planet" or
+              card.ability.extra.chosen_ability.spectral and "k_plus_spectral"
+          local colour = card.ability.extra.chosen_ability.tarot and G.C.PURPLE or
+              card.ability.extra.chosen_ability.planet and G.C.BLUE or
+              card.ability.extra.chosen_ability.spectral and G.C.SECONDARY_SET.Spectral
+          card_eval_status_text(context.blueprint_card or card, 'extra', nil, nil, nil,
+            { message = localize(loc), colour = colour })
+          return true
+        end)
+      }))
+    end
+  end,
+  add_to_deck = function(self, card, from_debuff)
+    card.ability.extra.chosen_ability = pseudorandom_element(card.ability.extra.all_abilities,
+      pseudoseed('peekabooability'))
+    local ranks = { 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14 }
+    card.ability.extra.chosen_rank = pseudorandom_element(ranks, pseudoseed('peekaboorank'))
+    local suits = { "Diamonds", "Hearts", "Spades", "Clubs" }
+    card.ability.extra.chosen_suit = pseudorandom_element(suits, pseudoseed('peekaboosuit'))
+    if card.ability.extra.chosen_ability.hands then
+      ease_hands_played(card.ability.extra.chosen_ability.hands)
+      G.GAME.round_resets.hands = G.GAME.round_resets.hands + card.ability.extra.chosen_ability.hands
+    end
+    if card.ability.extra.chosen_ability.discards then
+      ease_discard(card.ability.extra.chosen_ability.discards)
+      G.GAME.round_resets.discards = G.GAME.round_resets.discards + card.ability.extra.chosen_ability.discards
+    end
+    if card.ability.extra.chosen_ability.hand_size then G.hand:change_size(card.ability.extra.chosen_ability.hand_size) end
+    if card.ability.extra.chosen_ability.shop_size then change_shop_size(card.ability.extra.chosen_ability.shop_size) end
+
+    if card.ability.extra.chosen_ability.double_tag then
+      G.E_MANAGER:add_event(Event({
+        func = (function()
+          add_tag(Tag('tag_double'))
+          play_sound('generic1', 0.9 + math.random() * 0.1, 0.8)
+          play_sound('holo1', 1.2 + math.random() * 0.1, 0.4)
+          return true
+        end)
+      }))
+    end
+
+    if card.ability.extra.chosen_ability.foil then
+      G.E_MANAGER:add_event(Event({
+        func = (function()
+          card:set_edition("e_foil")
+          return true
+        end)
+      }))
+    end
+    if card.ability.extra.chosen_ability.holographic then
+      G.E_MANAGER:add_event(Event({
+        func = (function()
+          card:set_edition("e_holo")
+          return true
+        end)
+      }))
+    end
+    if card.ability.extra.chosen_ability.polychrome then
+      G.E_MANAGER:add_event(Event({
+        func = (function()
+          card:set_edition("e_polychrome")
+          return true
+        end)
+      }))
+    end
+    if card.ability.extra.chosen_ability.negative then
+      G.E_MANAGER:add_event(Event({
+        func = (function()
+          card:set_edition("e_negative")
+          return true
+        end)
+      }))
+    end
+  end,
+  remove_from_deck = function(self, card, from_debuff)
+    if card.ability.extra.chosen_ability.hands then
+      ease_hands_played(-card.ability.extra.chosen_ability.hands)
+      G.GAME.round_resets.hands = G.GAME.round_resets.hands - card.ability.extra.chosen_ability.hands
+    end
+    if card.ability.extra.chosen_ability.discards then
+      ease_discard(-card.ability.extra.chosen_ability.discards)
+      G.GAME.round_resets.discards = G.GAME.round_resets.discards - card.ability.extra.chosen_ability.discards
+    end
+    if card.ability.extra.chosen_ability.hand_size then G.hand:change_size(-card.ability.extra.chosen_ability.hand_size) end
+    if card.ability.extra.chosen_ability.shop_size then change_shop_size(-card.ability.extra.chosen_ability.shop_size) end
+  end,
+  calc_dollar_bonus = function(self, card)
+    if card.ability.extra.chosen_ability.eormoney then return card.ability.extra.chosen_ability.eormoney end
+  end
+}
+
+G.Phanta.centers["absentjoker"] = {
   config = { extra = { mult = 15 } },
   loc_vars = function(self, info_queue, card)
     return { vars = { card.ability.extra.mult } }
@@ -98,8 +399,7 @@ SMODS.Joker {
   end
 }
 
-SMODS.Joker {
-  key = 'fanta',
+G.Phanta.centers["fanta"] = {
   rarity = 1,
   atlas = 'Phanta2',
   pos = { x = 3, y = 1 },
@@ -147,8 +447,7 @@ SMODS.Joker {
   end
 }
 
-SMODS.Joker {
-  key = 'heartbreak',
+G.Phanta.centers["heartbreak"] = {
   config = { extra = { xmult = 1.5, odds = 2 } },
   rarity = 2,
   atlas = 'PhantaMiscAnims1',
@@ -176,8 +475,7 @@ SMODS.Joker {
   end
 }
 
-SMODS.Joker {
-  key = 'distance',
+G.Phanta.centers["distance"] = {
   config = { extra = { chips = 250 } },
   rarity = 3,
   atlas = 'Phanta2',
@@ -200,8 +498,7 @@ SMODS.Joker {
   end
 }
 
-SMODS.Joker {
-  key = 'donpaolo',
+G.Phanta.centers["donpaolo"] = {
   rarity = 2,
   atlas = 'PhantaLaytonAnims',
   pos = { x = 0, y = 2 },
@@ -234,8 +531,7 @@ SMODS.Joker {
   end
 }
 
-SMODS.Joker {
-  key = 'futureluke',
+G.Phanta.centers["futureluke"] = {
   rarity = 2,
   atlas = 'PhantaLaytonAnims',
   pos = { x = 0, y = 3 },
@@ -269,8 +565,7 @@ SMODS.Joker {
   end
 }
 
-SMODS.Joker {
-  key = 'barton',
+G.Phanta.centers["barton"] = {
   config = { extra = { mult = 50, requirement = 15 } },
   rarity = 2,
   atlas = 'PhantaLaytonAnims',
@@ -306,8 +601,7 @@ SMODS.Joker {
   end
 }
 
-SMODS.Joker {
-  key = 'inspectorchelmey',
+G.Phanta.centers["inspectorchelmey"] = {
   config = { extra = { xmult = 3, requirement = 9 } },
   rarity = 2,
   atlas = 'PhantaLaytonAnims',
@@ -343,8 +637,7 @@ SMODS.Joker {
   end
 }
 
-SMODS.Joker {
-  key = 'zeroii',
+G.Phanta.centers["zeroii"] = {
   config = { extra = { odds = 3 } },
   rarity = 2,
   atlas = 'Phanta2',
@@ -363,8 +656,7 @@ SMODS.Joker {
   end
 }
 
-SMODS.Joker {
-  key = 'valantgramarye',
+G.Phanta.centers["valantgramarye"] = {
   rarity = 2,
   atlas = 'Phanta2',
   pos = { x = 8, y = 1 },
@@ -382,8 +674,7 @@ SMODS.Joker {
   end
 }
 
---[[SMODS.Joker {
-  key = 'snoinches',
+--[[G.Phanta.centers["snoinches"] = {
   rarity = 2,
   atlas = 'Phanta2',
   pos = { x = 11, y = 1 },
@@ -402,8 +693,7 @@ SMODS.Joker {
   end
 }]] --
 
-SMODS.Joker {
-  key = 'bloodyace',
+G.Phanta.centers["bloodyace"] = {
   rarity = 1,
   atlas = 'Phanta2',
   pos = { x = 7, y = 1 },
@@ -422,8 +712,7 @@ SMODS.Joker {
   end
 }
 
-SMODS.Joker {
-  key = 'clapperboard',
+G.Phanta.centers["clapperboard"] = {
   rarity = 2,
   atlas = 'Phanta2',
   pos = { x = 4, y = 0 },
@@ -436,8 +725,7 @@ SMODS.Joker {
   end
 }
 
-SMODS.Joker {
-  key = 'birthdaycard',
+G.Phanta.centers["birthdaycard"] = {
   config = { extra = { added_xmult = 0.2, current_xmult = 1 } },
   loc_vars = function(self, info_queue, card)
     info_queue[#info_queue + 1] = G.P_CENTERS.e_phanta_waxed
@@ -473,8 +761,7 @@ SMODS.Joker {
   end
 }
 
-SMODS.Joker {
-  key = 'plugsocket',
+G.Phanta.centers["plugsocket"] = {
   config = { extra = { xmult = 0.25 } },
   loc_vars = function(self, info_queue, card)
     return { vars = { card.ability.extra.xmult, 1 + (#count_base_copper_grates() * card.ability.extra.xmult) } }
@@ -496,8 +783,7 @@ SMODS.Joker {
   end
 }
 
-SMODS.Joker {
-  key = 'neonjoker',
+G.Phanta.centers["neonjoker"] = {
   config = { extra = { xmult = 3 } },
   rarity = 2,
   atlas = 'Phanta2',
@@ -549,8 +835,7 @@ SMODS.Joker {
   end
 }
 
-SMODS.Joker {
-  key = 'technojoker',
+G.Phanta.centers["technojoker"] = {
   config = { extra = { xmult = 0.5 } },
   loc_vars = function(self, info_queue, card)
     return { vars = { card.ability.extra.xmult, 1 + (count_missing_ranks() * card.ability.extra.xmult) } }

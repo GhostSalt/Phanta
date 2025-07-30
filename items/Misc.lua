@@ -2007,7 +2007,9 @@ SMODS.Voucher {
   key = "tabloid",
   pos = { x = 0, y = 0 },
   draw = function(self, card, layer)
-    card.children.center:draw_shader('booster', nil, card.ARGS.send_to_shader)
+    if self.discovered or card.params.bypass_discovery_center then
+      card.children.center:draw_shader('booster', nil, card.ARGS.send_to_shader)
+    end
   end,
   cost = 10,
   atlas = "PhantaVouchers",
@@ -2023,7 +2025,9 @@ SMODS.Voucher {
   key = "broadcast",
   pos = { x = 1, y = 0 },
   draw = function(self, card, layer)
-    card.children.center:draw_shader('booster', nil, card.ARGS.send_to_shader)
+    if self.discovered or card.params.bypass_discovery_center then
+      card.children.center:draw_shader('booster', nil, card.ARGS.send_to_shader)
+    end
   end,
   cost = 10,
   atlas = "PhantaVouchers",

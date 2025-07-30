@@ -1,11 +1,3 @@
--- For rendering shaders on the souls
-
-local scale_mod = 0.07 + 0.02 * math.sin(1.8 * G.TIMERS.REAL) +
-    0.00 * math.sin((G.TIMERS.REAL - math.floor(G.TIMERS.REAL)) * math.pi * 14) *
-    (1 - (G.TIMERS.REAL - math.floor(G.TIMERS.REAL))) ^ 3
-local rotate_mod = 0.05 * math.sin(1.219 * G.TIMERS.REAL) +
-    0.00 * math.sin((G.TIMERS.REAL) * math.pi * 5) * (1 - (G.TIMERS.REAL - math.floor(G.TIMERS.REAL))) ^ 2
-
 SMODS.current_mod.optional_features = { cardareas = { unscored = true } }
 
 to_big = to_big or function(x) return x end
@@ -53,8 +45,7 @@ SMODS.Atlas {
   py = 95
 }
 
-SMODS.Joker {
-  key = 'bootleg',
+G.Phanta.centers["bootleg"] = {
   config = { extra = { chips = 30, mult = 2 } },
   loc_vars = function(self, info_queue, card)
     return { vars = { card.ability.extra.chips, card.ability.extra.mult } }
@@ -76,8 +67,7 @@ SMODS.Joker {
   end
 }
 
-SMODS.Joker {
-  key = 'dropdownlist',
+G.Phanta.centers["dropdownlist"] = {
   rarity = 1,
   atlas = 'Phanta',
   pos = { x = 11, y = 3 },
@@ -101,8 +91,7 @@ SMODS.Joker {
   end
 }
 
-SMODS.Joker {
-  key = 'trainstation',
+G.Phanta.centers["trainstation"] = {
   config = { extra = { added_mult = 1, current_mult = 0 } },
   loc_vars = function(self, info_queue, card)
     return { vars = { card.ability.extra.added_mult, localize((G.GAME.current_round.train_station_card.value or 2) .. "", 'ranks'), card.ability.extra.current_mult } }
@@ -135,8 +124,7 @@ SMODS.Joker {
   end
 }
 
-SMODS.Joker {
-  key = 'hintcoin',
+G.Phanta.centers["hintcoin"] = {
   config = { extra = { money = 5 } },
   rarity = 1,
   atlas = 'PhantaLaytonAnims',
@@ -163,8 +151,7 @@ SMODS.Joker {
   end
 }
 
-SMODS.Joker {
-  key = 'dollarsign',
+G.Phanta.centers["dollarsign"] = {
   config = { extra = { money = 5 } },
   rarity = 1,
   atlas = 'Phanta',
@@ -186,8 +173,7 @@ SMODS.Joker {
   end
 }
 
-SMODS.Joker {
-  key = 'yellow',
+G.Phanta.centers["yellow"] = {
   config = { extra = { odd_money = 7, even_money = 1 } },
   rarity = 1,
   atlas = 'Phanta',
@@ -208,8 +194,7 @@ SMODS.Joker {
   end
 }
 
-SMODS.Joker {
-  key = 'purplegoldenjoker',
+G.Phanta.centers["purplegoldenjoker"] = {
   config = { extra = { money = 3 } },
   rarity = 1,
   atlas = 'Phanta',
@@ -228,8 +213,7 @@ SMODS.Joker {
   end
 }
 
-SMODS.Joker {
-  key = 'holeinthejoker',
+G.Phanta.centers["holeinthejoker"] = {
   config = { extra = { money = 3 } },
   rarity = 1,
   atlas = 'Phanta',
@@ -253,8 +237,7 @@ SMODS.Joker {
   end
 }
 
-SMODS.Joker {
-  key = 'shootingstar',
+G.Phanta.centers["shootingstar"] = {
   config = { extra = { money = 1, added_money = 1 } },
   rarity = 2,
   atlas = 'Phanta',
@@ -280,8 +263,7 @@ SMODS.Joker {
   end
 }
 
-SMODS.Joker {
-  key = 'puzzle',
+G.Phanta.centers["puzzle"] = {
   config = { extra = { given_money = 3 } },
   rarity = 1,
   atlas = 'PhantaLaytonAnims',
@@ -324,8 +306,7 @@ SMODS.Joker {
   end
 }
 
-SMODS.Joker {
-  key = 'binman',
+G.Phanta.centers["binman"] = {
   config = { extra = { given_money = 3 } },
   rarity = 1,
   atlas = 'Phanta',
@@ -348,8 +329,7 @@ SMODS.Joker {
   end
 }
 
-SMODS.Joker {
-  key = 'onemanstrash',
+G.Phanta.centers["onemanstrash"] = {
   no_pool_flag = "one_mans_trash_sold",
   config = { extra = { added_mult = 1, current_mult = 0 } },
   loc_vars = function(self, info_queue, card)
@@ -380,8 +360,7 @@ SMODS.Joker {
   end
 }
 
-SMODS.Joker {
-  key = 'anothermanstreasure',
+G.Phanta.centers["anothermanstreasure"] = {
   yes_pool_flag = "one_mans_trash_sold",
   config = { extra = { added_xmult = 0.1, current_xmult = 1 } },
   loc_vars = function(self, info_queue, card)
@@ -407,8 +386,7 @@ SMODS.Joker {
   end
 }
 
-SMODS.Joker {
-  key = 'oracle',
+G.Phanta.centers["oracle"] = {
   rarity = 1,
   atlas = 'PhantaMiscAnims1',
   pos = { x = 4, y = 11 },
@@ -437,8 +415,7 @@ SMODS.Joker {
   end
 }
 
-SMODS.Joker {
-  key = 'thief',
+G.Phanta.centers["thief"] = {
   rarity = 1,
   atlas = 'PhantaMiscAnims2',
   pos = { x = 10, y = 10 },
@@ -464,8 +441,7 @@ SMODS.Joker {
   end
 }
 
-SMODS.Joker {
-  key = 'detective',
+G.Phanta.centers["detective"] = {
   rarity = 2,
   atlas = 'PhantaMiscAnims3',
   pos = { x = 0, y = 1 },
@@ -490,8 +466,7 @@ SMODS.Joker {
   end
 }
 
-SMODS.Joker {
-  key = 'timetable',
+G.Phanta.centers["timetable"] = {
   config = { extra = { discards = 1, hands = 1, hand_size = 1, is_happening = false } },
   loc_vars = function(self, info_queue, card)
     return { vars = { card.ability.extra.discards, card.ability.extra.hands, card.ability.extra.hand_size } }
@@ -568,8 +543,7 @@ SMODS.Joker {
   end
 }
 
-SMODS.Joker {
-  key = 'mazebean',
+G.Phanta.centers["mazebean"] = {
   config = { extra = { current_hand_size = 0, target_antes = 2, current_antes = 0 } },
   loc_vars = function(self, info_queue, card)
     return { vars = { card.ability.extra.current_hand_size, card.ability.extra.target_antes, card.ability.extra.target_antes - card.ability.extra.current_antes } }
@@ -614,8 +588,7 @@ SMODS.Sound({
   replace = true
 })
 
-SMODS.Joker {
-  key = 'new2dsxl',
+G.Phanta.centers["new2dsxl"] = {
   config = { extra = { lost_hand_size = 2, given_xhands = 2 } },
   loc_vars = function(self, info_queue, card)
     return { vars = { card.ability.extra.lost_hand_size, card.ability.extra.given_xhands } }
@@ -657,8 +630,7 @@ SMODS.Joker {
   end
 }
 
-SMODS.Joker {
-  key = 'playerpin',
+G.Phanta.centers["playerpin"] = {
   --config = { extra = {  } },
   loc_vars = function(self, info_queue, card)
     local _vars = -- Brace yourself.
@@ -719,8 +691,7 @@ SMODS.Joker {
   perishable_compat = true
 }
 
-SMODS.Joker {
-  key = 'junpei',
+G.Phanta.centers["junpei"] = {
   config = { extra = { given_mult = 9 } },
   loc_vars = function(self, info_queue, card)
     return { vars = { card.ability.extra.given_mult } }
@@ -739,8 +710,7 @@ SMODS.Joker {
   end
 }
 
-SMODS.Joker {
-  key = 'sigma',
+G.Phanta.centers["sigma"] = {
   loc_vars = function(self, info_queue, card)
     info_queue[#info_queue + 1] = G.P_CENTERS.m_bonus
     return {}
@@ -759,8 +729,7 @@ SMODS.Joker {
   end
 }
 
-SMODS.Joker {
-  key = 'carlos',
+G.Phanta.centers["carlos"] = {
   config = { extra = { added_hands = 1, current_hands = 0 } },
   loc_vars = function(self, info_queue, card)
     return { vars = { card.ability.extra.current_hands, card.ability.extra.current_hands == 1 and "" or localize("phanta_plural"), card.ability.extra.added_hands } }
@@ -791,8 +760,7 @@ SMODS.Joker {
   end
 }
 
-SMODS.Joker {
-  key = 'q',
+G.Phanta.centers["q"] = {
   config = { extra = { given_xmult = 1.5, queens = {} } },
   loc_vars = function(self, info_queue, card)
     return { vars = { card.ability.extra.given_xmult } }
@@ -825,8 +793,7 @@ SMODS.Joker {
   end
 }
 
-SMODS.Joker {
-  key = 'diana',
+G.Phanta.centers["diana"] = {
   config = { extra = { added_mult = 1, current_mult = 0 } },
   loc_vars = function(self, info_queue, card)
     info_queue[#info_queue + 1] = G.P_CENTERS.m_bonus
@@ -849,8 +816,7 @@ SMODS.Joker {
   end
 }
 
-SMODS.Joker {
-  key = 'redkeycards',
+G.Phanta.centers["redkeycards"] = {
   config = { extra = { added_discards = 3, will_be_spent = false, is_spent = false } },
   loc_vars = function(self, info_queue, card)
     info_queue[#info_queue + 1] = G.P_CENTERS.m_mult
@@ -902,8 +868,7 @@ SMODS.Joker {
   end
 }
 
-SMODS.Joker {
-  key = 'bluekeycards',
+G.Phanta.centers["bluekeycards"] = {
   config = { extra = { added_hands = 3, will_be_spent = false, is_spent = false } },
   loc_vars = function(self, info_queue, card)
     info_queue[#info_queue + 1] = G.P_CENTERS.m_bonus
@@ -954,8 +919,7 @@ SMODS.Joker {
   end
 }
 
-SMODS.Joker {
-  key = 'kylehyde',
+G.Phanta.centers["kylehyde"] = {
   config = { extra = { odds = 4 } },
   loc_vars = function(self, info_queue, card)
     info_queue[#info_queue + 1] = G.P_CENTERS.m_stone
@@ -969,7 +933,7 @@ SMODS.Joker {
   eternal_compat = true,
   perishable_compat = true,
   calculate = function(self, card, context)
-    if context.individual and (context.other_card:is_suit("Hearts") or context.other_card:is_suit("Diamonds")) and pseudorandom('kylehyde') < G.GAME.probabilities.normal / card.ability.extra.odds then
+    if context.individual and context.cardarea == G.play and (context.other_card:is_suit("Hearts") or context.other_card:is_suit("Diamonds")) and pseudorandom('kylehyde') < G.GAME.probabilities.normal / card.ability.extra.odds then
       local card_temp = context.other_card
       card_temp:set_ability(G.P_CENTERS.m_stone, nil, true)
       G.E_MANAGER:add_event(Event({
@@ -987,8 +951,7 @@ SMODS.Joker {
   end
 }
 
-SMODS.Joker {
-  key = 'inception',
+G.Phanta.centers["inception"] = {
   config = { extra = { current_mult = 0, added_mult = 6 } },
   rarity = 1,
   atlas = 'Phanta',
@@ -1017,8 +980,7 @@ SMODS.Joker {
   end
 }
 
-SMODS.Joker {
-  key = 'a1z26',
+G.Phanta.centers["a1z26"] = {
   config = { extra = { mult = 10 } },
   rarity = 1,
   atlas = 'Phanta',
@@ -1040,8 +1002,7 @@ SMODS.Joker {
   end
 }
 
-SMODS.Joker {
-  key = 'nonuniformday',
+G.Phanta.centers["nonuniformday"] = {
   config = { extra = { odds = 2 } },
   loc_vars = function(self, info_queue, card)
     info_queue[#info_queue + 1] = G.P_CENTERS.m_wild
@@ -1084,8 +1045,7 @@ SMODS.Joker {
   end
 }
 
-SMODS.Joker {
-  key = 'badhairday',
+G.Phanta.centers["badhairday"] = {
   config = { extra = { odds = 2 } },
   loc_vars = function(self, info_queue, card)
     info_queue[#info_queue + 1] = G.P_CENTERS.m_wild
@@ -1105,8 +1065,7 @@ SMODS.Joker {
   end
 }
 
-SMODS.Joker {
-  key = 'animalinstinct',
+G.Phanta.centers["animalinstinct"] = {
   config = { extra = { added_mult = 3, current_mult = 0 } },
   loc_vars = function(self, info_queue, card)
     return { vars = { card.ability.extra.added_mult, card.ability.extra.current_mult } }
@@ -1129,8 +1088,7 @@ SMODS.Joker {
   end
 }
 
-SMODS.Joker {
-  key = 'target',
+G.Phanta.centers["target"] = {
   config = { extra = { added_mult = 8, current_mult = 0 } },
   loc_vars = function(self, info_queue, card)
     return { vars = { card.ability.extra.added_mult, card.ability.extra.current_mult } }
@@ -1171,8 +1129,7 @@ SMODS.Joker {
   end
 }
 
-SMODS.Joker {
-  key = 'teastainedjoker',
+G.Phanta.centers["teastainedjoker"] = {
   config = { extra = { odds = 5, added_mult = 3, current_mult = 0 } },
   loc_vars = function(self, info_queue, card)
     info_queue[#info_queue + 1] = G.P_CENTERS.m_lucky
@@ -1216,8 +1173,7 @@ SMODS.Sound({
   replace = true
 })
 
-SMODS.Joker {
-  key = 'teabag',
+G.Phanta.centers["teabag"] = {
   loc_vars = function(self, info_queue, card)
     info_queue[#info_queue + 1] = G.P_CENTERS.m_lucky
   end,
@@ -1253,8 +1209,7 @@ SMODS.Joker {
   end
 }
 
-SMODS.Joker {
-  key = 'forsakenscroll',
+G.Phanta.centers["forsakenscroll"] = {
   config = { extra = { odds = 25, given_xmult = 3 } },
   loc_vars = function(self, info_queue, card)
     info_queue[#info_queue + 1] = G.P_CENTERS.m_lucky
@@ -1274,8 +1229,7 @@ SMODS.Joker {
   end
 }
 
-SMODS.Joker {
-  key = 'exitsign',
+G.Phanta.centers["exitsign"] = {
   config = { extra = { money_given = 10 } },
   rarity = 1,
   atlas = 'Phanta',
@@ -1294,8 +1248,7 @@ SMODS.Joker {
   end
 }
 
-SMODS.Joker {
-  key = 'task',
+G.Phanta.centers["task"] = {
   config = { extra = { added_money = 1, current_money = 0 } },
   rarity = 2,
   atlas = 'PhantaMiscAnims1',
@@ -1343,8 +1296,7 @@ SMODS.Joker {
   end
 }
 
-SMODS.Joker {
-  key = 'saltcircle',
+G.Phanta.centers["saltcircle"] = {
   config = { extra = { chips = 177 } },
   rarity = 1,
   atlas = 'Phanta',
@@ -1365,8 +1317,7 @@ SMODS.Joker {
   end
 }
 
-SMODS.Joker {
-  key = 'thenecronomicon',
+G.Phanta.centers["thenecronomicon"] = {
   config = { extra = { chips = 666 } },
   rarity = 3,
   atlas = 'Phanta',
@@ -1387,8 +1338,7 @@ SMODS.Joker {
   end
 }
 
-SMODS.Joker {
-  key = 'stitchintime',
+G.Phanta.centers["stitchintime"] = {
   config = { extra = { added_chips = 9, current_chips = 0 } },
   rarity = 2,
   atlas = 'Phanta',
@@ -1415,8 +1365,7 @@ SMODS.Joker {
   end
 }
 
-SMODS.Joker {
-  key = 'shackles',
+G.Phanta.centers["shackles"] = {
   config = { extra = { chips = 250 } },
   rarity = 3,
   atlas = 'Phanta',
@@ -1448,15 +1397,16 @@ SMODS.Joker {
   end
 }
 
-SMODS.Joker {
-  key = 'ghost',
+G.Phanta.centers["ghost"] = {
   config = { extra = { x_mult = 1 } },
   rarity = 3,
   atlas = 'Phanta',
   individual_quips = true,
   pos = { x = 0, y = 0 },
   draw = function(self, card, layer)
-    card.children.center:draw_shader('voucher', nil, card.ARGS.send_to_shader)
+    if self.discovered or card.params.bypass_discovery_center then
+      card.children.center:draw_shader('voucher', nil, card.ARGS.send_to_shader)
+    end
   end,
   cost = 8,
   blueprint_compat = true,
@@ -1473,8 +1423,7 @@ SMODS.Joker {
   end
 }
 
-SMODS.Joker {
-  key = 'html',
+G.Phanta.centers["html"] = {
   config = { extra = { given_mult = 6 } },
   rarity = 1,
   atlas = 'Phanta',
@@ -1493,8 +1442,7 @@ SMODS.Joker {
   end
 }
 
-SMODS.Joker {
-  key = 'knowledgeofthecollege',
+G.Phanta.centers["knowledgeofthecollege"] = {
   config = { extra = { given_xmult = 3 } },
   rarity = 3,
   atlas = 'PhantaKnowledgeOfTheCollegeAnim',
@@ -1517,13 +1465,14 @@ SMODS.Joker {
   end
 }
 
-SMODS.Joker {
-  key = 'theapparition',
+G.Phanta.centers["theapparition"] = {
   rarity = 2,
   atlas = 'Phanta',
   pos = { x = 7, y = 1 },
   draw = function(self, card, layer)
-    card.children.center:draw_shader('voucher', nil, card.ARGS.send_to_shader)
+    if self.discovered or card.params.bypass_discovery_center then
+      card.children.center:draw_shader('voucher', nil, card.ARGS.send_to_shader)
+    end
   end,
   cost = 6,
   blueprint_compat = true,
@@ -1539,8 +1488,7 @@ SMODS.Joker {
   end
 }
 
-SMODS.Joker {
-  key = 'willothewisp',
+G.Phanta.centers["willothewisp"] = {
   rarity = 3,
   atlas = 'Phanta',
   pos = { x = 6, y = 10 },
@@ -1555,8 +1503,7 @@ SMODS.Joker {
   end
 }
 
-SMODS.Joker {
-  key = 'stickercollection',
+G.Phanta.centers["stickercollection"] = {
   config = { extra = { retriggers = 3 } },
   rarity = 2,
   atlas = 'Phanta',
@@ -1581,8 +1528,7 @@ SMODS.Joker {
   end
 }
 
-SMODS.Joker {
-  key = 'photocopy',
+G.Phanta.centers["photocopy"] = {
   config = { extra = { odds = 2 } },
   rarity = 2,
   atlas = 'Phanta',
@@ -1601,8 +1547,7 @@ SMODS.Joker {
   end
 }
 
-SMODS.Joker {
-  key = 'doubledice',
+G.Phanta.centers["doubledice"] = {
   config = { extra = { added_mult = 5 } },
   rarity = 2,
   atlas = 'Phanta',
@@ -1621,8 +1566,7 @@ SMODS.Joker {
   end
 }
 
-SMODS.Joker {
-  key = 'prognosticator',
+G.Phanta.centers["prognosticator"] = {
   rarity = 2,
   atlas = 'Phanta',
   pos = { x = 9, y = 10 },
@@ -1653,8 +1597,7 @@ SMODS.Joker {
   end
 }
 
-SMODS.Joker {
-  key = 'calendar',
+G.Phanta.centers["calendar"] = {
   rarity = 2,
   atlas = 'Phanta',
   pos = { x = 10, y = 10 },
@@ -1688,8 +1631,7 @@ SMODS.Joker {
   end
 }
 
-SMODS.Joker {
-  key = 'grimreaper',
+G.Phanta.centers["grimreaper"] = {
   rarity = 3,
   atlas = 'Phanta',
   pos = { x = 9, y = 4 },
@@ -1732,8 +1674,7 @@ SMODS.Joker {
   end
 }
 
-SMODS.Joker {
-  key = 'professorlayton',
+G.Phanta.centers["professorlayton"] = {
   config = { extra = { out_of_odds = 4, added_mult = 50 } },
   rarity = 2,
   atlas = 'PhantaLaytonAnims',
@@ -1764,8 +1705,7 @@ SMODS.Joker {
   end
 }
 
-SMODS.Joker {
-  key = 'luketriton',
+G.Phanta.centers["luketriton"] = {
   config = { extra = { out_of_odds = 4, x_mult = 3 } },
   rarity = 2,
   atlas = 'PhantaLaytonAnims',
@@ -1803,8 +1743,7 @@ SMODS.Joker {
   end
 }
 
-SMODS.Joker {
-  key = 'jeandescole',
+G.Phanta.centers["jeandescole"] = {
   rarity = 2,
   atlas = 'PhantaLaytonAnims',
   pos = { x = 0, y = 6 },
@@ -1857,8 +1796,7 @@ SMODS.Joker {
   end
 }
 
-SMODS.Joker {
-  key = 'engineer',
+G.Phanta.centers["engineer"] = {
   rarity = 2,
   atlas = 'Phanta',
   pos = { x = 7, y = 8 },
@@ -1891,8 +1829,7 @@ SMODS.Joker {
   end
 }
 
-SMODS.Joker {
-  key = 'medic',
+G.Phanta.centers["medic"] = {
   rarity = 2,
   atlas = 'Phanta',
   pos = { x = 6, y = 6 },
@@ -1935,8 +1872,7 @@ SMODS.Joker {
   end
 }
 
-SMODS.Joker {
-  key = 'psychelock',
+G.Phanta.centers["psychelock"] = {
   config = { extra = { xmult = 0.6 } },
   rarity = 3,
   atlas = 'PhantaMiscAnims1',
@@ -1976,8 +1912,7 @@ SMODS.Joker {
   end
 }
 
-SMODS.Joker {
-  key = 'milesedgeworth',
+G.Phanta.centers["milesedgeworth"] = {
   config = { extra = { xmult = 0.5 } },
   rarity = 3,
   atlas = 'Phanta',
@@ -1997,8 +1932,7 @@ SMODS.Joker {
   end
 }
 
-SMODS.Joker {
-  key = 'apollosbracelet',
+G.Phanta.centers["apollosbracelet"] = {
   rarity = 3,
   atlas = 'PhantaMiscAnims3',
   pos = { x = 7, y = 2 },
@@ -2031,8 +1965,7 @@ SMODS.Sound({
   replace = true
 })
 
-SMODS.Joker {
-  key = 'diamondaxe',
+G.Phanta.centers["diamondaxe"] = {
   rarity = 2,
   atlas = 'Phanta',
   pos = { x = 10, y = 2 },
@@ -2068,8 +2001,7 @@ SMODS.Joker {
   end
 }
 
-SMODS.Joker {
-  key = 'honeydew',
+G.Phanta.centers["honeydew"] = {
   rarity = 2,
   atlas = 'PhantaMiscAnims3',
   pos = { x = 0, y = 0 },
@@ -2109,7 +2041,6 @@ SMODS.Joker {
               .hand.cards[i]
         end
       end
-      print(#candidates)
       if #candidates > 0 then
         local chosen_card = pseudorandom_element(candidates, pseudoseed("honeydew"))
         chosen_card:set_edition("e_phanta_waxed")
@@ -2123,8 +2054,7 @@ SMODS.Joker {
   end
 }
 
-SMODS.Joker {
-  key = 'candle',
+G.Phanta.centers["candle"] = {
   config = { extra = { added_xmult = 0.25, current_xmult = 1, is_contestant = true } },
   rarity = 2,
   atlas = 'Phanta',
@@ -2172,13 +2102,13 @@ SMODS.Joker {
   end,
   set_badges = function(self, card, badges)
     if next(SMODS.find_mod("GSBFDI")) then
-      badges[#badges + 1] = create_badge(localize('contestant_joker_badge'), G.C.BFDI.MISC_COLOURS.BFDI_GREEN, G.C.WHITE, 1)
+      badges[#badges + 1] = create_badge(localize('contestant_joker_badge'), G.C.BFDI.MISC_COLOURS.BFDI_GREEN, G.C.WHITE,
+        1)
     end
   end
 }
 
-SMODS.Joker {
-  key = 'goo',
+G.Phanta.centers["goo"] = {
   config = { extra = { is_contestant = true } },
   rarity = 2,
   atlas = 'Phanta',
@@ -2205,13 +2135,13 @@ SMODS.Joker {
   end,
   set_badges = function(self, card, badges)
     if next(SMODS.find_mod("GSBFDI")) then
-      badges[#badges + 1] = create_badge(localize('contestant_joker_badge'), G.C.BFDI.MISC_COLOURS.BFDI_GREEN, G.C.WHITE, 1)
+      badges[#badges + 1] = create_badge(localize('contestant_joker_badge'), G.C.BFDI.MISC_COLOURS.BFDI_GREEN, G.C.WHITE,
+        1)
     end
   end
 }
 
-SMODS.Joker {
-  key = 'web',
+G.Phanta.centers["web"] = {
   config = { extra = { given_mult = 15, counted_spades = 0, required_spades = 2 } },
   rarity = 1,
   atlas = 'Phanta',
@@ -2238,8 +2168,7 @@ SMODS.Joker {
   end
 }
 
-SMODS.Joker {
-  key = 'cutcorners',
+G.Phanta.centers["cutcorners"] = {
   config = { extra = { added_mult = 1, current_mult = 0, no_of_cards = 4 } },
   rarity = 1,
   atlas = 'Phanta',
@@ -2267,8 +2196,7 @@ SMODS.Joker {
   end
 }
 
-SMODS.Joker {
-  key = 'blottedjoker',
+G.Phanta.centers["blottedjoker"] = {
   config = { extra = { added_chips = 30, current_chips = 0 } },
   rarity = 2,
   atlas = 'Phanta',
@@ -2316,8 +2244,7 @@ SMODS.Joker {
   end
 }
 
-SMODS.Joker {
-  key = 'bloodpact',
+G.Phanta.centers["bloodpact"] = {
   config = { extra = { added_mult = 4, current_mult = 0 } },
   rarity = 2,
   atlas = 'Phanta',
@@ -2364,8 +2291,7 @@ SMODS.Joker {
   end
 }
 
-SMODS.Joker {
-  key = 'tnetennba',
+G.Phanta.centers["tnetennba"] = {
   config = { extra = { added_mult = 3, current_mult = 0 } },
   rarity = 2,
   atlas = 'PhantaMiscAnims2',
@@ -2407,8 +2333,7 @@ SMODS.Joker {
   end
 }
 
-SMODS.Joker {
-  key = 'technicolourjoker',
+G.Phanta.centers["technicolourjoker"] = {
   config = { extra = { given_mult = 7 } },
   rarity = 1,
   atlas = 'Phanta',
@@ -2427,8 +2352,7 @@ SMODS.Joker {
   end
 }
 
-SMODS.Joker {
-  key = 'identity',
+G.Phanta.centers["identity"] = {
   config = { extra = { no_of_cards = 2 } },
   rarity = 2,
   atlas = 'Phanta',
@@ -2438,7 +2362,9 @@ SMODS.Joker {
     return { vars = { card.ability.extra.no_of_cards } }
   end,
   draw = function(self, card, layer)
-    card.children.center:draw_shader('voucher', nil, card.ARGS.send_to_shader)
+    if self.discovered or card.params.bypass_discovery_center then
+      card.children.center:draw_shader('voucher', nil, card.ARGS.send_to_shader)
+    end
   end,
   blueprint_compat = false,
   eternal_compat = false,
@@ -2487,8 +2413,7 @@ SMODS.Joker {
   end
 }
 
-SMODS.Joker {
-  key = 'tricolour',
+G.Phanta.centers["tricolour"] = {
   config = { extra = { mult = 17 } },
   rarity = 1,
   atlas = 'PhantaMiscAnims2',
@@ -2528,8 +2453,7 @@ SMODS.Joker {
   end
 }
 
-SMODS.Joker {
-  key = 'beadnecklace',
+G.Phanta.centers["beadnecklace"] = {
   config = { extra = { added_mult = 1, current_mult = 0 } },
   rarity = 2,
   atlas = 'Phanta',
@@ -2590,8 +2514,7 @@ SMODS.Joker {
   end
 }
 
-SMODS.Joker {
-  key = 'p5joker',
+G.Phanta.centers["p5joker"] = {
   config = { extra = { mult_per_hand = 2, current_mult = 0 } },
   rarity = 2,
   atlas = 'Phanta',
@@ -2625,8 +2548,7 @@ SMODS.Joker {
   end
 }
 
-SMODS.Joker {
-  key = 'crescent',
+G.Phanta.centers["crescent"] = {
   rarity = 1,
   atlas = 'Phanta',
   pos = { x = 3, y = 0 },
@@ -2652,8 +2574,7 @@ SMODS.Joker {
   end
 }
 
-SMODS.Joker {
-  key = 'shoppinglist',
+G.Phanta.centers["shoppinglist"] = {
   config = { extra = { added_mult = 4, target = 5, current_bought = 0, current_mult = 0 } },
   rarity = 1,
   atlas = 'Phanta',
@@ -2690,8 +2611,7 @@ SMODS.Joker {
   end
 }
 
-SMODS.Joker {
-  key = 'ransomnote',
+G.Phanta.centers["ransomnote"] = {
   config = { extra = { money = 25, joker_tally = 0, jokers_required = 5 } },
   rarity = 2,
   atlas = 'Phanta',
@@ -2720,8 +2640,7 @@ SMODS.Joker {
   end
 }
 
-SMODS.Joker {
-  key = 'purplejoker',
+G.Phanta.centers["purplejoker"] = {
   config = { extra = { mult_per_hand = 1, current_mult = 0 } },
   rarity = 1,
   atlas = 'Phanta',
@@ -2749,8 +2668,7 @@ SMODS.Joker {
   end
 }
 
-SMODS.Joker {
-  key = 'monetjoker',
+G.Phanta.centers["monetjoker"] = {
   rarity = 3,
   atlas = 'Phanta',
   pos = { x = 4, y = 9 },
@@ -2780,8 +2698,7 @@ SMODS.Joker {
   end
 }
 
-SMODS.Joker {
-  key = 'charcoaljoker',
+G.Phanta.centers["charcoaljoker"] = {
   config = { extra = { added_mult = 3, current_mult = 0 } },
   rarity = 2,
   atlas = 'Phanta',
@@ -2812,8 +2729,7 @@ SMODS.Joker {
   end
 }
 
-SMODS.Joker {
-  key = 'goldenfiddle',
+G.Phanta.centers["goldenfiddle"] = {
   rarity = 2,
   atlas = 'Phanta',
   pos = { x = 4, y = 0 },
@@ -2856,8 +2772,7 @@ SMODS.Joker {
   end
 }
 
-SMODS.Joker {
-  key = 'reverie',
+G.Phanta.centers["reverie"] = {
   rarity = 2,
   atlas = 'PhantaMiscAnims1',
   pos = { x = 6, y = 6 },
@@ -2903,8 +2818,7 @@ SMODS.Joker {
   end
 }
 
-SMODS.Joker {
-  key = 'sees',
+G.Phanta.centers["sees"] = {
   rarity = 2,
   atlas = 'Phanta',
   pos = { x = 2, y = 4 },
@@ -2940,8 +2854,7 @@ SMODS.Joker {
   end
 }
 
-SMODS.Joker {
-  key = 'scissorsaresharp',
+G.Phanta.centers["scissorsaresharp"] = {
   rarity = 2,
   atlas = 'Phanta',
   pos = { x = 4, y = 7 },
@@ -2977,8 +2890,7 @@ SMODS.Joker {
   end
 }
 
-SMODS.Joker {
-  key = 'caesarcipher',
+G.Phanta.centers["caesarcipher"] = {
   rarity = 2,
   atlas = 'Phanta',
   pos = { x = 5, y = 4 },
@@ -3028,8 +2940,7 @@ SMODS.Joker {
   end
 }
 
-SMODS.Joker {
-  key = 'timepiece',
+G.Phanta.centers["timepiece"] = {
   rarity = 2,
   atlas = 'Phanta',
   pos = { x = 3, y = 4 },
@@ -3059,8 +2970,7 @@ SMODS.Joker {
   end
 }
 
-SMODS.Joker {
-  key = 'introspection',
+G.Phanta.centers["introspection"] = {
   config = { extra = { chosen_type = 0 } },
   rarity = 2,
   atlas = 'Phanta',
@@ -3107,8 +3017,7 @@ SMODS.Joker {
   end
 }
 
-SMODS.Joker {
-  key = 'blindjoker',
+G.Phanta.centers["blindjoker"] = {
   config = { extra = { no_of_aces = 2 } },
   rarity = 2,
   atlas = 'Phanta',
@@ -3156,8 +3065,7 @@ SMODS.Joker {
   end
 }
 
-SMODS.Joker {
-  key = 'spaceinvader',
+G.Phanta.centers["spaceinvader"] = {
   config = { extra = { no_of_planets = 2 } },
   rarity = 2,
   atlas = 'PhantaMiscAnims3',
@@ -3169,15 +3077,21 @@ SMODS.Joker {
     ["crab"] = {
       anim = {
         { xrange = { first = 0, last = 1 }, y = 5, t = 0.5 }
-      }, loop = true },
+      },
+      loop = true
+    },
     ["squid"] = {
       anim = {
         { xrange = { first = 2, last = 3 }, y = 5, t = 0.5 }
-      }, loop = true },
+      },
+      loop = true
+    },
     ["octopus"] = {
       anim = {
         { xrange = { first = 4, last = 5 }, y = 5, t = 0.5 }
-      }, loop = true },
+      },
+      loop = true
+    },
   },
   phanta_anim_extra_current_state = nil,
   cost = 6,
@@ -3225,8 +3139,7 @@ SMODS.Joker {
   end
 }
 
-SMODS.Joker {
-  key = 'witchsmark',
+G.Phanta.centers["witchsmark"] = {
   rarity = 3,
   atlas = 'Phanta',
   pos = { x = 0, y = 10 },
@@ -3264,8 +3177,7 @@ SMODS.Joker {
   end
 }
 
-SMODS.Joker {
-  key = 'modernart',
+G.Phanta.centers["modernart"] = {
   config = { extra = { bonus_cash = 3 } },
   rarity = 1,
   atlas = 'Phanta',
@@ -3289,8 +3201,7 @@ SMODS.Joker {
   end
 }
 
-SMODS.Joker {
-  key = 'sketch',
+G.Phanta.centers["sketch"] = {
   config = { extra = { xmult = 0.5 } },
   rarity = 3,
   atlas = 'Phanta',
@@ -3312,8 +3223,7 @@ SMODS.Joker {
   end
 }
 
-SMODS.Joker {
-  key = 'conspiracist',
+G.Phanta.centers["conspiracist"] = {
   config = { extra = { odds = 2 } },
   rarity = 1,
   atlas = 'Phanta',
@@ -3345,8 +3255,7 @@ SMODS.Joker {
   end
 }
 
-SMODS.Joker {
-  key = 'wavyjoker',
+G.Phanta.centers["wavyjoker"] = {
   config = { extra = { no_of_tarots = 2 } },
   rarity = 1,
   atlas = 'Phanta',
@@ -3384,8 +3293,7 @@ SMODS.Joker {
   end
 }
 
-SMODS.Joker {
-  key = 'slidingpuzzle',
+G.Phanta.centers["slidingpuzzle"] = {
   rarity = 2,
   atlas = 'Phanta',
   pos = { x = 10, y = 1 },
@@ -3410,8 +3318,7 @@ SMODS.Joker {
 }
 
 -- This code is so jank, sorry :sob:
-SMODS.Joker {
-  key = 'sudoku',
+G.Phanta.centers["sudoku"] = {
   config = { extra = { ranks = { ["2"] = 0, ["3"] = 0, ["4"] = 0, ["5"] = 0, ["6"] = 0, ["7"] = 0, ["8"] = 0, ["9"] = 0, ["14"] = 0 }, no_of_upgrades = 1 } },
   rarity = 1,
   atlas = 'Phanta',
@@ -3507,8 +3414,7 @@ SMODS.Joker {
   end
 }
 
-SMODS.Joker {
-  key = 'ceaseanddesist',
+G.Phanta.centers["ceaseanddesist"] = {
   config = { extra = { no_of_upgrades = 1 } },
   rarity = 2,
   atlas = 'Phanta',
@@ -3544,8 +3450,7 @@ SMODS.Joker {
   end
 }
 
-SMODS.Joker {
-  key = 'thepolicemun',
+G.Phanta.centers["thepolicemun"] = {
   config = { extra = { no_of_upgrades = 3 } },
   rarity = 2,
   atlas = 'PhantaMiscAnims2',
@@ -3596,8 +3501,7 @@ SMODS.Joker {
   end
 }
 
-SMODS.Joker {
-  key = 'nojoke',
+G.Phanta.centers["nojoke"] = {
   config = { extra = { mult_per_straight = 4 } },
   rarity = 1,
   atlas = 'Phanta',
@@ -3616,8 +3520,7 @@ SMODS.Joker {
   end
 }
 
-SMODS.Joker {
-  key = 'lotteryticket',
+G.Phanta.centers["lotteryticket"] = {
   config = { extra = { no_of_upgrades = 1 } },
   rarity = 2,
   atlas = 'Phanta',
@@ -3658,8 +3561,7 @@ SMODS.Joker {
   end
 }
 
-SMODS.Joker {
-  key = 'dottodot',
+G.Phanta.centers["dottodot"] = {
   config = { extra = { xmult = 3, active = false } },
   rarity = 2,
   atlas = 'PhantaMiscAnims2',
@@ -3674,11 +3576,15 @@ SMODS.Joker {
         { x = 11,                            y = 5, t = 0.025 }, { xrange = { first = 0, last = 4 }, y = 6, t = 0.025 }, { x = 4, y = 6, t = 0.2 },
         { xrange = { first = 5, last = 11 }, y = 6, t = 0.025 }, { xrange = { first = 0, last = 6 }, y = 7, t = 0.025 }, { x = 6, y = 7, t = 0.2 },
         { xrange = { first = 7, last = 9 }, y = 7, t = 0.025 }, { x = 9, y = 7, t = 1 }
-      }, loop = false },
+      },
+      loop = false
+    },
     ["fading"] = {
       anim = {
         { xrange = { first = 10, last = 11 }, y = 7, t = 0.025 }, { xrange = { first = 0, last = 1 }, y = 8, t = 0.025 }, { x = 4, y = 0, t = 1 }
-      }, loop = false }
+      },
+      loop = false
+    }
   },
   phanta_anim_current_state = nil,
   cost = 6,
@@ -3705,8 +3611,7 @@ SMODS.Joker {
   end
 }
 
-SMODS.Joker {
-  key = 'diningtable',
+G.Phanta.centers["diningtable"] = {
   rarity = 3,
   atlas = 'Phanta',
   pos = { x = 1, y = 10 },
@@ -3751,8 +3656,7 @@ SMODS.Joker {
   end
 }
 
-SMODS.Joker {
-  key = 'eyeofprovidence',
+G.Phanta.centers["eyeofprovidence"] = {
   config = { extra = { xmult = 2 } },
   rarity = 3,
   atlas = 'Phanta',
@@ -3771,8 +3675,7 @@ SMODS.Joker {
   end
 }
 
-SMODS.Joker {
-  key = 'plumber',
+G.Phanta.centers["plumber"] = {
   config = { extra = { added_xmult = 0.2, current_xmult = 1 } },
   rarity = 3,
   atlas = 'Phanta',
@@ -3803,8 +3706,7 @@ SMODS.Joker {
   end
 }
 
-SMODS.Joker {
-  key = 'thespear',
+G.Phanta.centers["thespear"] = {
   rarity = 3,
   atlas = 'Phanta',
   pos = { x = 0, y = 6 },
@@ -3851,8 +3753,7 @@ SMODS.Joker {
   end
 }
 
-SMODS.Joker {
-  key = 'thefuse',
+G.Phanta.centers["thefuse"] = {
   config = { extra = { added_xmult = 0.1, current_xmult = 1 } },
   rarity = 3,
   atlas = 'Phanta',
@@ -3892,8 +3793,7 @@ SMODS.Joker {
   end
 }
 
-SMODS.Joker {
-  key = 'themace',
+G.Phanta.centers["themace"] = {
   config = { extra = { money = 5 } },
   rarity = 3,
   atlas = 'Phanta',
@@ -3926,8 +3826,7 @@ SMODS.Joker {
   end
 }
 
-SMODS.Joker {
-  key = 'thedagger',
+G.Phanta.centers["thedagger"] = {
   config = { extra = { added_mult = 5, current_mult = 0 } },
   rarity = 3,
   atlas = 'Phanta',
@@ -3965,8 +3864,7 @@ SMODS.Joker {
   end
 }
 
-SMODS.Joker {
-  key = 'corkboard',
+G.Phanta.centers["corkboard"] = {
   rarity = 2,
   atlas = 'Phanta',
   pos = { x = 8, y = 5 },
@@ -3994,8 +3892,7 @@ SMODS.Joker {
   end
 }
 
-SMODS.Joker {
-  key = 'evidence',
+G.Phanta.centers["evidence"] = {
   config = { extra = { added_xmult = 1, current_xmult = 1 } },
   rarity = 3,
   atlas = 'Phanta',
@@ -4030,8 +3927,7 @@ SMODS.Joker {
   end
 }
 
-SMODS.Joker {
-  key = 'lily',
+G.Phanta.centers["lily"] = {
   config = { extra = { given_chips = 250 } },
   rarity = 3,
   atlas = 'Phanta',
@@ -4056,8 +3952,7 @@ SMODS.Joker {
   end
 }
 
-SMODS.Joker {
-  key = 'selfportrait',
+G.Phanta.centers["selfportrait"] = {
   config = { extra = { current_rounds = 0, rounds_required = 2 } },
   rarity = 3,
   atlas = 'Phanta',
@@ -4128,8 +4023,7 @@ SMODS.Joker {
   end
 }
 
-SMODS.Joker {
-  key = 'caniossoul',
+G.Phanta.centers["caniossoul"] = {
   config = { extra = { lost_xmult = 0.5, current_xmult = 3 } },
   rarity = 3,
   atlas = 'Phanta',
@@ -4190,8 +4084,7 @@ SMODS.Joker {
   end
 }
 
-SMODS.Joker {
-  key = 'tribouletssoul',
+G.Phanta.centers["tribouletssoul"] = {
   config = { extra = { given_xmult = 3, remaining_hands = 2, added_hands = 2 } },
   rarity = 3,
   atlas = 'Phanta',
@@ -4271,8 +4164,7 @@ SMODS.Joker {
   end
 }
 
-SMODS.Joker {
-  key = 'yorickssoul',
+G.Phanta.centers["yorickssoul"] = {
   config = { extra = { lost_xmult = 1, current_xmult = 3 } },
   rarity = 3,
   atlas = 'Phanta',
@@ -4327,8 +4219,7 @@ SMODS.Joker {
   end
 }
 
-SMODS.Joker {
-  key = 'chicotssoul',
+G.Phanta.centers["chicotssoul"] = {
   config = { extra = { lost_xmult = 0.5, current_xmult = 3 } },
   rarity = 3,
   atlas = 'Phanta',
@@ -4383,8 +4274,7 @@ SMODS.Joker {
   end
 }
 
-SMODS.Joker {
-  key = 'perkeossoul',
+G.Phanta.centers["perkeossoul"] = {
   config = { extra = { lost_xmult = 0.5, current_xmult = 3 } },
   rarity = 3,
   atlas = 'Phanta',
@@ -4439,8 +4329,7 @@ SMODS.Joker {
   end
 }
 
-SMODS.Joker {
-  key = 'spectretile',
+G.Phanta.centers["spectretile"] = {
   config = { extra = { odds = 3 } },
   rarity = 2,
   atlas = 'Phanta',
@@ -4478,8 +4367,7 @@ SMODS.Joker {
   end
 }
 
-SMODS.Joker {
-  key = 'possession',
+G.Phanta.centers["possession"] = {
   config = { extra = { odds = 13 } },
   rarity = 3,
   atlas = 'Phanta',

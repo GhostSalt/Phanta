@@ -1,7 +1,14 @@
+-- For rendering shaders on the souls
 
+local scale_mod = 0.07 + 0.02 * math.sin(1.8 * G.TIMERS.REAL) +
+    0.00 * math.sin((G.TIMERS.REAL - math.floor(G.TIMERS.REAL)) * math.pi * 14) *
+    (1 - (G.TIMERS.REAL - math.floor(G.TIMERS.REAL))) ^ 3
+local rotate_mod = 0.05 * math.sin(1.219 * G.TIMERS.REAL) +
+    0.00 * math.sin((G.TIMERS.REAL) * math.pi * 5) * (1 - (G.TIMERS.REAL - math.floor(G.TIMERS.REAL))) ^ 2
 
-SMODS.Joker {
-  key = 'ignaize',
+    
+
+G.Phanta.centers["ignaize"] = {
   config = { extra = { current_xmult = 1, added_xmult = 0.1 } },
   rarity = 4,
   atlas = 'Phanta',
@@ -34,8 +41,7 @@ SMODS.Joker {
   end
 }
 
-SMODS.Joker {
-  key = 'dimere',
+G.Phanta.centers["dimere"] = {
   rarity = 4,
   atlas = 'Phanta',
   pos = { x = 3, y = 1 },
@@ -78,8 +84,7 @@ SMODS.Joker {
   end
 }
 
-SMODS.Joker {
-  key = 'goldor',
+G.Phanta.centers["goldor"] = {
   config = { extra = { money = 3, xmult = 3 } },
   rarity = 4,
   atlas = 'Phanta',
@@ -120,8 +125,7 @@ SMODS.Joker {
   end
 }
 
-SMODS.Joker {
-  key = 'famalia',
+G.Phanta.centers["famalia"] = {
   rarity = 4,
   atlas = 'Phanta',
   pos = { x = 5, y = 1 },
@@ -165,8 +169,7 @@ SMODS.Joker {
   end
 }
 
-SMODS.Joker {
-  key = 'godoor',
+G.Phanta.centers["godoor"] = {
   config = { extra = { added_xmult = 1, current_xmult = 1, counted_rerolls = 0 } },
   rarity = 4,
   atlas = 'Phanta',
@@ -224,8 +227,7 @@ SMODS.Joker {
   end
 }
 
-SMODS.Joker {
-  key = 'fainfol',
+G.Phanta.centers["fainfol"] = {
   config = { extra = { xmult = 1.5 } },
   rarity = 4,
   atlas = 'Phanta',
@@ -278,8 +280,7 @@ SMODS.Joker {
   end
 }
 
-SMODS.Joker {
-  key = 'granwyrm',
+G.Phanta.centers["granwyrm"] = {
   config = { extra = { added_xmult = 0.8, current_unscored = 0, target_unscored = 16, current_xmult = 1 } },
   rarity = 4,
   atlas = 'Phanta',

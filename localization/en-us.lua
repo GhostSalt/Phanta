@@ -1298,6 +1298,14 @@ return {
                     "highly annoying"
                 }
             },
+            j_phanta_peekaboo            = {
+                name = 'Peekaboo',
+                text = {
+                    "{C:mult}+#1#{} Mult",
+                    "Has a {C:attention}secret{}",
+                    "second ability"
+                }
+            },
             j_phanta_absentjoker           = {
                 name = 'Absent Joker',
                 text = {
