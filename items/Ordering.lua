@@ -131,6 +131,7 @@ local joker_order = {
     "evidence",
     "lily",
     "selfportrait",
+    "profile",
     "caniossoul",
     "tribouletssoul",
     "yorickssoul",

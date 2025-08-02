@@ -1153,7 +1153,7 @@ return {
                     "{C:white,X:mult}X#1#{} Mult when scored"
                 }
             },
-            j_phanta_plumber       = {
+            j_phanta_plumber               = {
                 name = 'Plumber',
                 text = {
                     "Gains {C:white,X:mult}X#1#{} Mult for",
@@ -1298,7 +1298,7 @@ return {
                     "highly annoying"
                 }
             },
-            j_phanta_peekaboo            = {
+            j_phanta_peekaboo              = {
                 name = 'Peekaboo',
                 text = {
                     "{C:mult}+#1#{} Mult",
@@ -1454,6 +1454,15 @@ return {
                     "rank {C:red}absent{} from",
                     "your {C:attention}full deck{}",
                     "{C:inactive}(Currently {X:mult,C:white}X#2#{C:inactive} Mult){}"
+                }
+            },
+            j_phanta_profile               = {
+                name = 'Profile',
+                text = {
+                    "Purchase {C:tarot}Charm{}, {C:planet}Meteor{} and",
+                    "{C:spectral}Ethereal{} Tags from this",
+                    "Joker's {C:red}MORE{} menu,",
+                    "Tags cost {C:money}$16{} each"
                 }
             },
             j_phanta_ignaize               = {
@@ -2335,6 +2344,11 @@ return {
             a_hand = "+1 Hand",
             phanta_created_blue_seal = "+Blue Seal",
             phanta_created_gold_seal = "+Gold Seal",
+            b_phanta_more = "MORE",
+            phanta_profile_more_tooltip = {
+                "Charm, Meteor and Ethereal Tags",
+                "cost $16 each"
+            },
 
             credit_goat3730 = "OC by goat3730",
             credit_bobisnotaperson = "bobisnotaperson's Truesona",

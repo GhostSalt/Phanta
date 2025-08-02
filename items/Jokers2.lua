@@ -857,3 +857,19 @@ G.Phanta.centers["technojoker"] = {
     end
   end
 }
+
+G.Phanta.centers["profile"] = {
+  loc_vars = function(self, info_queue, card)
+    info_queue[#info_queue + 1] = G.P_TAGS.tag_charm
+    info_queue[#info_queue + 1] = G.P_TAGS.tag_meteor
+    info_queue[#info_queue + 1] = G.P_TAGS.tag_ethereal
+    return { }
+  end,
+  rarity = 3,
+  atlas = 'Phanta2',
+  pos = { x = 10, y = 1 },
+  cost = 8,
+  blueprint_compat = false,
+  eternal_compat = true,
+  perishable_compat = true
+}
