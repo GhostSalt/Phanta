@@ -420,7 +420,7 @@ G.Phanta.centers["fanta"] = {
     }
   end,
   blueprint_compat = true,
-  eternal_compat = true,
+  eternal_compat = false,
   perishable_compat = true,
   calculate = function(self, card, context)
     if context.selling_self and G.hand and G.hand.cards and #G.hand.cards > 0 then
@@ -712,6 +712,42 @@ G.Phanta.centers["bloodyace"] = {
   end
 }
 
+G.Phanta.centers["yatagarasucard"] = {
+  config = { extra = { money = 3 } },
+  loc_vars = function(self, info_queue, card)
+    return { vars = { card.ability.extra.money } }
+  end,
+  rarity = 1,
+  atlas = 'Phanta2',
+  pos = { x = 1, y = 2 },
+  cost = 4,
+  blueprint_compat = true,
+  eternal_compat = true,
+  perishable_compat = true,
+  calculate = function(self, card, context)
+    if context.individual and context.cardarea == G.play and context.other_card:get_id() == 3 then
+      return { dollars = card.ability.extra.money }
+    end
+  end
+}
+
+G.Phanta.centers["modping"] = {
+  config = { extra = { money_needed = 20, money_increase = 10 } },
+  loc_vars = function(self, info_queue, card)
+    return {
+      vars = { card.ability.extra.money_needed, card.ability.extra.money_increase },
+      main_end = { { n = G.UIT.C, config = { align = "bm", minh = 0.4 }, nodes = { { n = G.UIT.C, config = { ref_table = self, align = "m", colour = is_boss_active() and G.C.GREEN or G.C.RED, r = 0.05, padding = 0.06 }, nodes = { { n = G.UIT.T, config = { text = ' ' .. localize(is_boss_active() and 'k_active' or 'ph_no_boss_active') .. ' ', colour = G.C.UI.TEXT_LIGHT, scale = 0.32 * 0.9 } } } } } } }
+    }
+  end,
+  rarity = 2,
+  atlas = 'Phanta2',
+  pos = { x = 2, y = 2 },
+  cost = 5,
+  blueprint_compat = false,
+  eternal_compat = true,
+  perishable_compat = true
+}
+
 G.Phanta.centers["clapperboard"] = {
   rarity = 2,
   atlas = 'Phanta2',
@@ -863,7 +899,7 @@ G.Phanta.centers["profile"] = {
     info_queue[#info_queue + 1] = G.P_TAGS.tag_charm
     info_queue[#info_queue + 1] = G.P_TAGS.tag_meteor
     info_queue[#info_queue + 1] = G.P_TAGS.tag_ethereal
-    return { }
+    return {}
   end,
   rarity = 3,
   atlas = 'Phanta2',

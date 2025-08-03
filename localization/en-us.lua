@@ -1412,6 +1412,22 @@ return {
                     "{C:attention}Full Houses{}"
                 }
             },
+            j_phanta_yatagarasucard        = {
+                name = "Yatagarasu Card",
+                text = {
+                    "Played {C:attention}3s{} give",
+                    "{C:money}$#1#{} when scored",
+                }
+            },
+            j_phanta_modping          = {
+                name = "Mod Ping",
+                text = {
+                    "Press {C:red}USE{} to disable",
+                    "the current {C:attention}Boss Blind{}",
+                    "for {C:money}$#1#{}, price increases",
+                    "by {C:money}$#2#{} when used"
+                }
+            },
             j_phanta_clapperboard          = {
                 name = "Clapperboard",
                 text = {

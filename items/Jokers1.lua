@@ -340,7 +340,7 @@ G.Phanta.centers["onemanstrash"] = {
   pos = { x = 3, y = 7 },
   cost = 4,
   blueprint_compat = true,
-  eternal_compat = true,
+  eternal_compat = false,
   perishable_compat = true,
   calculate = function(self, card, context)
     if context.joker_main then
