@@ -132,6 +132,7 @@ local joker_order = {
     "corkboard",
     "evidence",
     "lily",
+    "crystaljoker",
     "selfportrait",
     "profile",
     "caniossoul",

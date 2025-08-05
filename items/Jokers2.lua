@@ -894,6 +894,30 @@ G.Phanta.centers["technojoker"] = {
   end
 }
 
+G.Phanta.centers["crystaljoker"] = {
+  loc_vars = function(self, info_queue, card)
+    info_queue[#info_queue + 1] = G.P_CENTERS.m_glass
+    return {}
+  end,
+  rarity = 3,
+  atlas = 'Phanta2',
+  pos = { x = 0, y = 2 },
+  draw = function(self, card, layer)
+    if self.discovered or card.params.bypass_discovery_center then
+      card.children.center:draw_shader('booster', nil, card.ARGS.send_to_shader)
+    end
+  end,
+  cost = 8,
+  blueprint_compat = true,
+  eternal_compat = true,
+  perishable_compat = true,
+  calculate = function(self, card, context)
+    if context.individual and not context.end_of_round and context.cardarea == G.hand and SMODS.has_enhancement(context.other_card, "m_glass") then
+      return { xmult = context.other_card.ability.Xmult }
+    end
+  end
+}
+
 G.Phanta.centers["profile"] = {
   loc_vars = function(self, info_queue, card)
     info_queue[#info_queue + 1] = G.P_TAGS.tag_charm

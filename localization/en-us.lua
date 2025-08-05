@@ -1419,7 +1419,7 @@ return {
                     "{C:money}$#1#{} when scored",
                 }
             },
-            j_phanta_modping          = {
+            j_phanta_modping               = {
                 name = "Mod Ping",
                 text = {
                     "Press {C:red}USE{} to disable",
@@ -1470,6 +1470,14 @@ return {
                     "rank {C:red}absent{} from",
                     "your {C:attention}full deck{}",
                     "{C:inactive}(Currently {X:mult,C:white}X#2#{C:inactive} Mult){}"
+                }
+            },
+            j_phanta_crystaljoker          = {
+                name = 'Crystal Joker',
+                text = {
+                    "{C:attention}Glass{} cards also give",
+                    "their {C:white,X:mult}XMult{} when",
+                    "held in {C:attention}hand{}"
                 }
             },
             j_phanta_profile               = {
