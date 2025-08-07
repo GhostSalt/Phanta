@@ -228,6 +228,10 @@ function is_blind_boss()
   return G.GAME.blind and G.GAME.blind:get_type() == 'Boss'
 end
 
+function is_boss_active()
+  return G and G.GAME and G.GAME.blind and ((not G.GAME.blind.disabled) and (G.GAME.blind:get_type() == 'Boss'))
+end
+
 function count_missing_ranks()
   if not G.playing_cards then return 0 end
   local existing_ranks = {}
@@ -389,6 +393,8 @@ function Game:start_run(args)
   G.E_MANAGER:add_event(Event({
     func = function()
       if not G.playing_cards then return false end
+      if G.GAME.phanta_initial_ranks then return true end
+
       local existing_ranks = {}
       for i, j in pairs(G.playing_cards) do
         local is_valid = true

@@ -1075,21 +1075,21 @@ G.FUNCS.phanta_purchase_ethereal_tag = function(e)
 end
 
 G.FUNCS.phanta_can_purchase_charm_tag = function(e)
-  if G.GAME.dollars - 16 < G.GAME.bankrupt_at then
+  if G.GAME.dollars - 16 < to_big(G.GAME.bankrupt_at) then
     e.config.colour = G.C.UI.BACKGROUND_INACTIVE
     e.config.button = nil
   end
 end
 
 G.FUNCS.phanta_can_purchase_meteor_tag = function(e)
-  if G.GAME.dollars - 16 < G.GAME.bankrupt_at then
+  if G.GAME.dollars - 16 < to_big(G.GAME.bankrupt_at) then
     e.config.colour = G.C.UI.BACKGROUND_INACTIVE
     e.config.button = nil
   end
 end
 
 G.FUNCS.phanta_can_purchase_ethereal_tag = function(e)
-  if G.GAME.dollars - 16 < G.GAME.bankrupt_at then
+  if G.GAME.dollars - 16 < to_big(G.GAME.bankrupt_at) then
     e.config.colour = G.C.UI.BACKGROUND_INACTIVE
     e.config.button = nil
   end
@@ -1102,7 +1102,7 @@ end
 G.FUNCS.phanta_can_modping_use = function(e)
   local card = e.config.ref_table
 
-  if G.GAME.dollars - card.ability.extra.money_needed < G.GAME.bankrupt_at or not is_boss_active() then
+  if G.GAME.dollars - card.ability.extra.money_needed < to_big(G.GAME.bankrupt_at) or not is_boss_active() then
     e.config.colour = G.C.UI.BACKGROUND_INACTIVE
     e.config.button = nil
   end
@@ -1114,7 +1114,7 @@ G.FUNCS.phanta_modping_use = function(e)
   G.E_MANAGER:add_event(Event({
       func = function()
         if is_boss_active() then
-          ease_dollars(-card.ability.extra.money_increase)
+          ease_dollars(-card.ability.extra.money_needed)
           card.ability.extra.money_needed = card.ability.extra.money_needed + card.ability.extra.money_increase
           play_sound("timpani")
           card:juice_up()
