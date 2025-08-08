@@ -35,6 +35,7 @@ local joker_order = {
     "a1z26",
     "nonuniformday",
     "badhairday",
+    "scratchart",
     "animalinstinct",
     "target",
     "fanta",

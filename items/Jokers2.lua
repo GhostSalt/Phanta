@@ -478,8 +478,14 @@ G.Phanta.centers["heartbreak"] = {
 G.Phanta.centers["distance"] = {
   config = { extra = { chips = 250 } },
   rarity = 3,
-  atlas = 'Phanta2',
-  pos = { x = 2, y = 1 },
+  atlas = 'PhantaMiscAnims4',
+  pos = { x = 0, y = 0 },
+  phanta_anim = {
+    { xrange = { first = 0, last = 4 },  y = 0, t = 0.05 },
+    { x = 5,                             y = 0, t = 0.45 },
+    { xrange = { first = 0, last = 4 },  y = 0, t = 0.05 },
+    { xrange = { first = 6, last = 11 }, y = 0, t = 0.05 },
+  },
   cost = 7,
   loc_vars = function(self, info_queue, card)
     return { vars = { card.ability.extra.chips } }
@@ -695,8 +701,17 @@ G.Phanta.centers["valantgramarye"] = {
 
 G.Phanta.centers["bloodyace"] = {
   rarity = 1,
-  atlas = 'Phanta2',
-  pos = { x = 7, y = 1 },
+  atlas = 'PhantaMiscAnims4',
+  pos = { x = 11, y = 3 },
+  phanta_anim = {
+    { x = 11,                           y = 3, t = 3 },
+    { xrange = { first = 0, last = 2 }, y = 4, t = 0.05 },
+    { x = 3,                            y = 4, t = 0.5 },
+    { x = 4,                            y = 4, t = 0.5 },
+    { x = 5,                            y = 4, t = 0.6 },
+    { x = 6,                            y = 4, t = 0.7 },
+    { xrange = { first = 7, last = 9 }, y = 4, t = 0.01 },
+  },
   cost = 4,
   blueprint_compat = false,
   eternal_compat = true,
@@ -803,8 +818,18 @@ G.Phanta.centers["plugsocket"] = {
     return { vars = { card.ability.extra.xmult, 1 + (#count_base_copper_grates() * card.ability.extra.xmult) } }
   end,
   rarity = 2,
-  atlas = 'Phanta2',
-  pos = { x = 3, y = 0 },
+  atlas = 'PhantaMiscAnims4',
+  pos = { x = 0, y = 1 },
+  phanta_anim = {
+    { x = 0, y = 1, t = 4 },
+    { x = 1, y = 1, t = 0.05 },
+    { x = 2, y = 1, t = 0.5 },
+    { x = 3, y = 1, t = 0.05 },
+    { x = 4, y = 1, t = 2 },
+    { x = 5, y = 1, t = 0.05 },
+    { x = 6, y = 1, t = 0.5 },
+    { x = 7, y = 1, t = 0.05 },
+  },
   cost = 6,
   blueprint_compat = true,
   eternal_compat = true,

@@ -39,6 +39,13 @@ SMODS.Atlas {
 }
 
 SMODS.Atlas {
+  key = "PhantaMiscAnims4",
+  path = "PhantaMiscAnims4.png",
+  px = 71,
+  py = 95
+}
+
+SMODS.Atlas {
   key = "PhantaKnowledgeOfTheCollegeAnim",
   path = "PhantaKnowledgeOfTheCollegeAnim.png",
   px = 71,
@@ -954,8 +961,14 @@ G.Phanta.centers["kylehyde"] = {
 G.Phanta.centers["inception"] = {
   config = { extra = { current_mult = 0, added_mult = 6 } },
   rarity = 1,
-  atlas = 'Phanta',
-  pos = { x = 0, y = 4 },
+  atlas = 'PhantaMiscAnims4',
+  pos = { x = 10, y = 4 },
+  phanta_anim = {
+    { x = 10,                           y = 4, t = 0.6 },
+    { x = 11,                           y = 4, t = 0.08 },
+    { x = 10,                           y = 5, t = 0.08 },
+    { x = 11,                           y = 5, t = 0.08 }
+  },
   cost = 5,
   loc_vars = function(self, info_queue, card)
     return { vars = { card.ability.extra.added_mult, card.ability.extra.current_mult + card.ability.extra.added_mult } }
@@ -1061,6 +1074,39 @@ G.Phanta.centers["badhairday"] = {
   calculate = function(self, card, context)
     if context.destroy_card and context.cardarea == G.hand and SMODS.has_enhancement(context.other_card, "m_wild") and pseudorandom('badhairday') < G.GAME.probabilities.normal / card.ability.extra.odds then
       return true
+    end
+  end
+}
+
+G.Phanta.centers["scratchart"] = {
+  config = { extra = { odds = 2 } },
+  loc_vars = function(self, info_queue, card)
+    info_queue[#info_queue + 1] = G.P_CENTERS.m_wild
+    return { vars = { (G.GAME.probabilities.normal or 1), card.ability.extra.odds } }
+  end,
+  rarity = 3,
+  atlas = 'Phanta',
+  pos = { x = 11, y = 6 },
+  cost = 8,
+  blueprint_compat = true,
+  eternal_compat = true,
+  perishable_compat = true,
+  calculate = function(self, card, context)
+    if context.individual and context.cardarea == "unscored" and SMODS.has_enhancement(context.other_card, "m_wild") and pseudorandom('scratchart') < G.GAME.probabilities.normal / card.ability.extra.odds then
+      local _card = context.other_card
+      G.E_MANAGER:add_event(Event({
+        func = function()
+          _card:set_edition('e_polychrome', true, true)
+          _card:juice_up()
+          return true
+        end
+      }))
+      return {
+        message = localize { type = 'name_text', key = 'e_polychrome', set = 'Edition' },
+        colour = G.C.FILTER,
+        card =
+            card
+      }
     end
   end
 }
@@ -1249,7 +1295,7 @@ G.Phanta.centers["exitsign"] = {
 }
 
 G.Phanta.centers["task"] = {
-  config = { extra = { added_money = 1, current_money = 0 } },
+  config = { extra = { added_money = 2, current_money = 0 } },
   rarity = 2,
   atlas = 'PhantaMiscAnims1',
   pos = { x = 0, y = 3 },
@@ -1299,8 +1345,17 @@ G.Phanta.centers["task"] = {
 G.Phanta.centers["saltcircle"] = {
   config = { extra = { chips = 177 } },
   rarity = 1,
-  atlas = 'Phanta',
-  pos = { x = 6, y = 1 },
+  atlas = 'PhantaMiscAnims4',
+  pos = { x = 8, y = 1 },
+  pos_extra = { x = 11, y = 1 },
+  phanta_anim = {
+    { xrange = { first = 8, last = 10 }, y = 1, t = 0.15 },
+  },
+  phanta_anim_extra = {
+    { x = 11,                           y = 1, t = 3 },
+    { xrange = { first = 0, last = 6 }, y = 2, t = 0.1 },
+    { xrange = { first = 5, last = 0 }, y = 2, t = 0.1 }
+  },
   cost = 4,
   blueprint_compat = false,
   eternal_compat = true,
@@ -3116,8 +3171,17 @@ G.Phanta.centers["introspection"] = {
 G.Phanta.centers["blindjoker"] = {
   config = { extra = { no_of_aces = 2 } },
   rarity = 2,
-  atlas = 'Phanta',
-  pos = { x = 1, y = 1 },
+  atlas = 'PhantaMiscAnims4',
+  pos = { x = 4, y = 3 },
+  phanta_anim = {
+    { x = 4,                             y = 3, t = 3 },
+    { x = 5,                             y = 3, t = 0.1 },
+    { x = 6,                             y = 3, t = 0.05 },
+    { x = 7,                             y = 3, t = 0.025 },
+    { x = 8,                             y = 3, t = 0.025 },
+    { x = 9,                             y = 3, t = 0.05 },
+    { x = 10,                             y = 3, t = 0.1 },
+  },
   cost = 6,
   loc_vars = function(self, info_queue, card)
     return { vars = { card.ability.extra.no_of_aces } }
@@ -3240,19 +3304,19 @@ G.Phanta.centers["witchsmark"] = {
   atlas = 'PhantaMiscAnims3', -- This should've gone in the Layton sheet, but mehhhhh too late
   pos = { x = 2, y = 11 },
   phanta_anim = {
-    { x = 2,                            y = 11, t = 3 },
-    { xrange = { first = 3, last = 5 }, y = 11, t = 0.075 },
-    { x = 6,                            y = 11, t = 0.5 },
-    { xrange = { first = 7, last = 8 }, y = 11, t = 0.08 },
-    { x = 9,                            y = 11, t = 0.2 },
+    { x = 2,                              y = 11, t = 3 },
+    { xrange = { first = 3, last = 5 },   y = 11, t = 0.075 },
+    { x = 6,                              y = 11, t = 0.5 },
+    { xrange = { first = 7, last = 8 },   y = 11, t = 0.08 },
+    { x = 9,                              y = 11, t = 0.2 },
     { xrange = { first = 10, last = 11 }, y = 11, t = 0.08 },
-    { x = 0,                            y = 12, t = 0.08 },
-    { x = 1,                            y = 12, t = 0.25 },
-    { xrange = { first = 2, last = 3 }, y = 12, t = 0.08 },
-    { x = 4,                            y = 12, t = 0.275 },
-    { xrange = { first = 5, last = 7 }, y = 12, t = 0.08 },
-    { x = 8,                            y = 12, t = 0.225 },
-    { xrange = { first = 9, last = 11 }, y = 12, t = 0.08 },
+    { x = 0,                              y = 12, t = 0.08 },
+    { x = 1,                              y = 12, t = 0.25 },
+    { xrange = { first = 2, last = 3 },   y = 12, t = 0.08 },
+    { x = 4,                              y = 12, t = 0.275 },
+    { xrange = { first = 5, last = 7 },   y = 12, t = 0.08 },
+    { x = 8,                              y = 12, t = 0.225 },
+    { xrange = { first = 9, last = 11 },  y = 12, t = 0.08 },
 
   },
   cost = 8,
@@ -3616,8 +3680,21 @@ G.Phanta.centers["thepolicemun"] = {
 G.Phanta.centers["nojoke"] = {
   config = { extra = { mult_per_straight = 4 } },
   rarity = 1,
-  atlas = 'Phanta',
-  pos = { x = 11, y = 2 },
+  atlas = 'PhantaMiscAnims4',
+  pos = { x = 7, y = 2 },
+  phanta_anim = {
+    { x = 7, y = 2, t = 1.4 }, { x = 8, y = 2, t = 0.1 },
+    { x = 7, y = 2, t = 0.1 }, { x = 8, y = 2, t = 0.1 },
+    { x = 7, y = 2, t = 2.2 }, { x = 8, y = 2, t = 0.1 },
+    { x = 7, y = 2, t = 1.3 }, { x = 8, y = 2, t = 0.1 },
+    { x = 7, y = 2, t = 0.6 }, { xrange = { first = 8, last = 11 }, y = 2, t = 0.1 },
+    { x = 0, y = 3, t = 0.3 }, { x = 1, y = 3, t = 0.1 },
+    { x = 0, y = 3, t = 0.1 }, { x = 2, y = 3, t = 0.1 },
+    { x = 0, y = 3, t = 0.1 }, { x = 1, y = 3, t = 0.1 },
+    { x = 0, y = 3, t = 0.1 }, { x = 2, y = 3, t = 0.5 },
+    { x = 0, y = 3, t = 0.1 }, { x = 1, y = 3, t = 0.5 },
+    { x = 0, y = 3, t = 0.3 }, { x = 3, y = 3, t = 0.1 }, { xrange = { first = 10, last = 8 }, y = 2, t = 0.1 },
+  },
   cost = 4,
   loc_vars = function(self, info_queue, card)
     return { vars = { card.ability.extra.mult_per_straight, G.GAME.hands["Straight"].level * card.ability.extra.mult_per_straight } }

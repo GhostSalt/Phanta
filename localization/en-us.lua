@@ -518,6 +518,15 @@ return {
                     "to be destroyed"
                 }
             },
+            j_phanta_scratchart            = {
+                name = "Scratch Art",
+                text = {
+                    "{C:green}#1# in #2#{} chance for each",
+                    "{C:attention}Wild{} card to become",
+                    "{C:dark_edition}Polychrome{} when",
+                    "played and {C:attention}unscored{}"
+                }
+            },
             j_phanta_animalinstinct        = {
                 name = "Animal Instinct",
                 text = {
