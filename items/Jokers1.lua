@@ -303,12 +303,8 @@ G.Phanta.centers["puzzle"] = {
       return { dollars = card.ability.extra.given_money }
     end
 
-    if context.end_of_round and not context.individual and not context.repetition and not context.blueprint then
-      return {
-        message =
-            localize("k_reset"),
-        colour = G.FILTER
-      }
+    if context.end_of_round and not context.individual and not context.repetition and not context.blueprint and G.GAME.last_blind and G.GAME.last_blind.boss then
+      return { message = localize("k_reset"), colour = G.FILTER }
     end
   end
 }
@@ -964,10 +960,10 @@ G.Phanta.centers["inception"] = {
   atlas = 'PhantaMiscAnims4',
   pos = { x = 10, y = 4 },
   phanta_anim = {
-    { x = 10,                           y = 4, t = 0.6 },
-    { x = 11,                           y = 4, t = 0.08 },
-    { x = 10,                           y = 5, t = 0.08 },
-    { x = 11,                           y = 5, t = 0.08 }
+    { x = 10, y = 4, t = 0.6 },
+    { x = 11, y = 4, t = 0.08 },
+    { x = 10, y = 5, t = 0.08 },
+    { x = 11, y = 5, t = 0.08 }
   },
   cost = 5,
   loc_vars = function(self, info_queue, card)
@@ -3174,13 +3170,13 @@ G.Phanta.centers["blindjoker"] = {
   atlas = 'PhantaMiscAnims4',
   pos = { x = 4, y = 3 },
   phanta_anim = {
-    { x = 4,                             y = 3, t = 3 },
-    { x = 5,                             y = 3, t = 0.1 },
-    { x = 6,                             y = 3, t = 0.05 },
-    { x = 7,                             y = 3, t = 0.025 },
-    { x = 8,                             y = 3, t = 0.025 },
-    { x = 9,                             y = 3, t = 0.05 },
-    { x = 10,                             y = 3, t = 0.1 },
+    { x = 4,  y = 3, t = 3 },
+    { x = 5,  y = 3, t = 0.1 },
+    { x = 6,  y = 3, t = 0.05 },
+    { x = 7,  y = 3, t = 0.025 },
+    { x = 8,  y = 3, t = 0.025 },
+    { x = 9,  y = 3, t = 0.05 },
+    { x = 10, y = 3, t = 0.1 },
   },
   cost = 6,
   loc_vars = function(self, info_queue, card)

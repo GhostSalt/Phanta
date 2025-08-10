@@ -288,7 +288,6 @@ CardSleeves.Sleeve {
   pos = { x = 4, y = 3 },
   unlocked = false,
   unlock_condition = { deck = "b_phanta_invisible", stake = "stake_white" },
-  config = { extra = { plus_hand_size = 2 } },
   loc_vars = function(self)
     if self.get_current_deck_key() == "b_phanta_invisible" then
       key = self.key .. "_alt"
@@ -355,6 +354,36 @@ CardSleeves.Sleeve {
   pos = { x = 1, y = 2 },
   unlocked = false,
   unlock_condition = { deck = "b_phanta_todayandtomorrow", stake = "stake_white" }
+}
+
+CardSleeves.Sleeve {
+  key = "gildedseven",
+  name = "Gilded 7 Sleeve",
+  atlas = "PhantaSleeves",
+  pos = { x = 0, y = 4 },
+  unlocked = false,
+  unlock_condition = { deck = "b_phanta_gildedseven", stake = "stake_white" },
+  loc_vars = function(self)
+    if self.get_current_deck_key() == "b_phanta_gildedseven" then
+      key = self.key .. "_alt"
+    else
+      key = self.key
+    end
+    return { key = key }
+  end,
+  apply = function(self, back)
+    G.E_MANAGER:add_event(Event({
+      func = function()
+        for i = 1, #G.playing_cards do
+          if G.playing_cards[i]:get_id() == 7 then
+            if self.get_current_deck_key() == "b_phanta_gildedseven" then G.playing_cards[i]:set_seal("Gold", true, true)
+            else G.playing_cards[i]:set_ability(G.P_CENTERS["m_gold"]) end
+          end
+        end
+        return true
+      end,
+    }))
+  end
 }
 
 CardSleeves.Sleeve {

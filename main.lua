@@ -104,9 +104,8 @@ function get_previous_blind()
     elseif G.GAME.last_blind.big then
       return "big"
     end
-  else
-    return "small"
   end
+  return "small"
 end
 
 function count_common_jokers()
@@ -245,7 +244,10 @@ function count_missing_ranks()
     end
   end
 
-  if G.GAME and G.GAME.phanta_initial_ranks and #existing_ranks < #G.GAME.phanta_initial_ranks then return #G.GAME.phanta_initial_ranks - #existing_ranks end
+  if G.GAME and G.GAME.phanta_initial_ranks and #existing_ranks < #G.GAME.phanta_initial_ranks then
+    return #G.GAME
+    .phanta_initial_ranks - #existing_ranks
+  end
   return 0
 end
 
@@ -461,11 +463,13 @@ function SMODS.current_mod.reset_game_globals(run_start)
   local value_table = { '2', '3', '4', '5', '6', '7', '8', '9', '10', 'Jack', 'Queen', 'King', 'Ace' }
   G.GAME.current_round.train_station_card.value = value_table[G.GAME.current_round.train_station_card.id - 1]
 
-  if G.playing_cards then
-    G.GAME.current_round.puzzle_card.id = pseudorandom_element(G.playing_cards,
-      pseudoseed('puzzle' .. G.GAME.round_resets.ante)):get_id()
-  else
-    G.GAME.current_round.puzzle_card.id = 2
+  if (get_previous_blind() and get_previous_blind() == "boss") or not G.GAME.last_blind then
+    if G.playing_cards then
+      G.GAME.current_round.puzzle_card.id = pseudorandom_element(G.playing_cards,
+        pseudoseed('puzzle' .. G.GAME.round_resets.ante)):get_id()
+    else
+      G.GAME.current_round.puzzle_card.id = 2
+    end
   end
 end
 

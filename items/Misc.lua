@@ -2053,6 +2053,24 @@ SMODS.Back {
 }
 
 SMODS.Back {
+  key = 'gildedseven',
+  atlas = 'Decks',
+  pos = { x = 0, y = 4 },
+  apply = function(self, back)
+    G.E_MANAGER:add_event(Event({
+      func = function()
+        for i = 1, #G.playing_cards do
+          if G.playing_cards[i]:get_id() == 7 then
+            G.playing_cards[i]:set_ability(G.P_CENTERS["m_gold"])
+          end
+        end
+        return true
+      end,
+    }))
+  end
+}
+
+SMODS.Back {
   key = 'hazel',
   atlas = 'Decks',
   pos = { x = 2, y = 2 }

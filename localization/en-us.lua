@@ -111,6 +111,13 @@ return {
                     "{C:attention}stronger{} abilities"
                 }
             },
+            b_phanta_gildedseven = {
+                name = 'Gilded 7 Deck',
+                text = {
+                    "All {C:attention}7s{} start",
+                    "as {C:attention,T:m_gold}Gold{} cards",
+                }
+            },
             b_phanta_hazel = {
                 name = 'Hazel Deck',
                 text = {
@@ -332,7 +339,7 @@ return {
                     "Each played {C:attention}?{} gives",
                     "{C:money}$#1#{} when scored, {C:attention}?{} is",
                     "a {C:attention}secret{} rank which",
-                    "changes each round"
+                    "changes each {C:attention}Ante{}"
                 }
             },
             j_phanta_binman                = {
@@ -393,7 +400,7 @@ return {
                     "Sell this card to",
                     "permanently gain {C:attention}+#1#{}",
                     "hand size, increases",
-                    "by 1 every {C:attention}#2#{} {C:inactive}[#3#]{} Antes"
+                    "by 1 every {C:attention}#2#{} {C:inactive}[#3#]{} {C:attention}Antes{}"
                 }
             },
             j_phanta_new2dsxl              = {
@@ -1912,6 +1919,20 @@ return {
                 text = {
                     "{C:phanta_zodiac}Zodiac{} cards have",
                     "{C:attention}stronger{} abilities"
+                }
+            },
+            sleeve_phanta_gildedseven = {
+                name = 'Gilded 7 Sleeve',
+                text = {
+                    "All {C:attention}7s{} start",
+                    "as {C:attention,T:m_gold}Gold{} cards",
+                }
+            },
+            sleeve_phanta_gildedseven_alt = {
+                name = 'Gilded 7 Sleeve',
+                text = {
+                    "All {C:attention}7s{} start",
+                    "with {C:attention,T:Gold}Gold{} seals",
                 }
             },
             sleeve_phanta_hazel = {
