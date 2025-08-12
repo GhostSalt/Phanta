@@ -176,7 +176,13 @@ return {
             }
         },
         Blind = {
-
+            bl_phanta_answer = {
+                name = "The Answer",
+                text = {
+                    "#1# in #2# cards have",
+                    "unknown suits"
+                }
+            }
         },
         ["Content Set"] = {
             set_phanta_jokers = {
@@ -2460,6 +2466,12 @@ return {
                 "This run isn't",
                 "gonna die!"
             }
+        },
+        suits_singular = {
+            phanta_unknown = "?"
+        },
+        suits_plural = {
+            phanta_unknown = "?"
         },
         v_dictionary = {
             a_discards = '+#1# Discards',

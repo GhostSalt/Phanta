@@ -301,6 +301,7 @@ end
 
 local allFolders = { "none", "items" }
 
+--local allFiles = { ["none"] = {}, ["items"] = { "Blind", "Jokers1", "Jokers2", "Legendaries", "Misc", "StarterPack", "Suit" } }
 local allFiles = { ["none"] = {}, ["items"] = { "Jokers1", "Jokers2", "Legendaries", "Misc", "StarterPack" } }
 
 for i = 1, #allFolders do

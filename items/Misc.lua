@@ -710,8 +710,7 @@ SMODS.Edition {
   calculate = function(self, card, context)
     if (context.main_scoring and context.cardarea == G.play) or context.post_joker then
       return {
-        xmult = self.config
-            .xmult
+        xmult = self.config.xmult
       }
     end
   end
@@ -734,7 +733,7 @@ SMODS.Enhancement {
   calculate = function(self, card, context)
     if context.final_scoring_step and context.cardarea == G.play and not (card.edition and card.edition.key == 'e_phanta_waxed') and #SMODS.find_card("j_phanta_diamondaxe") == 0 then
       card:set_ability(G.P_CENTERS.m_phanta_coppergrateexposed, nil, true)
-      return false
+      return { message = localize('phanta_copper_grate_exposed'), colour = G.C.PHANTA.MISC_COLOURS.COPPER_EXPOSED }
     end
   end,
   set_badges = function(self, card, badges)
@@ -755,7 +754,7 @@ SMODS.Enhancement {
   calculate = function(self, card, context)
     if context.final_scoring_step and context.cardarea == G.play and not (card.edition and card.edition.key == 'e_phanta_waxed') and #SMODS.find_card("j_phanta_diamondaxe") == 0 then
       card:set_ability(G.P_CENTERS.m_phanta_coppergrateweathered, nil, true)
-      return false
+      return { message = localize('phanta_copper_grate_weathered'), colour = G.C.PHANTA.MISC_COLOURS.COPPER_WEATHERED }
     end
   end,
   set_badges = function(self, card, badges)
@@ -777,16 +776,22 @@ SMODS.Enhancement {
   calculate = function(self, card, context)
     if context.final_scoring_step and context.cardarea == G.play and not (card.edition and card.edition.key == 'e_phanta_waxed') and #SMODS.find_card("j_phanta_diamondaxe") == 0 then
       card:set_ability(G.P_CENTERS.m_phanta_coppergrateoxidised, nil, true)
-      return false
+      return { message = localize('phanta_copper_grate_oxidised'), colour = G.C.PHANTA.MISC_COLOURS.COPPER_OXIDISED }
     end
   end,
   set_badges = function(self, card, badges)
     badges[#badges + 1] = create_badge(localize('phanta_copper_grate_weathered'),
-      G.C.PHANTA.MISC_COLOURS.COPPER_WEATHERED,
+    G.C.PHANTA.MISC_COLOURS.COPPER_WEATHERED,
       G.C.WHITE, 1)
   end,
   in_pool = function() return false end
 }
+
+SMODS.Sound({
+  key = "oxidised_break",
+  path = "phanta_oxidised_break.ogg",
+  replace = true
+})
 
 SMODS.Enhancement {
   key = "coppergrateoxidised",
@@ -800,7 +805,15 @@ SMODS.Enhancement {
   calculate = function(self, card, context)
     if context.before then card.ability.extra.primed = true end
 
-    if context.destroy_card == card and context.cardarea == G.play and not (card.edition and card.edition.key == 'e_phanta_waxed') and #SMODS.find_card("j_phanta_diamondaxe") == 0 and card.ability.extra.primed then return { remove = true } end
+    if context.destroy_card == card and context.cardarea == G.play and not (card.edition and card.edition.key == 'e_phanta_waxed') and #SMODS.find_card("j_phanta_diamondaxe") == 0 and card.ability.extra.primed then
+      G.E_MANAGER:add_event(Event({
+        func = function()
+          play_sound("phanta_oxidised_break", 0.9 + math.random() * 0.1, 1)
+          return true
+        end
+      }))
+      return { remove = true }
+    end
   end,
   set_badges = function(self, card, badges)
     badges[#badges + 1] = create_badge(localize('phanta_copper_grate_oxidised'), G.C.PHANTA.MISC_COLOURS.COPPER_OXIDISED,
@@ -1112,17 +1125,17 @@ G.FUNCS.phanta_modping_use = function(e)
   local card = e.config.ref_table
 
   G.E_MANAGER:add_event(Event({
-      func = function()
-        if is_boss_active() then
-          ease_dollars(-card.ability.extra.money_needed)
-          card.ability.extra.money_needed = card.ability.extra.money_needed + card.ability.extra.money_increase
-          play_sound("timpani")
-          card:juice_up()
-          G.GAME.blind:disable()
-        end
-        return true
+    func = function()
+      if is_boss_active() then
+        ease_dollars(-card.ability.extra.money_needed)
+        card.ability.extra.money_needed = card.ability.extra.money_needed + card.ability.extra.money_increase
+        play_sound("timpani")
+        card:juice_up()
+        G.GAME.blind:disable()
       end
-    }))
+      return true
+    end
+  }))
 end
 
 

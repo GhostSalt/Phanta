@@ -926,7 +926,8 @@ G.Phanta.centers["kylehyde"] = {
   config = { extra = { odds = 4 } },
   loc_vars = function(self, info_queue, card)
     info_queue[#info_queue + 1] = G.P_CENTERS.m_stone
-    return { vars = { (G.GAME.probabilities.normal or 1), card.ability.extra.odds } }
+    local num, denom = SMODS.get_probability_vars(card, 1, card.ability.extra.odds, "kylehyde")
+    return { vars = { num, denom } }
   end,
   rarity = 2,
   atlas = 'Phanta',
@@ -936,7 +937,7 @@ G.Phanta.centers["kylehyde"] = {
   eternal_compat = true,
   perishable_compat = true,
   calculate = function(self, card, context)
-    if context.individual and context.cardarea == G.play and (context.other_card:is_suit("Hearts") or context.other_card:is_suit("Diamonds")) and pseudorandom('kylehyde') < G.GAME.probabilities.normal / card.ability.extra.odds then
+    if context.individual and context.cardarea == G.play and (context.other_card:is_suit("Hearts") or context.other_card:is_suit("Diamonds")) and SMODS.pseudorandom_probability(card, "kylehyde", 1, card.ability.extra.odds) then
       local card_temp = context.other_card
       card_temp:set_ability(G.P_CENTERS.m_stone, nil, true)
       G.E_MANAGER:add_event(Event({
@@ -1015,7 +1016,8 @@ G.Phanta.centers["nonuniformday"] = {
   config = { extra = { odds = 2 } },
   loc_vars = function(self, info_queue, card)
     info_queue[#info_queue + 1] = G.P_CENTERS.m_wild
-    return { vars = { (G.GAME.probabilities.normal or 1), card.ability.extra.odds } }
+    local num, denom = SMODS.get_probability_vars(card, 1, card.ability.extra.odds, "nonuniformday")
+    return { vars = { num, denom } }
   end,
   rarity = 1,
   atlas = 'Phanta',
@@ -1025,7 +1027,7 @@ G.Phanta.centers["nonuniformday"] = {
   eternal_compat = true,
   perishable_compat = true,
   calculate = function(self, card, context)
-    if context.individual and context.cardarea == G.play and count_consumables() < G.consumeables.config.card_limit and SMODS.has_enhancement(context.other_card, "m_wild") and pseudorandom('nonuniformday') < G.GAME.probabilities.normal / card.ability.extra.odds then
+    if context.individual and context.cardarea == G.play and count_consumables() < G.consumeables.config.card_limit and SMODS.has_enhancement(context.other_card, "m_wild") and SMODS.pseudorandom_probability(card, "nonuniformday", 1, card.ability.extra.odds) then
       G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
       return {
         extra = {
@@ -1058,7 +1060,8 @@ G.Phanta.centers["badhairday"] = {
   config = { extra = { odds = 2 } },
   loc_vars = function(self, info_queue, card)
     info_queue[#info_queue + 1] = G.P_CENTERS.m_wild
-    return { vars = { (G.GAME.probabilities.normal or 1), card.ability.extra.odds } }
+    local num, denom = SMODS.get_probability_vars(card, 1, card.ability.extra.odds, "badhairday")
+    return { vars = { num, denom } }
   end,
   rarity = 2,
   atlas = 'Phanta',
@@ -1068,7 +1071,7 @@ G.Phanta.centers["badhairday"] = {
   eternal_compat = true,
   perishable_compat = true,
   calculate = function(self, card, context)
-    if context.destroy_card and context.cardarea == G.hand and SMODS.has_enhancement(context.other_card, "m_wild") and pseudorandom('badhairday') < G.GAME.probabilities.normal / card.ability.extra.odds then
+    if context.destroy_card and context.cardarea == G.hand and SMODS.has_enhancement(context.other_card, "m_wild") and SMODS.pseudorandom_probability(card, "badhairday", 1, card.ability.extra.odds) then
       return true
     end
   end
@@ -1078,7 +1081,8 @@ G.Phanta.centers["scratchart"] = {
   config = { extra = { odds = 2 } },
   loc_vars = function(self, info_queue, card)
     info_queue[#info_queue + 1] = G.P_CENTERS.m_wild
-    return { vars = { (G.GAME.probabilities.normal or 1), card.ability.extra.odds } }
+    local num, denom = SMODS.get_probability_vars(card, 1, card.ability.extra.odds, "scratchart")
+    return { vars = { num, denom } }
   end,
   rarity = 3,
   atlas = 'Phanta',
@@ -1088,7 +1092,7 @@ G.Phanta.centers["scratchart"] = {
   eternal_compat = true,
   perishable_compat = true,
   calculate = function(self, card, context)
-    if context.individual and context.cardarea == "unscored" and SMODS.has_enhancement(context.other_card, "m_wild") and pseudorandom('scratchart') < G.GAME.probabilities.normal / card.ability.extra.odds then
+    if context.individual and context.cardarea == "unscored" and SMODS.has_enhancement(context.other_card, "m_wild") and SMODS.pseudorandom_probability(card, "scratchart", 1, card.ability.extra.odds) then
       local _card = context.other_card
       G.E_MANAGER:add_event(Event({
         func = function()
@@ -1175,7 +1179,8 @@ G.Phanta.centers["teastainedjoker"] = {
   config = { extra = { odds = 5, added_mult = 3, current_mult = 0 } },
   loc_vars = function(self, info_queue, card)
     info_queue[#info_queue + 1] = G.P_CENTERS.m_lucky
-    return { vars = { (G.GAME.probabilities.normal or 1), card.ability.extra.odds, card.ability.extra.added_mult, card.ability.extra.current_mult } }
+    local num, denom = SMODS.get_probability_vars(card, 1, card.ability.extra.odds, "teastainedjoker")
+    return { vars = { num, denom, card.ability.extra.added_mult, card.ability.extra.current_mult } }
   end,
   rarity = 2,
   atlas = 'Phanta',
@@ -1198,7 +1203,7 @@ G.Phanta.centers["teastainedjoker"] = {
           colour = G.C.RED,
           card = card
         }
-      elseif pseudorandom('teastainedjoker') < G.GAME.probabilities.normal / card.ability.extra.odds then
+      elseif SMODS.pseudorandom_probability(card, "teastainedjoker", 1, card.ability.extra.odds) then
         card.ability.extra.current_mult = card.ability.extra.current_mult + card.ability.extra.added_mult
         return {
           message = localize('k_upgrade_ex'),
@@ -1255,7 +1260,8 @@ G.Phanta.centers["forsakenscroll"] = {
   config = { extra = { odds = 25, given_xmult = 3 } },
   loc_vars = function(self, info_queue, card)
     info_queue[#info_queue + 1] = G.P_CENTERS.m_lucky
-    return { vars = { (G.GAME.probabilities.normal or 1) * count_lucky_cards(), card.ability.extra.odds, card.ability.extra.given_xmult } }
+    local num, denom = SMODS.get_probability_vars(card, count_lucky_cards(), card.ability.extra.odds, "forsakenscroll")
+    return { vars = { num, denom, card.ability.extra.given_xmult } }
   end,
   rarity = 2,
   atlas = 'Phanta',
@@ -1265,7 +1271,7 @@ G.Phanta.centers["forsakenscroll"] = {
   eternal_compat = true,
   perishable_compat = false,
   calculate = function(self, card, context)
-    if context.joker_main and pseudorandom('forsakenscroll') < (G.GAME.probabilities.normal * count_lucky_cards()) / card.ability.extra.odds then
+    if context.joker_main and SMODS.pseudorandom_probability(card, "forsakenscroll", count_lucky_cards(), card.ability.extra.odds) then
       return { xmult = card.ability.extra.given_xmult }
     end
   end
@@ -1586,13 +1592,14 @@ G.Phanta.centers["photocopy"] = {
   pos = { x = 5, y = 11 },
   cost = 6,
   loc_vars = function(self, info_queue, card)
-    return { vars = { (G.GAME.probabilities.normal or 1), card.ability.extra.odds } }
+    local num, denom = SMODS.get_probability_vars(card, 1, card.ability.extra.odds, "photocopy")
+    return { vars = { num, denom } }
   end,
   blueprint_compat = true,
   eternal_compat = true,
   perishable_compat = true,
   calculate = function(self, card, context)
-    if context.cardarea == G.play and context.repetition and pseudorandom('photocopy') < G.GAME.probabilities.normal / card.ability.extra.odds then
+    if context.cardarea == G.play and context.repetition and SMODS.pseudorandom_probability(card, "photocopy", 1, card.ability.extra.odds) then
       return { repetitions = 1 }
     end
   end
@@ -1701,7 +1708,7 @@ G.Phanta.centers["grimreaper"] = {
         if not has_death and v.ability.set == "Tarot" and v.config.center.key == "c_death" then has_death = true end
       end
 
-      if has_death then return true end
+      if has_death then return { remove = true } end
     end
 
     --[[
@@ -1744,12 +1751,12 @@ G.Phanta.centers["professorlayton"] = {
   eternal_compat = true,
   perishable_compat = true,
   loc_vars = function(self, info_queue, card)
-    return { vars = { next(SMODS.find_card("j_phanta_luketriton")) and card.ability.extra.out_of_odds or ((G.GAME.probabilities.normal or 1) * count_tarots()), card.ability.extra.out_of_odds, card.ability.extra.added_mult } }
+    local num, denom = SMODS.get_probability_vars(card, next(SMODS.find_card("j_phanta_luketriton")) and card.ability.extra.out_of_odds or count_tarots(), card.ability.extra.out_of_odds, "professorlayton")
+    return { vars = { num, denom, card.ability.extra.added_mult } }
   end,
   calculate = function(self, card, context)
     if context.joker_main then
-      local tarot_count = G.GAME.probabilities.normal * count_tarots()
-      if next(SMODS.find_card("j_phanta_luketriton")) or (tarot_count > 0 and pseudorandom('layton') < tarot_count / card.ability.extra.out_of_odds) then
+      if next(SMODS.find_card("j_phanta_luketriton")) or SMODS.pseudorandom_probability(card, "layton", count_tarot_cards(), card.ability.extra.out_of_odds) then
         return { mult = card.ability.extra.added_mult }
       end
     end
@@ -1782,12 +1789,12 @@ G.Phanta.centers["luketriton"] = {
   eternal_compat = true,
   perishable_compat = true,
   loc_vars = function(self, info_queue, card)
-    return { vars = { next(SMODS.find_card("j_phanta_professorlayton")) and card.ability.extra.out_of_odds or ((G.GAME.probabilities.normal or 1) * count_planets()), card.ability.extra.out_of_odds, card.ability.extra.x_mult } }
+    local num, denom = SMODS.get_probability_vars(card, next(SMODS.find_card("j_phanta_professorlayton")) and card.ability.extra.out_of_odds or count_planets(), card.ability.extra.out_of_odds, "luketriton")
+    return { vars = { num, denom, card.ability.extra.x_mult } }
   end,
   calculate = function(self, card, context)
     if context.joker_main then
-      local planet_count = G.GAME.probabilities.normal * count_planets()
-      if next(SMODS.find_card("j_phanta_professorlayton")) or (planet_count > 0 and pseudorandom('luke') < planet_count / card.ability.extra.out_of_odds) then
+      if next(SMODS.find_card("j_phanta_professorlayton")) or SMODS.pseudorandom_probability(card, "luke", count_planet_cards(), card.ability.extra.out_of_odds) then
         return { xmult = card.ability.extra.x_mult }
       end
     end
@@ -2044,7 +2051,7 @@ G.Phanta.centers["diamondaxe"] = {
         func = function()
           card:juice_up()
           _card:juice_up()
-          play_sound("phanta_diamondaxe", 1, 0.5)
+          play_sound("phanta_diamondaxe", 0.9 + math.random() * 0.1, 0.5)
           return true
         end
       }))
@@ -3403,14 +3410,15 @@ G.Phanta.centers["conspiracist"] = {
   cost = 5,
   loc_vars = function(self, info_queue, card)
     info_queue[#info_queue + 1] = G.P_CENTERS.c_earth
-    return { vars = { (G.GAME.probabilities.normal or 1), card.ability.extra.odds } }
+    local num, denom = SMODS.get_probability_vars(card, 1, card.ability.extra.odds, "conspiracist")
+    return { vars = { num, denom } }
   end,
   blueprint_compat = true,
   eternal_compat = true,
   perishable_compat = true,
   calculate = function(self, card, context)
     if context.before and not (context.blueprint_card or card).getting_sliced and count_consumables() < G.consumeables.config.card_limit
-        and pseudorandom('conspiracist') < G.GAME.probabilities.normal / card.ability.extra.odds and next(context.poker_hands['Full House']) then
+        and SMODS.pseudorandom_probability(card, "conspiracist", 1, card.ability.extra.odds) and next(context.poker_hands['Full House']) then
       G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
       G.E_MANAGER:add_event(Event({
         func = function()
@@ -4524,10 +4532,11 @@ G.Phanta.centers["spectretile"] = {
   eternal_compat = true,
   perishable_compat = true,
   loc_vars = function(self, info_queue, card)
-    return { vars = { (G.GAME.probabilities.normal or 1), card.ability.extra.odds } }
+    local num, denom = SMODS.get_probability_vars(card, 1, card.ability.extra.odds, "spectretile")
+    return { vars = { num, denom } }
   end,
   calculate = function(self, card, context)
-    if context.buying_card and context.card.config.center.set == "Joker" and pseudorandom('spectretile') < G.GAME.probabilities.normal / card.ability.extra.odds and count_consumables() < G.consumeables.config.card_limit then
+    if context.buying_card and context.card.config.center.set == "Joker" and SMODS.pseudorandom_probability(card, "spectretile", 1, card.ability.extra.odds) and count_consumables() < G.consumeables.config.card_limit then
       local _card = card
       G.E_MANAGER:add_event(Event({
         func = function()
@@ -4563,10 +4572,11 @@ G.Phanta.centers["possession"] = {
   eternal_compat = true,
   perishable_compat = true,
   loc_vars = function(self, info_queue, card)
-    return { vars = { (G.GAME.probabilities.normal or 1), card.ability.extra.odds } }
+    local num, denom = SMODS.get_probability_vars(card, 1, card.ability.extra.odds, "possession")
+    return { vars = { num, denom } }
   end,
   calculate = function(self, card, context)
-    if context.buying_card and context.card.config.center.set == "Joker" and not context.card.edition and pseudorandom('possession') < G.GAME.probabilities.normal / card.ability.extra.odds then
+    if context.buying_card and context.card.config.center.set == "Joker" and not context.card.edition and SMODS.pseudorandom_probability(card, "possession", 1, card.ability.extra.odds) then
       G.E_MANAGER:add_event(Event({
         func = function()
           context.card:set_edition { negative = true }

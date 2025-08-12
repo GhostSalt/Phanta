@@ -458,7 +458,8 @@ G.Phanta.centers["heartbreak"] = {
   },
   cost = 6,
   loc_vars = function(self, info_queue, card)
-    return { vars = { card.ability.extra.xmult, (G.GAME.probabilities.normal or 1), card.ability.extra.odds } }
+    local num, denom = SMODS.get_probability_vars(card, 1, card.ability.extra.odds, "heartbreak")
+    return { vars = { card.ability.extra.xmult, num, denom } }
   end,
   blueprint_compat = true,
   eternal_compat = true,
@@ -469,7 +470,7 @@ G.Phanta.centers["heartbreak"] = {
     end
 
     if context.destroy_card and context.cardarea == G.play and context.destroy_card:is_suit("Hearts")
-        and pseudorandom('heartbreak') < G.GAME.probabilities.normal / card.ability.extra.odds then
+        and SMODS.pseudorandom_probability(card, "heartbreak", 1, card.ability.extra.odds) then
       return { remove = true }
     end
   end
@@ -653,10 +654,11 @@ G.Phanta.centers["zeroii"] = {
   eternal_compat = true,
   perishable_compat = true,
   loc_vars = function(self, info_queue, card)
-    return { vars = { (G.GAME.probabilities.normal or 1), card.ability.extra.odds } }
+    local num, denom = SMODS.get_probability_vars(card, 1, card.ability.extra.odds, "zeroii")
+    return { vars = { num, denom } }
   end,
   calculate = function(self, card, context)
-    if context.discard and G.GAME.current_round.discards_used <= 0 and pseudorandom('zeroii') < G.GAME.probabilities.normal / card.ability.extra.odds then
+    if context.discard and G.GAME.current_round.discards_used <= 0 and SMODS.pseudorandom_probability(card, "zeroii", 1, card.ability.extra.odds) then
       return { remove = true }
     end
   end

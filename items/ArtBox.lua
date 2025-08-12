@@ -22,6 +22,12 @@ function Game:main_menu(change_context)
     { atlas = 'phanta_PhantaCollectables', pos = { x = 2, y = 0 }, soul_pos = { x = 3, y = 0 } })
   ArtBox.add_collectible('m_phanta_coppergratefresh',
     { atlas = 'phanta_PhantaCollectables', pos = { x = 4, y = 0 }, soul_pos = { x = 5, y = 0 } })
+  ArtBox.add_collectible('m_phanta_coppergrateexposed',
+    { atlas = 'phanta_PhantaCollectables', pos = { x = 4, y = 1 }, soul_pos = { x = 5, y = 1 } })
+  ArtBox.add_collectible('m_phanta_coppergrateweathered',
+    { atlas = 'phanta_PhantaCollectables', pos = { x = 0, y = 2 }, soul_pos = { x = 1, y = 2 } })
+  ArtBox.add_collectible('m_phanta_coppergrateoxidised',
+    { atlas = 'phanta_PhantaCollectables', pos = { x = 2, y = 2 }, soul_pos = { x = 3, y = 2 } })
   ArtBox.add_collectible('m_phanta_marblecard',
     { atlas = 'phanta_PhantaCollectables', pos = { x = 0, y = 1 }, soul_pos = { x = 1, y = 1 } })
   ArtBox.add_collectible('e_phanta_waxed',

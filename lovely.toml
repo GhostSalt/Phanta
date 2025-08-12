@@ -18,3 +18,45 @@ pattern = '''(G.GAME.used_vouchers["v_retcon"] or'''
 position = 'after'
 payload = '''#SMODS.find_card('j_phanta_clapperboard') > 0 or'''
 match_indent = true
+
+
+
+[[patches]]
+[patches.pattern]
+target = 'functions/UI_definitions.lua'
+pattern = '''if v:is_suit(kk) then mod_suit_counts[kk] = mod_suit_counts[kk] + 1 end'''
+position = 'at'
+payload = '''if v:is_suit(kk, nil, nil, true) then mod_suit_counts[kk] = mod_suit_counts[kk] + 1 end'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = 'functions/UI_definitions.lua'
+pattern = '''mod_suit_tallies['Spades'] = (mod_suit_tallies['Spades'] or 0) + (v:is_suit('Spades') and 1 or 0)'''
+position = 'at'
+payload = '''mod_suit_tallies['Spades'] = (mod_suit_tallies['Spades'] or 0) + (v:is_suit('Spades', nil, nil, true) and 1 or 0)'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = 'functions/UI_definitions.lua'
+pattern = '''mod_suit_tallies['Hearts'] = (mod_suit_tallies['Hearts'] or 0) + (v:is_suit('Hearts') and 1 or 0)'''
+position = 'at'
+payload = '''mod_suit_tallies['Hearts'] = (mod_suit_tallies['Hearts'] or 0) + (v:is_suit('Hearts', nil, nil, true) and 1 or 0)'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = 'functions/UI_definitions.lua'
+pattern = '''mod_suit_tallies['Clubs'] = (mod_suit_tallies['Clubs'] or 0) + (v:is_suit('Clubs') and 1 or 0)'''
+position = 'at'
+payload = '''mod_suit_tallies['Clubs'] = (mod_suit_tallies['Clubs'] or 0) + (v:is_suit('Clubs', nil, nil, true) and 1 or 0)'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = 'functions/UI_definitions.lua'
+pattern = '''mod_suit_tallies['Diamonds'] = (mod_suit_tallies['Diamonds'] or 0) + (v:is_suit('Diamonds') and 1 or 0)'''
+position = 'at'
+payload = '''mod_suit_tallies['Diamonds'] = (mod_suit_tallies['Diamonds'] or 0) + (v:is_suit('Diamonds', nil, nil, true) and 1 or 0)'''
+match_indent = true
