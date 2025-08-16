@@ -1336,6 +1336,38 @@ return {
                     "slot is {C:attention}empty{}"
                 }
             },
+            j_phanta_patientjoker                 = {
+                name = 'Patient Joker',
+                text = {
+                    "{C:mult}+#1#{} Mult if played",
+                    "hand contains a card",
+                    "with {C:diamonds}Diamonds{} suit"
+                }
+            },
+            j_phanta_blissedjoker                 = {
+                name = 'Blissed Joker',
+                text = {
+                    "{C:mult}+#1#{} Mult if played",
+                    "hand contains a card",
+                    "with {C:hearts}Hearts{} suit"
+                }
+            },
+            j_phanta_forgivingjoker                 = {
+                name = 'Forgiving Joker',
+                text = {
+                    "{C:mult}+#1#{} Mult if played",
+                    "hand contains a card",
+                    "with {C:diamonds}Diamonds{} suit"
+                }
+            },
+            j_phanta_temperedjoker                 = {
+                name = 'Tempered Joker',
+                text = {
+                    "{C:mult}+#1#{} Mult if played",
+                    "hand contains a card",
+                    "with {C:clubs}Clubs{} suit"
+                }
+            },
             j_phanta_fanta                 = {
                 name = 'Fanta',
                 text = {
@@ -1439,6 +1471,14 @@ return {
                 text = {
                     "Played {C:attention}3s{} give",
                     "{C:money}$#1#{} when scored",
+                }
+            },
+            j_phanta_glassjoe        = {
+                name = "Glass Joe",
+                text = {
+                    "Played {C:attention}face{} cards",
+                    "with {C:diamonds}Diamonds{} suit",
+                    "become {C:attention}Glass{} when scored"
                 }
             },
             j_phanta_modping               = {
@@ -2374,6 +2414,7 @@ return {
     },
     misc = {
         dictionary = {
+            k_glass = "Glass",
             phanta_chips_equals = "Chips=",
             phanta_mult_equals = "Mult=",
             phanta_swapped = "Swapped",

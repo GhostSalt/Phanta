@@ -7,7 +7,10 @@
     "main_file": "main.lua",
     "badge_colour": "4d1575",
     "dependencies": [
-        "Steamodded (1.0.0~BETA-0711a-STEAMODDED)"
+        "Steamodded (>=1.0.0~BETA-0711a)"
+    ],
+    "conflicts": [
+        "entr"
     ],
     "version": "1.0.2"
 }

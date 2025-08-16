@@ -392,9 +392,92 @@ G.Phanta.centers["absentjoker"] = {
   calculate = function(self, card, context)
     if context.joker_main and G.jokers.config.card_limit - #G.jokers.cards == 1 then
       return {
-        mult = card.ability.extra
-            .mult
+        mult = card.ability.extra.mult
       }
+    end
+  end
+}
+
+G.Phanta.centers["patientjoker"] = {
+  config = { extra = { mult = 10 } },
+  loc_vars = function(self, info_queue, card)
+    return { vars = { card.ability.extra.mult } }
+  end,
+  rarity = 1,
+  atlas = 'Phanta2',
+  pos = { x = 3, y = 2 },
+  cost = 4,
+  blueprint_compat = true,
+  eternal_compat = true,
+  perishable_compat = true,
+  calculate = function(self, card, context)
+    if context.joker_main then
+      for _, v in ipairs(context.scoring_hand) do
+        if v:is_suit("Diamonds") then return { mult = card.ability.extra.mult } end
+      end
+    end
+  end
+}
+
+G.Phanta.centers["blissedjoker"] = {
+  config = { extra = { mult = 10 } },
+  loc_vars = function(self, info_queue, card)
+    return { vars = { card.ability.extra.mult } }
+  end,
+  rarity = 1,
+  atlas = 'Phanta2',
+  pos = { x = 4, y = 2 },
+  cost = 4,
+  blueprint_compat = true,
+  eternal_compat = true,
+  perishable_compat = true,
+  calculate = function(self, card, context)
+    if context.joker_main then
+      for _, v in ipairs(context.scoring_hand) do
+        if v:is_suit("Hearts") then return { mult = card.ability.extra.mult } end
+      end
+    end
+  end
+}
+
+G.Phanta.centers["forgivingjoker"] = {
+  config = { extra = { mult = 10 } },
+  loc_vars = function(self, info_queue, card)
+    return { vars = { card.ability.extra.mult } }
+  end,
+  rarity = 1,
+  atlas = 'Phanta2',
+  pos = { x = 5, y = 2 },
+  cost = 4,
+  blueprint_compat = true,
+  eternal_compat = true,
+  perishable_compat = true,
+  calculate = function(self, card, context)
+    if context.joker_main then
+      for _, v in ipairs(context.scoring_hand) do
+        if v:is_suit("Spades") then return { mult = card.ability.extra.mult } end
+      end
+    end
+  end
+}
+
+G.Phanta.centers["temperedjoker"] = {
+  config = { extra = { mult = 10 } },
+  loc_vars = function(self, info_queue, card)
+    return { vars = { card.ability.extra.mult } }
+  end,
+  rarity = 1,
+  atlas = 'Phanta2',
+  pos = { x = 6, y = 2 },
+  cost = 4,
+  blueprint_compat = true,
+  eternal_compat = true,
+  perishable_compat = true,
+  calculate = function(self, card, context)
+    if context.joker_main then
+      for _, v in ipairs(context.scoring_hand) do
+        if v:is_suit("Clubs") then return { mult = card.ability.extra.mult } end
+      end
     end
   end
 }
@@ -744,6 +827,58 @@ G.Phanta.centers["yatagarasucard"] = {
   calculate = function(self, card, context)
     if context.individual and context.cardarea == G.play and context.other_card:get_id() == 3 then
       return { dollars = card.ability.extra.money }
+    end
+  end
+}
+
+G.Phanta.centers["glassjoe"] = {
+  loc_vars = function(self, info_queue, card)
+    info_queue[#info_queue + 1] = G.P_CENTERS.m_glass
+    return {}
+  end,
+  rarity = 1,
+  atlas = 'PhantaMiscAnims4',
+  pos = { x = 0, y = 5 },
+  phanta_anim = {
+    { x = 0,  y = 5, t = 0.5 },
+    { x = 1,  y = 5, t = 0.3 },
+    { x = 2,  y = 5, t = 0.2 },
+    { x = 3,  y = 5, t = 0.9 },
+    { x = 4,  y = 5, t = 0.4 },
+    { x = 5,  y = 5, t = 0.2 },
+    { x = 6,  y = 5, t = 0.8 },
+    { x = 7,  y = 5, t = 0.1 },
+    { x = 8,  y = 5, t = 0.2 },
+    { x = 9,  y = 5, t = 0.7 },
+    { x = 0,  y = 6, t = 0.3 },
+    { x = 1,  y = 6, t = 0.6 },
+    { x = 2,  y = 6, t = 0.3 },
+    { x = 3,  y = 6, t = 0.5 }
+  },
+  pos_extra = { x = 4, y = 6 },
+  phanta_anim_extra = {
+    { x = 4, y = 6, t = 8 / 30 },
+    { x = 5, y = 6, t = 0.1 },
+    { x = 6, y = 6, t = 1 / 30 },
+    { x = 7, y = 6, t = 8 / 30 },
+    { x = 8, y = 6, t = 0.1 },
+    { x = 9, y = 6, t = 1 / 30 }
+  },
+  cost = 4,
+  blueprint_compat = false,
+  eternal_compat = true,
+  perishable_compat = true,
+  calculate = function(self, card, context)
+    if context.individual and context.cardarea == G.play and context.other_card:is_face() and context.other_card:is_suit("Diamonds") and not SMODS.has_enhancement(context.other_card, "m_glass") then
+      local _card = context.other_card
+      _card:set_ability("m_glass", nil, true)
+      G.E_MANAGER:add_event(Event({
+        func = function()
+          _card:juice_up()
+          return true
+        end
+      }))
+      return { message = localize("k_glass"), colour = G.C.FILTER }
     end
   end
 }
