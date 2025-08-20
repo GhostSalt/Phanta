@@ -125,6 +125,20 @@ return {
                     "the {C:attention,T:bl_final_acorn}Amber Acorn{}"
                 }
             },
+            b_phanta_retired = {
+                name = 'Retired Deck',
+                text = {
+                    "All {C:attention}Aces{} start",
+                    "as {C:attention,T:e_drilled}Drilled{} cards",
+                }
+            },
+            b_phanta_bee = {
+                name = 'Bee Deck',
+                text = {
+                    "All {C:attention}face cards{}",
+                    "start as {C:attention,T:e_waxed}Waxed{} cards",
+                }
+            },
             b_phanta_spectrum = {
                 name = 'Spectrum Deck',
                 text = {
@@ -209,6 +223,47 @@ return {
                 name = "Waxed",
                 text = {
                     "{X:mult,C:white}X#1#{} Mult",
+                },
+            },
+            e_phanta_waxed_showcase = {
+                name = "Waxed",
+                text = {
+                    {
+                        "{X:mult,C:white}X#1#{} Mult",
+                        "{s:0.9}when on playing cards{}"
+                    },
+                    {
+                        "{X:mult,C:white}X#2#{} Mult",
+                        "{s:0.9}when on Jokers{}"
+                    }
+                },
+            },
+            e_phanta_drilled = {
+                name = "Drilled",
+                text = {
+                    "{C:attention}+#1#{} consumable slot",
+                },
+            },
+            e_phanta_drilled_playingcard = {
+                name = "Drilled",
+                text = {
+                    "{C:red}+#1#{} discard",
+                    "when played",
+                    "and scored"
+                },
+            },
+            e_phanta_drilled_showcase = {
+                name = "Drilled",
+                text = {
+                    {
+                        "{C:red}+#1#{} discard when",
+                        "played and scored",
+                        "{s:0.9}when on playing cards{}"
+                    },
+                    {
+                        "{C:attention}+#1#{} consumable slot",
+                        "{s:0.9}when on Jokers{}"
+                    }
                 },
             }
         },
@@ -1336,7 +1391,7 @@ return {
                     "slot is {C:attention}empty{}"
                 }
             },
-            j_phanta_patientjoker                 = {
+            j_phanta_patientjoker          = {
                 name = 'Patient Joker',
                 text = {
                     "{C:mult}+#1#{} Mult if played",
@@ -1344,7 +1399,7 @@ return {
                     "with {C:diamonds}Diamonds{} suit"
                 }
             },
-            j_phanta_blissedjoker                 = {
+            j_phanta_blissedjoker          = {
                 name = 'Blissed Joker',
                 text = {
                     "{C:mult}+#1#{} Mult if played",
@@ -1352,15 +1407,15 @@ return {
                     "with {C:hearts}Hearts{} suit"
                 }
             },
-            j_phanta_forgivingjoker                 = {
+            j_phanta_forgivingjoker        = {
                 name = 'Forgiving Joker',
                 text = {
                     "{C:mult}+#1#{} Mult if played",
                     "hand contains a card",
-                    "with {C:diamonds}Diamonds{} suit"
+                    "with {C:spades}Spades{} suit"
                 }
             },
-            j_phanta_temperedjoker                 = {
+            j_phanta_temperedjoker         = {
                 name = 'Tempered Joker',
                 text = {
                     "{C:mult}+#1#{} Mult if played",
@@ -1473,12 +1528,19 @@ return {
                     "{C:money}$#1#{} when scored",
                 }
             },
-            j_phanta_glassjoe        = {
+            j_phanta_glassjoe              = {
                 name = "Glass Joe",
                 text = {
                     "Played {C:attention}face{} cards",
                     "with {C:diamonds}Diamonds{} suit",
                     "become {C:attention}Glass{} when scored"
+                }
+            },
+            j_phanta_magiceggcup              = {
+                name = "Magic Egg Cup",
+                text = {
+                    "Played cards change",
+                    "{C:attention}suit{} if {C:attention}unscored{}"
                 }
             },
             j_phanta_modping               = {
@@ -2466,7 +2528,8 @@ return {
         labels = {
             phanta_ghostcard = "Ghost Card",
             phanta_ghostseal_seal = "Ghost Seal",
-            phanta_waxed = "Waxed"
+            phanta_waxed = "Waxed",
+            phanta_drilled = "Drilled"
         },
         poker_hands = {
             ["phanta_junk"] = "Junk",

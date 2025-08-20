@@ -856,8 +856,7 @@ G.Phanta.centers["redkeycards"] = {
       }))
       return {
         message = localize { type = 'variable', key = 'a_discards', vars = { card.ability.extra.added_discards } },
-        colour =
-            G.C.RED
+        colour = G.C.RED
       }
     end
 
@@ -908,8 +907,7 @@ G.Phanta.centers["bluekeycards"] = {
       }))
       return {
         message = localize { type = 'variable', key = 'a_hands', vars = { card.ability.extra.added_hands } },
-        colour =
-            G.C.BLUE
+        colour = G.C.BLUE
       }
     end
 
@@ -1751,7 +1749,9 @@ G.Phanta.centers["professorlayton"] = {
   eternal_compat = true,
   perishable_compat = true,
   loc_vars = function(self, info_queue, card)
-    local num, denom = SMODS.get_probability_vars(card, next(SMODS.find_card("j_phanta_luketriton")) and card.ability.extra.out_of_odds or count_tarots(), card.ability.extra.out_of_odds, "professorlayton")
+    local num, denom = SMODS.get_probability_vars(card,
+      next(SMODS.find_card("j_phanta_luketriton")) and card.ability.extra.out_of_odds or count_tarots(),
+      card.ability.extra.out_of_odds, "professorlayton")
     return { vars = { num, denom, card.ability.extra.added_mult } }
   end,
   calculate = function(self, card, context)
@@ -1789,7 +1789,9 @@ G.Phanta.centers["luketriton"] = {
   eternal_compat = true,
   perishable_compat = true,
   loc_vars = function(self, info_queue, card)
-    local num, denom = SMODS.get_probability_vars(card, next(SMODS.find_card("j_phanta_professorlayton")) and card.ability.extra.out_of_odds or count_planets(), card.ability.extra.out_of_odds, "luketriton")
+    local num, denom = SMODS.get_probability_vars(card,
+      next(SMODS.find_card("j_phanta_professorlayton")) and card.ability.extra.out_of_odds or count_planets(),
+      card.ability.extra.out_of_odds, "luketriton")
     return { vars = { num, denom, card.ability.extra.x_mult } }
   end,
   calculate = function(self, card, context)

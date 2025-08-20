@@ -840,20 +840,20 @@ G.Phanta.centers["glassjoe"] = {
   atlas = 'PhantaMiscAnims4',
   pos = { x = 0, y = 5 },
   phanta_anim = {
-    { x = 0,  y = 5, t = 0.5 },
-    { x = 1,  y = 5, t = 0.3 },
-    { x = 2,  y = 5, t = 0.2 },
-    { x = 3,  y = 5, t = 0.9 },
-    { x = 4,  y = 5, t = 0.4 },
-    { x = 5,  y = 5, t = 0.2 },
-    { x = 6,  y = 5, t = 0.8 },
-    { x = 7,  y = 5, t = 0.1 },
-    { x = 8,  y = 5, t = 0.2 },
-    { x = 9,  y = 5, t = 0.7 },
-    { x = 0,  y = 6, t = 0.3 },
-    { x = 1,  y = 6, t = 0.6 },
-    { x = 2,  y = 6, t = 0.3 },
-    { x = 3,  y = 6, t = 0.5 }
+    { x = 0, y = 5, t = 0.5 },
+    { x = 1, y = 5, t = 0.3 },
+    { x = 2, y = 5, t = 0.2 },
+    { x = 3, y = 5, t = 0.9 },
+    { x = 4, y = 5, t = 0.4 },
+    { x = 5, y = 5, t = 0.2 },
+    { x = 6, y = 5, t = 0.8 },
+    { x = 7, y = 5, t = 0.1 },
+    { x = 8, y = 5, t = 0.2 },
+    { x = 9, y = 5, t = 0.7 },
+    { x = 0, y = 6, t = 0.3 },
+    { x = 1, y = 6, t = 0.6 },
+    { x = 2, y = 6, t = 0.3 },
+    { x = 3, y = 6, t = 0.5 }
   },
   pos_extra = { x = 4, y = 6 },
   phanta_anim_extra = {
@@ -879,6 +879,67 @@ G.Phanta.centers["glassjoe"] = {
         end
       }))
       return { message = localize("k_glass"), colour = G.C.FILTER }
+    end
+  end
+}
+
+G.Phanta.centers["magiceggcup"] = {
+  rarity = 1,
+  atlas = 'Phanta2',
+  pos = { x = 8, y = 2 },
+  cost = 4,
+  blueprint_compat = false,
+  eternal_compat = true,
+  perishable_compat = true,
+  calculate = function(self, card, context)
+    if context.individual and context.cardarea == "unscored" then
+      local _card = context.other_card
+      local selectable_suits = {}
+      for k, v in pairs(SMODS.Suits) do
+        if k ~= _card.base.suit then
+          selectable_suits[k] = v
+        end
+      end
+      selectable_suits[_card.base.suit] = nil
+      local chosen_suit = (pseudorandom_element(selectable_suits, pseudoseed('magiceggcup')) or {key = "Spades"}).key
+
+      G.E_MANAGER:add_event(Event({
+        func = function()
+          play_sound('tarot1')
+          card:juice_up()
+          return true
+        end
+      }))
+      G.E_MANAGER:add_event(Event({
+        trigger = 'after',
+        delay = 0.15,
+        func = function()
+          _card:flip()
+          play_sound('card1', 1)
+          _card:juice_up(0.3, 0.3)
+          return true
+        end
+      }))
+      delay(0.2)
+      G.E_MANAGER:add_event(Event({
+        trigger = 'after',
+        delay = 0.1,
+        func = function()
+          _card:change_suit(chosen_suit)
+          return true
+        end
+      }))
+      G.E_MANAGER:add_event(Event({
+        delay = 0.1,
+        func = function()
+          _card:flip()
+          play_sound('tarot2', 1)
+          _card:juice_up(0.3, 0.3)
+          return true
+        end
+      }))
+      delay(0.2)
+      return { message = localize(chosen_suit, "suits_plural"), colour = G.C.SUITS[chosen_suit] }
     end
   end
 }

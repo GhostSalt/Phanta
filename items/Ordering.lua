@@ -85,6 +85,7 @@ local joker_order = {
     "honeydew",
     "candle",
     "goo",
+    "magiceggcup",
     "web",
     "cutcorners",
     "blottedjoker",

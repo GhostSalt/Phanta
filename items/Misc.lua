@@ -703,14 +703,27 @@ SMODS.Edition {
   get_weight = function(self)
     return G.GAME.edition_rate * self.weight
   end,
-  config = { xmult = 1.1 },
-  loc_vars = function(self, info_queue)
-    return { vars = { self.config.xmult } }
+  config = { xmult = 1.1, joker_xmult = 1.3 },
+  loc_vars = function(self, info_queue, card)
+    key = self.key
+    if card.fake_card or card.config.center.set == "Edition" then
+      key = key .. "_showcase"
+      return { key = key, vars = { self.config.xmult, self.config.joker_xmult } }
+    end
+    if card.config.center.set == "Joker" then
+      return { key = key, vars = { self.config.joker_xmult } }
+    else
+      return { key = key, vars = { self.config.xmult } }
+    end
   end,
   calculate = function(self, card, context)
-    if (context.main_scoring and context.cardarea == G.play) or context.post_joker then
+    if (context.main_scoring and context.cardarea == G.play) then
       return {
         xmult = self.config.xmult
+      }
+    elseif context.post_joker then
+      return {
+        xmult = self.config.joker_xmult
       }
     end
   end
@@ -720,6 +733,83 @@ SMODS.Edition {
 
 
 
+
+SMODS.Shader {
+  key = "drilled",
+  path = "phanta_drilled.fs"
+}
+
+SMODS.Shader {
+  key = "drilled_consistent",
+  path = "phanta_drilled_consistent.fs"
+}
+
+SMODS.Sound({
+  key = "drilled_card",
+  path = "phanta_drilled_card.ogg"
+})
+
+SMODS.Edition {
+  key = 'drilled',
+  shader = 'drilled',
+  disable_base_shader = true,
+  in_shop = true,
+  sound = { sound = "phanta_drilled_card", per = 1, vol = 0.5 },
+  weight = 5,
+  badge_colour = HEX('BFC7D5'),
+  extra_cost = 1,
+  get_weight = function(self)
+    return G.GAME.edition_rate * self.weight
+  end,
+  config = { extra = { slots = 1, discards = 1 } },
+  loc_vars = function(self, info_queue, card)
+    key = self.key
+    if card.config.center.set == "Edition" then
+      key = key .. "_showcase"
+      return { key = key, vars = { self.config.extra.discards, self.config.extra.slots } }
+    end
+    if card.config.center.set == "Joker" then
+      return { key = key, vars = { self.config.extra.slots } }
+    else
+      key = key .. "_playingcard"
+      return { key = key, vars = { self.config.extra.discards } }
+    end
+  end,
+  calculate = function(self, card, context)
+    if (context.main_scoring and context.cardarea == G.play) then
+      ease_discard(self.config.extra.discards)
+      return {
+        message = localize { type = 'variable', key = 'a_discard', vars = { self.config.extra.discards } },
+        colour = G.C.RED
+      }
+    end
+  end --[[,
+  draw = function(self, card, layer)
+    if card.phanta_drilled_consistent then
+
+    else
+
+    end
+  end]] --
+}
+
+local atdref = Card.add_to_deck
+function Card:add_to_deck(from_debuff)
+  if self and self.edition and self.edition.key == "e_phanta_drilled" and self.config and self.config.center and self.config.center.set == "Joker"
+      and G.consumeables and G.consumeables.config and G.consumeables.config.card_limit then
+    G.consumeables.config.card_limit = G.consumeables.config.card_limit + self.edition.extra.slots
+  end
+  atdref(self, from_debuff)
+end
+
+local rfdref = Card.remove_from_deck
+function Card:remove_from_deck(from_debuff)
+  if self and self.edition and self.edition.key == "e_phanta_drilled" and self.config and self.config.center and self.config.center.set == "Joker"
+      and G.consumeables and G.consumeables.config and G.consumeables.config.card_limit then
+    G.consumeables.config.card_limit = G.consumeables.config.card_limit - self.edition.extra.slots
+  end
+  rfdref(self, from_debuff)
+end
 
 SMODS.Enhancement {
   key = "coppergratefresh",
@@ -781,7 +871,7 @@ SMODS.Enhancement {
   end,
   set_badges = function(self, card, badges)
     badges[#badges + 1] = create_badge(localize('phanta_copper_grate_weathered'),
-    G.C.PHANTA.MISC_COLOURS.COPPER_WEATHERED,
+      G.C.PHANTA.MISC_COLOURS.COPPER_WEATHERED,
       G.C.WHITE, 1)
   end,
   in_pool = function() return false end
@@ -2098,6 +2188,45 @@ function get_new_boss()
     return get_new_boss_ref()
   end
 end
+
+SMODS.Back {
+  key = 'retired',
+  atlas = 'Decks',
+  pos = { x = 1, y = 4 },
+  draw = function(self, back, layer)
+    back.children.center:draw_shader('drilled', nil, card.ARGS.send_to_shader)
+  end,
+  apply = function(self, back)
+    G.E_MANAGER:add_event(Event({
+      func = function()
+        for i = 1, #G.playing_cards do
+          if G.playing_cards[i]:get_id() == 14 then
+            G.playing_cards[i]:set_edition("e_phanta_drilled")
+          end
+        end
+        return true
+      end,
+    }))
+  end
+}
+
+SMODS.Back {
+  key = 'bee',
+  atlas = 'Decks',
+  pos = { x = 2, y = 4 },
+  apply = function(self, back)
+    G.E_MANAGER:add_event(Event({
+      func = function()
+        for i = 1, #G.playing_cards do
+          if G.playing_cards[i]:is_face() then
+            G.playing_cards[i]:set_edition("e_phanta_waxed")
+          end
+        end
+        return true
+      end,
+    }))
+  end
+}
 
 SMODS.Back {
   key = 'spectrum',
