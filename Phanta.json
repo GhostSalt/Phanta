@@ -9,8 +9,5 @@
     "dependencies": [
         "Steamodded (>=1.0.0~BETA-0711a)"
     ],
-    "conflicts": [
-        "entr"
-    ],
     "version": "1.0.3"
 }
