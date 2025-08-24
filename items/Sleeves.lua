@@ -151,42 +151,42 @@ CardSleeves.Sleeve {
   name = "Tally Sleeve",
   atlas = "PhantaSleeves",
   pos = { x = 0, y = 1 },
+  config = { extra = { given_joker_slots = 1, triggered = false } },
   unlocked = false,
   unlock_condition = { deck = "b_phanta_tally", stake = "stake_white" },
   loc_vars = function(self)
     if self.get_current_deck_key() ~= "b_phanta_tally" then
       key = self.key
-      self.config = { extra = { given_joker_slots = 1, triggered = false } }
-      return { key = key, vars = { self.config.extra.given_joker_slots, self.config.extra.triggered } }
     else
       key = self.key .. "_alt"
-      return { key = key }
     end
+    return { key = key, vars = { self.config.extra.given_joker_slots } }
   end,
   calculate = function(self, back, context)
-    if self.get_current_deck_key() ~= "b_phanta_tally" and context.setting_blind and G.GAME.blind:get_type() == "Small" and G.GAME.round_resets.ante == 5 and not self.config.extra.triggered then
+    if ((self.get_current_deck_key() ~= "b_phanta_tally" and context.setting_blind and G.GAME.blind:get_type() == "Small")
+    or (self.get_current_deck_key() == "b_phanta_tally") and context.setting_blind and G.GAME.blind:get_type() == "Big") and G.GAME.round_resets.ante == 5 and not self.config.extra.triggered then
       G.jokers.config.card_limit = G.jokers.config.card_limit + 1
       self.config.extra.triggered = true
-      local destructable_jokers = {}
-      for i = 1, #G.jokers.cards do
-        if not G.jokers.cards[i].ability.eternal and not G.jokers.cards[i].getting_sliced then
-          destructable_jokers[#destructable_jokers + 1] =
-              G.jokers.cards[i]
-        end
-      end
-      local joker_to_destroy = #destructable_jokers > 0 and
-          pseudorandom_element(destructable_jokers, pseudoseed('tallydeck')) or nil
 
-      if joker_to_destroy and not (context.blueprint_card or self).getting_sliced then
-        joker_to_destroy.getting_sliced = true
-        G.E_MANAGER:add_event(Event({
-          func = function()
-            play_sound("phanta_tally_deck", 1, 0.75)
-            joker_to_destroy:start_dissolve({ G.C.RED }, nil, 1.6)
-            return true
+        local destructable_jokers = {}
+        for i = 1, #G.jokers.cards do
+          if not G.jokers.cards[i].ability.eternal and not G.jokers.cards[i].getting_sliced then
+            destructable_jokers[#destructable_jokers + 1] = G.jokers.cards[i]
           end
-        }))
-      end
+        end
+        local joker_to_destroy = #destructable_jokers > 0 and
+            pseudorandom_element(destructable_jokers, pseudoseed('tallysleeve')) or nil
+
+        if joker_to_destroy and not (context.blueprint_card or self).getting_sliced then
+          joker_to_destroy.getting_sliced = true
+          G.E_MANAGER:add_event(Event({
+            func = function()
+              play_sound("phanta_tally_deck", 1, 0.5)
+              joker_to_destroy:start_dissolve({ G.C.RED }, nil, 1.6)
+              return true
+            end
+          }))
+        end
     end
   end
 }
@@ -306,7 +306,7 @@ CardSleeves.Sleeve {
           end
         end
         return true
-      end,
+      end
     }))
   end
 }
@@ -404,6 +404,35 @@ function get_new_boss()
     return get_new_boss_ref()
   end
 end
+
+CardSleeves.Sleeve {
+  key = "bee",
+  name = "Bee Sleeve",
+  atlas = "PhantaSleeves",
+  pos = { x = 2, y = 4 },
+  unlocked = false,
+  unlock_condition = { deck = "b_phanta_bee", stake = "stake_white" },
+  loc_vars = function(self)
+    if self.get_current_deck_key() == "b_phanta_bee" then
+      key = self.key .. "_alt"
+    else
+      key = self.key
+    end
+    return { key = key }
+  end,
+  apply = function(self, back)
+    G.E_MANAGER:add_event(Event({
+      func = function()
+        for i = 1, #G.playing_cards do
+          if G.playing_cards[i]:is_face() or self.get_current_deck_key() == "b_phanta_bee" then
+            G.playing_cards[i]:set_edition("e_phanta_waxed", true, true)
+          end
+        end
+        return true
+      end,
+    }))
+  end
+}
 
 CardSleeves.Sleeve {
   key = "spectrum",

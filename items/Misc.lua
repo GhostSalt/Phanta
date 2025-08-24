@@ -732,7 +732,7 @@ SMODS.Edition {
 
 
 
-
+--[[
 
 SMODS.Shader {
   key = "drilled",
@@ -783,14 +783,7 @@ SMODS.Edition {
         colour = G.C.RED
       }
     end
-  end --[[,
-  draw = function(self, card, layer)
-    if card.phanta_drilled_consistent then
-
-    else
-
-    end
-  end]] --
+  end
 }
 
 local atdref = Card.add_to_deck
@@ -798,18 +791,28 @@ function Card:add_to_deck(from_debuff)
   if self and self.edition and self.edition.key == "e_phanta_drilled" and self.config and self.config.center and self.config.center.set == "Joker"
       and G.consumeables and G.consumeables.config and G.consumeables.config.card_limit then
     G.consumeables.config.card_limit = G.consumeables.config.card_limit + self.edition.extra.slots
+    play_sound("foil2", 0.9, 0.3)
+    card_eval_status_text(self, 'extra', nil, nil, nil, { message = localize("plus_consumable_slot"), colour = G.C.FILTER })
   end
   atdref(self, from_debuff)
 end
+
+SMODS.Sound({
+  key = "undo_edition",
+  path = "phanta_undo_edition.ogg",
+  replace = true
+})
 
 local rfdref = Card.remove_from_deck
 function Card:remove_from_deck(from_debuff)
   if self and self.edition and self.edition.key == "e_phanta_drilled" and self.config and self.config.center and self.config.center.set == "Joker"
       and G.consumeables and G.consumeables.config and G.consumeables.config.card_limit then
     G.consumeables.config.card_limit = G.consumeables.config.card_limit - self.edition.extra.slots
+    play_sound("phanta_undo_edition", 0.9, 0.3)
+    card_eval_status_text(self, 'extra', nil, nil, nil, { message = localize("minus_consumable_slot"), colour = G.C.FILTER })
   end
   rfdref(self, from_debuff)
-end
+end]]--
 
 SMODS.Enhancement {
   key = "coppergratefresh",
@@ -1999,19 +2002,17 @@ SMODS.Back {
   pos = { x = 0, y = 1 },
   config = { extra = { given_joker_slots = 1, triggered = false } },
   loc_vars = function(self, info_queue, center)
-    return { vars = { self.config.extra.given_joker_slots, self.config.extra.minus_hand_size } }
+    return { vars = { self.config.extra.given_joker_slots } }
   end,
   calculate = function(self, back, context)
     if context.setting_blind and G.GAME.blind:get_type() == "Small" and G.GAME.round_resets.ante == 5 and not self.config.extra.triggered then
       G.jokers.config.card_limit = G.jokers.config.card_limit + 1
       self.config.extra.triggered = true
 
-      if G.GAME.selected_sleeve ~= "sleeve_phanta_tally" then
         local destructable_jokers = {}
         for i = 1, #G.jokers.cards do
           if not G.jokers.cards[i].ability.eternal and not G.jokers.cards[i].getting_sliced then
-            destructable_jokers[#destructable_jokers + 1] =
-                G.jokers.cards[i]
+            destructable_jokers[#destructable_jokers + 1] = G.jokers.cards[i]
           end
         end
         local joker_to_destroy = #destructable_jokers > 0 and
@@ -2021,13 +2022,12 @@ SMODS.Back {
           joker_to_destroy.getting_sliced = true
           G.E_MANAGER:add_event(Event({
             func = function()
-              play_sound("phanta_tally_deck", 1, 0.75)
+              play_sound("phanta_tally_deck", 1, 0.5)
               joker_to_destroy:start_dissolve({ G.C.RED }, nil, 1.6)
               return true
             end
           }))
         end
-      end
     end
   end
 }
@@ -2189,7 +2189,7 @@ function get_new_boss()
   end
 end
 
-SMODS.Back {
+--[[SMODS.Back {
   key = 'retired',
   atlas = 'Decks',
   pos = { x = 1, y = 4 },
@@ -2201,14 +2201,14 @@ SMODS.Back {
       func = function()
         for i = 1, #G.playing_cards do
           if G.playing_cards[i]:get_id() == 14 then
-            G.playing_cards[i]:set_edition("e_phanta_drilled")
+            G.playing_cards[i]:set_edition("e_phanta_drilled", true, true)
           end
         end
         return true
       end,
     }))
   end
-}
+}]]--
 
 SMODS.Back {
   key = 'bee',
@@ -2219,7 +2219,7 @@ SMODS.Back {
       func = function()
         for i = 1, #G.playing_cards do
           if G.playing_cards[i]:is_face() then
-            G.playing_cards[i]:set_edition("e_phanta_waxed")
+            G.playing_cards[i]:set_edition("e_phanta_waxed", true, true)
           end
         end
         return true

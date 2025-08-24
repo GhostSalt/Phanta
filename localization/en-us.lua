@@ -1954,8 +1954,9 @@ return {
             sleeve_phanta_tally_alt = {
                 name = "Tally Sleeve",
                 text = {
-                    "The deck no longer",
-                    "{C:red}destroys{} any Jokers"
+                    "The first time you select the",
+                    "{C:attention}Big Blind{} of {C:attention}Ante 5{},",
+                    "destroys {C:red}1{} Joker and gain {C:attention}+#1#{} Joker slot"
                 }
             },
             sleeve_phanta_trickster = {
@@ -2033,14 +2034,14 @@ return {
                 name = 'Gilded 7 Sleeve',
                 text = {
                     "All {C:attention}7s{} start",
-                    "as {C:attention,T:m_gold}Gold{} cards",
+                    "as {C:attention,T:m_gold}Gold{} cards"
                 }
             },
             sleeve_phanta_gildedseven_alt = {
                 name = 'Gilded 7 Sleeve',
                 text = {
                     "All {C:attention}7s{} start",
-                    "with {C:attention,T:Gold}Gold{} seals",
+                    "with {C:attention,T:Gold}Gold{} seals"
                 }
             },
             sleeve_phanta_hazel = {
@@ -2055,6 +2056,20 @@ return {
                 text = {
                     "All {C:attention}Blinds{} are",
                     "the {C:attention,T:bl_final_acorn}Amber Acorn{}"
+                }
+            },
+            sleeve_phanta_bee = {
+                name = 'Bee Sleeve',
+                text = {
+                    "All {C:attention}face cards{}",
+                    "start as {C:attention,T:e_waxed}Waxed{} cards"
+                }
+            },
+            sleeve_phanta_bee_alt = {
+                name = 'Bee Sleeve',
+                text = {
+                    "All {C:attention}cards{} start",
+                    "as {C:attention,T:e_waxed}Waxed{} cards"
                 }
             },
             sleeve_phanta_spectrum = {
@@ -2496,6 +2511,8 @@ return {
             b_phanta_starterpack_cards = "Starter Packs",
             k_phanta_starterpack = "Starter Pack",
             plus_standard_tag = '+Standard Tag',
+            plus_consumable_slot = '+1 Consumable Slot',
+            minus_consumable_slot = '-1 Consumable Slot',
             phanta_aries_second = "second ",
             phanta_plural = "s",
             phanta_virgo_at_most = "at most ",

@@ -884,9 +884,75 @@ G.Phanta.centers["glassjoe"] = {
 }
 
 G.Phanta.centers["magiceggcup"] = {
+  config = { extra = { is_first = true } },
   rarity = 1,
-  atlas = 'Phanta2',
-  pos = { x = 8, y = 2 },
+  atlas = 'PhantaMiscAnims4',
+  pos = { x = 7, y = 10 },
+  pos_extra = { x = 0, y = 11 },
+  phanta_anim_states = {
+    ["unknown"] = { anim = { { x = 7, y = 10, t = 1 } }, loop = false },
+
+    ["diamonds"] = { anim = { { x = 8, y = 10, t = 1 } }, loop = false },
+    ["hearts"] = { anim = { { x = 9, y = 10, t = 1 } }, loop = false },
+    ["spades"] = { anim = { { x = 10, y = 10, t = 1 } }, loop = false },
+    ["clubs"] = { anim = { { x = 11, y = 10, t = 1 } }, loop = false },
+
+    ["inks"] = { anim = { { x = 8, y = 11, t = 1 } }, loop = false },
+    ["colors"] = { anim = { { x = 9, y = 11, t = 1 } }, loop = false },
+
+    ["clovers"] = { anim = { { x = 10, y = 11, t = 1 } }, loop = false },
+    ["suitless"] = { anim = { { x = 11, y = 11, t = 1 } }, loop = false },
+
+    ["3s"] = { anim = { { x = 0, y = 12, t = 1 } }, loop = false },
+
+    ["notes"] = { anim = { { x = 1, y = 12, t = 1 } }, loop = false },
+
+    ["stars1"] = { anim = { { x = 2, y = 12, t = 1 } }, loop = false },
+    ["moons"] = { anim = { { x = 3, y = 12, t = 1 } }, loop = false },
+
+    ["fleurons"] = { anim = { { x = 4, y = 12, t = 1 } }, loop = false },
+    ["halberds"] = { anim = { { x = 5, y = 12, t = 1 } }, loop = false },
+
+    ["goblets"] = { anim = { { x = 6, y = 12, t = 1 } }, loop = false },
+    ["towers"] = { anim = { { x = 7, y = 12, t = 1 } }, loop = false },
+    ["blooms"] = { anim = { { x = 8, y = 12, t = 1 } }, loop = false },
+    ["daggers"] = { anim = { { x = 9, y = 12, t = 1 } }, loop = false },
+    ["voids"] = { anim = { { x = 10, y = 12, t = 1 } }, loop = false },
+    ["lanterns"] = { anim = { { x = 11, y = 12, t = 1 } }, loop = false },
+
+    ["crowns"] = { anim = { { x = 0, y = 13, t = 1 } }, loop = false },
+    ["stars2"] = { anim = { { x = 1, y = 13, t = 1 } }, loop = false },
+
+    ["thunders"] = { anim = { { x = 2, y = 13, t = 1 } }, loop = false },
+    ["waters"] = { anim = { { x = 3, y = 13, t = 1 } }, loop = false },
+
+    ["eyes"] = { anim = { { x = 4, y = 13, t = 1 } }, loop = false }
+  },
+  phanta_anim_extra_states = {
+    ["lifting first"] = {
+      anim = {
+        { xrange = { first = 0, last = 7 }, y = 11, t = 0.05 },
+        { xrange = { first = 7, last = 2 }, y = 11, t = 0.06 },
+      },
+      loop = false
+    },
+    ["lifting middle"] = {
+      anim = {
+        { xrange = { first = 2, last = 7 }, y = 11, t = 0.05 },
+        { xrange = { first = 7, last = 2 }, y = 11, t = 0.06 },
+      },
+      loop = false
+    },
+    ["lifting end"] = {
+      anim = {
+        { xrange = { first = 2, last = 0 }, y = 11, t = 0.1 }
+      },
+      loop = false
+    },
+    ["resting"] = { anim = { { x = 0, y = 11, t = 1 } }, loop = false }
+  },
+  phanta_anim_current_state = "unknown",
+  phanta_anim_extra_current_state = "resting",
   cost = 4,
   blueprint_compat = false,
   eternal_compat = true,
@@ -901,12 +967,54 @@ G.Phanta.centers["magiceggcup"] = {
         end
       end
       selectable_suits[_card.base.suit] = nil
-      local chosen_suit = (pseudorandom_element(selectable_suits, pseudoseed('magiceggcup')) or {key = "Spades"}).key
+      local chosen_suit = (pseudorandom_element(selectable_suits, pseudoseed('magiceggcup')) or { key = "Spades" }).key
+
+      local supported_suits = {
+        ["Diamonds"] = "diamonds",
+        ["Hearts"] = "hearts",
+        ["Spades"] = "spades",
+        ["Clubs"] = "clubs",
+
+        ["ink_Inks"] = "inks",
+        ["ink_Colors"] = "colors",
+
+        ["mtg_Clovers"] = "clovers",
+        ["mtg_Suitless"] = "suitless",
+
+        ["minty_3s"] = "3s",
+
+        ["Notes"] = "notes",
+
+        ["six_Stars"] = "stars1",
+        ["six_Moons"] = "moons",
+
+        ["bunc_Fleurons"] = "fleurons",
+        ["bunc_Halberds"] = "halberds",
+
+        ["rgmc_goblets"] = "goblets",
+        ["rgmc_towers"] = "towers",
+        ["rgmc_blooms"] = "blooms",
+        ["rgmc_daggers"] = "daggers",
+        ["rgmc_voids"] = "voids",
+        ["rgmc_lanterns"] = "lanterns",
+
+        ["paperback_Crowns"] = "crowns",
+        ["paperback_Stars"] = "stars2",
+
+        ["rcb_thunders"] = "thunders",
+        ["rcb_waters"] = "waters",
+
+        ["gb_Eyes"] = "eyes"
+      }
+      local displayed_suit = supported_suits[chosen_suit] or "unknown"
 
       G.E_MANAGER:add_event(Event({
         func = function()
           play_sound('tarot1')
           card:juice_up()
+          card:phanta_set_anim_state(displayed_suit)
+          card:phanta_set_anim_extra_state(card.ability.extra.is_first and "lifting first" or "lifting middle")
+          card.ability.extra.is_first = false
           return true
         end
       }))
@@ -917,10 +1025,10 @@ G.Phanta.centers["magiceggcup"] = {
           _card:flip()
           play_sound('card1', 1)
           _card:juice_up(0.3, 0.3)
+          delay(0.2)
           return true
         end
       }))
-      delay(0.2)
       G.E_MANAGER:add_event(Event({
         trigger = 'after',
         delay = 0.1,
@@ -940,6 +1048,17 @@ G.Phanta.centers["magiceggcup"] = {
       }))
       delay(0.2)
       return { message = localize(chosen_suit, "suits_plural"), colour = G.C.SUITS[chosen_suit] }
+    end
+
+    if context.after then
+      G.E_MANAGER:add_event(Event({
+        func = function()
+          card.ability.extra.is_first = true
+          card:phanta_set_anim_state("unknown")
+          card:phanta_set_anim_extra_state("lifting end")
+          return true
+        end
+      }))
     end
   end
 }
