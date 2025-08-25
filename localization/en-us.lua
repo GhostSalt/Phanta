@@ -2537,6 +2537,7 @@ return {
             phanta_zodiac_enabled = "Zodiac Cards",
             phanta_starter_pack_enabled = "Starter Packs",
             phanta_disable_animations = "Disable Animations",
+            phanta_disable_custom_music = "Disable Custom Music",
 
             phanta_credit_1 = "Mod by GhostSalt",
             phanta_credit_2 = "Ability brainstorming: BakersDozenBagels",

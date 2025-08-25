@@ -29,7 +29,7 @@ SMODS.Sound({
   key = "polargeist_music",
   path = "phanta_polargeist.ogg",
   select_music_track = function()
-    if #SMODS.find_card('j_phanta_normalface') > 0 then
+    if #SMODS.find_card('j_phanta_normalface') > 0 and not Phanta.config["custom_music_disabled"] then
       return 1e6
     end
     return false

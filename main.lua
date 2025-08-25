@@ -516,6 +516,14 @@ local phantaConfigTab = function()
     callback = function()
     end,
   })
+  phanta_nodes[#phanta_nodes + 1] = create_toggle({
+    label = localize("phanta_disable_custom_music"),
+    active_colour = HEX("40c76d"),
+    ref_table = Phanta.config,
+    ref_value = "custom_music_disabled",
+    callback = function()
+    end,
+  })
   return {
     n = G.UIT.ROOT,
     config = {
