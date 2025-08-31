@@ -1064,7 +1064,7 @@ G.Phanta.centers["magiceggcup"] = {
 }
 
 G.Phanta.centers["modping"] = {
-  config = { extra = { money_needed = 20, money_increase = 10 } },
+  config = { extra = { money_needed = 5, money_increase = 10 } },
   loc_vars = function(self, info_queue, card)
     return {
       vars = { card.ability.extra.money_needed, card.ability.extra.money_increase },

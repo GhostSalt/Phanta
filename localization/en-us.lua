@@ -1536,7 +1536,7 @@ return {
                     "become {C:attention}Glass{} when scored"
                 }
             },
-            j_phanta_magiceggcup              = {
+            j_phanta_magiceggcup           = {
                 name = "Magic Egg Cup",
                 text = {
                     "Played cards change",
@@ -2327,6 +2327,114 @@ return {
                 },
             }
         },
+        phanta_Birthstone = {
+            c_phanta_bloodstone = {
+                name = "Bloodstone",
+                text = {
+                    "Creates #1# {C:dark_edition}Negative{} {C:tarot}Tarot{}",
+                    "card#2# when {C:attention}second{}",
+                    "hand is played",
+                },
+            },
+            c_phanta_sapphire = {
+                name = "Sapphire",
+                text = {
+                    "Retriggers all but",
+                    "the {C:attention}first{} played card",
+                    "used in scoring {C:attention}#1#{} time#2#"
+                },
+            },
+            c_phanta_agate = {
+                name = "Agate",
+                text = {
+                    "Earn {C:money}$#1#{} if played",
+                    "hand contains a",
+                    "{C:attention}Four of a Kind{}"
+                },
+            },
+            c_phanta_emerald = {
+                name = "Emerald",
+                text = {
+                    "{C:chips}+#1#{} Chips if played",
+                    "hand contains a",
+                    "card with {C:clubs}Clubs{} suit"
+                },
+            },
+            c_phanta_onyx = {
+                name = "Onyx",
+                text = {
+                    "{C:mult}+#1#{} Mult if played",
+                    "hand contains a",
+                    "card with {C:hearts}Hearts{} suit"
+                },
+            },
+            c_phanta_carnelian = {
+                name = "Carnelian",
+                text = {
+                    "If {C:attention}Blind{} is defeated",
+                    "in #1#{C:blue}#2#{} hand#3#,#4#",
+                    "#5#a {C:attention}Rare{} Tag"
+                },
+            },
+            c_phanta_peridot = {
+                name = "Peridot",
+                text = {
+                    "{C:white,X:mult}X#1#{} Mult if played",
+                    "hand contains a",
+                    "card with {C:spades}Spades{} suit"
+                },
+            },
+            c_phanta_aquamarine = {
+                name = "Aquamarine",
+                text = {
+                    "Creates #1# {C:dark_edition}Negative{}",
+                    "{C:planet}Planet{} card#2# if played",
+                    "hand contains a",
+                    "card with {C:diamonds}Diamonds{} suit"
+                },
+            },
+            c_phanta_topaz = {
+                name = "Topaz",
+                text = {
+                    "{C:red}+#1#{} discards",
+                    "when selecting",
+                    "any {C:attention}Boss Blind{}"
+                },
+            },
+            c_phanta_ruby = {
+                name = "Ruby",
+                text = {
+                    "Earn {C:money}$#1#{} at the end",
+                    "of the {C:attention}shop{} if you",
+                    "did not {C:attention}reroll{}"
+                },
+            },
+            c_phanta_garnet = {
+                name = "Garnet",
+                text = {
+                    "{C:blue}+#1#{} hands",
+                    "when selecting",
+                    "any {C:attention}Boss Blind{}"
+                }
+            },
+            c_phanta_amethyst = {
+                name = "Amethyst",
+                text = {
+                    "At the end of the",
+                    "{C:attention}shop{}, gains {C:money}$#1#{} of",
+                    "{C:attention}sell{} {C:attention}value{} for each",
+                    "unopened {C:attention}Booster Pack{}"
+                },
+            },
+            c_phanta_moonstone = {
+                name = "Moonstone",
+                text = {
+                    "Played cards with",
+                    "{C:clubs}Clubs{} suit give",
+                    "{C:white,X:mult}X#1#{} Mult when scored"
+                },
+            }
+        },
         phanta_StarterPack = {
             c_phanta_performerpack = {
                 name = "Performer Pack",
@@ -2508,9 +2616,12 @@ return {
             b_phanta_zodiac_cards = "Zodiac Cards",
             k_phanta_zodiac = "Zodiac",
             k_phanta_zodiac_pack = "Zodiac Pack",
+            b_phanta_birthstone_cards = "Birthstone Cards",
+            k_phanta_birthstone = "Birthstone",
             b_phanta_starterpack_cards = "Starter Packs",
             k_phanta_starterpack = "Starter Pack",
             plus_standard_tag = '+Standard Tag',
+            plus_rare_tag = '+Rare Tag',
             plus_consumable_slot = '+1 Consumable Slot',
             minus_consumable_slot = '-1 Consumable Slot',
             phanta_aries_second = "second ",
@@ -2603,6 +2714,7 @@ return {
             a_hand = "+#1# Hand",
             s_hand = "-#1# Hand",
             s_hands = "-#1# Hands",
+            a_tarot = "+#1# Tarot",
             a_tarots = "+#1# Tarots",
         }
     }

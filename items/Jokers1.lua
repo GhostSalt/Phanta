@@ -46,6 +46,13 @@ SMODS.Atlas {
 }
 
 SMODS.Atlas {
+  key = "PhantaMiscAnims5",
+  path = "PhantaMiscAnims5.png",
+  px = 71,
+  py = 95
+}
+
+SMODS.Atlas {
   key = "PhantaKnowledgeOfTheCollegeAnim",
   path = "PhantaKnowledgeOfTheCollegeAnim.png",
   px = 71,
@@ -135,7 +142,7 @@ G.Phanta.centers["hintcoin"] = {
   config = { extra = { money = 5 } },
   rarity = 1,
   atlas = 'PhantaLaytonAnims',
-  pos = { x = 0, y = 7 }, --[[
+  pos = { x = 8, y = 1 }, --[[
   phanta_anim = {
     { x = 0, y = 7, t = 4 },
     { x = 1, y = 7, t = 0.15 },
@@ -276,20 +283,12 @@ G.Phanta.centers["puzzle"] = {
   atlas = 'PhantaLaytonAnims',
   pos = { x = 0, y = 8 },
   phanta_anim = {
-    { x = 6, y = 8, t = 0.05 },
-    { x = 5, y = 8, t = 0.05 },
-    { x = 0, y = 8, t = 0.05 },
-    { x = 1, y = 8, t = 0.05 },
-    { x = 2, y = 8, t = 0.05 },
-    { x = 3, y = 8, t = 0.05 },
-    { x = 4, y = 8, t = 0.05 },
-    { x = 3, y = 8, t = 0.05 },
-    { x = 2, y = 8, t = 0.05 },
-    { x = 1, y = 8, t = 0.05 },
-    { x = 0, y = 8, t = 4 },
-    { x = 4, y = 7, t = 0.08 },
-    { x = 5, y = 7, t = 0.08 },
-    { x = 6, y = 7, t = 0.5 },
+    { xrange = { first = 11, last = 10 }, y = 0, t = 0.05 },
+    { xrange = { first = 5, last = 9 },   y = 0, t = 0.05 },
+    { xrange = { first = 8, last = 6 },   y = 0, t = 0.05 },
+    { x = 5,                              y = 0, t = 4 },
+    { xrange = { first = 6, last = 7 },   y = 1, t = 0.05 },
+    { x = 5,                              y = 2, t = 0.5 },
   },
   cost = 4,
   loc_vars = function(self, info_queue, card)
@@ -597,17 +596,53 @@ G.Phanta.centers["new2dsxl"] = {
     return { vars = { card.ability.extra.lost_hand_size, card.ability.extra.given_xhands } }
   end,
   rarity = 3,
-  atlas = 'Phanta',
-  pos = { x = 10, y = 6 },
+  atlas = 'PhantaMiscAnims5',
+  pos = { x = 0, y = 0 },
+  phanta_anim_states = {
+    ["normal"] = {
+      anim = {
+        { x = 0, y = 0, t = 1 }
+      },
+      loop = false
+    },
+
+    ["streetpass"] = {
+      anim = {
+        { x = 0,                            y = 0, t = 0.1 },
+        { xrange = { first = 2, last = 3 }, y = 0, t = 0.1 },
+        { x = 4,                            y = 0, t = 1 }
+      },
+      loop = false
+    },
+
+    ["streetpass off"] = {
+      anim = {
+        { x = 4,                            y = 0, t = 0.1 },
+        { xrange = { first = 2, last = 3 }, y = 0, t = 0.1 },
+        { x = 0,                            y = 0, t = 1 }
+      },
+      loop = false
+    },
+
+    ["low battery"] = {
+      anim = {
+        { x = 1, y = 0, t = 0.125 },
+        { x = 0, y = 0, t = 0.125 }
+      },
+      loop = true
+    },
+  },
   cost = 8,
   blueprint_compat = true,
   eternal_compat = true,
   perishable_compat = true,
   add_to_deck = function(self, card, from_debuff)
     G.hand:change_size(-card.ability.extra.lost_hand_size)
+    set_phanta_new2dsxl_streetpass(card)
   end,
   remove_from_deck = function(self, card, from_debuff)
     G.hand:change_size(card.ability.extra.lost_hand_size)
+    set_phanta_new2dsxl_streetpass(card, true)
   end,
   calculate = function(self, card, context)
     if context.setting_blind and not (context.blueprint_card or card).getting_sliced then
@@ -629,6 +664,16 @@ G.Phanta.centers["new2dsxl"] = {
         card = context
             .blueprint_card or card
       }
+    end
+
+    if card.config.center.phanta_anim_current_state ~= "streetpass" then
+      if context.after and G.GAME.current_round.hands_left == 1 and not context.blueprint and card.config.center.phanta_anim_current_state ~= "low battery" then
+        card:phanta_set_anim_state("low battery")
+      end
+
+      if context.end_of_round and not context.individual and not context.repetition and not context.blueprint then
+        card:phanta_set_anim_state("normal")
+      end
     end
   end
 }
@@ -3498,14 +3543,14 @@ G.Phanta.centers["slidingpuzzle"] = {
     { x = 4, y = 9, t = 0.25 }, { x = 5, y = 9, t = 0.1 },
     { x = 6, y = 9, t = 0.25 }, { x = 7, y = 9, t = 0.1 },
     { x = 8, y = 9, t = 0.25 }, { x = 9, y = 9, t = 0.1 },
-    { x = 10, y = 9, t = 0.25 }, { x = 11, y = 9, t = 0.1 },
+    { x = 10, y = 9,  t = 0.25 }, { x = 11, y = 9, t = 0.1 },
     { x = 0,  y = 10, t = 0.25 }, { x = 1, y = 10, t = 0.1 },
     { x = 2, y = 10, t = 0.25 }, { x = 3, y = 10, t = 0.1 },
     { x = 4, y = 10, t = 0.25 }, { x = 5, y = 10, t = 0.1 },
-    { x = 6, y = 10, t = 2 },
-    { xrange = { first = 5, last = 0 }, y = 10, t = 0.05 },
+    { x = 6,                             y = 10,                           t = 2 },
+    { xrange = { first = 5, last = 0 },  y = 10,                           t = 0.05 },
     { xrange = { first = 11, last = 0 }, yrange = { first = 9, last = 7 }, t = 0.05 },
-    { x = 11, y = 6, t = 0.05 }
+    { x = 11,                            y = 6,                            t = 0.05 }
   },
   cost = 5,
   blueprint_compat = true,

@@ -190,7 +190,10 @@ end
 function find_current_zodiacs()
   local matches = {}
   for i, j in pairs(G.P_CENTER_POOLS.phanta_Zodiac) do
-    if is_current_month({ config = { center = j } }) then matches[#matches + 1] = { config = { center = j } } end -- Cursed solution, but works.
+    if is_current_month({ config = { center = j } }) then matches[#matches + 1] = { set = "phanta_Zodiac", config = { center = j } } end -- Cursed solution, but works.
+  end
+  for i, j in pairs(G.P_CENTER_POOLS.phanta_Birthstone) do
+    if is_current_month({ config = { center = j } }) then matches[#matches + 1] = { set = "phanta_Birthstone", config = { center = j } } end
   end
   return matches
 end
@@ -198,7 +201,7 @@ end
 function get_names_from_zodiacs(cards)
   local names = {}
   for i = 1, #cards do
-    names[#names + 1] = localize { type = 'name_text', set = 'phanta_Zodiac', key = cards[i].config.center.key }
+    names[#names + 1] = localize { type = 'name_text', set = cards[i].set, key = cards[i].config.center.key }
   end
   return names
 end
@@ -289,6 +292,43 @@ function azran_active()
       (G.GAME and G.GAME.selected_sleeve == "sleeve_phanta_azran")
 end
 
+function count_boosters()
+  local boosters = {}
+  for _, v in ipairs(G.shop_booster.cards) do
+    if v.config and v.config.center and v.config.center.set == "Booster" then boosters[#boosters + 1] = v end
+  end
+  return boosters
+end
+
+function set_phanta_new2dsxl_streetpass(card, removed)
+  local found = SMODS.find_card("j_phanta_new2dsxl")
+  local count = 0
+  for _, v in ipairs(found) do
+    if v ~= card then
+      count = count + 1
+    end
+  end
+  if count < 1 + (removed and 1 or 0) then
+    for _, v in ipairs(found) do
+      if v.config and v.config.center and v.config.center.phanta_anim_current_state == "streetpass" then
+        v:phanta_set_anim_state("streetpass off")
+      end
+    end
+    if card and card.config and card.config.center and card.config.center.phanta_anim_current_state == "streetpass" then
+      card:phanta_set_anim_state("streetpass off")
+    end
+  else
+    for _, v in ipairs(found) do
+      if v.config and v.config.center and v.config.center.phanta_anim_current_state ~= "streetpass" then
+        v:phanta_set_anim_state("streetpass")
+      end
+    end
+    if card and card.config and card.config.center and card.config.center.phanta_anim_current_state ~= "streetpass" then
+      card:phanta_set_anim_state("streetpass")
+    end
+  end
+end
+
 local ref1 = Card.start_dissolve
 function Card:start_dissolve()
   if self.config and self.config.center and self.config.center.phanta_shatters then
@@ -319,6 +359,7 @@ if next(SMODS.find_mod('Bakery')) then assert(SMODS.load_file("items/Charm.lua")
 if next(SMODS.find_mod('partner')) then assert(SMODS.load_file("items/Partners.lua"))() end
 if next(SMODS.find_mod('CardSleeves')) then assert(SMODS.load_file("items/Sleeves.lua"))() end
 if next(SMODS.find_mod('artbox')) then assert(SMODS.load_file("items/ArtBox.lua"))() end
+if next(SMODS.find_mod('entr')) then assert(SMODS.load_file("items/Entropy.lua"))() end
 local aura_enabled = next(SMODS.find_mod('Aura'))
 
 
@@ -335,9 +376,22 @@ SMODS.Atlas {
   py = 95,
 }
 
+SMODS.Atlas {
+  key = "PhantaBirthstoneUpgrades",
+  path = "PhantaBirthstoneUpgrades.png",
+  px = 71,
+  py = 95,
+}
+
 for k, v in pairs(SMODS.Centers) do
-  if v.set == "phanta_Zodiac" then
-    if not v.atlas_extra then v.atlas_extra = "phanta_PhantaZodiacUpgrades" end
+  if v.set == "phanta_Zodiac" or v.set == "phanta_Birthstone" then
+    if not v.atlas_extra then
+      if v.set == "phanta_Zodiac" then
+        v.atlas_extra = "phanta_PhantaZodiacUpgrades"
+      elseif v.set == "phanta_Birthstone" then
+        v.atlas_extra = "phanta_PhantaBirthstoneUpgrades"
+      end
+    end
     v.phanta_anim_extra_states = {
       ["0"] = {
         anim = {
@@ -572,11 +626,13 @@ end
 local update_ref = Game.update
 function Game:update(dt)
   if not G.GAME.phanta_zodiac_rate_cache then G.GAME.phanta_zodiac_rate_cache = 0 end
+  if not G.GAME.phanta_birthstone_rate_cache then G.GAME.phanta_birthstone_rate_cache = 0 end
 
   if Phanta.config["zodiac_enabled"] then
     G.GAME.phanta_zodiac_rate = G.GAME.phanta_zodiac_rate_cache
+    G.GAME.phanta_birthstone_rate = G.GAME.phanta_birthstone_rate_cache
   else
-    G.GAME.phanta_zodiac_rate = 0
+    G.GAME.phanta_birthstone_rate = 0
   end
 
   if not Phanta.config["animations_disabled"] then
@@ -586,7 +642,7 @@ function Game:update(dt)
       handle_phanta_anim(v, dt)
       handle_phanta_anim_extra(v, dt)
 
-      if v.set == 'phanta_Zodiac' then v:phanta_update_zodiac_level_anim() end
+      if v.set == 'phanta_Zodiac' or v.set == 'phanta_Birthstone' then v:phanta_update_zodiac_level_anim() end
     end
   else
     for k, v in pairs(G.P_CENTERS) do
