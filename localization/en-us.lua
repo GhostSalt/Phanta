@@ -991,10 +991,9 @@ return {
             j_phanta_shoppinglist          = {
                 name = 'Shopping List',
                 text = {
-                    "Gains {C:mult}+#1#{} Mult every",
-                    "{C:attention}#2#{} {C:inactive}[#3#]{} cards {C:attention}purchased{}",
-                    "from the shop",
-                    "{C:inactive}(Currently {C:mult}+#4#{C:inactive} Mult){}"
+                    "Gains {C:mult}+#1#{} Mult for",
+                    "each card {C:attention}purchased{}",
+                    "{C:inactive}(Currently {C:mult}+#2#{C:inactive} Mult){}"
                 }
             },
             j_phanta_ransomnote            = {
@@ -1487,6 +1486,15 @@ return {
                     "{C:inactive,s:0.65}(Active if with Barton){}"
                 }
             },
+            j_phanta_zero                  = {
+                name = 'Zero',
+                text = {
+                    "If {C:attention}2{} or more",
+                    "cards are {C:red}discarded{},",
+                    "{C:red}destroys{} them if their {C:chips}Chip{}",
+                    "values sum to exactly {C:attention}9{}"
+                }
+            },
             j_phanta_zeroii                = {
                 name = 'Zero II',
                 text = {
@@ -1536,6 +1544,14 @@ return {
                     "become {C:attention}Glass{} when scored"
                 }
             },
+            j_phanta_theriddler              = {
+                name = "The Riddler",
+                text = {
+                    "{C:chips}+#1#{} Chips,",
+                    "all cards in your",
+                    "deck have {C:attention}unknown{} suits"
+                }
+            },
             j_phanta_magiceggcup           = {
                 name = "Magic Egg Cup",
                 text = {
@@ -1576,6 +1592,13 @@ return {
                     "edition {C:attention}Copper Grate{} card",
                     "in your {C:attention}full deck{}",
                     "{C:inactive}(Currently {X:mult,C:white}X#2#{C:inactive} Mult){}"
+                }
+            },
+            j_phanta_mrbigmoneybags        = {
+                name = 'Mr. Big Moneybags',
+                text = {
+                    "Always earn",
+                    "maximum {C:money}interest{}"
                 }
             },
             j_phanta_neonjoker             = {

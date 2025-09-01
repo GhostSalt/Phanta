@@ -727,6 +727,30 @@ G.Phanta.centers["inspectorchelmey"] = {
   end
 }
 
+G.Phanta.centers["zero"] = {
+  config = { extra = { sum = 9 } },
+  rarity = 2,
+  atlas = 'Phanta2',
+  pos = { x = 9, y = 2 },
+  cost = 6,
+  blueprint_compat = false,
+  eternal_compat = true,
+  perishable_compat = true,
+  loc_vars = function(self, info_queue, card)
+    return { vars = { card.ability.extra.sum } }
+  end,
+  calculate = function(self, card, context)
+    if context.discard and context.cardarea == G.jokers and #context.full_hand > 1 then
+      local total = 0
+      for _, v in ipairs(context.full_hand) do
+        total = total + v:get_chip_bonus()
+      end
+
+      if total == 9 then return { remove = true } end
+    end
+  end
+}
+
 G.Phanta.centers["zeroii"] = {
   config = { extra = { odds = 3 } },
   rarity = 2,
@@ -746,6 +770,57 @@ G.Phanta.centers["zeroii"] = {
     end
   end
 }
+
+G.Phanta.centers["theriddler"] = {
+  config = { extra = { chips = 250 } },
+  rarity = 3,
+  atlas = 'Phanta2',
+  pos = { x = 10, y = 2 },
+  cost = 8,
+  blueprint_compat = true,
+  eternal_compat = true,
+  perishable_compat = true,
+  loc_vars = function(self, info_queue, card)
+    return { vars = { card.ability.extra.chips } }
+  end,
+  calculate = function(self, card, context)
+    if context.joker_main then
+      return { chips = card.ability.extra.chips }
+    end
+  end,
+  add_to_deck = function(self, card, from_debuff)
+    if G.playing_cards and not context.blueprint then
+      for _, v in ipairs(G.playing_cards) do
+        v:become_unknown("phanta_theriddler")
+      end
+    end
+  end,
+  remove_from_deck = function(self, card, from_debuff)
+    if G.playing_cards and not context.blueprint and #SMODS.find_card("j_phanta_theriddler") <= 1 then
+      for _, v in ipairs(G.playing_cards) do
+        v:release_unknown("phanta_theriddler")
+      end
+    end
+  end,
+}
+
+local add_to_deck_ref = Card.add_to_deck
+function Card:add_to_deck(card, from_debuff)
+  local ref_return = add_to_deck_ref(self, card, from_debuff)
+  if next(SMODS.find_card("j_phanta_theriddler")) and self.config and self.config.center and (self.config.center.set == "Default" or self.config.center.set == "Enhanced") then
+    self:become_unknown("phanta_theriddler")
+  end
+  return ref_return
+end
+
+local remove_from_deck_ref = Card.remove_from_deck
+function Card:remove_from_deck(card, from_debuff)
+  local ref_return = remove_from_deck_ref(self, card, from_debuff)
+  if self.config and self.config.center and (self.config.center.set == "Default" or self.config.center.set == "Enhanced") then
+    self:release_unknown("phanta_theriddler")
+  end
+  return ref_return
+end
 
 G.Phanta.centers["valantgramarye"] = {
   rarity = 2,
@@ -1050,7 +1125,7 @@ G.Phanta.centers["magiceggcup"] = {
       return { message = localize(chosen_suit, "suits_plural"), colour = G.C.SUITS[chosen_suit] }
     end
 
-    if context.after then
+    if context.after and not card.ability.extra.is_first then
       G.E_MANAGER:add_event(Event({
         func = function()
           card.ability.extra.is_first = true
@@ -1159,6 +1234,16 @@ G.Phanta.centers["plugsocket"] = {
       end
     end
   end
+}
+
+G.Phanta.centers["mrbigmoneybags"] = {
+  rarity = 1,
+  atlas = 'Phanta2',
+  pos = { x = 11, y = 2 },
+  cost = 5,
+  blueprint_compat = false,
+  eternal_compat = true,
+  perishable_compat = true
 }
 
 G.Phanta.centers["neonjoker"] = {

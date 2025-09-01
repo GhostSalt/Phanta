@@ -63,6 +63,7 @@ function Game:start_run(args)
               func = function()
                 new_card:start_materialize({ G.C.SECONDARY_SET.Enhanced })
                 G.play:emplace(new_card)
+                all_cards[i]:add_to_deck()
                 return true
               end
             }))

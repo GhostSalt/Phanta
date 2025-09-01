@@ -340,8 +340,7 @@ end
 
 local allFolders = { "none", "items" }
 
---local allFiles = { ["none"] = {}, ["items"] = { "Blind", "Jokers1", "Jokers2", "Legendaries", "Misc", "StarterPack", "Suit" } }
-local allFiles = { ["none"] = {}, ["items"] = { "Jokers1", "Jokers2", "Legendaries", "Misc", "StarterPack" } }
+local allFiles = { ["none"] = {}, ["items"] = { "Blind", "Jokers1", "Jokers2", "Legendaries", "Misc", "StarterPack", "Suit" } }
 
 for i = 1, #allFolders do
   if allFolders[i] == "none" then

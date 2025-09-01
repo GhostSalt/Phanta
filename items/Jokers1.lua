@@ -2776,13 +2776,13 @@ G.Phanta.centers["crescent"] = {
 }
 
 G.Phanta.centers["shoppinglist"] = {
-  config = { extra = { added_mult = 4, target = 5, current_bought = 0, current_mult = 0 } },
+  config = { extra = { added_mult = 1, current_mult = 0 } },
   rarity = 1,
   atlas = 'Phanta',
   pos = { x = 7, y = 4 },
   cost = 4,
   loc_vars = function(self, info_queue, card)
-    return { vars = { card.ability.extra.added_mult, card.ability.extra.target, card.ability.extra.target - card.ability.extra.current_bought, card.ability.extra.current_mult } }
+    return { vars = { card.ability.extra.added_mult, card.ability.extra.current_mult } }
   end,
   blueprint_compat = true,
   eternal_compat = true,
@@ -2792,22 +2792,12 @@ G.Phanta.centers["shoppinglist"] = {
       return { mult = card.ability.extra.current_mult }
     end
 
-    if context.buying_card and not context.blueprint then
-      card.ability.extra.current_bought = card.ability.extra.current_bought + 1
-      if card.ability.extra.current_bought == card.ability.extra.target then
-        card.ability.extra.current_bought = 0
-        card.ability.extra.current_mult = card.ability.extra.current_mult + card.ability.extra.added_mult
-        return {
-          message = localize('k_upgrade_ex'),
-          card = card
-        }
-      else
-        return {
-          message = card.ability.extra.current_bought .. "/" .. card.ability.extra.target,
-          colour = G.C.FILTER,
-          card = card
-        }
-      end
+    if context.buying_card and context.card ~= card and not context.blueprint then
+      card.ability.extra.current_mult = card.ability.extra.current_mult + card.ability.extra.added_mult
+      return {
+        message = localize('k_upgrade_ex'),
+        card = card
+      }
     end
   end
 }
