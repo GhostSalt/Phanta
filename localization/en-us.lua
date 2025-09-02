@@ -1492,7 +1492,7 @@ return {
                     "If {C:attention}2{} or more",
                     "cards are {C:red}discarded{},",
                     "{C:red}destroys{} them if their {C:chips}Chip{}",
-                    "values sum to exactly {C:attention}9{}"
+                    "values sum to exactly {C:attention}#1#{}"
                 }
             },
             j_phanta_zeroii                = {

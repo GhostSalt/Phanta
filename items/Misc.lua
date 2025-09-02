@@ -677,6 +677,93 @@ SMODS.Consumable {
   end
 }
 
+SMODS.Consumable {
+  object_type = "Consumable",
+  set = "Spectral",
+  key = "genius",
+  loc_txt = {
+    name = 'Genius',
+    text = {
+      "Adds {C:attention}random seals{} to",
+      "up to {C:attention}#1#{} selected",
+      "cards, their suits",
+      "become {C:attention}unknown{}"
+    }
+  },
+  pos = { x = 2, y = 3 },
+  config = {
+    max_highlighted = 3
+  },
+  atlas = "PhantaTarots",
+  loc_vars = function(self, info_queue, card)
+    return { vars = { card.ability.max_highlighted } }
+  end,
+  use = function(self, card, area, copier)
+    G.E_MANAGER:add_event(Event({
+      trigger = 'after',
+      delay = 0.4,
+      func = function()
+        play_sound('tarot1')
+        card:juice_up(0.3, 0.5)
+        return true
+      end
+    }))
+    for i = 1, #G.hand.highlighted do
+      local percent = 1.15 - (i - 0.999) / (#G.hand.highlighted - 0.998) * 0.3
+      G.E_MANAGER:add_event(Event({
+        trigger = 'after',
+        delay = 0.15,
+        func = function()
+          G.hand.highlighted[i]:flip()
+          play_sound('card1', percent)
+          G.hand.highlighted[i]:juice_up(0.3, 0.3)
+          return true
+        end
+      }))
+    end
+    delay(0.2)
+    for i = 1, #G.hand.highlighted do
+      G.E_MANAGER:add_event(Event({
+        trigger = 'after',
+        delay = 0.1,
+        func = function()
+          G.hand.highlighted[i]:set_seal(SMODS.poll_seal { type_key = "genius_seal", guaranteed = true }, true, true)
+          G.hand.highlighted[i]:become_unknown("phanta_genius")
+          return true
+        end
+      }))
+    end
+    for i = 1, #G.hand.highlighted do
+      local percent = 0.85 + (i - 0.999) / (#G.hand.highlighted - 0.998) * 0.3
+      G.E_MANAGER:add_event(Event({
+        trigger = 'after',
+        delay = 0.15,
+        func = function()
+          G.hand.highlighted[i]:flip()
+          play_sound('tarot2', percent, 0.6)
+          G.hand.highlighted[i]:juice_up(0.3, 0.3)
+          return true
+        end
+      }))
+    end
+    G.E_MANAGER:add_event(Event({
+      trigger = 'after',
+      delay = 0.2,
+      func = function()
+        G.hand:unhighlight_all()
+        return true
+      end
+    }))
+    delay(0.5)
+  end,
+  in_pool = function()
+    return azran_active()
+  end,
+  set_badges = function(self, card, badges)
+    badges[#badges + 1] = create_badge(localize('phanta_azran_exclusive'), G.C.SECONDARY_SET.Spectral, G.C.WHITE, 1)
+  end
+}
+
 
 
 
@@ -812,7 +899,7 @@ function Card:remove_from_deck(from_debuff)
     card_eval_status_text(self, 'extra', nil, nil, nil, { message = localize("minus_consumable_slot"), colour = G.C.FILTER })
   end
   rfdref(self, from_debuff)
-end]]--
+end]] --
 
 SMODS.Enhancement {
   key = "coppergratefresh",
@@ -2009,25 +2096,25 @@ SMODS.Back {
       G.jokers.config.card_limit = G.jokers.config.card_limit + 1
       self.config.extra.triggered = true
 
-        local destructable_jokers = {}
-        for i = 1, #G.jokers.cards do
-          if not G.jokers.cards[i].ability.eternal and not G.jokers.cards[i].getting_sliced then
-            destructable_jokers[#destructable_jokers + 1] = G.jokers.cards[i]
-          end
+      local destructable_jokers = {}
+      for i = 1, #G.jokers.cards do
+        if not G.jokers.cards[i].ability.eternal and not G.jokers.cards[i].getting_sliced then
+          destructable_jokers[#destructable_jokers + 1] = G.jokers.cards[i]
         end
-        local joker_to_destroy = #destructable_jokers > 0 and
-            pseudorandom_element(destructable_jokers, pseudoseed('tallydeck')) or nil
+      end
+      local joker_to_destroy = #destructable_jokers > 0 and
+          pseudorandom_element(destructable_jokers, pseudoseed('tallydeck')) or nil
 
-        if joker_to_destroy and not (context.blueprint_card or self).getting_sliced then
-          joker_to_destroy.getting_sliced = true
-          G.E_MANAGER:add_event(Event({
-            func = function()
-              play_sound("phanta_tally_deck", 1, 0.5)
-              joker_to_destroy:start_dissolve({ G.C.RED }, nil, 1.6)
-              return true
-            end
-          }))
-        end
+      if joker_to_destroy and not (context.blueprint_card or self).getting_sliced then
+        joker_to_destroy.getting_sliced = true
+        G.E_MANAGER:add_event(Event({
+          func = function()
+            play_sound("phanta_tally_deck", 1, 0.5)
+            joker_to_destroy:start_dissolve({ G.C.RED }, nil, 1.6)
+            return true
+          end
+        }))
+      end
     end
   end
 }
@@ -2208,7 +2295,7 @@ end
       end,
     }))
   end
-}]]--
+}]] --
 
 SMODS.Back {
   key = 'bee',

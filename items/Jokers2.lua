@@ -774,8 +774,28 @@ G.Phanta.centers["zeroii"] = {
 G.Phanta.centers["theriddler"] = {
   config = { extra = { chips = 250 } },
   rarity = 3,
-  atlas = 'Phanta2',
-  pos = { x = 10, y = 2 },
+  atlas = 'PhantaMiscAnims5',
+  pos = { x = 8, y = 0 },
+  phanta_anim = {
+    { xrange = { first = 8, last = 11 }, y = 0, t = 0.1 },
+    { xrange = { first = 0, last = 7 }, y = 1, t = 0.1 }
+  },
+  pos_extra = { x = 8, y = 1 },
+  phanta_anim_extra = {
+    { x = 8, y = 1, t = 1.3 }, { x = 9, y = 1, t = 0.1 },
+    { x = 8, y = 1, t = 0.3 }, { x = 9, y = 1, t = 0.1 },
+    { x = 8, y = 1, t = 2.1 }, { x = 9, y = 1, t = 0.1 },
+    { x = 8, y = 1, t = 1.6 }, { x = 9, y = 1, t = 0.1 },
+    { x = 8, y = 1, t = 2.3 }, { x = 9, y = 1, t = 0.1 },
+    { x = 8, y = 1, t = 0.9 },
+
+    { x = 10, y = 1, t = 0.1 },
+    { x = 11, y = 1, t = 0.07 }, { xrange = { first = 0, last = 2 }, y = 2, t = 0.07 },
+    { x = 11, y = 1, t = 0.07 }, { xrange = { first = 0, last = 2 }, y = 2, t = 0.07 },
+    { x = 11, y = 1, t = 0.07 }, { xrange = { first = 0, last = 2 }, y = 2, t = 0.07 },
+    { x = 11, y = 1, t = 0.07 }, { xrange = { first = 0, last = 1 }, y = 2, t = 0.07 },
+    { x = 10, y = 1, t = 0.1 }
+  },
   cost = 8,
   blueprint_compat = true,
   eternal_compat = true,
@@ -789,19 +809,19 @@ G.Phanta.centers["theriddler"] = {
     end
   end,
   add_to_deck = function(self, card, from_debuff)
-    if G.playing_cards and not context.blueprint then
+    if G.playing_cards then
       for _, v in ipairs(G.playing_cards) do
         v:become_unknown("phanta_theriddler")
       end
     end
   end,
   remove_from_deck = function(self, card, from_debuff)
-    if G.playing_cards and not context.blueprint and #SMODS.find_card("j_phanta_theriddler") <= 1 then
+    if G.playing_cards and #SMODS.find_card("j_phanta_theriddler") <= 1 then
       for _, v in ipairs(G.playing_cards) do
         v:release_unknown("phanta_theriddler")
       end
     end
-  end,
+  end
 }
 
 local add_to_deck_ref = Card.add_to_deck

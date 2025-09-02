@@ -21,9 +21,10 @@ Partner_API.Partner {
   config = { extra = { xmult = 1.5 } },
   link_config = { j_phanta_ghost = 1 },
   loc_vars = function(self, info_queue, card)
+    local link_level = self:get_link_level() or 0
     local benefits = 0
     --[[if next(SMODS.find_card(card.ability.extra.related_card))]] -- then benefits = 0.5 end
-    if link_level == 1 then benefits = 0.5 end
+    if link_level >= 1 then benefits = 0.5 end
     return { vars = { card.ability.extra.xmult + benefits } }
   end,
   calculate = function(self, card, context)
@@ -55,9 +56,9 @@ Partner_API.Partner {
   config = { extra = { levels = 1, all_hands = { "High Card", "Pair", "Two Pair", "Three of a Kind", "Four of a Kind" }, xmult = 2, hand_threshold = 4 } },
   link_config = { j_phanta_cutcorners = 1 },
   loc_vars = function(self, info_queue, card)
-    local link_level = self:get_link_level()
+    local link_level = self:get_link_level() or 0
     local key = self.key
-    if link_level == 1 then key = key .. "_" .. link_level end
+    if link_level >= 1 then key = key .. "_" .. link_level end
     return { key = key, vars = { card.ability.extra.levels + 1, card.ability.extra.xmult, card.ability.extra.hand_threshold } }
   end,
   calculate = function(self, card, context)
@@ -98,9 +99,9 @@ Partner_API.Partner {
   config = { extra = { no_of_earths = 2 } },
   link_config = { j_phanta_conspiracist = 1 },
   loc_vars = function(self, info_queue, card)
-    local link_level = self:get_link_level()
+    local link_level = self:get_link_level() or 0
     local key = self.key
-    if link_level == 1 then key = key .. "_" .. link_level end
+    if link_level >= 1 then key = key .. "_" .. link_level end
     return { key = key, vars = { card.ability.extra.no_of_earths } }
   end,
   calculate_begin = function(self, card)
@@ -140,9 +141,9 @@ Partner_API.Partner {
   config = { extra = { init_levels = 3, after_levels = 1, xmult = 2, hand_threshold = 4 } },
   link_config = { j_phanta_nojoke = 1 },
   loc_vars = function(self, info_queue, card)
-    local link_level = self:get_link_level()
+    local link_level = self:get_link_level() or 0
     local key = self.key
-    if link_level == 1 then key = key .. "_" .. link_level end
+    if link_level >= 1 then key = key .. "_" .. link_level end
     return { key = key, vars = { card.ability.extra.init_levels + 1, card.ability.extra.after_levels } }
   end,
   calculate = function(self, card, context)
