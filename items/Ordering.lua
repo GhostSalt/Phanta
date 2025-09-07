@@ -145,6 +145,7 @@ local joker_order = {
     "crystaljoker",
     "selfportrait",
     "profile",
+    "deathnote",
     "caniossoul",
     "tribouletssoul",
     "yorickssoul",

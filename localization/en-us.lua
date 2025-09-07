@@ -196,6 +196,13 @@ return {
                     "#1# in #2# cards have",
                     "unknown suits"
                 }
+            },
+            bl_phanta_proton = {
+                name = "The Proton",
+                text = {
+                    "All cards in played",
+                    "hand must score"
+                }
             }
         },
         ["Content Set"] = {
@@ -583,7 +590,8 @@ return {
                 text = {
                     "{C:green}#1# in #2#{} chance for each",
                     "{C:attention}Wild{} card held in hand",
-                    "to be destroyed"
+                    "to create a copy of",
+                    "{C:tarot}The Lovers{} and be {C:red}destroyed{}"
                 }
             },
             j_phanta_scratchart            = {
@@ -1544,7 +1552,7 @@ return {
                     "become {C:attention}Glass{} when scored"
                 }
             },
-            j_phanta_theriddler              = {
+            j_phanta_theriddler            = {
                 name = "The Riddler",
                 text = {
                     "{C:chips}+#1#{} Chips,",
@@ -1634,6 +1642,16 @@ return {
                     "{C:spectral}Ethereal{} Tags from this",
                     "Joker's {C:red}MORE{} menu,",
                     "Tags cost {C:money}$16{} each"
+                }
+            },
+            j_phanta_deathnote             = {
+                name = 'Death Note',
+                text = {
+                    "Press {C:red}MORE{} to enter",
+                    "the {C:attention}name{} of a card,",
+                    "cards with that {C:attention}name{}",
+                    "spawn with {C:dark_edition}Negative{} edition",
+                    "{C:inactive}(#1#{C:attention}#2#{C:inactive}){}"
                 }
             },
             j_phanta_ignaize               = {
@@ -2618,6 +2636,40 @@ return {
                     "4 {C:attention}Marble{} cards"
                 }
             }
+        },
+        phanta_BuildPack = {
+            c_phanta_pranksterpack = {
+                name = "Prankster Pack",
+                text = {
+                    "Contains:",
+                    "1 {C:attention}Hack{}",
+                    "1 {C:eternal}Eternal{} {C:attention}Wee Joker{}"
+                }
+            },
+            c_phanta_progesteronepack = {
+                name = "Progesterone Pack",
+                text = {
+                    "Contains:",
+                    "2 {C:dark_edition}Negative{} {C:attention}Shoot the Moons{}",
+                    "1 {C:attention}Raised Fist{}"
+                }
+            },
+            c_phanta_primarypack = {
+                name = "Primary Pack",
+                text = {
+                    "Contains:",
+                    "1 {C:eternal}Eternal{} {C:attention}Baron{}",
+                    "1 {C:eternal}Eternal{} {C:attention}Mime{}"
+                }
+            },
+            c_phanta_primarypack = {
+                name = "Primary Pack",
+                text = {
+                    "Contains:",
+                    "1 {C:eternal}Eternal{} {C:attention}Baron{}",
+                    "1 {C:eternal}Eternal{} {C:attention}Mime{}"
+                }
+            }
         }
     },
     misc = {
@@ -2659,10 +2711,19 @@ return {
             phanta_created_blue_seal = "+Blue Seal",
             phanta_created_gold_seal = "+Gold Seal",
             b_phanta_more = "MORE",
+            phanta_set = "SET",
             phanta_profile_more_tooltip = {
                 "Charm, Meteor and Ethereal Tags",
                 "cost $16 each"
             },
+            phanta_deathnote_more_tooltip = {
+                "Enter the name of a card.",
+                "(Some sets, like playing cards",
+                "and boosters, are unaffected)"
+            },
+            phanta_deathnote_more_text = "enter card name...",
+            phanta_deathnote_name_present = "Chosen name: ",
+            phanta_deathnote_no_name = "No name chosen",
 
             credit_goat3730 = "OC by goat3730",
             credit_bobisnotaperson = "bobisnotaperson's Truesona",

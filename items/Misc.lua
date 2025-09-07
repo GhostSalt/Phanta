@@ -1027,7 +1027,7 @@ SMODS.Enhancement {
 local sell_use_ref = G.UIDEF.use_and_sell_buttons
 
 function G.UIDEF.use_and_sell_buttons(card)
-  if not card or ((not card.config or not card.config.center or (card.config.center.key ~= "j_phanta_profile" and card.config.center.key ~= "j_phanta_modping")) and (not card.ability or card.ability.set ~= "phanta_Zodiac")) then
+  if not card or ((not card.config or not card.config.center or (card.config.center.key ~= "j_phanta_profile" and card.config.center.key ~= "j_phanta_modping" and card.config.center.key ~= "j_phanta_deathnote")) and (not card.ability or card.ability.set ~= "phanta_Zodiac")) then
     return sell_use_ref(card, self)
   end
 
@@ -1066,7 +1066,7 @@ function G.UIDEF.use_and_sell_buttons(card)
     }
   }
 
-  local more =
+  local profile_more =
   {
     n = G.UIT.C,
     config = { align = "cr" },
@@ -1098,6 +1098,22 @@ function G.UIDEF.use_and_sell_buttons(card)
     }
   }
 
+  local deathnote_more =
+  {
+    n = G.UIT.C,
+    config = { align = "cr" },
+    nodes = {
+      {
+        n = G.UIT.C,
+        config = { ref_table = card, align = "cr", maxw = 1.25, padding = 0.1, r = 0.08, minw = 1.25, minh = (card.area and card.area.config.type == 'joker') and 0 or 1, hover = true, shadow = true, colour = G.C.RED, button = 'run_deathnote_menu', func = 'phanta_can_deathnote_more' },
+        nodes = {
+          { n = G.UIT.B, config = { w = 0.1, h = 0.6 } },
+          { n = G.UIT.T, config = { text = localize('b_phanta_more'), colour = G.C.UI.TEXT_LIGHT, scale = 0.55, shadow = true } }
+        }
+      }
+    }
+  }
+
   if card.config and card.config.center and card.config.center.key == "j_phanta_profile" then
     return {
       n = G.UIT.ROOT,
@@ -1115,7 +1131,7 @@ function G.UIDEF.use_and_sell_buttons(card)
             {
               n = G.UIT.R,
               config = { align = 'cl' },
-              nodes = { more }
+              nodes = { profile_more }
             }
           }
         }
@@ -1141,6 +1157,31 @@ function G.UIDEF.use_and_sell_buttons(card)
               n = G.UIT.R,
               config = { align = 'cl' },
               nodes = { modping_use }
+            }
+          }
+        }
+      }
+    }
+  end
+
+  if card.config and card.config.center and card.config.center.key == "j_phanta_deathnote" then
+    return {
+      n = G.UIT.ROOT,
+      config = { padding = 0, colour = G.C.CLEAR },
+      nodes = {
+        {
+          n = G.UIT.C,
+          config = { padding = 0.15, align = 'cl' },
+          nodes = {
+            {
+              n = G.UIT.R,
+              config = { align = 'cl' },
+              nodes = { sell }
+            },
+            {
+              n = G.UIT.R,
+              config = { align = 'cl' },
+              nodes = { deathnote_more }
             }
           }
         }
@@ -1183,140 +1224,9 @@ function G.UIDEF.use_and_sell_buttons(card)
   }
 end
 
-G.FUNCS.run_profile_menu = function(e)
-  G.SETTINGS.paused = true
-  G.FUNCS.overlay_menu {
-    definition = create_profile_more_menu()
-  }
-end
-
-G.FUNCS.phanta_can_profile_more = function(e)
-
-end
-
-function create_profile_more_menu()
-  local charm = UIBox_button({ button = 'phanta_purchase_charm_tag', func = 'phanta_can_purchase_charm_tag', label = { localize({ type = 'name_text', set = 'Tag', key = 'tag_charm' }) }, minw = 5, focus_args = { snap_to = true } })
-  local meteor = UIBox_button({ button = 'phanta_purchase_meteor_tag', func = 'phanta_can_purchase_meteor_tag', label = { localize({ type = 'name_text', set = 'Tag', key = 'tag_meteor' }) }, minw = 5, focus_args = { snap_to = true } })
-  local ethereal = UIBox_button({ button = 'phanta_purchase_ethereal_tag', func = 'phanta_can_purchase_ethereal_tag', label = { localize({ type = 'name_text', set = 'Tag', key = 'tag_ethereal' }) }, minw = 5, focus_args = { snap_to = true } })
-
-  local t = create_UIBox_generic_options({
-    infotip = localize("phanta_profile_more_tooltip"),
-    contents = {
-      charm,
-      meteor,
-      ethereal
-    }
-  })
-  return t
-end
-
-G.FUNCS.phanta_purchase_charm_tag = function(e)
-  G.E_MANAGER:add_event(Event({
-    func = (function()
-      add_tag(Tag('tag_charm'))
-      play_sound('generic1', 0.9 + math.random() * 0.1, 0.8)
-      play_sound('holo1', 1.2 + math.random() * 0.1, 0.4)
-      return true
-    end)
-  }))
-
-  ease_dollars(-16)
-
-  if G.OVERLAY_MENU then G.FUNCS.exit_overlay_menu() end
-  G.SETTINGS.paused = true
-  G.FUNCS.overlay_menu {
-    definition = create_profile_more_menu()
-  }
-end
-
-G.FUNCS.phanta_purchase_meteor_tag = function(e)
-  G.E_MANAGER:add_event(Event({
-    func = (function()
-      add_tag(Tag('tag_meteor'))
-      play_sound('generic1', 0.9 + math.random() * 0.1, 0.8)
-      play_sound('holo1', 1.2 + math.random() * 0.1, 0.4)
-      return true
-    end)
-  }))
-
-  ease_dollars(-16)
-
-  if G.OVERLAY_MENU then G.FUNCS.exit_overlay_menu() end
-  G.SETTINGS.paused = true
-  G.FUNCS.overlay_menu {
-    definition = create_profile_more_menu()
-  }
-end
-
-G.FUNCS.phanta_purchase_ethereal_tag = function(e)
-  G.E_MANAGER:add_event(Event({
-    func = (function()
-      add_tag(Tag('tag_ethereal'))
-      play_sound('generic1', 0.9 + math.random() * 0.1, 0.8)
-      play_sound('holo1', 1.2 + math.random() * 0.1, 0.4)
-      return true
-    end)
-  }))
-
-  ease_dollars(-16)
-
-  if G.OVERLAY_MENU then G.FUNCS.exit_overlay_menu() end
-  G.SETTINGS.paused = true
-  G.FUNCS.overlay_menu {
-    definition = create_profile_more_menu()
-  }
-end
-
-G.FUNCS.phanta_can_purchase_charm_tag = function(e)
-  if G.GAME.dollars - 16 < to_big(G.GAME.bankrupt_at) then
-    e.config.colour = G.C.UI.BACKGROUND_INACTIVE
-    e.config.button = nil
-  end
-end
-
-G.FUNCS.phanta_can_purchase_meteor_tag = function(e)
-  if G.GAME.dollars - 16 < to_big(G.GAME.bankrupt_at) then
-    e.config.colour = G.C.UI.BACKGROUND_INACTIVE
-    e.config.button = nil
-  end
-end
-
-G.FUNCS.phanta_can_purchase_ethereal_tag = function(e)
-  if G.GAME.dollars - 16 < to_big(G.GAME.bankrupt_at) then
-    e.config.colour = G.C.UI.BACKGROUND_INACTIVE
-    e.config.button = nil
-  end
-end
 
 
 
-
-
-G.FUNCS.phanta_can_modping_use = function(e)
-  local card = e.config.ref_table
-
-  if G.GAME.dollars - card.ability.extra.money_needed < to_big(G.GAME.bankrupt_at) or not is_boss_active() then
-    e.config.colour = G.C.UI.BACKGROUND_INACTIVE
-    e.config.button = nil
-  end
-end
-
-G.FUNCS.phanta_modping_use = function(e)
-  local card = e.config.ref_table
-
-  G.E_MANAGER:add_event(Event({
-    func = function()
-      if is_boss_active() then
-        ease_dollars(-card.ability.extra.money_needed)
-        card.ability.extra.money_needed = card.ability.extra.money_needed + card.ability.extra.money_increase
-        play_sound("timpani")
-        card:juice_up()
-        G.GAME.blind:disable()
-      end
-      return true
-    end
-  }))
-end
 
 
 

@@ -778,7 +778,7 @@ G.Phanta.centers["theriddler"] = {
   pos = { x = 8, y = 0 },
   phanta_anim = {
     { xrange = { first = 8, last = 11 }, y = 0, t = 0.1 },
-    { xrange = { first = 0, last = 7 }, y = 1, t = 0.1 }
+    { xrange = { first = 0, last = 7 },  y = 1, t = 0.1 }
   },
   pos_extra = { x = 8, y = 1 },
   phanta_anim_extra = {
@@ -786,8 +786,8 @@ G.Phanta.centers["theriddler"] = {
     { x = 8, y = 1, t = 0.3 }, { x = 9, y = 1, t = 0.1 },
     { x = 8, y = 1, t = 2.1 }, { x = 9, y = 1, t = 0.1 },
     { x = 8, y = 1, t = 1.6 }, { x = 9, y = 1, t = 0.1 },
-    { x = 8, y = 1, t = 2.3 }, { x = 9, y = 1, t = 0.1 },
-    { x = 8, y = 1, t = 0.9 },
+    { x = 8,  y = 1, t = 2.3 }, { x = 9, y = 1, t = 0.1 },
+    { x = 8,  y = 1, t = 0.9 },
 
     { x = 10, y = 1, t = 0.1 },
     { x = 11, y = 1, t = 0.07 }, { xrange = { first = 0, last = 2 }, y = 2, t = 0.07 },
@@ -1175,6 +1175,34 @@ G.Phanta.centers["modping"] = {
   perishable_compat = true
 }
 
+G.FUNCS.phanta_can_modping_use = function(e)
+  local card = e.config.ref_table
+
+  if G.GAME.dollars - card.ability.extra.money_needed < to_big(G.GAME.bankrupt_at) or not is_boss_active() then
+    e.config.colour = G.C.UI.BACKGROUND_INACTIVE
+    e.config.button = nil
+  end
+end
+
+G.FUNCS.phanta_modping_use = function(e)
+  local card = e.config.ref_table
+
+  G.E_MANAGER:add_event(Event({
+    func = function()
+      if is_boss_active() then
+        ease_dollars(-card.ability.extra.money_needed)
+        card.ability.extra.money_needed = card.ability.extra.money_needed + card.ability.extra.money_increase
+        play_sound("timpani")
+        card:juice_up()
+        G.GAME.blind:disable()
+      end
+      return true
+    end
+  }))
+end
+
+
+
 G.Phanta.centers["clapperboard"] = {
   rarity = 2,
   atlas = 'Phanta2',
@@ -1380,3 +1408,265 @@ G.Phanta.centers["profile"] = {
   eternal_compat = true,
   perishable_compat = true
 }
+
+G.FUNCS.run_profile_menu = function(e)
+  G.SETTINGS.paused = true
+  G.FUNCS.overlay_menu {
+    definition = create_profile_more_menu()
+  }
+end
+
+G.FUNCS.phanta_can_profile_more = function(e)
+
+end
+
+function create_profile_more_menu()
+  local charm = UIBox_button({ button = 'phanta_purchase_charm_tag', func = 'phanta_can_purchase_charm_tag', label = { localize({ type = 'name_text', set = 'Tag', key = 'tag_charm' }) }, minw = 5, focus_args = { snap_to = true } })
+  local meteor = UIBox_button({ button = 'phanta_purchase_meteor_tag', func = 'phanta_can_purchase_meteor_tag', label = { localize({ type = 'name_text', set = 'Tag', key = 'tag_meteor' }) }, minw = 5, focus_args = { snap_to = true } })
+  local ethereal = UIBox_button({ button = 'phanta_purchase_ethereal_tag', func = 'phanta_can_purchase_ethereal_tag', label = { localize({ type = 'name_text', set = 'Tag', key = 'tag_ethereal' }) }, minw = 5, focus_args = { snap_to = true } })
+
+  local t = create_UIBox_generic_options({
+    infotip = localize("phanta_profile_more_tooltip"),
+    contents = {
+      charm,
+      meteor,
+      ethereal
+    }
+  })
+  return t
+end
+
+G.FUNCS.phanta_purchase_charm_tag = function(e)
+  G.E_MANAGER:add_event(Event({
+    func = (function()
+      add_tag(Tag('tag_charm'))
+      play_sound('generic1', 0.9 + math.random() * 0.1, 0.8)
+      play_sound('holo1', 1.2 + math.random() * 0.1, 0.4)
+      return true
+    end)
+  }))
+
+  ease_dollars(-16)
+
+  if G.OVERLAY_MENU then G.FUNCS.exit_overlay_menu() end
+  G.SETTINGS.paused = true
+  G.FUNCS.overlay_menu {
+    definition = create_profile_more_menu()
+  }
+end
+
+G.FUNCS.phanta_purchase_meteor_tag = function(e)
+  G.E_MANAGER:add_event(Event({
+    func = (function()
+      add_tag(Tag('tag_meteor'))
+      play_sound('generic1', 0.9 + math.random() * 0.1, 0.8)
+      play_sound('holo1', 1.2 + math.random() * 0.1, 0.4)
+      return true
+    end)
+  }))
+
+  ease_dollars(-16)
+
+  if G.OVERLAY_MENU then G.FUNCS.exit_overlay_menu() end
+  G.SETTINGS.paused = true
+  G.FUNCS.overlay_menu {
+    definition = create_profile_more_menu()
+  }
+end
+
+G.FUNCS.phanta_purchase_ethereal_tag = function(e)
+  G.E_MANAGER:add_event(Event({
+    func = (function()
+      add_tag(Tag('tag_ethereal'))
+      play_sound('generic1', 0.9 + math.random() * 0.1, 0.8)
+      play_sound('holo1', 1.2 + math.random() * 0.1, 0.4)
+      return true
+    end)
+  }))
+
+  ease_dollars(-16)
+
+  if G.OVERLAY_MENU then G.FUNCS.exit_overlay_menu() end
+  G.SETTINGS.paused = true
+  G.FUNCS.overlay_menu {
+    definition = create_profile_more_menu()
+  }
+end
+
+G.FUNCS.phanta_can_purchase_charm_tag = function(e)
+  if G.GAME.dollars - 16 < to_big(G.GAME.bankrupt_at) then
+    e.config.colour = G.C.UI.BACKGROUND_INACTIVE
+    e.config.button = nil
+  end
+end
+
+G.FUNCS.phanta_can_purchase_meteor_tag = function(e)
+  if G.GAME.dollars - 16 < to_big(G.GAME.bankrupt_at) then
+    e.config.colour = G.C.UI.BACKGROUND_INACTIVE
+    e.config.button = nil
+  end
+end
+
+G.FUNCS.phanta_can_purchase_ethereal_tag = function(e)
+  if G.GAME.dollars - 16 < to_big(G.GAME.bankrupt_at) then
+    e.config.colour = G.C.UI.BACKGROUND_INACTIVE
+    e.config.button = nil
+  end
+end
+
+G.Phanta.centers["deathnote"] = {
+  loc_vars = function(self, info_queue, card)
+    info_queue[#info_queue + 1] = G.P_CENTERS.e_negative
+    local name = card.ability and card.ability.extra and card.ability.extra.card_name and
+        card.ability.extra.card_name ~= "" and card.ability.extra.card_name
+    return { vars = { name and localize("phanta_deathnote_name_present") or localize("phanta_deathnote_no_name"), name and name or "" } }
+  end,
+  rarity = 3,
+  atlas = 'Phanta2',
+  pos = { x = 0, y = 3 },
+  cost = 4,
+  blueprint_compat = false,
+  eternal_compat = true,
+  perishable_compat = true
+}
+
+G.FUNCS.run_deathnote_menu = function(e)
+  G.SETTINGS.paused = true
+  e.config.ref_table.ability = e.config.ref_table.ability or {}
+  e.config.ref_table.ability.extra = e.config.ref_table.ability.extra or {}
+  G.GAME.phanta_deathnote_name = e.config.ref_table.ability.extra.card_name or ""
+  G.FUNCS.overlay_menu {
+    definition = create_deathnote_more_menu(e)
+  }
+end
+
+G.FUNCS.phanta_can_deathnote_more = function(e)
+
+end
+
+function create_deathnote_more_menu(e)
+  local t = create_UIBox_generic_options({
+    infotip = localize("phanta_deathnote_more_tooltip"),
+    contents = {
+      {
+        n = G.UIT.R,
+        nodes = {
+          create_text_input({
+            w = 5,
+            h = 1,
+            max_length = 100,
+            extended_corpus = true,
+            prompt_text = localize("phanta_deathnote_more_text"),
+            ref_table = G.GAME,
+            ref_value = "phanta_deathnote_name",
+            keyboard_offset = 1
+          })
+        }
+      },
+      {
+        n = G.UIT.R,
+        config = { align = "cm" },
+        nodes = {
+          UIBox_button({
+            ref_table = e.config.ref_table,
+            button = "phanta_set_deathnote_card",
+            func = "phanta_can_set_deathnote_card",
+            label = { localize("phanta_set") },
+            minw = 2,
+            focus_args = { snap_to = true }
+          })
+        }
+      }
+    },
+  })
+  return t
+end
+
+G.FUNCS.phanta_set_deathnote_card = function(e)
+  if G.GAME.phanta_deathnote_name:lower() == G.PROFILES[G.SETTINGS.profile].name:lower() then
+    G.STATE = G.STATES.GAME_OVER
+    if not G.GAME.won and not G.GAME.seeded and not G.GAME.challenge then
+      G.PROFILES[G.SETTINGS.profile].high_scores.current_streak.amt = 0
+    end
+    G:save_settings()
+    G.FILE_HANDLER.force = true
+    G.STATE_COMPLETE = false
+    G.SETTINGS.paused = false
+    return
+  end
+  if G.GAME.phanta_deathnote_name:lower() == "balatro" then
+    G:save_settings()
+    G:save_progress()
+    love.event.quit(0)
+    return
+  end
+
+  e.config.ref_table.ability.extra.card_name = G.GAME.phanta_deathnote_name
+
+  if G.OVERLAY_MENU then G.FUNCS.exit_overlay_menu() end
+  G.SETTINGS.paused = true
+  G.FUNCS.overlay_menu {
+    definition = create_deathnote_more_menu(e)
+  }
+end
+
+G.FUNCS.phanta_can_set_deathnote_card = function(e)
+  if G.GAME.phanta_deathnote_name:lower() == G.PROFILES[G.SETTINGS.profile].name:lower()
+  or G.GAME.phanta_deathnote_name:lower() == "balatro" then
+    e.config.colour = G.C.RED
+    e.config.button = "phanta_set_deathnote_card"
+    return
+  end
+
+  local banned = { "Voucher", "Back", "Enhanced", "Edition", "Booster" }
+  local valid = false
+  for k, v in pairs(G.P_CENTERS) do
+    if localize { key = k, type = "name_text", set = v.set }:lower() == G.GAME.phanta_deathnote_name:lower() then
+      local is_banned = false
+      for i, banned_key in ipairs(banned) do
+        if v.set == banned_key then is_banned = true end
+      end
+      if not is_banned then
+        valid = true
+        break
+      end
+    end
+  end
+  if not valid then
+    e.config.colour = G.C.UI.BACKGROUND_INACTIVE
+    e.config.button = nil
+  else
+    e.config.colour = G.C.RED
+    e.config.button = "phanta_set_deathnote_card"
+  end
+end
+
+local create_card_ref = create_card
+function create_card(_type, area, legendary, _rarity, skip_materialize, soulable, forced_key, key_append)
+  local card = create_card_ref(_type, area, legendary, _rarity, skip_materialize, soulable, forced_key, key_append)
+  local notes = SMODS.find_card("j_phanta_deathnote")
+  if next(notes) then
+    for i, v in ipairs(notes) do
+      if v and v.ability and v.ability.extra and v.ability.extra.card_name
+          and localize { key = card.config.center.key, type = "name_text", set = card.config.center.set }:lower() == v.ability.extra.card_name:lower() then
+        card:set_edition("e_negative")
+      end
+    end
+  end
+  return card
+end
+
+local smods_create_card_ref = SMODS.create_card
+function SMODS:create_card(t)
+  local card = smods_create_card_ref(self, t)
+  local notes = SMODS.find_card("j_phanta_deathnote")
+  if next(notes) then
+    for i, v in ipairs(notes) do
+      if v and v.ability and v.ability.extra and v.ability.extra.card_name
+          and localize { key = card.config.center.key, type = "name_text", set = card.config.center.set }:lower() == v.ability.extra.card_name:lower() then
+        card:set_edition("e_negative")
+      end
+    end
+  end
+  return card
+end

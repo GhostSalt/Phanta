@@ -330,7 +330,8 @@ SMODS.Consumable {
   calculate = function(self, card, context)
     if context.ending_shop then
       if #count_boosters() > 0 then
-        card.ability.extra_value = card.ability.extra_value + (#count_boosters() * (card.ability.extra.added_value + (count_prognosticators(card) * 3))) -- Prog adds $3 extra sell value.
+        card.ability.extra_value = card.ability.extra_value +
+            (#count_boosters() * (card.ability.extra.added_value + (count_prognosticators(card) * 3))) -- Prog adds $3 extra sell value.
         card:set_cost()
         return {
           message = localize('k_val_up'),

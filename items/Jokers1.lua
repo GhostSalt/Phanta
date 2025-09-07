@@ -1103,19 +1103,57 @@ G.Phanta.centers["badhairday"] = {
   config = { extra = { odds = 2 } },
   loc_vars = function(self, info_queue, card)
     info_queue[#info_queue + 1] = G.P_CENTERS.m_wild
+    info_queue[#info_queue + 1] = G.P_CENTERS.c_lovers
     local num, denom = SMODS.get_probability_vars(card, 1, card.ability.extra.odds, "badhairday")
     return { vars = { num, denom } }
   end,
   rarity = 2,
-  atlas = 'Phanta',
-  pos = { x = 10, y = 3 },
+  atlas = 'PhantaMiscAnims5',
+  pos = { x = 3, y = 2 },
+  phanta_anim = {
+    { x = 3, y = 2, t = 1.5 }, { x = 4, y = 2, t = 0.1 },
+    { x = 3, y = 2, t = 0.1 }, { x = 4, y = 2, t = 0.1 },
+    { x = 3, y = 2, t = 1.8 }, { x = 4, y = 2, t = 0.1 },
+    { x = 3, y = 2, t = 0.9 }, { x = 4, y = 2, t = 0.1 },
+    { x = 3, y = 2, t = 2.1 }, { x = 4, y = 2, t = 0.1 },
+    { x = 3, y = 2, t = 0.5 }, { x = 4, y = 2, t = 0.1 },
+
+    { x = 5, y = 2, t = 0.15 }, { x = 6, y = 2, t = 0.1 },
+    { x = 7, y = 2, t = 0.15 }, { x = 8, y = 2, t = 0.1 },
+    { x = 5, y = 2, t = 0.15 }, { x = 6, y = 2, t = 0.1 },
+    { x = 7, y = 2, t = 0.15 }, { x = 8, y = 2, t = 0.1 },
+    { x = 5, y = 2, t = 0.15 }, { x = 6, y = 2, t = 0.1 },
+    { x = 7, y = 2, t = 0.15 }, { x = 8, y = 2, t = 0.1 },
+
+    { x = 9, y = 2, t = 0.15 },
+  },
   cost = 6,
   blueprint_compat = true,
   eternal_compat = true,
   perishable_compat = true,
   calculate = function(self, card, context)
-    if context.destroy_card and context.cardarea == G.hand and SMODS.has_enhancement(context.other_card, "m_wild") and SMODS.pseudorandom_probability(card, "badhairday", 1, card.ability.extra.odds) then
-      return true
+    if context.destroy_card and context.cardarea == G.hand and SMODS.has_enhancement(context.destroy_card, "m_wild") and SMODS.pseudorandom_probability(card, "badhairday", 1, card.ability.extra.odds) then
+      if count_consumables() < G.consumeables.config.card_limit then
+        G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
+        G.E_MANAGER:add_event(Event({
+          func = function()
+            G.E_MANAGER:add_event(Event({
+              func = function()
+                local new_card = create_card("Tarot", G.consumables, nil, nil, nil, nil, "c_lovers", 'badhairday')
+                new_card:add_to_deck()
+                G.consumeables:emplace(new_card)
+                G.GAME.consumeable_buffer = 0
+                new_card:juice_up(0.3, 0.5)
+                return true
+              end
+            }))
+            card_eval_status_text(context.blueprint_card or card, 'extra', nil, nil, nil,
+              { message = "+1 Lovers", colour = G.C.PURPLE })
+            return true
+          end
+        }))
+      end
+      return { remove = true }
     end
   end
 }

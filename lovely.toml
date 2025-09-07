@@ -108,3 +108,30 @@ pattern = '''dollars = dollars + G.GAME.interest_amount*math.min(math.floor(G.GA
 position = 'at'
 payload = '''dollars = dollars + G.GAME.interest_amount*(moneybags and G.GAME.interest_cap/5 or math.min(math.floor(G.GAME.dollars/5), G.GAME.interest_cap/5))'''
 match_indent = true
+
+
+
+[[patches]]
+[patches.pattern]
+target = 'functions/button_callbacks.lua'
+pattern = '''if args.key == '[' or args.key == ']' then return end'''
+position = 'at'
+payload = '''if (args.key == '[' or args.key == ']') and not hook.config.ref_table.extended_corpus then return end'''
+match_indent = true
+
+# why does 0 crash the game why does 0 crash the game why does
+# [[patches]]
+# [patches.pattern]
+# target = 'functions/button_callbacks.lua'
+# pattern = '''if args.key == '0' then args.key = 'o' end'''
+# position = 'at'
+# payload = '''if args.key == '0' and not hook.config.ref_table.extended_corpus then args.key = 'o' end'''
+# match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = 'functions/button_callbacks.lua'
+pattern = '''local corpus = '123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'..(hook.config.ref_table.extended_corpus and " 0!$&()<>?:{}+-=,.[]_" or '')'''
+position = 'at'
+payload = '''local corpus = '123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'..(hook.config.ref_table.extended_corpus and " 0!$&()<>?:{}+-=,.[]_'" or '')'''
+match_indent = true
