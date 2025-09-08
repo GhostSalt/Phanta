@@ -136,7 +136,7 @@ SMODS.Consumable {
   config = { starter_cards = {
     { count = 1, rank = "Queen", suit = "Hearts" },
     { count = 3, rank = "Queen" },
-    { count = 1, rank = "Ace", suit = "Hearts" } } },
+    { count = 1, rank = "Ace",   suit = "Hearts" } } },
   atlas = "PhantaStarterPacks1"
 }
 
@@ -436,3 +436,17 @@ function SMODS.calculate_context(context, return_table)
   end
   return context_ref(context, return_table)
 end
+
+SMODS.Joker:take_ownership("j_hologram", {
+  config = { extra = 0.25, extra_if_starters = 0.2, Xmult = 1 },
+  loc_vars = function(self, info_queue, card)
+    return { vars = { Phanta.config["starter_pack_enabled"] and card.ability.extra_if_starters or card.ability.extra, card.ability.Xmult } }
+  end,
+  calculate = function(self, card, context)
+    if context.playing_card_added and not context.blueprint then
+      card.ability.Xmult = card.ability.Xmult + #context.cards * (Phanta.config["starter_pack_enabled"] and card.ability.extra_if_starters or card.ability.extra)
+      return { message = localize { type = 'variable', key = 'a_xmult', vars = { card.ability.Xmult } }, }
+    end
+    if context.joker_main then return { Xmult = card.ability.Xmult } end
+  end
+}, true)

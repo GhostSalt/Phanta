@@ -192,8 +192,10 @@ function find_current_zodiacs()
   for i, j in pairs(G.P_CENTER_POOLS.phanta_Zodiac) do
     if is_current_month({ config = { center = j } }) then matches[#matches + 1] = { set = "phanta_Zodiac", config = { center = j } } end -- Cursed solution, but works.
   end
-  for i, j in pairs(G.P_CENTER_POOLS.phanta_Birthstone) do
-    if is_current_month({ config = { center = j } }) then matches[#matches + 1] = { set = "phanta_Birthstone", config = { center = j } } end
+  if G.P_CENTER_POOLS.phanta_Birthstone then
+    for i, j in pairs(G.P_CENTER_POOLS.phanta_Birthstone) do
+      if is_current_month({ config = { center = j } }) then matches[#matches + 1] = { set = "phanta_Birthstone", config = { center = j } } end
+    end
   end
   return matches
 end

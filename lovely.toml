@@ -135,3 +135,13 @@ pattern = '''local corpus = '123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnop
 position = 'at'
 payload = '''local corpus = '123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'..(hook.config.ref_table.extended_corpus and " 0!$&()<>?:{}+-=,.[]_'" or '')'''
 match_indent = true
+
+
+
+[[patches]]
+[patches.pattern]
+target = 'functions/UI_definitions.lua'
+pattern = '''{n=G.UIT.T, config={text = localize{type = 'variable', key = 'ante_x_voucher', vars = {G.GAME.round_resets.ante}}, scale = 0.45, colour = G.C.L_BLACK, vert = true}},'''
+position = 'at'
+payload = '''{n=G.UIT.T, config={text = next(SMODS.find_card('j_phanta_theblackraven')) and localize('phanta_theblackraven_blackmarket') or localize{type = 'variable', key = 'ante_x_voucher', vars = {G.GAME.round_resets.ante}}, scale = 0.45, colour = G.C.L_BLACK, vert = true}},'''
+match_indent = true

@@ -1439,6 +1439,24 @@ return {
                     "card in your hand"
                 }
             },
+            j_phanta_testpage              = {
+                name = 'Test Page',
+                text = {
+                    "Gains {C:chips}+#1#{} Chips",
+                    "if played hand",
+                    "is a {C:attention}Junk{}",
+                    "{C:inactive}(Currently {C:chips}+#2#{C:inactive} Chips){}"
+                }
+            },
+            j_phanta_flagsignal            = {
+                name = 'Flag Signal',
+                text = {
+                    "Gains {C:mult}+#1#{} Mult for",
+                    "each played and",
+                    "unscored {C:attention}Lucky{} card",
+                    "{C:inactive}(Currently {C:mult}+#2#{C:inactive} Mult){}"
+                }
+            },
             j_phanta_heartbreak            = {
                 name = 'Heartbreak',
                 text = {
@@ -1492,6 +1510,15 @@ return {
                     "have been used this run",
                     "{C:inactive}({C:attention}#3#/#2#{C:inactive}, #4#){}",
                     "{C:inactive,s:0.65}(Active if with Barton){}"
+                }
+            },
+            j_phanta_theblackraven      = {
+                name = 'The Black Raven',
+                text = {
+                    "All shops have {C:attention}#1#{}",
+                    "extra {C:tarot}Tarot{} card#2#",
+                    "on sale beside",
+                    "the {C:attention}Vouchers{}"
                 }
             },
             j_phanta_zero                  = {
@@ -2724,6 +2751,8 @@ return {
             phanta_deathnote_more_text = "enter card name...",
             phanta_deathnote_name_present = "Chosen name: ",
             phanta_deathnote_no_name = "No name chosen",
+
+            phanta_theblackraven_blackmarket = "THE BLACK MARKET",
 
             credit_goat3730 = "OC by goat3730",
             credit_bobisnotaperson = "bobisnotaperson's Truesona",

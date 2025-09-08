@@ -530,6 +530,98 @@ G.Phanta.centers["fanta"] = {
   end
 }
 
+G.Phanta.centers["testpage"] = {
+  config = { extra = { added_chips = 20, current_chips = 0 } },
+  rarity = 1,
+  atlas = 'Phanta2',
+  pos = { x = 1, y = 3 },
+  cost = 4,
+  loc_vars = function(self, info_queue, card)
+    return { vars = { card.ability.extra.added_chips, card.ability.extra.current_chips } }
+  end,
+  blueprint_compat = true,
+  eternal_compat = true,
+  perishable_compat = false,
+  calculate = function(self, card, context)
+    if context.joker_main and card.ability.extra.current_chips > 0 then
+      return { chips = card.ability.extra.current_chips }
+    end
+    if context.before and context.scoring_name == "phanta_junk" and not context.blueprint then
+      card.ability.extra.current_chips = card.ability.extra.current_chips + card.ability.extra.added_chips
+      return { message = localize("k_upgrade_ex"), colour = G.C.FILTER }
+    end
+  end,
+  in_pool = function()
+    return G.GAME.hands["phanta_junk"].visible and Phanta.config["junk_enabled"]
+  end
+}
+
+G.Phanta.centers["flagsignal"] = {
+  config = { extra = { added_mult = 1, current_mult = 0 } },
+  rarity = 1,
+  atlas = 'PhantaMiscAnims5',
+  pos = { x = 10, y = 2 },
+  phanta_anim = {
+    { x = 10, y = 2, t = 0.3 },
+    { x = 11, y = 2, t = 0.3 },
+    { x = 0,  y = 3, t = 0.3 }
+  },
+  pos_extra = { x = 1, y = 3 },
+  phanta_anim_extra = {
+    { x = 1, y = 3, t = 0.2 }, { x = 2, y = 3, t = 0.1 }, -- LETTERS
+    { x = 3, y = 3, t = 0.1 },
+
+    { x = 4, y = 3, t = 0.3 }, -- REST
+    { x = 3, y = 3, t = 0.1 },
+
+    { x = 1, y = 3, t = 0.2 }, { x = 2, y = 3, t = 0.1 }, -- J
+    { x = 5, y = 3, t = 0.1 },
+
+    { x = 6, y = 3, t = 0.2 }, { x = 7, y = 3, t = 0.1 }, -- O
+    { x = 8, y = 3, t = 0.1 },
+
+    { x = 9, y = 3, t = 0.2 }, { x = 10, y = 3, t = 0.1 }, -- K
+    { x = 11, y = 3, t = 0.1 },
+
+    { x = 0,  y = 4, t = 0.2 }, { x = 1, y = 4, t = 0.1 }, -- E
+    { x = 2, y = 4, t = 0.1 },
+
+    { x = 3, y = 4, t = 0.2 }, { x = 4, y = 4, t = 0.1 }, -- R
+    { x = 5, y = 4, t = 0.1 },
+
+    { x = 4, y = 3, t = 4 },   -- REST
+
+    { x = 5, y = 4, t = 0.1 }, -- ATTENTION
+    { x = 3, y = 4, t = 0.05 },
+    { x = 6, y = 4, t = 0.2 },
+    { x = 3, y = 4, t = 0.1 },
+    { x = 5, y = 4, t = 0.2 },
+    { x = 3, y = 4, t = 0.1 },
+    { x = 6, y = 4, t = 0.2 },
+    { x = 3, y = 4, t = 0.1 },
+    { x = 5, y = 4, t = 0.05 },
+    { x = 4, y = 3, t = 0.4 },
+
+    { x = 3, y = 3, t = 0.1 },
+  },
+  cost = 5,
+  loc_vars = function(self, info_queue, card)
+    return { vars = { card.ability.extra.added_mult, card.ability.extra.current_mult } }
+  end,
+  blueprint_compat = true,
+  eternal_compat = true,
+  perishable_compat = false,
+  calculate = function(self, card, context)
+    if context.joker_main and card.ability.extra.current_mult > 0 then
+      return { mult = card.ability.extra.current_mult }
+    end
+    if context.individual and context.cardarea == "unscored" and SMODS.has_enhancement(context.other_card, "m_lucky") and not context.blueprint then
+      card.ability.extra.current_mult = card.ability.extra.current_mult + card.ability.extra.added_mult
+      return { message = localize("k_upgrade_ex"), colour = G.C.FILTER, card = card }
+    end
+  end
+}
+
 G.Phanta.centers["heartbreak"] = {
   config = { extra = { xmult = 1.5, odds = 2 } },
   rarity = 2,
@@ -727,6 +819,45 @@ G.Phanta.centers["inspectorchelmey"] = {
   end
 }
 
+G.Phanta.centers["theblackraven"] = {
+  config = { extra = { no_of_cards = 2 } },
+  rarity = 2,
+  atlas = 'Phanta2',
+  pos = { x = 3, y = 3 },
+  cost = 6,
+  blueprint_compat = false,
+  eternal_compat = true,
+  perishable_compat = true,
+  loc_vars = function(self, info_queue, card)
+    return {
+      vars = { card.ability.extra.no_of_cards, card.ability.extra.no_of_cards == 1 and "" or localize("phanta_plural") }
+    }
+  end,
+  add_to_deck = function(self, card, from_debuff)
+    G.GAME.phanta_black_raven_cards = G.GAME.phanta_black_raven_cards or 0
+    G.GAME.phanta_black_raven_cards = G.GAME.phanta_black_raven_cards + card.ability.extra.no_of_cards
+    if G.STATE == G.STATES["SHOP"] then phanta_black_raven_add_to_shop(card.ability.extra.no_of_cards) end
+  end,
+  remove_from_deck = function(self, card, from_debuff)
+    G.GAME.phanta_black_raven_cards = G.GAME.phanta_black_raven_cards - card.ability.extra.no_of_cards
+  end
+}
+
+function phanta_black_raven_add_to_shop(no_of_cards)
+  for i = 1, no_of_cards do
+    local new_card = create_card("Tarot", G.shop_vouchers, nil, nil, nil, nil, nil, 'blackraven')
+    G.shop_vouchers:emplace(new_card)
+    create_shop_card_ui(new_card)
+    G.shop_vouchers.config.card_limit = G.shop_vouchers.config.card_limit + 1
+  end
+end
+
+local context_ref = SMODS.calculate_context
+function SMODS.calculate_context(context, return_table)
+  if context and context.starting_shop then phanta_black_raven_add_to_shop(G.GAME.phanta_black_raven_cards or 0) end
+  return context_ref(context, return_table)
+end
+
 G.Phanta.centers["zero"] = {
   config = { extra = { sum = 9 } },
   rarity = 2,
@@ -861,10 +992,10 @@ G.Phanta.centers["valantgramarye"] = {
 }
 
 --[[G.Phanta.centers["snoinches"] = {
-  rarity = 2,
+  rarity = 1,
   atlas = 'Phanta2',
   pos = { x = 11, y = 1 },
-  cost = 5,
+  cost = 4,
   blueprint_compat = true,
   eternal_compat = true,
   perishable_compat = true,
@@ -1217,7 +1348,7 @@ G.Phanta.centers["clapperboard"] = {
 }
 
 G.Phanta.centers["birthdaycard"] = {
-  config = { extra = { added_xmult = 0.2, current_xmult = 1 } },
+  config = { extra = { added_xmult = 0.25, current_xmult = 1 } },
   loc_vars = function(self, info_queue, card)
     info_queue[#info_queue + 1] = G.P_CENTERS.e_phanta_waxed
     return { vars = { card.ability.extra.added_xmult, card.ability.extra.current_xmult } }
@@ -1612,7 +1743,7 @@ end
 
 G.FUNCS.phanta_can_set_deathnote_card = function(e)
   if G.GAME.phanta_deathnote_name:lower() == G.PROFILES[G.SETTINGS.profile].name:lower()
-  or G.GAME.phanta_deathnote_name:lower() == "balatro" then
+      or G.GAME.phanta_deathnote_name:lower() == "balatro" then
     e.config.colour = G.C.RED
     e.config.button = "phanta_set_deathnote_card"
     return
