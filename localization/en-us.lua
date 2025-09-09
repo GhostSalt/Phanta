@@ -1512,7 +1512,7 @@ return {
                     "{C:inactive,s:0.65}(Active if with Barton){}"
                 }
             },
-            j_phanta_theblackraven      = {
+            j_phanta_theblackraven         = {
                 name = 'The Black Raven',
                 text = {
                     "All shops have {C:attention}#1#{}",
@@ -1627,6 +1627,14 @@ return {
                     "edition {C:attention}Copper Grate{} card",
                     "in your {C:attention}full deck{}",
                     "{C:inactive}(Currently {X:mult,C:white}X#2#{C:inactive} Mult){}"
+                }
+            },
+            j_phanta_metalhead             = {
+                name = 'Metalhead',
+                text = {
+                    "If {C:attention}first hand{} of round",
+                    "has only {C:attention}1{} card, it",
+                    "becomes a {C:attention}Steel{} card"
                 }
             },
             j_phanta_mrbigmoneybags        = {

@@ -1383,9 +1383,43 @@ G.Phanta.centers["birthdaycard"] = {
   end
 }
 
+G.Phanta.centers["metalhead"] = {
+  loc_vars = function(self, info_queue, card)
+    info_queue[#info_queue + 1] = G.P_CENTERS.m_steel
+    return {}
+  end,
+  rarity = 2,
+  atlas = 'Phanta2',
+  pos = { x = 4, y = 3 },
+  cost = 6,
+  blueprint_compat = false,
+  eternal_compat = true,
+  perishable_compat = true,
+  calculate = function(self, card, context)
+    if context.first_hand_drawn then
+      local eval = function() return G.GAME.current_round.hands_played == 0 end
+      juice_card_until(card, eval, true)
+    end
+
+    if context.before and G.GAME.current_round.hands_played == 0 then
+      if #context.full_hand == 1 then
+        G.E_MANAGER:add_event(Event({
+          func = function()
+            context.full_hand[1]:set_ability("m_steel")
+            context.full_hand[1]:juice_up()
+            return true
+          end
+        }))
+        return { message = localize { key = "m_steel", type = "name_text", set = "Enhanced" }, colour = G.C.FILTER }
+      end
+    end
+  end
+}
+
 G.Phanta.centers["plugsocket"] = {
   config = { extra = { xmult = 0.25 } },
   loc_vars = function(self, info_queue, card)
+    info_queue[#info_queue + 1] = G.P_CENTERS.m_phanta_coppergratefresh
     return { vars = { card.ability.extra.xmult, 1 + (#count_base_copper_grates() * card.ability.extra.xmult) } }
   end,
   rarity = 2,

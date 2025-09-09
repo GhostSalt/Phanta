@@ -52,6 +52,8 @@ function Card:is_suit(suit, bypass_debuff, flush_calc, lie_about_unknowns)
         self.base.suit = self.ability.phanta_actual_suit or "phanta_unknown"
         ref_return = is_suit_ref(self, suit, bypass_debuff, flush_calc)
         self.base.suit = "phanta_unknown"
+    elseif suit == "phanta_unknown" then
+        return self.base.suit == suit
     else
         ref_return = is_suit_ref(self, suit, bypass_debuff, flush_calc)
     end

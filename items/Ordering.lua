@@ -131,6 +131,7 @@ local joker_order = {
     "ceaseanddesist",
     "thepolicemun",
     "nojoke",
+    "metalhead",
     "mrbigmoneybags",
     "lotteryticket",
     "dottodot",
