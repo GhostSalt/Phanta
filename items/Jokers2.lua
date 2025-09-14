@@ -376,6 +376,104 @@ G.Phanta.centers["peekaboo"] = {
   end
 }
 
+
+
+SMODS.Atlas {
+  key = "PhantaDeckJoker",
+  path = "PhantaDeckJoker.png",
+  px = 71,
+  py = 95
+}
+
+G.Phanta.centers["deckjoker"] = {
+  rarity = 1,
+  atlas = "PhantaDeckJoker",
+  pos = { x = 0, y = 0 },
+  cost = 4,
+  in_pool = function()
+    return G.GAME.phanta_deck_joker_selected_deck
+  end
+}
+
+function phanta_assign_deck_joker()
+  local deck_key = G.GAME.selected_back and G.GAME.selected_back.effect and G.GAME.selected_back.effect.center and G.GAME.selected_back.effect.center.key
+  local deck = deck_key and G.phanta_all_deck_joker_decks[deck_key]
+  G.GAME.phanta_deck_joker_selected_deck = deck and deck_key
+
+  if deck then
+    G.P_CENTERS["j_phanta_deckjoker"].config = deck.config or {}
+    G.P_CENTERS["j_phanta_deckjoker"].loc_vars = function(self, info_queue, card)
+      for _, v in ipairs(deck.info_queue or {}) do
+        info_queue[#info_queue + 1] = v
+      end
+      return { key = deck.loc_key and self.key .. "_" .. deck.loc_key or self.key, vars = deck.loc_vars }
+    end
+
+    G.P_CENTERS["j_phanta_deckjoker"].set_sprites = function(self, card, front)
+      if not self.discovered and not card.params.bypass_discovery_center then
+        return
+      end
+      if card and card.children and card.children.center and card.children.center.set_sprite_pos then
+        card.children.center.atlas = G.ASSET_ATLAS[deck.atlas or "phanta_PhantaDeckJoker"]
+        card.children.center:set_sprite_pos({
+          x = deck.pos and deck.pos.x or 0,
+          y = deck.pos and deck.pos.y or 0
+        })
+      end
+    end
+
+    G.P_CENTERS["j_phanta_deckjoker"].calculate = deck.calculate
+    G.P_CENTERS["j_phanta_deckjoker"].add_to_deck = deck.add_to_deck
+    G.P_CENTERS["j_phanta_deckjoker"].remove_from_deck = deck.remove_from_deck
+    G.P_CENTERS["j_phanta_deckjoker"].calc_dollar_bonus = deck.calc_dollar_bonus
+
+    G.P_CENTERS["j_phanta_deckjoker"].blueprint_compat = deck.blueprint_compat or false
+    G.P_CENTERS["j_phanta_deckjoker"].eternal_compat = deck.eternal_compat or false
+    G.P_CENTERS["j_phanta_deckjoker"].perishable_compat = deck.perishable_compat or false
+
+    G.P_CENTERS["j_phanta_deckjoker"].pos = deck.pos or { x = 0, y = 0 }
+    G.P_CENTERS["j_phanta_deckjoker"].cost = deck.cost or 4
+    G.P_CENTERS["j_phanta_deckjoker"].rarity = deck.rarity or 1
+    G.P_CENTERS["j_phanta_deckjoker"].atlas = deck.atlas or "phanta_PhantaDeckJoker"
+  else
+    G.P_CENTERS["j_phanta_deckjoker"].config = nil
+    G.P_CENTERS["j_phanta_deckjoker"].loc_vars = nil
+
+    G.P_CENTERS["j_phanta_deckjoker"].set_sprites = function(self, card, front)
+      if not self.discovered and not card.params.bypass_discovery_center then
+        return
+      end
+      if card and card.children and card.children.center and card.children.center.set_sprite_pos then
+        card.children.center.atlas = G.ASSET_ATLAS["phanta_PhantaDeckJoker"]
+        card.children.center:set_sprite_pos({ x = 0, y = 0 })
+      end
+    end
+
+    G.P_CENTERS["j_phanta_deckjoker"].calculate = nil
+    G.P_CENTERS["j_phanta_deckjoker"].add_to_deck = nil
+    G.P_CENTERS["j_phanta_deckjoker"].remove_from_deck = nil
+    G.P_CENTERS["j_phanta_deckjoker"].calc_dollar_bonus = nil
+
+    G.P_CENTERS["j_phanta_deckjoker"].blueprint_compat = false
+    G.P_CENTERS["j_phanta_deckjoker"].eternal_compat = false
+    G.P_CENTERS["j_phanta_deckjoker"].perishable_compat = false
+
+    G.P_CENTERS["j_phanta_deckjoker"].pos = { x = 0, y = 0 }
+    G.P_CENTERS["j_phanta_deckjoker"].cost = 4
+    G.P_CENTERS["j_phanta_deckjoker"].rarity = 1
+    G.P_CENTERS["j_phanta_deckjoker"].atlas = "phanta_PhantaDeckJoker"
+  end
+end
+
+function phanta_add_deck_joker_deck(deck)
+  G.phanta_all_deck_joker_decks = G.phanta_all_deck_joker_decks or {}
+  G.phanta_all_deck_joker_decks[deck.key] = deck
+end
+
+-- Find the list of decks in DeckJoker.lua.
+
+
+
 G.Phanta.centers["absentjoker"] = {
   config = { extra = { mult = 15 } },
   loc_vars = function(self, info_queue, card)
@@ -964,15 +1062,6 @@ function Card:add_to_deck(card, from_debuff)
   return ref_return
 end
 
-local remove_from_deck_ref = Card.remove_from_deck
-function Card:remove_from_deck(card, from_debuff)
-  local ref_return = remove_from_deck_ref(self, card, from_debuff)
-  if self.config and self.config.center and (self.config.center.set == "Default" or self.config.center.set == "Enhanced") then
-    self:release_unknown("phanta_theriddler")
-  end
-  return ref_return
-end
-
 G.Phanta.centers["valantgramarye"] = {
   rarity = 2,
   atlas = 'Phanta2',
@@ -1285,6 +1374,34 @@ G.Phanta.centers["magiceggcup"] = {
           return true
         end
       }))
+    end
+  end
+}
+
+G.Phanta.centers["doublelift"] = {
+  config = { extra = { cards_to_draw = 2 } },
+  loc_vars = function(self, info_queue, card)
+    return {
+      vars = { card.ability.extra.cards_to_draw },
+    }
+  end,
+  rarity = 1,
+  atlas = 'Phanta2',
+  pos = { x = 5, y = 3 },
+  cost = 4,
+  blueprint_compat = false,
+  eternal_compat = true,
+  perishable_compat = true,
+  calculate = function(self, card, context)
+    if context.pre_discard then
+      card.ability.extra.primed = true
+    end
+
+    if context.drawing_cards and card.ability.extra.primed then
+      card.ability.extra.primed = nil
+      if G.hand.config.card_limit - #G.hand.cards <= card.ability.extra.cards_to_draw then
+        return { cards_to_draw = card.ability.extra.cards_to_draw }
+      end
     end
   end
 }

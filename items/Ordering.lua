@@ -1,6 +1,7 @@
 local joker_order = {
     "bootleg",
     "peekaboo",
+    "deckjoker",
     "normalface",
     "absentjoker",
     "dropdownlist",
@@ -92,6 +93,7 @@ local joker_order = {
     "candle",
     "goo",
     "magiceggcup",
+    "doublelift",
     "web",
     "cutcorners",
     "blottedjoker",

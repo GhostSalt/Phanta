@@ -342,7 +342,7 @@ end
 
 local allFolders = { "none", "items" }
 
-local allFiles = { ["none"] = {}, ["items"] = { "Blind", "Jokers1", "Jokers2", "Legendaries", "Misc", "StarterPack", "Suit" } }
+local allFiles = { ["none"] = {}, ["items"] = { "Blind", "Jokers1", "Jokers2", "Legendaries", "Misc", "StarterPack", "Suit", "DeckJoker" } }
 
 for i = 1, #allFolders do
   if allFolders[i] == "none" then
@@ -447,6 +447,7 @@ local game_start_run_ref = Game.start_run
 
 function Game:start_run(args)
   game_start_run_ref(self, args)
+  phanta_assign_deck_joker()
   G.E_MANAGER:add_event(Event({
     func = function()
       if not G.playing_cards then return false end

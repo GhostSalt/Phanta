@@ -143,9 +143,9 @@ return {
                 name = 'Spectrum Deck',
                 text = {
                     "Applies the effects of",
-                    "{C:red,T:b_red}Red{}, {C:blue,T:b_blue}Blue{}, {C:money,T:b_yellow}Yellow{}, {C:green,T:b_green}Green{}",
-                    "and {T:b_black}Black Deck{}, {C:attention}-#1#{}",
-                    "Booster pack each {C:attention}shop{}"
+                    "{C:red}Red{}, {C:blue}Blue{}, {C:money}Yellow{}, {C:green}Green{}",
+                    "and Black Deck, {C:attention}-#1#{}",
+                    "Booster Pack each {C:attention}shop{}"
                 }
             },
             b_phanta_bloodred = {
@@ -1390,6 +1390,13 @@ return {
                     "second ability"
                 }
             },
+            j_phanta_deckjoker            = {
+                name = 'Deck Joker',
+                text = {
+                    "{C:attention}Ability{} depends on",
+                    "selected {C:attention}deck{}"
+                }
+            },
             j_phanta_absentjoker           = {
                 name = 'Absent Joker',
                 text = {
@@ -1594,6 +1601,14 @@ return {
                     "{C:attention}suit{} if {C:attention}unscored{}"
                 }
             },
+            j_phanta_doublelift            = {
+                name = "Double Lift",
+                text = {
+                    "After {C:red}discard{},",
+                    "always draw at",
+                    "least {C:attention}#1#{} cards"
+                }
+            },
             j_phanta_modping               = {
                 name = "Mod Ping",
                 text = {
@@ -1749,8 +1764,56 @@ return {
                     "{C:inactive}(Currently {C:white,X:mult}X#4#{C:inactive} Mult){}"
                 }
             },
-            j_phanta_                      = {
 
+
+
+
+
+
+
+            j_phanta_deckjoker_red = {
+                name = "Deck Joker (Red)",
+                text = {
+                    "{C:red}+#1#{} discard",
+                    "each round"
+                }
+            },
+            j_phanta_deckjoker_blue = {
+                name = "Deck Joker (Blue)",
+                text = {
+                    "{C:blue}+#1#{} hand",
+                    "each round"
+                }
+            },
+            j_phanta_deckjoker_yellow = {
+                name = "Deck Joker (Yellow)",
+                text = {
+                    "Earn {C:money}$#1#{} if",
+                    "{C:money}interest{} earned",
+                    "is the {C:attention}maximum{}"
+                }
+            },
+            j_phanta_deckjoker_green = {
+                name = "Deck Joker (Green)",
+                text = {
+                    "Gains {C:mult}+#1#{} Mult for",
+                    "each remaining {C:blue}hand{}",
+                    "at end of round",
+                    "{C:inactive}(Currently {C:mult}+#2#{C:inactive} Mult){}"
+                }
+            },
+            j_phanta_deckjoker_black = {
+                name = "Deck Joker (Black)",
+                text = {
+                    "{C:blue}Common{} Jokers each",
+                    "give {C:chips}+#1#{} Chips"
+                }
+            },
+            j_phanta_deckjoker_magic = {
+                name = "Deck Joker (Magic)",
+                text = {
+                    "no idea yet"
+                }
             },
 
 
@@ -2152,8 +2215,8 @@ return {
                 name = 'Spectrum Sleeve',
                 text = {
                     "Applies the effects of",
-                    "{C:red,T:b_red}Red{}, {C:blue,T:b_blue}Blue{}, {C:money,T:b_yellow}Yellow{}, {C:green,T:b_green}Green{}",
-                    "and {T:b_black}Black Deck{}, {C:attention}-#1#{}",
+                    "{C:red}Red{}, {C:blue}Blue{}, {C:money}Yellow{}, {C:green}Green{}",
+                    "and Black Deck, {C:attention}-#1#{}",
                     "Booster Pack each {C:attention}shop{}"
                 }
             },

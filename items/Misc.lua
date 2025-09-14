@@ -1224,15 +1224,6 @@ function G.UIDEF.use_and_sell_buttons(card)
   }
 end
 
-
-
-
-
-
-
-
-
-
 local can_select_card_ref = G.FUNCS.can_select_card
 G.FUNCS.can_select_card = function(e)
   local card = e.config.ref_table
@@ -2235,7 +2226,7 @@ SMODS.Back {
   end,
   apply = function(self, back)
     G.GAME.starting_params.boosters_in_shop = G.GAME.starting_params.boosters_in_shop -
-        self.config.extra.removed_shop_slots
+    self.config.extra.removed_shop_slots
   end
 }
 
