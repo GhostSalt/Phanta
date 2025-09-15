@@ -396,7 +396,8 @@ G.Phanta.centers["deckjoker"] = {
 }
 
 function phanta_assign_deck_joker()
-  local deck_key = G.GAME.selected_back and G.GAME.selected_back.effect and G.GAME.selected_back.effect.center and G.GAME.selected_back.effect.center.key
+  local deck_key = G.GAME.selected_back and G.GAME.selected_back.effect and G.GAME.selected_back.effect.center and
+      G.GAME.selected_back.effect.center.key
   local deck = deck_key and G.phanta_all_deck_joker_decks[deck_key]
   G.GAME.phanta_deck_joker_selected_deck = deck and deck_key
 
@@ -1496,6 +1497,53 @@ G.Phanta.centers["birthdaycard"] = {
             (#waxed_cards * card.ability.extra.added_xmult)
         return { message = localize("k_upgrade_ex"), colour = G.C.FILTER, card = card }
       end
+    end
+  end
+}
+
+G.Phanta.centers["leprechaun"] = {
+  config = { extra = { mult = 17 } },
+  loc_vars = function(self, info_queue, card)
+    return { vars = { card.ability.extra.mult } }
+  end,
+  rarity = 1,
+  atlas = 'Phanta2',
+  pos = { x = 8, y = 3 },
+  cost = 6,
+  blueprint_compat = true,
+  eternal_compat = true,
+  perishable_compat = true,
+  calculate = function(self, card, context)
+    if context.joker_main and G.hand.cards[#G.hand.cards]:get_id() == 7 then
+      return { mult = card.ability.extra.mult }
+    end
+  end
+}
+
+G.Phanta.centers["shamrock"] = {
+  loc_vars = function(self, info_queue, card)
+    info_queue[#info_queue + 1] = G.P_CENTERS.m_lucky
+    return {}
+  end,
+  rarity = 2,
+  atlas = 'Phanta2',
+  pos = { x = 7, y = 3 },
+  cost = 6,
+  blueprint_compat = false,
+  eternal_compat = true,
+  perishable_compat = true,
+  calculate = function(self, card, context)
+    if context.individual and context.cardarea == G.play and SMODS.has_enhancement(context.other_card, "m_lucky")
+        and not (context.other_card:is_suit("Clubs") and context.other_card:get_id() == 7) then
+      local _card = context.other_card
+      G.E_MANAGER:add_event(Event({
+        func = function()
+          assert(SMODS.change_base(_card, "Clubs", "7"))
+          _card:juice_up()
+          return true
+        end
+      }))
+      return { message = "7 of Clubs", colour = G.C.SUITS.Clubs }
     end
   end
 }

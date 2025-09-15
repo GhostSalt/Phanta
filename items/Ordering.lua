@@ -102,6 +102,8 @@ local joker_order = {
     "technicolourjoker",
     "identity",
     "tricolour",
+    "leprechaun",
+    "shamrock",
     "beadnecklace",
     "p5joker",
     "crescent",

@@ -307,15 +307,6 @@ SMODS.Consumable {
 SMODS.Consumable {
   set = "Spectral",
   key = "shard",
-  loc_txt = {
-    name = 'Shard',
-    text = {
-      "Creates the last",
-      "{C:spectral}Spectral{} card used",
-      "during this run",
-      "{s:0.8,C:spectral}Shard{s:0.8} excluded"
-    }
-  },
   pos = { x = 2, y = 0 },
   atlas = "PhantaTarots",
   loc_vars = function(self, info_queue, card)

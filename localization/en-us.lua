@@ -1390,7 +1390,7 @@ return {
                     "second ability"
                 }
             },
-            j_phanta_deckjoker            = {
+            j_phanta_deckjoker             = {
                 name = 'Deck Joker',
                 text = {
                     "{C:attention}Ability{} depends on",
@@ -1644,6 +1644,23 @@ return {
                     "{C:inactive}(Currently {X:mult,C:white}X#2#{C:inactive} Mult){}"
                 }
             },
+            j_phanta_leprechaun             = {
+                name = 'Leprechaun',
+                text = {
+                    "{C:mult}+#1#{} Mult when",
+                    "hand is played if",
+                    "{C:attention}rightmost{} card held",
+                    "in hand is a {C:attention}7{}"
+                }
+            },
+            j_phanta_shamrock             = {
+                name = 'Shamrock',
+                text = {
+                    "Played {C:attention}Lucky{} cards",
+                    "become {C:clubs}7s of{}",
+                    "{C:clubs}Clubs{} when scored"
+                }
+            },
             j_phanta_metalhead             = {
                 name = 'Metalhead',
                 text = {
@@ -1812,10 +1829,10 @@ return {
             j_phanta_deckjoker_magic = {
                 name = "Deck Joker (Magic)",
                 text = {
-                    "When {C:attention}Blind{} is selected,",
-                    "creates a {C:spectral}Spectral{} card",
-                    "if you own both a",
-                    "{C:tarot}Tarot{} and {C:planet}Planet{} card"
+                    "When {C:attention}Blind{} is selected, creates",
+                    "a {C:spectral}Spectral{} card if you own",
+                    "both a {C:tarot}Tarot{} and {C:planet}Planet{} card",
+                    "{C:inactive}(Must have room){}"
                 }
             },
             j_phanta_deckjoker_nebula = {
@@ -1826,7 +1843,56 @@ return {
                     "{C:planet}Meteor{} Tag"
                 }
             },
+            j_phanta_deckjoker_ghost = {
+                name = "Deck Joker (Ghost)",
+                text = {
+                    "Creates a copy of",
+                    "{C:tarot}The Fool{} when a",
+                    "{C:spectral}Spectral{} card is sold",
+                    "{C:inactive}(Must have room){}"
+                }
+            },
 
+
+
+
+
+
+
+
+            j_phanta_deckjoker_stormcaught = {
+                name = "Deck Joker (Stormcaught)",
+                text = {
+                    "Creates a {C:green}Foil{} Tag",
+                    "when selling an",
+                    "{C:green}Uncommon{} Joker"
+                }
+            },
+            j_phanta_deckjoker_blurple = {
+                name = "Deck Joker (Blurple)",
+                text = {
+                    "When {C:attention}Blind{} is selected,",
+                    "gain a random {C:tarot}Tarot{}",
+                    "or {C:planet}Planet{} card",
+                    "{C:inactive}(Must have room){}"
+                }
+            },
+            j_phanta_deckjoker_azran = {
+                name = "Deck Joker (Azran)",
+                text = {
+                    "Creates a {C:dark_edition}Negative{}",
+                    "copy of {C:spectral}Shard{} at",
+                    "the end of the {C:attention}shop",
+                    "{C:red,E:2}self destructs{}"
+                }
+            },
+            j_phanta_deckjoker_badd = {
+                name = "Deck Joker (Badd)",
+                text = {
+                    "Gives {C:money}$#1#{} when a",
+                    "playing card is {C:red}destroyed{}"
+                }
+            },
 
 
 
@@ -2361,6 +2427,15 @@ return {
                     "to {C:attention}1{} selected",
                     "card held in hand"
                 },
+            },
+            c_phanta_shard = {
+                name = "Shard",
+                text = {
+                    "Creates the last",
+                    "{C:spectral}Spectral{} card used",
+                    "during this run",
+                    "{s:0.8,C:spectral}Shard{s:0.8} excluded"
+                }
             }
         },
         Tag = {
