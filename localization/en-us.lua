@@ -1812,7 +1812,18 @@ return {
             j_phanta_deckjoker_magic = {
                 name = "Deck Joker (Magic)",
                 text = {
-                    "no idea yet"
+                    "When {C:attention}Blind{} is selected,",
+                    "creates a {C:spectral}Spectral{} card",
+                    "if you own both a",
+                    "{C:tarot}Tarot{} and {C:planet}Planet{} card"
+                }
+            },
+            j_phanta_deckjoker_nebula = {
+                name = "Deck Joker (Nebula)",
+                text = {
+                    "On {C:attention}final hand{} of",
+                    "round, creates a",
+                    "{C:planet}Meteor{} Tag"
                 }
             },
 
