@@ -1852,6 +1852,21 @@ return {
                     "{C:inactive}(Must have room){}"
                 }
             },
+            j_phanta_deckjoker_abandoned={
+                name = "Deck Joker (Abandoned)",
+                text={
+                    "Played {C:attention}Aces{} give",
+                    "{C:mult}+#1#{} Mult when scored",
+                },
+            },
+            j_phanta_deckjoker_checkered={
+                name = "Deck Joker (Checkered)",
+                text={
+                    "Gains {C:mult}+#1#{} Mult if",
+                    "played hand is a {C:attention}Flush{}",
+                    "{C:inactive}(Currently {C:mult}+#2#{C:inactive} Mult){}"
+                },
+            },
 
 
 

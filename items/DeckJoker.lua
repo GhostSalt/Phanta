@@ -110,7 +110,7 @@ local deck_joker_green = {
 
     blueprint_compat = true,
     eternal_compat = true,
-    perishable_compat = true,
+    perishable_compat = false,
 
     config = {
         extra = {
@@ -295,6 +295,69 @@ local deck_joker_ghost = {
     end
 }
 phanta_add_deck_joker_deck(deck_joker_ghost)
+
+local deck_joker_abandoned = {
+    key = "b_abandoned",
+    loc_key = "abandoned",
+
+    pos = {
+        x = 8,
+        y = 0
+    },
+    atlas = "phanta_PhantaDeckJoker",
+
+    rarity = 1,
+    cost = 5,
+
+    blueprint_compat = true,
+    eternal_compat = true,
+    perishable_compat = true,
+
+    config = {
+        extra = {
+            mult = 6
+        }
+    },
+    calculate = function(self, card, context)
+        if context.individual and context.other_card:get_id() == 14 then return { mult = card.ability.extra.mult } end
+    end
+}
+deck_joker_abandoned.loc_vars = { deck_joker_abandoned.config.extra.mult }
+phanta_add_deck_joker_deck(deck_joker_abandoned)
+
+local deck_joker_checkered = {
+    key = "b_checkered",
+    loc_key = "checkered",
+
+    pos = {
+        x = 9,
+        y = 0
+    },
+    atlas = "phanta_PhantaDeckJoker",
+
+    rarity = 1,
+    cost = 5,
+
+    blueprint_compat = true,
+    eternal_compat = true,
+    perishable_compat = false,
+
+    config = {
+        extra = {
+            added_mult = 1, current_mult = 0
+        }
+    },
+    calculate = function(self, card, context)
+        if context.joker_main and card.ability.extra.current_mult > 0 then return { mult = card.ability.extra.current_mult } end
+
+        if context.before and context.scoring_name == "Flush" and not context.blueprint then
+            card.ability.extra.current_mult = card.ability.extra.current_mult + card.ability.extra.added_mult
+            return { message = localize("k_upgrade_ex"), colour = G.C.FILTER }
+        end
+    end
+}
+deck_joker_checkered.loc_vars = { deck_joker_checkered.config.extra.added_mult, deck_joker_checkered.config.extra.current_mult }
+phanta_add_deck_joker_deck(deck_joker_checkered)
 
 
 
