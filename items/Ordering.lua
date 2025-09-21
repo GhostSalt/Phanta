@@ -34,6 +34,7 @@ local joker_order = {
     "diana",
     "zero",
     "zeroii",
+    "zeroiii",
     "redkeycards",
     "bluekeycards",
     "kylehyde",

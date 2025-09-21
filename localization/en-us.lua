@@ -1546,6 +1546,15 @@ return {
                     "chance to be {C:red}destroyed{}"
                 }
             },
+            j_phanta_zeroiii                = {
+                name = 'Zero III',
+                text = {
+                    "If played hand has",
+                    "exactly {C:attention}#1#{} cards and",
+                    "is a {C:attention}Pair{}, {C:red}destroys{}",
+                    "all {C:attention}unscored{} cards"
+                }
+            },
             j_phanta_valantgramarye        = {
                 name = "Valant Gramarye",
                 text = {

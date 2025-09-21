@@ -1001,6 +1001,31 @@ G.Phanta.centers["zeroii"] = {
   end
 }
 
+G.Phanta.centers["zeroiii"] = {
+  config = { extra = { cards = 3 } },
+  rarity = 2,
+  atlas = 'Phanta2',
+  pos = { x = 9, y = 3 },
+  cost = 6,
+  blueprint_compat = false,
+  eternal_compat = true,
+  perishable_compat = true,
+  loc_vars = function(self, info_queue, card)
+    return { vars = { card.ability.extra.cards } }
+  end,
+  calculate = function(self, card, context)
+    if context.before and context.scoring_name == "Pair" and #context.full_hand == card.ability.extra.cards then
+      for k, v in pairs(context.full_hand) do
+        if not SMODS.in_scoring(v, context.scoring_hand) then
+          v.phanta_zeroiii_marked_for_death = true
+        end
+      end
+    end
+
+    if context.destroy_card and context.destroy_card.phanta_zeroiii_marked_for_death then return { remove = true } end
+  end
+}
+
 G.Phanta.centers["theriddler"] = {
   config = { extra = { chips = 250 } },
   rarity = 3,
