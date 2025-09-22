@@ -1876,6 +1876,39 @@ return {
                     "{C:inactive}(Currently {C:mult}+#2#{C:inactive} Mult){}"
                 },
             },
+            j_phanta_deckjoker_zodiac={
+                name = "Deck Joker (Zodiac)",
+                text={
+                    "{C:attention}#1#{} free {C:green}Reroll",
+                    "per shop"
+                },
+            },
+            j_phanta_deckjoker_painted={
+                name = "Deck Joker (Painted)",
+                text={
+                    "Gains {C:mult}+#1#{} Mult if played",
+                    "hand is a {C:attention}Straight Flush{}",
+                    "{C:inactive}(Currently {C:mult}+#2#{C:inactive} Mult){}"
+                },
+            },
+            j_phanta_deckjoker_anaglyph={
+                name = "Deck Joker (Anaglyph)",
+                text={
+                    ""
+                },
+            },
+            j_phanta_deckjoker_plasma={
+                name = "Deck Joker (Plasma)",
+                text={
+                    ""
+                },
+            },
+            j_phanta_deckjoker_erratic={
+                name = "Deck Joker (Erratic)",
+                text={
+                    ""
+                },
+            },
 
 
 
