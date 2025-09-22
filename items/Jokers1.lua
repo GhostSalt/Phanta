@@ -1839,7 +1839,7 @@ G.Phanta.centers["professorlayton"] = {
   end,
   calculate = function(self, card, context)
     if context.joker_main then
-      if next(SMODS.find_card("j_phanta_luketriton")) or SMODS.pseudorandom_probability(card, "layton", count_tarot_cards(), card.ability.extra.out_of_odds) then
+      if next(SMODS.find_card("j_phanta_luketriton")) or SMODS.pseudorandom_probability(card, "layton", count_tarots(), card.ability.extra.out_of_odds) then
         return { mult = card.ability.extra.added_mult }
       end
     end
@@ -1879,7 +1879,7 @@ G.Phanta.centers["luketriton"] = {
   end,
   calculate = function(self, card, context)
     if context.joker_main then
-      if next(SMODS.find_card("j_phanta_professorlayton")) or SMODS.pseudorandom_probability(card, "luke", count_planet_cards(), card.ability.extra.out_of_odds) then
+      if next(SMODS.find_card("j_phanta_professorlayton")) or SMODS.pseudorandom_probability(card, "luke", count_planets(), card.ability.extra.out_of_odds) then
         return { xmult = card.ability.extra.x_mult }
       end
     end
