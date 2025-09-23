@@ -1224,6 +1224,27 @@ G.Phanta.centers["glassjoe"] = {
   end
 }
 
+G.Phanta.centers["dougdimmadome"] = {
+  config = { extra = { added_xmult = 0.25 } },
+  loc_vars = function(self, info_queue, card)
+    return { vars = { card.ability.extra.added_xmult, 1 + (card.ability.extra.added_xmult * phanta_dougdimmadome_count_duplicates()) } }
+  end,
+  rarity = 3,
+  atlas = 'Phanta2',
+  pos = { x = 10, y = 3 },
+  --pos_extra = { x = 11, y = 3 },
+  cost = 8,
+  blueprint_compat = true,
+  eternal_compat = true,
+  perishable_compat = true,
+  calculate = function(self, card, context)
+    if context.joker_main then
+      local xmult = 1 + (card.ability.extra.added_xmult * phanta_dougdimmadome_count_duplicates())
+      if xmult > 1 then return { xmult = xmult } end
+    end
+  end
+}
+
 G.Phanta.centers["magiceggcup"] = {
   config = { extra = { is_first = true } },
   rarity = 1,
@@ -1938,22 +1959,24 @@ function create_deathnote_more_menu(e)
 end
 
 G.FUNCS.phanta_set_deathnote_card = function(e)
-  if G.GAME.phanta_deathnote_name:lower() == G.PROFILES[G.SETTINGS.profile].name:lower() then
-    G.STATE = G.STATES.GAME_OVER
-    if not G.GAME.won and not G.GAME.seeded and not G.GAME.challenge then
-      G.PROFILES[G.SETTINGS.profile].high_scores.current_streak.amt = 0
+  if not phanta_deathnote_is_existing_card() then
+    if G.GAME.phanta_deathnote_name:lower() == G.PROFILES[G.SETTINGS.profile].name:lower() then
+      G.STATE = G.STATES.GAME_OVER
+      if not G.GAME.won and not G.GAME.seeded and not G.GAME.challenge then
+        G.PROFILES[G.SETTINGS.profile].high_scores.current_streak.amt = 0
+      end
+      G:save_settings()
+      G.FILE_HANDLER.force = true
+      G.STATE_COMPLETE = false
+      G.SETTINGS.paused = false
+      return
     end
-    G:save_settings()
-    G.FILE_HANDLER.force = true
-    G.STATE_COMPLETE = false
-    G.SETTINGS.paused = false
-    return
-  end
-  if G.GAME.phanta_deathnote_name:lower() == "balatro" then
-    G:save_settings()
-    G:save_progress()
-    love.event.quit(0)
-    return
+    if G.GAME.phanta_deathnote_name:lower() == "balatro" then
+      G:save_settings()
+      G:save_progress()
+      love.event.quit(0)
+      return
+    end
   end
 
   e.config.ref_table.ability.extra.card_name = G.GAME.phanta_deathnote_name
@@ -1973,6 +1996,16 @@ G.FUNCS.phanta_can_set_deathnote_card = function(e)
     return
   end
 
+  if not phanta_deathnote_is_existing_card() then
+    e.config.colour = G.C.UI.BACKGROUND_INACTIVE
+    e.config.button = nil
+  else
+    e.config.colour = G.C.RED
+    e.config.button = "phanta_set_deathnote_card"
+  end
+end
+
+function phanta_deathnote_is_existing_card()
   local banned = { "Voucher", "Back", "Enhanced", "Edition", "Booster" }
   local valid = false
   for k, v in pairs(G.P_CENTERS) do
@@ -1987,13 +2020,7 @@ G.FUNCS.phanta_can_set_deathnote_card = function(e)
       end
     end
   end
-  if not valid then
-    e.config.colour = G.C.UI.BACKGROUND_INACTIVE
-    e.config.button = nil
-  else
-    e.config.colour = G.C.RED
-    e.config.button = "phanta_set_deathnote_card"
-  end
+  return valid
 end
 
 local create_card_ref = create_card

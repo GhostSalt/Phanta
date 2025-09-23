@@ -1546,7 +1546,7 @@ return {
                     "chance to be {C:red}destroyed{}"
                 }
             },
-            j_phanta_zeroiii                = {
+            j_phanta_zeroiii               = {
                 name = 'Zero III',
                 text = {
                     "If played hand has",
@@ -1603,6 +1603,16 @@ return {
                     "deck have {C:attention}unknown{} suits"
                 }
             },
+            j_phanta_dougdimmadome         = {
+                name = "Doug Dimmadome",
+                text = {
+                    "Gives {C:white,X:mult}X#1#{} Mult for each",
+                    "{C:attention}duplicate{} occurrence of the",
+                    "most common {C:attention}rank & suit{}",
+                    "pair in your {C:attention}full deck{}",
+                    "{C:inactive}(Currently {C:white,X:mult}X#2#{C:inactive} Mult){}"
+                }
+            },
             j_phanta_magiceggcup           = {
                 name = "Magic Egg Cup",
                 text = {
@@ -1653,7 +1663,7 @@ return {
                     "{C:inactive}(Currently {X:mult,C:white}X#2#{C:inactive} Mult){}"
                 }
             },
-            j_phanta_leprechaun             = {
+            j_phanta_leprechaun            = {
                 name = 'Leprechaun',
                 text = {
                     "{C:mult}+#1#{} Mult when",
@@ -1662,7 +1672,7 @@ return {
                     "in hand is a {C:attention}7{}"
                 }
             },
-            j_phanta_shamrock             = {
+            j_phanta_shamrock              = {
                 name = 'Shamrock',
                 text = {
                     "Played {C:attention}Lucky{} cards",
@@ -1861,16 +1871,16 @@ return {
                     "{C:inactive}(Must have room){}"
                 }
             },
-            j_phanta_deckjoker_abandoned={
+            j_phanta_deckjoker_abandoned = {
                 name = "Deck Joker (Abandoned)",
-                text={
+                text = {
                     "Played {C:attention}Aces{} give",
                     "{C:mult}+#1#{} Mult when scored",
                 },
             },
-            j_phanta_deckjoker_checkered={
+            j_phanta_deckjoker_checkered = {
                 name = "Deck Joker (Checkered)",
-                text={
+                text = {
                     "Gains {C:mult}+#1#{} Mult if",
                     "played hand is a {C:attention}Flush{}",
                     "{C:inactive}(Currently {C:mult}+#2#{C:inactive} Mult){}"

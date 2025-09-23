@@ -331,6 +331,41 @@ function set_phanta_new2dsxl_streetpass(card, removed)
   end
 end
 
+function phanta_dougdimmadome_count_duplicates()
+  if not G.playing_cards then return 0 end
+
+  local tallies = {}
+  for i, j in pairs(G.playing_cards) do
+    if not SMODS.has_no_rank(j) and not SMODS.has_no_suit(j) then
+      local id = j:get_id()
+      if not tallies[id] then tallies[id] = {} end
+      if SMODS.has_any_suit(j) then
+        tallies[id].wilds = (tallies[id].wilds or 0) + 1
+      else
+        for k, v in pairs(SMODS.Suits) do
+          if j:is_suit(k) then
+            tallies[id][k] = (tallies[id][k] or 0) + 1
+          end
+        end
+      end
+    end
+  end
+
+  local largest = { count = 0 }
+  for r, i in pairs(tallies) do
+    for s, j in pairs(i) do
+      if j + (i.wilds or 0) > largest.count then
+        largest.rank = r
+        largest.suit = s
+        largest.count = j + (i.wilds or 0)
+      end
+    end
+  end
+
+  if largest.count < 1 then return 0 end
+  return largest.count - 1
+end
+
 local ref1 = Card.start_dissolve
 function Card:start_dissolve()
   if self.config and self.config.center and self.config.center.phanta_shatters then
@@ -619,11 +654,56 @@ function Card:set_sprites(c, f)
   end
 end
 
+--[[local main_menu_ref = Game.main_menu
+function Game:main_menu(change_context)
+  main_menu_ref(self, change_context)
+
+  G.phanta_extra_sprites = {}
+  for k, v in pairs(G.P_CENTERS) do
+    if v.pos_extra then
+      local H = 1
+      if v.key == "j_phanta_dougdimmadome" then H = 80 end
+      G.phanta_extra_sprites[k] = Sprite(0, G.CARD_H * ((3.0/4) + (H / 2)), 71, 95 * H,
+        G.ASSET_ATLAS[v.atlas_extra or v.atlas], v.pos_extra, 1)
+    end
+  end
+end
+
 local cd = Card.draw
 function Card:draw(layer)
   if self.config and self.config.center and self.config.center.pos_extra then self:set_sprites() end
   cd(self, layer)
-end
+SMODS.DrawStep {
+  key = 'extra',
+  order = 1,
+  func = function(self, layer)
+    if G.phanta_extra_sprites and G.phanta_extra_sprites[self.config.center.key] then
+      if not self.children.phanta_extra then
+        self.children.phanta_extra = G.phanta_extra_sprites[self.config.center.key]
+      end
+      if (self.edition and self.edition.negative and (not self.delay_edition or self.delay_edition.negative)) or (self.ability.name == 'Antimatter' and (self.config.center.discovered or self.bypass_discovery_center)) then
+        if self.children.phanta_extra and (self.ability.delayed or not self:should_hide_front()) then
+          self.children.phanta_extra:draw_shader('negative', nil, self.ARGS.send_to_shader)
+        end
+      elseif not self:should_draw_base_shader() then
+      elseif not self.greyed then
+        if self.children.phanta_extra and (self.ability.delayed or not self:should_hide_front()) then
+          self.children.phanta_extra:draw_shader('dissolve')
+        end
+      end
+
+      if self.children.phanta_extra and self.children.phanta_extra.draw and type(self.children.phanta_extra.draw) == 'function' then
+        self.children.phanta_extra:draw(self, layer)
+      end
+
+      G.phanta_extra_sprites[self.config.center.key].role.draw_major = self
+      G.phanta_extra_sprites[self.config.center.key]:draw_shader('dissolve', 0, nil, nil, self.children.phanta_extra, nil, nil,
+        nil, nil, nil, 0.6)
+      G.phanta_extra_sprites[self.config.center.key]:draw_shader('dissolve', 0, nil, nil, self.children.phanta_extra)
+    end
+  end,
+  conditions = { vortex = false, facing = 'front', front_hidden = false },
+}]]--
 
 local update_ref = Game.update
 function Game:update(dt)

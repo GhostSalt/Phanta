@@ -40,6 +40,7 @@ local joker_order = {
     "kylehyde",
     "glassjoe",
     "theriddler",
+    "dougdimmadome",
     "inception",
     "a1z26",
     "nonuniformday",
