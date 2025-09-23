@@ -359,6 +359,72 @@ local deck_joker_checkered = {
 deck_joker_checkered.loc_vars = { deck_joker_checkered.config.extra.added_mult, deck_joker_checkered.config.extra.current_mult }
 phanta_add_deck_joker_deck(deck_joker_checkered)
 
+local deck_joker_zodiac = {
+    key = "b_zodiac",
+    loc_key = "zodiac",
+
+    pos = {
+        x = 10,
+        y = 0
+    },
+    atlas = "phanta_PhantaDeckJoker",
+
+    rarity = 1,
+    cost = 4,
+
+    blueprint_compat = false,
+    eternal_compat = true,
+    perishable_compat = false,
+
+    config = {
+        extra = {
+            rerolls = 1
+        }
+    },
+    add_to_deck = function(self, card, from_debuff)
+        SMODS.change_free_rerolls(card.ability.extra.rerolls)
+    end,
+    remove_from_deck = function(self, card, from_debuff)
+        SMODS.change_free_rerolls(-card.ability.extra.rerolls)
+    end
+}
+deck_joker_zodiac.loc_vars = { deck_joker_zodiac.config.extra.rerolls }
+phanta_add_deck_joker_deck(deck_joker_zodiac)
+
+local deck_joker_painted = {
+    key = "b_painted",
+    loc_key = "painted",
+
+    pos = {
+        x = 11,
+        y = 0
+    },
+    atlas = "phanta_PhantaDeckJoker",
+
+    rarity = 1,
+    cost = 5,
+
+    blueprint_compat = true,
+    eternal_compat = true,
+    perishable_compat = false,
+
+    config = {
+        extra = {
+            added_mult = 2, current_mult = 0
+        }
+    },
+    calculate = function(self, card, context)
+        if context.joker_main and card.ability.extra.current_mult > 0 then return { mult = card.ability.extra.current_mult } end
+
+        if context.before and context.scoring_name == "Straight Flush" and not context.blueprint then
+            card.ability.extra.current_mult = card.ability.extra.current_mult + card.ability.extra.added_mult
+            return { message = localize("k_upgrade_ex"), colour = G.C.FILTER }
+        end
+    end
+}
+deck_joker_painted.loc_vars = { deck_joker_painted.config.extra.added_mult, deck_joker_painted.config.extra.current_mult }
+phanta_add_deck_joker_deck(deck_joker_painted)
+
 
 
 
