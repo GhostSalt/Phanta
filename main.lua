@@ -634,76 +634,32 @@ end
 
 
 
+--[[self.phanta_extra.states.hover.can = false
+      self.phanta_extra.states.click.can = false]] --
 
-local css = Card.set_sprites
-function Card:set_sprites(c, f)
-  css(self, c, f)
-  if self.config.center and self.config.center.pos_extra and (self.config.center.discovered or (self.params and self.params.bypass_discovery_center)) then
-    if not self.children.front then
-      self.children.front = Sprite(self.T.x, self.T.y, self.T.w, self.T.h,
-        G.ASSET_ATLAS[self.config.center.atlas_extra or self.config.center.atlas],
-        self.config.center.pos_extra)
-      self.children.front.states.hover = self.states.hover
-      self.children.front.states.click = self.states.click
-      self.children.front.states.drag = self.states.drag
-      self.children.front.states.collide.can = false
-      self.children.front:set_role({ major = self, role_type = 'Glued', draw_major = self })
-    else
-      self.children.front:set_sprite_pos(self.config.center.pos_extra)
+
+SMODS.DrawStep {
+  key = 'extra',
+  order = 1,
+  func = function(self, layer)
+    if not self.phanta_extra and self.config.center.pos_extra then
+      self.phanta_extra = Sprite(self.T.x, self.T.y, self.T.w, self.T.h,
+        G.ASSET_ATLAS[self.config.center.atlas_extra or self.config.center.atlas], self.config.center.pos_extra)
     end
-  end
-end
-
---[[local main_menu_ref = Game.main_menu
-function Game:main_menu(change_context)
-  main_menu_ref(self, change_context)
-
-  G.phanta_extra_sprites = {}
-  for k, v in pairs(G.P_CENTERS) do
-    if v.pos_extra then
-      local H = 1
-      if v.key == "j_phanta_dougdimmadome" then H = 80 end
-      G.phanta_extra_sprites[k] = Sprite(0, G.CARD_H * ((3.0/4) + (H / 2)), 71, 95 * H,
-        G.ASSET_ATLAS[v.atlas_extra or v.atlas], v.pos_extra, 1)
+    if self.phanta_extra then
+      self.phanta_extra:set_sprite_pos(self.config.center.pos_extra)
+      self.phanta_extra.role.draw_major = self
+      self.phanta_extra:draw_shader('dissolve', nil, nil, nil, self.children.center)
     end
-  end
-end
+  end,
+  conditions = { vortex = false, facing = 'front', front_hidden = false },
+}
 
 local cd = Card.draw
 function Card:draw(layer)
   if self.config and self.config.center and self.config.center.pos_extra then self:set_sprites() end
   cd(self, layer)
-SMODS.DrawStep {
-  key = 'extra',
-  order = 1,
-  func = function(self, layer)
-    if G.phanta_extra_sprites and G.phanta_extra_sprites[self.config.center.key] then
-      if not self.children.phanta_extra then
-        self.children.phanta_extra = G.phanta_extra_sprites[self.config.center.key]
-      end
-      if (self.edition and self.edition.negative and (not self.delay_edition or self.delay_edition.negative)) or (self.ability.name == 'Antimatter' and (self.config.center.discovered or self.bypass_discovery_center)) then
-        if self.children.phanta_extra and (self.ability.delayed or not self:should_hide_front()) then
-          self.children.phanta_extra:draw_shader('negative', nil, self.ARGS.send_to_shader)
-        end
-      elseif not self:should_draw_base_shader() then
-      elseif not self.greyed then
-        if self.children.phanta_extra and (self.ability.delayed or not self:should_hide_front()) then
-          self.children.phanta_extra:draw_shader('dissolve')
-        end
-      end
-
-      if self.children.phanta_extra and self.children.phanta_extra.draw and type(self.children.phanta_extra.draw) == 'function' then
-        self.children.phanta_extra:draw(self, layer)
-      end
-
-      G.phanta_extra_sprites[self.config.center.key].role.draw_major = self
-      G.phanta_extra_sprites[self.config.center.key]:draw_shader('dissolve', 0, nil, nil, self.children.phanta_extra, nil, nil,
-        nil, nil, nil, 0.6)
-      G.phanta_extra_sprites[self.config.center.key]:draw_shader('dissolve', 0, nil, nil, self.children.phanta_extra)
-    end
-  end,
-  conditions = { vortex = false, facing = 'front', front_hidden = false },
-}]]--
+end
 
 local update_ref = Game.update
 function Game:update(dt)

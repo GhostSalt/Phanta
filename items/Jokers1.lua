@@ -3311,6 +3311,7 @@ G.Phanta.centers["spaceinvader"] = {
   phanta_anim = {
     { xrange = { first = 5, last = 5 }, y = 4, t = 1 }
   },
+  pos_extra = { x = 0, y = 5 },
   phanta_anim_extra_states = {
     ["crab"] = {
       anim = {

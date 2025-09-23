@@ -145,3 +145,59 @@ pattern = '''{n=G.UIT.T, config={text = localize{type = 'variable', key = 'ante_
 position = 'at'
 payload = '''{n=G.UIT.T, config={text = next(SMODS.find_card('j_phanta_theblackraven')) and localize('phanta_theblackraven_blackmarket') or localize{type = 'variable', key = 'ante_x_voucher', vars = {G.GAME.round_resets.ante}}, scale = 0.45, colour = G.C.L_BLACK, vert = true}},'''
 match_indent = true
+
+
+
+[[patches]]
+[patches.pattern]
+target = "functions/misc_functions.lua"
+pattern = '''
+love.graphics.translate(
+    moveable.VT.x+moveable.VT.w/2 + (offset and offset.x or 0) + ((moveable.layered_parallax and moveable.layered_parallax.x) or ((moveable.parent and moveable.parent.layered_parallax and moveable.parent.layered_parallax.x)) or 0),
+    moveable.VT.y+moveable.VT.h/2 + (offset and offset.y or 0) + ((moveable.layered_parallax and moveable.layered_parallax.y) or ((moveable.parent and moveable.parent.layered_parallax and moveable.parent.layered_parallax.y)) or 0))
+'''
+position = "at"
+payload = '''
+love.graphics.translate(moveable.VT.x+moveable.VT.w/2, moveable.VT.y+moveable.VT.h/2)
+'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = "functions/misc_functions.lua"
+pattern = '''
+love.graphics.scale(moveable.VT.scale*scale)
+'''
+position = "after"
+payload = '''
+love.graphics.translate(
+    (offset and offset.x or 0) + ((moveable.layered_parallax and moveable.layered_parallax.x) or ((moveable.parent and moveable.parent.layered_parallax and moveable.parent.layered_parallax.x)) or 0),
+    (offset and offset.y or 0) + ((moveable.layered_parallax and moveable.layered_parallax.y) or ((moveable.parent and moveable.parent.layered_parallax and moveable.parent.layered_parallax.y)) or 0))
+'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = "engine/sprite.lua"
+pattern = '''
+    love.graphics.draw(
+        self.atlas.image,
+        self.sprite,
+        -(other_obj.T.w/2 -other_obj.VT.w/2)*10,
+        0,
+        0,
+        other_obj.VT.w/(other_obj.T.w),
+        other_obj.VT.h/(other_obj.T.h)
+    )'''
+position = "at"
+payload = '''
+love.graphics.draw(
+        self.atlas.image,
+        self.sprite,
+        -(other_obj.T.w/2 -other_obj.VT.w/2)*10,
+        other_obj.phanta_vertical_offset or 0,
+        0,
+        other_obj.VT.w/(other_obj.T.w),
+        (other_obj.VT.h / other_obj.T.h) * (other_obj.phanta_vertical_scale or 1)
+    )'''
+match_indent = true

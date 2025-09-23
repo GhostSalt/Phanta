@@ -1232,7 +1232,6 @@ G.Phanta.centers["dougdimmadome"] = {
   rarity = 3,
   atlas = 'Phanta2',
   pos = { x = 10, y = 3 },
-  --pos_extra = { x = 11, y = 3 },
   cost = 8,
   blueprint_compat = true,
   eternal_compat = true,
@@ -1241,6 +1240,20 @@ G.Phanta.centers["dougdimmadome"] = {
     if context.joker_main then
       local xmult = 1 + (card.ability.extra.added_xmult * phanta_dougdimmadome_count_duplicates())
       if xmult > 1 then return { xmult = xmult } end
+    end
+  end,
+  draw = function(self, card, layer)
+    if (layer == 'card' or layer == 'both') and (self.discovered or card.params.bypass_discovery_center) then
+      if not card.phanta_extra then
+        card.phanta_dimmadomeextra = Sprite(card.T.x, card.T.y, card.T.w, card.T.h,
+          G.ASSET_ATLAS[card.config.center.atlas], { x = 11, y = 3 })
+      end
+      if card.phanta_dimmadomeextra then
+        card.children.center.phanta_vertical_scale = 80
+        card.children.center.phanta_vertical_offset = -150
+        card.phanta_dimmadomeextra:set_sprite_pos({ x = 11, y = 3 })
+        card.phanta_dimmadomeextra:draw_shader('dissolve', nil, nil, nil, card.children.center)
+      end
     end
   end
 }
