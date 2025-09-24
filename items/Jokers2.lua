@@ -1224,6 +1224,13 @@ G.Phanta.centers["glassjoe"] = {
   end
 }
 
+
+
+SMODS.Shader {
+  key = "dimmadomehat",
+  path = "phanta_dimmadomehat.fs"
+}
+
 G.Phanta.centers["dougdimmadome"] = {
   config = { extra = { added_xmult = 0.25 } },
   loc_vars = function(self, info_queue, card)
@@ -1249,10 +1256,10 @@ G.Phanta.centers["dougdimmadome"] = {
           G.ASSET_ATLAS[card.config.center.atlas], { x = 11, y = 3 })
       end
       if card.phanta_dimmadomeextra then
-        card.children.center.phanta_vertical_scale = 80
-        card.children.center.phanta_vertical_offset = -150
+        card.children.center.phanta_vertical_scale = 40
+        card.children.center.phanta_vertical_offset = -3750
         card.phanta_dimmadomeextra:set_sprite_pos({ x = 11, y = 3 })
-        card.phanta_dimmadomeextra:draw_shader('dissolve', nil, nil, nil, card.children.center)
+        card.phanta_dimmadomeextra:draw_shader('phanta_dimmadomehat', nil, card.children.center.VT, nil, card.children.center)
       end
     end
   end
