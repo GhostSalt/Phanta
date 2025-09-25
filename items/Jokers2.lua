@@ -1259,7 +1259,45 @@ G.Phanta.centers["dougdimmadome"] = {
         card.children.center.phanta_vertical_scale = 40
         card.children.center.phanta_vertical_offset = -3750
         card.phanta_dimmadomeextra:set_sprite_pos({ x = 11, y = 3 })
-        card.phanta_dimmadomeextra:draw_shader('phanta_dimmadomehat', nil, card.children.center.VT, nil, card.children.center)
+
+        local Sg                                       = G.TILESCALE * G.TILESIZE
+        local inv                                      = 1 /
+            (card.children.center.scale_mag or card.children.center.VT.scale)
+
+        local sx                                       = card.children.center.VT.scale
+
+        local theta                                    = card.children.center.VT.r or 0
+        local cosT, sinT                               = math.cos(theta), math.sin(theta)
+
+        local cx                                       = card.children.center.VT.x + card.children.center.VT.w / 2 +
+            ((card.children.center.layered_parallax and card.children.center.layered_parallax.x) or
+              (card.children.center.parent and card.children.center.parent.layered_parallax and card.children.center.parent.layered_parallax.x) or 0)
+        local cy                                       = card.children.center.VT.y + card.children.center.VT.h / 2 +
+            ((card.children.center.layered_parallax and card.children.center.layered_parallax.y) or
+              (card.children.center.parent and card.children.center.parent.layered_parallax and card.children.center.parent.layered_parallax.y) or 0)
+
+        local ox                                       = card.children.center.VT.w * card.children.center.VT.scale / 2
+        local oy                                       = card.children.center.VT.h * card.children.center.VT.scale / 2
+
+        local k                                        = Sg * inv * sx
+
+        local a                                        = k * cosT
+        local b                                        = k * sinT
+        local c                                        = -k * sinT
+        local d                                        = k * cosT
+
+        local tx                                       = Sg * inv * (cx - cosT * ox + sinT * oy)
+        local ty                                       = Sg * inv * (cy - sinT * ox - cosT * oy)
+
+        card.phanta_dimmadomeextra.ARGS.send_to_shader = {
+          1, 0, 0, 0,
+          0, 1, 0, 0,
+          0, 0, 1, 0,
+          0, 0, 0, 1
+        }
+
+        card.phanta_dimmadomeextra:draw_shader('phanta_dimmadomehat', nil, card.phanta_dimmadomeextra.ARGS
+          .send_to_shader, nil, card.children.center)
       end
     end
   end

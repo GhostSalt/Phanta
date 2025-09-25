@@ -5,7 +5,7 @@
 #endif
 
 extern MY_HIGHP_OR_MEDIUMP number dissolve;
-extern MY_HIGHP_OR_MEDIUMP vec4 dimmadomehat;
+extern MY_HIGHP_OR_MEDIUMP mat4 dimmadomehat;
 extern MY_HIGHP_OR_MEDIUMP number time;
 extern MY_HIGHP_OR_MEDIUMP vec4 texture_details;
 extern MY_HIGHP_OR_MEDIUMP vec2 image_details;
@@ -74,7 +74,7 @@ extern MY_HIGHP_OR_MEDIUMP float screen_scale;
 #ifdef VERTEX
 vec4 position( mat4 transform_projection, vec4 vertex_position )
 {
-    vec4 warped_vertex = dimmadomehat * vertex_position + (mouse_screen_pos.x * hovering * screen_scale * 0.00001 * 0.00001 * 0.00001);
-    return transform_projection * warped_vertex;
+    vec4 warped_vertex = vertex_position + (mouse_screen_pos.x * hovering * screen_scale * 0.00001 * 0.00001 * 0.00001);
+    return transform_projection * dimmadomehat * warped_vertex;
 }
 #endif
