@@ -5,6 +5,13 @@ SMODS.Atlas {
   py = 95
 }
 
+SMODS.Atlas {
+  key = "PhantaDougDimmadomeHat",
+  path = "PhantaDougDimmadomeHat.png",
+  px = 71,
+  py = 7600
+}
+
 SMODS.Sound({
   key = "lobotomy_0",
   path = "phanta_lobotomy_0.ogg",
@@ -1224,13 +1231,6 @@ G.Phanta.centers["glassjoe"] = {
   end
 }
 
-
-
-SMODS.Shader {
-  key = "dimmadomehat",
-  path = "phanta_dimmadomehat.fs"
-}
-
 G.Phanta.centers["dougdimmadome"] = {
   config = { extra = { added_xmult = 0.25 } },
   loc_vars = function(self, info_queue, card)
@@ -1239,6 +1239,8 @@ G.Phanta.centers["dougdimmadome"] = {
   rarity = 3,
   atlas = 'Phanta2',
   pos = { x = 10, y = 3 },
+  atlas_extra = "phanta_PhantaDougDimmadomeHat",
+  pos_extra = { x = 0, y = 0 },
   cost = 8,
   blueprint_compat = true,
   eternal_compat = true,
@@ -1247,58 +1249,6 @@ G.Phanta.centers["dougdimmadome"] = {
     if context.joker_main then
       local xmult = 1 + (card.ability.extra.added_xmult * phanta_dougdimmadome_count_duplicates())
       if xmult > 1 then return { xmult = xmult } end
-    end
-  end,
-  draw = function(self, card, layer)
-    if (layer == 'card' or layer == 'both') and (self.discovered or card.params.bypass_discovery_center) then
-      if not card.phanta_extra then
-        card.phanta_dimmadomeextra = Sprite(card.T.x, card.T.y, card.T.w, card.T.h,
-          G.ASSET_ATLAS[card.config.center.atlas], { x = 11, y = 3 })
-      end
-      if card.phanta_dimmadomeextra then
-        card.children.center.phanta_vertical_scale = 40
-        card.children.center.phanta_vertical_offset = -3750
-        card.phanta_dimmadomeextra:set_sprite_pos({ x = 11, y = 3 })
-
-        local Sg                                       = G.TILESCALE * G.TILESIZE
-        local inv                                      = 1 /
-            (card.children.center.scale_mag or card.children.center.VT.scale)
-
-        local sx                                       = card.children.center.VT.scale
-
-        local theta                                    = card.children.center.VT.r or 0
-        local cosT, sinT                               = math.cos(theta), math.sin(theta)
-
-        local cx                                       = card.children.center.VT.x + card.children.center.VT.w / 2 +
-            ((card.children.center.layered_parallax and card.children.center.layered_parallax.x) or
-              (card.children.center.parent and card.children.center.parent.layered_parallax and card.children.center.parent.layered_parallax.x) or 0)
-        local cy                                       = card.children.center.VT.y + card.children.center.VT.h / 2 +
-            ((card.children.center.layered_parallax and card.children.center.layered_parallax.y) or
-              (card.children.center.parent and card.children.center.parent.layered_parallax and card.children.center.parent.layered_parallax.y) or 0)
-
-        local ox                                       = card.children.center.VT.w * card.children.center.VT.scale / 2
-        local oy                                       = card.children.center.VT.h * card.children.center.VT.scale / 2
-
-        local k                                        = Sg * inv * sx
-
-        local a                                        = k * cosT
-        local b                                        = k * sinT
-        local c                                        = -k * sinT
-        local d                                        = k * cosT
-
-        local tx                                       = Sg * inv * (cx - cosT * ox + sinT * oy)
-        local ty                                       = Sg * inv * (cy - sinT * ox - cosT * oy)
-
-        card.phanta_dimmadomeextra.ARGS.send_to_shader = {
-          1, 0, 0, 0,
-          0, 1, 0, 0,
-          0, 0, 1, 0,
-          0, 0, 0, 1
-        }
-
-        card.phanta_dimmadomeextra:draw_shader('phanta_dimmadomehat', nil, card.phanta_dimmadomeextra.ARGS
-          .send_to_shader, nil, card.children.center)
-      end
     end
   end
 }
