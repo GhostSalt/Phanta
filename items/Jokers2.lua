@@ -5,13 +5,6 @@ SMODS.Atlas {
   py = 95
 }
 
-SMODS.Atlas {
-  key = "PhantaDougDimmadomeHat",
-  path = "PhantaDougDimmadomeHat.png",
-  px = 71,
-  py = 7600
-}
-
 SMODS.Sound({
   key = "lobotomy_0",
   path = "phanta_lobotomy_0.ogg",
@@ -1231,6 +1224,26 @@ G.Phanta.centers["glassjoe"] = {
   end
 }
 
+
+
+SMODS.Sound({
+  key = "dougdimmadome_0",
+  path = "phanta_dougdimmadome_0.ogg",
+  replace = true
+})
+
+SMODS.Sound({
+  key = "dougdimmadome_1",
+  path = "phanta_dougdimmadome_1.ogg",
+  replace = true
+})
+
+SMODS.Sound({
+  key = "dougdimmadome_2",
+  path = "phanta_dougdimmadome_2.ogg",
+  replace = true
+})
+
 G.Phanta.centers["dougdimmadome"] = {
   config = { extra = { added_xmult = 0.25 } },
   loc_vars = function(self, info_queue, card)
@@ -1239,12 +1252,19 @@ G.Phanta.centers["dougdimmadome"] = {
   rarity = 3,
   atlas = 'Phanta2',
   pos = { x = 10, y = 3 },
-  atlas_extra = "phanta_PhantaDougDimmadomeHat",
-  pos_extra = { x = 0, y = 0 },
   cost = 8,
   blueprint_compat = true,
   eternal_compat = true,
   perishable_compat = true,
+  add_to_deck = function(self, card, from_debuff)
+    if not G.PROFILES[G.SETTINGS.profile].phanta_dougdimmadomes_taken then G.PROFILES[G.SETTINGS.profile].phanta_dougdimmadomes_taken = 0 end
+    if G.PROFILES[G.SETTINGS.profile].phanta_dougdimmadomes_taken < 3 then
+      play_sound("phanta_dougdimmadome_" .. G.PROFILES[G.SETTINGS.profile].phanta_dougdimmadomes_taken, 1, 0.5)
+      G.PROFILES[G.SETTINGS.profile].phanta_dougdimmadomes_taken =
+          G.PROFILES[G.SETTINGS.profile].phanta_dougdimmadomes_taken + 1
+    end
+    G:save_settings()
+  end,
   calculate = function(self, card, context)
     if context.joker_main then
       local xmult = 1 + (card.ability.extra.added_xmult * phanta_dougdimmadome_count_duplicates())

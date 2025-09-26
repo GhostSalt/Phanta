@@ -634,8 +634,6 @@ end
 
 
 
---[[self.phanta_extra.states.hover.can = false
-      self.phanta_extra.states.click.can = false]] --
 
 
 SMODS.DrawStep {
@@ -643,8 +641,9 @@ SMODS.DrawStep {
   order = 1,
   func = function(self, layer)
     if not self.phanta_extra and self.config.center.pos_extra then
-      self.phanta_extra = Sprite(self.T.x, self.T.y, self.T.w, self.T.h,
-        G.ASSET_ATLAS[self.config.center.atlas_extra or self.config.center.atlas], self.config.center.pos_extra)
+      local atlas = G.ASSET_ATLAS[self.config.center.atlas_extra or self.config.center.atlas]
+      self.phanta_extra = Sprite(0, 0, atlas.px, atlas.py,
+        atlas, self.config.center.pos_extra)
     end
     if self.phanta_extra then
       self.phanta_extra:set_sprite_pos(self.config.center.pos_extra)
@@ -654,12 +653,6 @@ SMODS.DrawStep {
   end,
   conditions = { vortex = false, facing = 'front', front_hidden = false },
 }
-
-local cd = Card.draw
-function Card:draw(layer)
-  if self.config and self.config.center and self.config.center.pos_extra then self:set_sprites() end
-  cd(self, layer)
-end
 
 local update_ref = Game.update
 function Game:update(dt)
