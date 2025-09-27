@@ -1018,7 +1018,10 @@ SMODS.Enhancement {
 local sell_use_ref = G.UIDEF.use_and_sell_buttons
 
 function G.UIDEF.use_and_sell_buttons(card)
-  if not card or ((not card.config or not card.config.center or (card.config.center.key ~= "j_phanta_profile" and card.config.center.key ~= "j_phanta_modping" and card.config.center.key ~= "j_phanta_deathnote")) and (not card.ability or card.ability.set ~= "phanta_Zodiac")) then
+  if not card or ((not card.config or not card.config.center
+  or (card.config.center.key ~= "j_phanta_profile" and card.config.center.key ~= "j_phanta_modping" and card.config.center.key ~= "j_phanta_deathnote"))
+  and (not card.ability or card.ability.set ~= "phanta_Zodiac")
+  and (not card.ability or not card.ability.perishable or card.ability.perish_tally ~= 0)) then
     return sell_use_ref(card, self)
   end
 
@@ -1659,7 +1662,7 @@ SMODS.Consumable {
   set = "phanta_Zodiac",
   key = "libra",
   pos = { x = 2, y = 1 },
-  config = { extra = { xmult = 1.1 } },
+  config = { extra = { xmult = 1.2 } },
   atlas = "PhantaZodiacs",
   loc_vars = function(self, info_queue, card)
     return { vars = { card.ability.extra.xmult + (count_prognosticators(card) * 0.2) } }

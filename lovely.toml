@@ -175,3 +175,114 @@ love.graphics.translate(
     (offset and offset.y or 0) + ((moveable.layered_parallax and moveable.layered_parallax.y) or ((moveable.parent and moveable.parent.layered_parallax and moveable.parent.layered_parallax.y)) or 0))
 '''
 match_indent = true
+
+
+
+
+
+
+
+[[patches]]
+[patches.pattern]
+target = 'functions/common_events.lua'
+pattern = '''if add and not G.GAME.banned_keys[v.key] then'''
+position = 'before'
+payload = '''if G.GAME.modifiers.phanta_only then
+    if not v.mod and v.set == "Joker" then add = false end
+    if (v.mod and v.mod.id ~= 'GSPhanta') and not table.contains(Phanta.phanta_only_inclusion or {}, v.key) then
+        add = false
+    end 
+end
+'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = 'functions/common_events.lua'
+pattern = '''local min_use = 100'''
+position = 'before'
+payload = '''if G.GAME.modifiers.phanta_only then
+    for k, v in pairs(eligible_bosses) do
+        if eligible_bosses[k] and G.P_BLINDS[k].mod and G.P_BLINDS[k].mod.id ~= 'GSPhanta' then
+            eligible_bosses[k] = nil
+        end
+    end
+end
+'''
+match_indent = true
+
+
+
+[[patches]]
+[patches.pattern]
+target = 'blind.lua'
+pattern = '''if G.GAME.modifiers.no_blind_reward and G.GAME.modifiers.no_blind_reward[self:get_type()] then self.dollars = 0 end'''
+position = 'before'
+payload = '''if G.GAME.modifiers.small_blind_reward then self.dollars = 3 end'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = 'functions/UI_definitions.lua'
+pattern = '''{n=G.UIT.T, config={text = string.rep(localize("$"), blind_choice.config.dollars)..'+', scale = 0.35, colour = disabled and G.C.UI.TEXT_INACTIVE or G.C.MONEY, shadow = not disabled}}'''
+position = 'at'
+payload = '''{n=G.UIT.T, config={text = string.rep(localize("$"), blind_choice.dollars)..'+', scale = 0.35, colour = disabled and G.C.UI.TEXT_INACTIVE or G.C.MONEY, shadow = not disabled}}'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = 'functions/UI_definitions.lua'
+pattern = '''
+local blind_choice = {
+    config = G.P_BLINDS[G.GAME.round_resets.blind_choices[type]],
+  }'''
+position = 'after'
+payload = '''
+blind_choice.dollars = blind_choice.config.dollars
+if G.GAME.modifiers.small_blind_reward then blind_choice.dollars = 3 end
+'''
+match_indent = true
+
+
+
+[[patches]]
+[patches.pattern]
+target = 'card.lua'
+pattern = '''if self.config.center.eternal_compat and not self.ability.perishable then'''
+position = 'at'
+payload = '''if (self.config.center.eternal_compat or (self.ability and self.ability.consumeable and G.GAME.modifiers.enable_eternal_consumables)) and not self.ability.perishable then'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = 'card.lua'
+pattern = '''if self.config.center.perishable_compat and not self.ability.eternal then'''
+position = 'at'
+payload = '''if (self.config.center.perishable_compat or (self.ability and self.ability.consumeable and G.GAME.modifiers.enable_perishable_consumables)) and not self.ability.eternal then'''
+match_indent = true
+
+
+
+[[patches]]
+[patches.pattern]
+target = 'functions/button_callbacks.lua'
+pattern = '''for i = 1, G.GAME.shop.joker_max - #G.shop_jokers.cards do'''
+position = 'at'
+payload = '''for i = 1, math.max(G.GAME.shop.joker_max - ((G.GAME.current_shop_rerolls or 0) <= 0 and G.GAME.modifiers.fewer_shop_slots_pre_reroll or 0), 0) do'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = 'game.lua'
+pattern = '''for i = 1, G.GAME.shop.joker_max - #G.shop_jokers.cards do'''
+position = 'at'
+payload = '''for i = 1, math.max(G.GAME.shop.joker_max - ((G.GAME.current_shop_rerolls or 0) <= 0 and G.GAME.modifiers.fewer_shop_slots_pre_reroll or 0), 0) do'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = 'functions/button_callbacks.lua'
+pattern = '''G.CONTROLLER.locks.shop_reroll = true'''
+position = 'before'
+payload = '''G.GAME.current_shop_rerolls = (G.GAME.current_shop_rerolls or 0) + 1'''
+match_indent = true

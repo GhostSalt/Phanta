@@ -377,7 +377,7 @@ end
 
 local allFolders = { "none", "items" }
 
-local allFiles = { ["none"] = {}, ["items"] = { "Blind", "Jokers1", "Jokers2", "Legendaries", "Misc", "StarterPack", "Suit", "DeckJoker" } }
+local allFiles = { ["none"] = {}, ["items"] = { "Blind", "Jokers1", "Jokers2", "Legendaries", "Misc", "StarterPack", "Stake", "Sticker", "Suit", "DeckJoker" } }
 
 for i = 1, #allFolders do
   if allFolders[i] == "none" then
@@ -482,6 +482,7 @@ local game_start_run_ref = Game.start_run
 
 function Game:start_run(args)
   game_start_run_ref(self, args)
+  G.GAME.phanta_sleepy_rounds = 2
   phanta_assign_deck_joker()
   G.E_MANAGER:add_event(Event({
     func = function()
@@ -500,6 +501,38 @@ function Game:start_run(args)
       return true
     end
   }))
+end
+
+function SMODS.current_mod:calculate(context)
+  if context.end_of_round and not context.repetition and not context.individual then
+    for i, v in ipairs(G.jokers.cards) do
+      if v.ability.phanta_sleepy then
+        v.ability.sleepy_tally = v.ability.sleepy_tally - 1
+        if v.ability.sleepy_tally > 0 then
+          card_eval_status_text(v, 'extra', nil, nil, nil,
+            {
+              message = localize { type = 'variable', key = 'a_remaining', vars = { v.ability.sleepy_tally } },
+              colour = G.C.FILTER,
+              message_card = v
+            })
+        else
+          v.ability.sleepy_tally = 0
+          v:set_debuff(false)
+          v.ability.phanta_sleepy = nil
+          card_eval_status_text(v, 'extra', nil, nil, nil,
+            {
+              message = localize('phanta_sleepy_awake'),
+              colour = G.C.FILTER,
+              message_card = v
+            })
+        end
+      end
+    end
+  end
+
+  if context.ending_shop then
+    G.GAME.current_shop_rerolls = 0
+  end
 end
 
 local igo = Game.init_game_object

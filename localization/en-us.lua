@@ -1886,36 +1886,36 @@ return {
                     "{C:inactive}(Currently {C:mult}+#2#{C:inactive} Mult){}"
                 },
             },
-            j_phanta_deckjoker_zodiac={
+            j_phanta_deckjoker_zodiac = {
                 name = "Deck Joker (Zodiac)",
-                text={
+                text = {
                     "{C:attention}#1#{} free {C:green}Reroll",
                     "per shop"
                 },
             },
-            j_phanta_deckjoker_painted={
+            j_phanta_deckjoker_painted = {
                 name = "Deck Joker (Painted)",
-                text={
+                text = {
                     "Gains {C:mult}+#1#{} Mult if played",
                     "hand is a {C:attention}Straight Flush{}",
                     "{C:inactive}(Currently {C:mult}+#2#{C:inactive} Mult){}"
                 },
             },
-            j_phanta_deckjoker_anaglyph={
+            j_phanta_deckjoker_anaglyph = {
                 name = "Deck Joker (Anaglyph)",
-                text={
+                text = {
                     ""
                 },
             },
-            j_phanta_deckjoker_plasma={
+            j_phanta_deckjoker_plasma = {
                 name = "Deck Joker (Plasma)",
-                text={
+                text = {
                     ""
                 },
             },
-            j_phanta_deckjoker_erratic={
+            j_phanta_deckjoker_erratic = {
                 name = "Deck Joker (Erratic)",
-                text={
+                text = {
                     ""
                 },
             },
@@ -2505,6 +2505,84 @@ return {
                 }
             }
         },
+        Stake = {
+            stake_phanta_white = {
+                name = "White Stake (Phanta)",
+                text = {
+                    "{C:attention}Vanilla{} and {C:tarot}Phanta{} content only",
+                    "{C:tarot}Phanta{} Jokers only"
+                },
+            },
+            stake_phanta_red = {
+                name = "Red Stake (Phanta)",
+                text = {
+                    "All {C:attention}Blinds{} give",
+                    "{C:money}$3{} of reward money",
+                    "{s:0.8}Applies all previous Stakes{}"
+                }
+            },
+            stake_phanta_green = {
+                name = "Green Stake (Phanta)",
+                text = {
+                    "Required score scales",
+                    "faster for each {C:attention}Ante",
+                    "{s:0.8}Applies all previous Stakes{}"
+                },
+            },
+            stake_phanta_black = {
+                name = "Black Stake (Phanta)",
+                text = {
+                    "Consumables can be {C:attention}Eternal{}",
+                    "{C:inactive,s:0.8}(Can't be sold or{}",
+                    "{C:inactive,s:0.8}destroyed, may be used){}",
+                    "{C:inactive,s:0.8}(Excludes Starter Packs){}",
+                    "{s:0.8}Applies all previous Stakes{}"
+                },
+            },
+            stake_phanta_blue = {
+                name = "Blue Stake (Phanta)",
+                text = {
+                    "Consumables can be {C:attention}Perishable{}",
+                    "{C:inactive,s:0.8}(Debuffed after 2 rounds){}",
+                    "{C:inactive,s:0.8}(Excludes Starter Packs){}",
+                    "{s:0.8}Applies all previous Stakes{}"
+                },
+            },
+            stake_phanta_purple = {
+                name = "Purple Stake (Phanta)",
+                text = {
+                    "Required score scales",
+                    "faster for each {C:attention}Ante",
+                    "{s:0.8}Applies all previous Stakes{}"
+                },
+            },
+            stake_phanta_orange = {
+                name = "Orange Stake (Phanta)",
+                text = {
+                    "Shop can have {C:attention}Sleepy{} Jokers",
+                    "{C:inactive,s:0.8}(Debuffed until after 2 rounds){}",
+                    "{s:0.8}Applies all previous Stakes{}"
+                },
+            },
+            stake_phanta_gold = {
+                name = "Gold Stake (Phanta)",
+                text = {
+                    "Shop can have {C:attention}Sleepy{} Jokers",
+                    "{C:inactive,s:0.8}(Debuffed until after 2 rounds){}",
+                    "{s:0.8}Applies all previous Stakes{}"
+                },
+            }
+        },
+        Other = {
+            phanta_sleepy = {
+                name = "Sleepy",
+                text = {
+                    "Debuffed until",
+                    "after {C:attention}#1#{} rounds",
+                    "{C:inactive}({C:attention}#2#{C:inactive} remaining)",
+                },
+            },
+        },
         Tag = {
             tag_phanta_sol = {
                 name = "Sol Tag",
@@ -2961,6 +3039,7 @@ return {
             a_hand = "+1 Hand",
             phanta_created_blue_seal = "+Blue Seal",
             phanta_created_gold_seal = "+Gold Seal",
+            phanta_sleepy_awake = "Awake",
             b_phanta_more = "MORE",
             phanta_set = "SET",
             phanta_profile_more_tooltip = {

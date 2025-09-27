@@ -3786,7 +3786,7 @@ G.Phanta.centers["thepolicemun"] = {
 }
 
 G.Phanta.centers["nojoke"] = {
-  config = { extra = { mult_per_straight = 4 } },
+  config = { extra = { mult_per_straight = 3 } },
   rarity = 1,
   atlas = 'PhantaMiscAnims4',
   pos = { x = 7, y = 2 },
