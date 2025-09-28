@@ -2567,8 +2567,8 @@ return {
             stake_phanta_gold = {
                 name = "Gold Stake (Phanta)",
                 text = {
-                    "Shop can have {C:attention}Sleepy{} Jokers",
-                    "{C:inactive,s:0.8}(Debuffed until after 2 rounds){}",
+                    "{C:attention}-1{} card slot in the",
+                    "shop until it is {C:green}rerolled{}",
                     "{s:0.8}Applies all previous Stakes{}"
                 },
             }
