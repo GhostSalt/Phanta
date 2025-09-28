@@ -24,6 +24,12 @@ SMODS.Sound({
 })
 
 SMODS.Sound({
+  key = "lobotomy_die",
+  path = "phanta_lobotomy_die.ogg",
+  replace = true
+})
+
+SMODS.Sound({
   vol = 1,
   pitch = 1,
   key = "polargeist_music",
@@ -37,7 +43,7 @@ SMODS.Sound({
 })
 
 G.Phanta.centers["normalface"] = {
-  config = { extra = { mult = 10 } },
+  config = { extra = { mult = 10, amazing_grace = false } },
   loc_vars = function(self, info_queue, card)
     return { vars = { card.ability.extra.mult } }
   end,
@@ -50,7 +56,7 @@ G.Phanta.centers["normalface"] = {
   perishable_compat = true,
   calculate = function(self, card, context)
     if context.joker_main then return { mult = card.ability.extra.mult } end
-    if not context.repetition and math.random() > 0.95 then
+    if not context.repetition and not card.ability.extra.amazing_grace and math.random() > 0.95 then
       local all_pitches = { { 1 }, { 1, 1, 1, 1, 0.5, 2 }, { 1, 1, 2 } }
 
       local sound = math.floor(math.random() * #all_pitches)
@@ -61,14 +67,24 @@ G.Phanta.centers["normalface"] = {
         func = function()
           G.E_MANAGER:add_event(Event({
             func = function()
-              play_sound("phanta_lobotomy_" .. sound, pitch, 1)
-              card_eval_status_text(card, 'extra', nil, nil, nil, { message = ":)", colour = G.C.GREEN })
+              if not card.ability.extra.amazing_grace then
+                play_sound("phanta_lobotomy_" .. sound, pitch, 1)
+                card_eval_status_text(card, 'extra', nil, nil, nil, { message = ":)", colour = G.C.GREEN })
+              end
               return true
             end
           }))
           return true
         end
       }))
+    end
+
+    if context.selling_self or (context.joker_type_destroyed and context.joker_type_destroyed == card) then
+      card.ability.extra.amazing_grace = true
+      card.children.center:set_sprite_pos({ x = 0, y = 4 })
+      play_sound("phanta_lobotomy_die", 1, 0.5)
+      card_eval_status_text(card, 'extra', nil, nil, nil, { message = ">:(", colour = G.C.RED })
+      delay(4.5)
     end
   end
 }
