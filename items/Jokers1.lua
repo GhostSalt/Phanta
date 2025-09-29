@@ -999,7 +999,7 @@ G.Phanta.centers["kylehyde"] = {
 }
 
 G.Phanta.centers["inception"] = {
-  config = { extra = { current_mult = 0, added_mult = 6 } },
+  config = { extra = { current_mult = 0, added_mult = 5 } },
   rarity = 1,
   atlas = 'PhantaMiscAnims4',
   pos = { x = 10, y = 4 },
@@ -1216,7 +1216,7 @@ G.Phanta.centers["animalinstinct"] = {
 }
 
 G.Phanta.centers["target"] = {
-  config = { extra = { added_mult = 8, current_mult = 0 } },
+  config = { extra = { added_mult = 7, current_mult = 0 } },
   loc_vars = function(self, info_queue, card)
     return { vars = { card.ability.extra.added_mult, card.ability.extra.current_mult } }
   end,
