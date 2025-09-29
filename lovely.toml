@@ -189,8 +189,12 @@ pattern = '''if add and not G.GAME.banned_keys[v.key] then'''
 position = 'before'
 payload = '''if G.GAME.modifiers.phanta_only then
     if not v.mod and v.set == "Joker" then add = false end
-    if (v.mod and v.mod.id ~= 'GSPhanta') and not table.contains(Phanta.phanta_only_inclusion or {}, v.key) then
-        add = false
+    if (v.mod and v.mod.id ~= 'GSPhanta') then
+        local valid = false
+        for _, vv in ipairs(Phanta.phanta_only_inclusion or {}) do
+            if vv == v.key then valid = true end
+        end
+        if not valid then add = false end
     end 
 end
 '''
