@@ -425,6 +425,7 @@ function phanta_assign_deck_joker()
       end
       return { key = deck.loc_key and self.key .. "_" .. deck.loc_key or self.key, vars = deck.loc_vars }
     end
+    G.P_CENTERS["j_phanta_deckjoker"].enhancement_gate = deck.enhancement_gate
 
     G.P_CENTERS["j_phanta_deckjoker"].set_sprites = function(self, card, front)
       if not self.discovered and not card.params.bypass_discovery_center then
@@ -455,6 +456,7 @@ function phanta_assign_deck_joker()
   else
     G.P_CENTERS["j_phanta_deckjoker"].config = nil
     G.P_CENTERS["j_phanta_deckjoker"].loc_vars = nil
+    G.P_CENTERS["j_phanta_deckjoker"].enhancement_gate = nil
 
     G.P_CENTERS["j_phanta_deckjoker"].set_sprites = function(self, card, front)
       if not self.discovered and not card.params.bypass_discovery_center then
@@ -734,7 +736,8 @@ G.Phanta.centers["flagsignal"] = {
       card.ability.extra.current_mult = card.ability.extra.current_mult + card.ability.extra.added_mult
       return { message = localize("k_upgrade_ex"), colour = G.C.FILTER, card = card }
     end
-  end
+  end,
+  enhancement_gate = "m_lucky"
 }
 
 G.Phanta.centers["heartbreak"] = {
@@ -1589,6 +1592,8 @@ G.Phanta.centers["birthdaycard"] = {
       end
     end
   end
+
+  -- ADD EDITION GATE!!!!!!!!!! :triumph:
 }
 
 G.Phanta.centers["leprechaun"] = {
@@ -1635,7 +1640,8 @@ G.Phanta.centers["shamrock"] = {
       }))
       return { message = "7 of Clubs", colour = G.C.SUITS.Clubs }
     end
-  end
+  end,
+  enhancement_gate = "m_lucky"
 }
 
 G.Phanta.centers["metalhead"] = {
@@ -1810,7 +1816,8 @@ G.Phanta.centers["crystaljoker"] = {
     if context.individual and not context.end_of_round and context.cardarea == G.hand and SMODS.has_enhancement(context.other_card, "m_glass") then
       return { xmult = context.other_card.ability.Xmult }
     end
-  end
+  end,
+  enhancement_gate = "m_glass"
 }
 
 G.Phanta.centers["profile"] = {

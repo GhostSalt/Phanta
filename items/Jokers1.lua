@@ -774,7 +774,8 @@ G.Phanta.centers["sigma"] = {
     if context.repetition and context.cardarea == G.play and SMODS.has_enhancement(context.other_card, "m_bonus") then
       return { repetitions = 1 }
     end
-  end
+  end,
+  enhancement_gate = "m_bonus"
 }
 
 G.Phanta.centers["carlos"] = {
@@ -861,7 +862,8 @@ G.Phanta.centers["diana"] = {
       card.ability.extra.current_mult = card.ability.extra.current_mult + card.ability.extra.added_mult
       return { message = localize("k_upgrade_ex"), colour = G.C.FILTER, card = card }
     end
-  end
+  end,
+  enhancement_gate = "m_bonus"
 }
 
 G.Phanta.centers["redkeycards"] = {
@@ -912,7 +914,8 @@ G.Phanta.centers["redkeycards"] = {
     end
 
     if context.end_of_round then card.ability.extra.is_spent = false end
-  end
+  end,
+  enhancement_gate = "m_mult"
 }
 
 G.Phanta.centers["bluekeycards"] = {
@@ -962,7 +965,8 @@ G.Phanta.centers["bluekeycards"] = {
     end
 
     if context.end_of_round then card.ability.extra.is_spent = false end
-  end
+  end,
+  enhancement_gate = "m_bonus"
 }
 
 G.Phanta.centers["kylehyde"] = {
@@ -1096,7 +1100,8 @@ G.Phanta.centers["nonuniformday"] = {
         card = card
       }
     end
-  end
+  end,
+  enhancement_gate = "m_wild"
 }
 
 G.Phanta.centers["badhairday"] = {
@@ -1155,7 +1160,8 @@ G.Phanta.centers["badhairday"] = {
       end
       return { remove = true }
     end
-  end
+  end,
+  enhancement_gate = "m_wild"
 }
 
 G.Phanta.centers["scratchart"] = {
@@ -1189,7 +1195,8 @@ G.Phanta.centers["scratchart"] = {
             card
       }
     end
-  end
+  end,
+  enhancement_gate = "m_wild"
 }
 
 G.Phanta.centers["animalinstinct"] = {
@@ -1292,7 +1299,8 @@ G.Phanta.centers["teastainedjoker"] = {
         }
       end
     end
-  end
+  end,
+  enhancement_gate = "m_lucky"
 }
 
 SMODS.Sound({
@@ -1355,7 +1363,8 @@ G.Phanta.centers["forsakenscroll"] = {
     if context.joker_main and SMODS.pseudorandom_probability(card, "forsakenscroll", count_lucky_cards(), card.ability.extra.odds) then
       return { xmult = card.ability.extra.given_xmult }
     end
-  end
+  end,
+  enhancement_gate = "m_lucky"
 }
 
 G.Phanta.centers["exitsign"] = {
@@ -1638,7 +1647,8 @@ G.Phanta.centers["willothewisp"] = {
     if context.individual and context.cardarea == "unscored" and SMODS.has_enhancement(context.other_card, "m_phanta_ghostcard") then
       return { xmult = context.other_card.ability.h_x_mult }
     end
-  end
+  end,
+  enhancement_gate = "m_phanta_ghostcard"
 }
 
 G.Phanta.centers["stickercollection"] = {
@@ -1936,7 +1946,8 @@ G.Phanta.centers["jeandescole"] = {
       end
       return { remove = true }
     end
-  end
+  end,
+  enhancement_gate = "m_stone"
 }
 
 G.Phanta.centers["engineer"] = {
@@ -2480,7 +2491,8 @@ G.Phanta.centers["blottedjoker"] = {
         }
       end
     end
-  end
+  end,
+  enhancement_gate = "m_bonus"
 }
 
 G.Phanta.centers["bloodpact"] = {
@@ -2527,7 +2539,8 @@ G.Phanta.centers["bloodpact"] = {
         }
       end
     end
-  end
+  end,
+  enhancement_gate = "m_mult"
 }
 
 G.Phanta.centers["tnetennba"] = {
@@ -2588,7 +2601,8 @@ G.Phanta.centers["technicolourjoker"] = {
     if context.individual and context.cardarea == G.play and SMODS.has_enhancement(context.other_card, "m_wild") then
       return { mult = card.ability.extra.given_mult }
     end
-  end
+  end,
+  enhancement_gate = "m_wild"
 }
 
 G.Phanta.centers["identity"] = {
@@ -4218,7 +4232,8 @@ G.Phanta.centers["evidence"] = {
         return { message = localize("k_upgrade_ex"), colour = G.C.FILTER }
       end
     end
-  end
+  end,
+  enhancement_gate = "m_stone"
 }
 
 G.Phanta.centers["lily"] = {
