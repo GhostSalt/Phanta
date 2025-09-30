@@ -71,7 +71,7 @@ end
 function get_lowest(hand)
   local lowest = nil
   for k, v in ipairs(hand) do
-    if not lowest or v:get_nominal() < lowest:get_nominal() then
+    if (not lowest or v:get_nominal() < lowest:get_nominal()) and not SMODS.has_no_rank(v) then
       lowest = v
     end
   end
