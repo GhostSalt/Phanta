@@ -1711,13 +1711,20 @@ G.Phanta.centers["plugsocket"] = {
 }
 
 G.Phanta.centers["mrbigmoneybags"] = {
+  config = { extra = { xmult = 2 } },
   rarity = 1,
   atlas = 'Phanta2',
   pos = { x = 11, y = 2 },
-  cost = 5,
-  blueprint_compat = false,
+  cost = 15,
+  loc_vars = function(self, info_queue, card)
+    return { vars = { card.ability.extra.xmult } }
+  end,
+  blueprint_compat = true,
   eternal_compat = true,
-  perishable_compat = true
+  perishable_compat = true,
+  calculate = function(self, card, context)
+    if context.joker_main then return { xmult = card.ability.extra.xmult } end
+  end
 }
 
 G.Phanta.centers["neonjoker"] = {

@@ -1691,8 +1691,7 @@ return {
             j_phanta_mrbigmoneybags        = {
                 name = 'Mr. Big Moneybags',
                 text = {
-                    "Always earn",
-                    "maximum {C:money}interest{}"
+                    "{C:white,X:mult}X#1#{} Mult, {C:money}expensive{}"
                 }
             },
             j_phanta_neonjoker             = {

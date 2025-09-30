@@ -679,19 +679,19 @@ SMODS.DrawStep {
         atlas, self.config.center.pos_extra)
     end
     if self.phanta_extra then
-      if self.discovered or self.params.bypass_discovery_center then
+      if self.config.center.discovered or self.config.center.params.bypass_discovery_center then
         self.phanta_extra:set_sprite_pos(self.config.center.pos_extra)
         self.phanta_extra.role.draw_major = self
         if (self.edition and self.edition.negative and (not self.delay_edition or self.delay_edition.negative)) or (self.ability.name == 'Antimatter' and (self.config.center.discovered or self.bypass_discovery_center)) then
-          self.phanta_extra:draw_shader('negative', nil, self.ARGS.send_to_shader)
+          self.phanta_extra:draw_shader('negative', nil, self.ARGS.send_to_shader, nil, self.children.center)
         elseif not self:should_draw_base_shader() then
         elseif not self.greyed then
-          self.phanta_extra:draw_shader('dissolve')
+          self.phanta_extra:draw_shader('dissolve', nil, nil, nil, self.children.center)
         end
 
         if self.ability.name == 'Invisible Joker' and (self.config.center.discovered or self.bypass_discovery_center) then
           if self:should_draw_base_shader() then
-            self.phanta_extra:draw_shader('voucher', nil, self.ARGS.send_to_shader)
+            self.phanta_extra:draw_shader('voucher', nil, self.ARGS.send_to_shader, nil, self.children.center)
           end
         end
 
@@ -699,33 +699,26 @@ SMODS.DrawStep {
         if center.draw_extra and type(center.draw_extra) == 'function' then
           self.phanta_extra:draw_extra(self, layer)
         end
+
+        local edition = self.delay_edition or self.edition
+        if edition then
+          for k, v in pairs(G.P_CENTER_POOLS.Edition) do
+            if edition[v.key:sub(3)] and v.shader then
+              if type(v.draw) == 'function' then
+                v:draw(self, layer)
+              else
+                self.phanta_extra:draw_shader(v.shader, nil, self.ARGS.send_to_shader, nil, self.children.center)
+              end
+            end
+          end
+        end
+        if (edition and edition.negative) or (self.ability.name == 'Antimatter' and (self.config.center.discovered or self.bypass_discovery_center)) then
+          self.phanta_extra:draw_shader('negative_shine', nil, self.ARGS.send_to_shader, nil, self.children.center)
+        end
       end
     end
   end,
   conditions = { vortex = false, facing = 'front' },
-}
-
-SMODS.DrawStep {
-    key = 'extra_edition',
-    order = 21.1,
-    func = function(self, layer)
-      local edition = self.delay_edition or self.edition
-      if edition then
-        for k, v in pairs(G.P_CENTER_POOLS.Edition) do
-          if edition[v.key:sub(3)] and v.shader then
-            if type(v.draw) == 'function' then
-              v:draw(self, layer)
-            else
-              self.phanta_extra:draw_shader(v.shader, nil, self.ARGS.send_to_shader)
-            end
-          end
-        end
-      end
-      if (edition and edition.negative) or (self.ability.name == 'Antimatter' and (self.config.center.discovered or self.bypass_discovery_center)) then
-          self.phanta_extra:draw_shader('negative_shine', nil, self.ARGS.send_to_shader)
-      end
-    end,
-    conditions = { vortex = false, facing = 'front' },
 }
 
 local update_ref = Game.update

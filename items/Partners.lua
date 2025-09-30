@@ -53,7 +53,7 @@ Partner_API.Partner {
   discovered = true,
   pos = { x = 1, y = 0 },
   atlas = "PhantaPartners",
-  config = { extra = { levels = 1, all_hands = { "High Card", "Pair", "Two Pair", "Three of a Kind", "Four of a Kind" }, xmult = 2 } },
+  config = { extra = { levels = 1, all_hands = { "High Card", "Pair", "Two Pair", "Three of a Kind" }, xmult = 2 } },
   link_config = { j_phanta_cutcorners = 1 },
   loc_vars = function(self, info_queue, card)
     local link_level = self:get_link_level() or 0
