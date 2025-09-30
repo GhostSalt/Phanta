@@ -514,7 +514,7 @@ G.Phanta.centers["absentjoker"] = {
 }
 
 G.Phanta.centers["patientjoker"] = {
-  config = { extra = { mult = 10 } },
+  config = { extra = { mult = 12 } },
   loc_vars = function(self, info_queue, card)
     return { vars = { card.ability.extra.mult } }
   end,
@@ -535,7 +535,7 @@ G.Phanta.centers["patientjoker"] = {
 }
 
 G.Phanta.centers["blissedjoker"] = {
-  config = { extra = { mult = 10 } },
+  config = { extra = { mult = 12 } },
   loc_vars = function(self, info_queue, card)
     return { vars = { card.ability.extra.mult } }
   end,
@@ -556,7 +556,7 @@ G.Phanta.centers["blissedjoker"] = {
 }
 
 G.Phanta.centers["forgivingjoker"] = {
-  config = { extra = { mult = 10 } },
+  config = { extra = { mult = 12 } },
   loc_vars = function(self, info_queue, card)
     return { vars = { card.ability.extra.mult } }
   end,
@@ -577,7 +577,7 @@ G.Phanta.centers["forgivingjoker"] = {
 }
 
 G.Phanta.centers["temperedjoker"] = {
-  config = { extra = { mult = 10 } },
+  config = { extra = { mult = 12 } },
   loc_vars = function(self, info_queue, card)
     return { vars = { card.ability.extra.mult } }
   end,

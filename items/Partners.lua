@@ -53,16 +53,16 @@ Partner_API.Partner {
   discovered = true,
   pos = { x = 1, y = 0 },
   atlas = "PhantaPartners",
-  config = { extra = { levels = 1, all_hands = { "High Card", "Pair", "Two Pair", "Three of a Kind", "Four of a Kind" }, xmult = 2, hand_threshold = 4 } },
+  config = { extra = { levels = 1, all_hands = { "High Card", "Pair", "Two Pair", "Three of a Kind", "Four of a Kind" }, xmult = 2 } },
   link_config = { j_phanta_cutcorners = 1 },
   loc_vars = function(self, info_queue, card)
     local link_level = self:get_link_level() or 0
     local key = self.key
     if link_level >= 1 then key = key .. "_" .. link_level end
-    return { key = key, vars = { card.ability.extra.levels + 1, card.ability.extra.xmult, card.ability.extra.hand_threshold } }
+    return { key = key, vars = { card.ability.extra.levels + 1, card.ability.extra.xmult } }
   end,
   calculate = function(self, card, context)
-    if self:get_link_level() == 1 and context.joker_main and G.GAME.current_round.hands_left < card.ability.extra.hand_threshold then
+    if self:get_link_level() == 1 and context.joker_main and G.GAME.current_round.hands_played == 0 then
       return { xmult = card.ability.extra.xmult }
     end
   end,

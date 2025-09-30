@@ -606,9 +606,9 @@ return {
             j_phanta_animalinstinct        = {
                 name = "Animal Instinct",
                 text = {
-                    "Gains {C:mult}+#1#{} Mult when a",
+                    "Gains {C:white,X:mult}X#1#{} Mult when a",
                     "playing card is {C:red}destroyed{}",
-                    "{C:inactive}(Currently {C:mult}+#2#{C:inactive} Mult){}"
+                    "{C:inactive}(Currently {C:white,X:mult}X#2#{C:inactive} Mult){}"
                 }
             },
             j_phanta_target                = {
@@ -1007,8 +1007,8 @@ return {
             j_phanta_ransomnote            = {
                 name = 'Ransom Note',
                 text = {
-                    "Gives {C:money}$#1#{} every",
-                    "{C:attention}#2#{} {C:inactive}[#3#]{} Jokers {C:attention}sold{}"
+                    "Gain {C:money}$#1#{} when",
+                    "selling Jokers"
                 }
             },
             j_phanta_purplejoker           = {
@@ -1032,10 +1032,10 @@ return {
             j_phanta_charcoaljoker         = {
                 name = 'Charcoal Joker',
                 text = {
-                    "Gains {C:mult}+#1#{} Mult if",
+                    "Gains {C:chips}+#1#{} Chips if",
                     "all {C:red}discarded{} cards",
                     "are {C:spades}Spades{}",
-                    "{C:inactive}(Currently {C:mult}+#2#{C:inactive} Mult){}"
+                    "{C:inactive}(Currently {C:chips}+#2#{C:inactive} Chips){}"
                 }
             },
             j_phanta_goldenfiddle          = {
@@ -1061,7 +1061,7 @@ return {
                 text = {
                     "When {C:attention}Blind{} is selected,",
                     "creates a copy of",
-                    "{C:tarot}The Moon{}",
+                    "{C:tarot}The Moon{} or {C:tarot}Justice{}",
                     "{C:inactive}(Must have room){}"
                 }
             },
@@ -1175,7 +1175,7 @@ return {
                 text = {
                     "Once {C:attention}A-9{} {C:inactive}[#1#]{} have",
                     "each been played and scored,",
-                    "upgrades {C:attention}Straight{} by {C:attention}#2#{} level"
+                    "upgrades {C:attention}Straight{} by {C:attention}#2#{} levels"
                 }
             },
             j_phanta_ceaseanddesist        = {
@@ -2087,7 +2087,7 @@ return {
                 name = "Rushed",
                 text = {
                     "Vanilla hands with",
-                    "{C:attention}4{} or fewer {C:attention}scoring{}",
+                    "{C:attention}3{} or fewer {C:attention}scoring{}",
                     "{C:attention}cards{} start at {C:attention}level #1#{}"
                 },
                 unlock = {
@@ -2099,9 +2099,8 @@ return {
             pnr_phanta_cutcorners_1 = {
                 name = "Rushed",
                 text = {
-                    "{C:white,X:mult}X#2#{} Mult if hand is",
-                    "played with at most",
-                    "{C:blue}#3#{} hands remaining"
+                    "{C:white,X:mult}X#2#{} Mult on",
+                    "{C:attention}first{} hand of round"
                 },
                 unlock = {
                     "Used {C:attention}Cut Corners{}",

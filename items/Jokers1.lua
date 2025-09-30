@@ -309,7 +309,7 @@ G.Phanta.centers["puzzle"] = {
 }
 
 G.Phanta.centers["binman"] = {
-  config = { extra = { given_money = 3 } },
+  config = { extra = { given_money = 4 } },
   rarity = 1,
   atlas = 'Phanta',
   pos = { x = 6, y = 8 },
@@ -1193,9 +1193,9 @@ G.Phanta.centers["scratchart"] = {
 }
 
 G.Phanta.centers["animalinstinct"] = {
-  config = { extra = { added_mult = 3, current_mult = 0 } },
+  config = { extra = { added_xmult = 0.15, current_xmult = 1 } },
   loc_vars = function(self, info_queue, card)
-    return { vars = { card.ability.extra.added_mult, card.ability.extra.current_mult } }
+    return { vars = { card.ability.extra.added_xmult, card.ability.extra.current_xmult } }
   end,
   rarity = 2,
   atlas = 'Phanta',
@@ -1205,11 +1205,11 @@ G.Phanta.centers["animalinstinct"] = {
   eternal_compat = true,
   perishable_compat = false,
   calculate = function(self, card, context)
-    if context.joker_main and card.ability.extra.current_mult > 0 then return { mult = card.ability.extra.current_mult } end
+    if context.joker_main and card.ability.extra.current_xmult > 0 then return { xmult = card.ability.extra.current_xmult } end
 
     if context.remove_playing_cards and not context.blueprint then
-      card.ability.extra.current_mult = card.ability.extra.current_mult +
-          (#context.removed * card.ability.extra.added_mult)
+      card.ability.extra.current_xmult = card.ability.extra.current_xmult +
+          (#context.removed * card.ability.extra.added_xmult)
       return { message = localize("k_upgrade_ex"), colour = G.C.FILTER, card = card }
     end
   end
@@ -1687,7 +1687,7 @@ G.Phanta.centers["photocopy"] = {
 }
 
 G.Phanta.centers["doubledice"] = {
-  config = { extra = { added_mult = 5 } },
+  config = { extra = { added_mult = 4 } },
   rarity = 2,
   atlas = 'Phanta',
   pos = { x = 11, y = 10 },
@@ -2408,7 +2408,7 @@ G.Phanta.centers["web"] = {
 }
 
 G.Phanta.centers["cutcorners"] = {
-  config = { extra = { added_mult = 1, current_mult = 0, no_of_cards = 4 } },
+  config = { extra = { added_mult = 1, current_mult = 0, no_of_cards = 3 } },
   rarity = 1,
   atlas = 'Phanta',
   pos = { x = 6, y = 0 },
@@ -2841,30 +2841,20 @@ G.Phanta.centers["shoppinglist"] = {
 }
 
 G.Phanta.centers["ransomnote"] = {
-  config = { extra = { money = 25, joker_tally = 0, jokers_required = 5 } },
+  config = { extra = { money = 5 } },
   rarity = 2,
   atlas = 'Phanta',
   pos = { x = 3, y = 10 },
   cost = 4,
   loc_vars = function(self, info_queue, card)
-    return { vars = { card.ability.extra.money, card.ability.extra.jokers_required, card.ability.extra.jokers_required - card.ability.extra.joker_tally } }
+    return { vars = { card.ability.extra.money } }
   end,
   blueprint_compat = true,
   eternal_compat = true,
   perishable_compat = true,
   calculate = function(self, card, context)
     if context.selling_card and context.card.config.center.set == "Joker" and not card.getting_sliced then
-      card.ability.extra.joker_tally = card.ability.extra.joker_tally + 1
-      if card.ability.extra.joker_tally == card.ability.extra.jokers_required then
-        card.ability.extra.joker_tally = 0
-        return { dollars = card.ability.extra.money }
-      else
-        return {
-          message = card.ability.extra.joker_tally .. "/" .. card.ability.extra.jokers_required,
-          colour = G.C.FILTER,
-          card = card
-        }
-      end
+      return { dollars = card.ability.extra.money }
     end
   end
 }
@@ -2928,19 +2918,19 @@ G.Phanta.centers["monetjoker"] = {
 }
 
 G.Phanta.centers["charcoaljoker"] = {
-  config = { extra = { added_mult = 3, current_mult = 0 } },
+  config = { extra = { added_chips = 15, current_chips = 0 } },
   rarity = 2,
   atlas = 'Phanta',
   pos = { x = 4, y = 5 },
   cost = 6,
   loc_vars = function(self, info_queue, card)
-    return { vars = { card.ability.extra.added_mult, card.ability.extra.current_mult } }
+    return { vars = { card.ability.extra.added_chips, card.ability.extra.current_chips } }
   end,
   blueprint_compat = true,
   eternal_compat = true,
   perishable_compat = false,
   calculate = function(self, card, context)
-    if context.joker_main and card.ability.extra.current_mult > 0 then return { mult = card.ability.extra.current_mult } end
+    if context.joker_main and card.ability.extra.current_chips > 0 then return { chips = card.ability.extra.current_chips } end
 
     if context.discard and context.other_card == context.full_hand[#context.full_hand] and not context.blueprint then
       local non_spades_present = false
@@ -2948,7 +2938,7 @@ G.Phanta.centers["charcoaljoker"] = {
         if not v:is_suit("Spades") then non_spades_present = true end
       end
       if not non_spades_present then
-        card.ability.extra.current_mult = card.ability.extra.current_mult + card.ability.extra.added_mult
+        card.ability.extra.current_chips = card.ability.extra.current_chips + card.ability.extra.added_chips
         return {
           message = localize('k_upgrade_ex'),
           card = card
@@ -3054,6 +3044,7 @@ G.Phanta.centers["sees"] = {
   cost = 6,
   loc_vars = function(self, info_queue, card)
     info_queue[#info_queue + 1] = G.P_CENTERS.c_moon
+    info_queue[#info_queue + 1] = G.P_CENTERS.c_justice
     return {}
   end,
   blueprint_compat = true,
@@ -3064,9 +3055,15 @@ G.Phanta.centers["sees"] = {
       G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
       G.E_MANAGER:add_event(Event({
         func = function()
+          local chosen_message = '+1 Moon'
           G.E_MANAGER:add_event(Event({
             func = function()
-              local new_card = create_card("Tarot", G.consumables, nil, nil, nil, nil, "c_moon", 'sees')
+              local chosen_card = 'c_moon'
+              if pseudorandom('sees', 1, 2) == 1 then
+                chosen_card = 'c_justice'
+                chosen_message = '+1 Justice'
+              end
+              local new_card = create_card("Tarot", G.consumables, nil, nil, nil, nil, chosen_card, 'sees')
               new_card:add_to_deck()
               G.consumeables:emplace(new_card)
               G.GAME.consumeable_buffer = 0
@@ -3075,7 +3072,7 @@ G.Phanta.centers["sees"] = {
             end
           }))
           card_eval_status_text(context.blueprint_card or card, 'extra', nil, nil, nil,
-            { message = "+1 Moon", colour = G.C.PURPLE })
+            { message = chosen_message, colour = G.C.PURPLE })
           return true
         end
       }))
@@ -3603,11 +3600,11 @@ G.Phanta.centers["slidingpuzzle"] = {
 
 -- This code is so jank, sorry :sob:
 G.Phanta.centers["sudoku"] = {
-  config = { extra = { ranks = { ["2"] = 0, ["3"] = 0, ["4"] = 0, ["5"] = 0, ["6"] = 0, ["7"] = 0, ["8"] = 0, ["9"] = 0, ["14"] = 0 }, no_of_upgrades = 1 } },
-  rarity = 1,
+  config = { extra = { ranks = { ["2"] = 0, ["3"] = 0, ["4"] = 0, ["5"] = 0, ["6"] = 0, ["7"] = 0, ["8"] = 0, ["9"] = 0, ["14"] = 0 }, no_of_upgrades = 2 } },
+  rarity = 2,
   atlas = 'Phanta',
   pos = { x = 9, y = 2 },
-  cost = 4,
+  cost = 5,
   loc_vars = function(self, info_queue, card)
     return {
       vars = {
@@ -3700,10 +3697,10 @@ G.Phanta.centers["sudoku"] = {
 
 G.Phanta.centers["ceaseanddesist"] = {
   config = { extra = { no_of_upgrades = 1 } },
-  rarity = 2,
+  rarity = 1,
   atlas = 'Phanta',
   pos = { x = 5, y = 9 },
-  cost = 6,
+  cost = 4,
   loc_vars = function(self, info_queue, card)
     return { vars = { card.ability.extra.no_of_upgrades } }
   end,
