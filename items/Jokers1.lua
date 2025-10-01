@@ -2451,96 +2451,49 @@ G.Phanta.centers["blottedjoker"] = {
   rarity = 2,
   atlas = 'Phanta',
   pos = { x = 11, y = 0 },
-  cost = 5,
+  cost = 6,
   loc_vars = function(self, info_queue, card)
     info_queue[#info_queue + 1] = G.P_CENTERS.m_bonus
-    return { vars = { card.ability.extra.added_chips, card.ability.extra.current_chips } }
+    return {}
   end,
-  blueprint_compat = true,
+  blueprint_compat = false,
   eternal_compat = true,
-  perishable_compat = false,
+  perishable_compat = true,
   calculate = function(self, card, context)
-    if context.joker_main and card.ability.extra.current_chips > 0 then
-      return { chips = card.ability.extra.current_chips }
-    end
-
-    if context.cardarea == G.jokers and context.before and not context.blueprint then
-      local bonus_cards = {}
-      for k, v in ipairs(context.scoring_hand) do
-        if SMODS.has_enhancement(v, "m_bonus") and not v.debuff and not v.blotted_selected then
-          bonus_cards[#bonus_cards + 1] = v
-          v.blotted_selected = true
-          v:set_ability(G.P_CENTERS.c_base, nil, true)
-          G.E_MANAGER:add_event(Event({
-            func = function()
-              v:juice_up()
-              v.blotted_selected = nil
-              return true
-            end
-          }))
+    if context.cardarea == G.play and context.individual and (context.other_card:get_id() == 2 or context.other_card:get_id() == 3 or context.other_card:get_id() == 4 or context.other_card:get_id() == 5) then
+      local _card = context.other_card
+      _card:set_ability("m_bonus", nil, true)
+      G.E_MANAGER:add_event(Event({
+        func = function()
+          _card:juice_up()
+          return true
         end
-      end
-
-      if #bonus_cards > 0 then
-        card.ability.extra.current_chips = card.ability.extra.current_chips +
-            (card.ability.extra.added_chips * #bonus_cards)
-        return {
-          message = localize { type = 'variable', key = 'a_chips', vars = { card.ability.extra.current_chips } },
-          colour = G.C.CHIPS,
-          card = card
-        }
-      end
+      }))
+      return { message = localize("k_bonus"), colour = G.C.FILTER }
     end
-  end,
-  enhancement_gate = "m_bonus"
+  end
 }
 
 G.Phanta.centers["bloodpact"] = {
-  config = { extra = { added_mult = 4, current_mult = 0 } },
+  config = { extra = { xmult = 2 } },
   rarity = 2,
   atlas = 'Phanta',
   pos = { x = 3, y = 5 },
-  cost = 5,
+  cost = 4,
   loc_vars = function(self, info_queue, card)
-    info_queue[#info_queue + 1] = G.P_CENTERS.m_mult
-    return { vars = { card.ability.extra.added_mult, card.ability.extra.current_mult } }
+    return { vars = { card.ability.extra.xmult } }
   end,
   blueprint_compat = true,
   eternal_compat = true,
-  perishable_compat = false,
+  perishable_compat = true,
   calculate = function(self, card, context)
-    if context.joker_main and card.ability.extra.current_mult > 0 then
-      return { mult = card.ability.extra.current_mult }
+    if context.joker_main then
+      return { xmult = card.ability.extra.xmult }
     end
-
-    if context.cardarea == G.jokers and context.before and not context.blueprint then
-      local mult_cards = {}
-      for k, v in ipairs(context.scoring_hand) do
-        if SMODS.has_enhancement(v, "m_mult") and not v.debuff and not v.bloodpact_selected then
-          mult_cards[#mult_cards + 1] = v
-          v.bloodpact_selected = true
-          v:set_ability(G.P_CENTERS.c_base, nil, true)
-          G.E_MANAGER:add_event(Event({
-            func = function()
-              v:juice_up()
-              v.bloodpact_selected = nil
-              return true
-            end
-          }))
-        end
-      end
-
-      if #mult_cards > 0 then
-        card.ability.extra.current_mult = card.ability.extra.current_mult + (card.ability.extra.added_mult * #mult_cards)
-        return {
-          message = localize { type = 'variable', key = 'a_mult', vars = { card.ability.extra.current_mult } },
-          colour = G.C.MULT,
-          card = card
-        }
-      end
+    if context.modify_scoring_hand and not context.blueprint then
+      return { remove_from_hand = true }
     end
-  end,
-  enhancement_gate = "m_mult"
+  end
 }
 
 G.Phanta.centers["tnetennba"] = {

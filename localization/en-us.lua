@@ -917,19 +917,16 @@ return {
             j_phanta_blottedjoker          = {
                 name = 'Blotted Joker',
                 text = {
-                    "Gains {C:chips}+#1#{} Chips for each",
-                    "played and scored {C:attention}Bonus{}",
-                    "card, {C:attention}unenhances{} them",
-                    "{C:inactive}(Currently {C:chips}+#2#{C:inactive} Chips){}"
+                    "Played {C:attention}2s{}, {C:attention}3s{}",
+                    "{C:attention}4s{} and {C:attention}5s{} become {C:attention}Bonus{}",
+                    "cards when scored"
                 }
             },
             j_phanta_bloodpact             = {
                 name = 'Blood Pact',
                 text = {
-                    "Gains {C:mult}+#1#{} Mult for each",
-                    "played and scored {C:attention}Mult{}",
-                    "card, {C:attention}unenhances{} them",
-                    "{C:inactive}(Currently {C:mult}+#2#{C:inactive} Mult){}"
+                    "{C:white,X:mult}X#1#{} Mult, played",
+                    "cards do not {C:attention}score{}"
                 }
             },
             j_phanta_tnetennba             = {
@@ -3002,6 +2999,7 @@ return {
     misc = {
         dictionary = {
             k_glass = "Glass",
+            k_bonus = "Bonus",
             phanta_chips_equals = "Chips=",
             phanta_mult_equals = "Mult=",
             phanta_swapped = "Swapped",
