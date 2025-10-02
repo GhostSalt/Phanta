@@ -799,6 +799,7 @@ G.Phanta.centers["distance"] = {
 }
 
 G.Phanta.centers["donpaolo"] = {
+  config = { extra = { levels = 1 } },
   rarity = 2,
   atlas = 'PhantaLaytonAnims',
   pos = { x = 0, y = 2 },
@@ -813,20 +814,27 @@ G.Phanta.centers["donpaolo"] = {
     { x = 3, y = 2, t = 0.1 }, { x = 2, y = 2, t = 0.1 }, { x = 1, y = 2, t = 0.1 },
   },
   cost = 6,
-  blueprint_compat = false,
+  loc_vars = function(self, info_queue, card)
+    return { vars = { card.ability.extra.levels } }
+  end,
+  blueprint_compat = true,
   eternal_compat = true,
   perishable_compat = true,
   calculate = function(self, card, context)
-    if context.selling_card and context.card.config.center.set == "Tarot" and #G.hand.highlighted == 1 then
+    if context.selling_card and context.card.config.center.set == "Tarot" then
+      local valid_hands = {}
+      for k, v in pairs(G.GAME.hands) do
+        if v.visible then valid_hands[#valid_hands + 1] = k end
+      end
+      local chosen_hand = pseudorandom_element(valid_hands, pseudoseed("donpaolo"))
+
       G.E_MANAGER:add_event(Event({
-        trigger = 'after',
-        delay = 0.2,
         func = function()
-          card:juice_up()
-          SMODS.destroy_cards(G.hand.highlighted)
+          SMODS.smart_level_up_hand(card, chosen_hand, nil, card.ability.extra.levels)
           return true
         end
       }))
+      return { message = localize('k_level_up_ex'), colour = G.C.FILTER }
     end
   end
 }
@@ -853,11 +861,55 @@ G.Phanta.centers["futureluke"] = {
   calculate = function(self, card, context)
     if context.selling_card and context.card.config.center.set == "Planet" and #G.hand.highlighted == 1 then
       G.E_MANAGER:add_event(Event({
+        func = function()
+          if #G.hand.highlighted == 1 then
+            card:juice_up()
+          end
+          return true
+        end
+      }))
+      G.E_MANAGER:add_event(Event({
+        trigger = 'after',
+        delay = 0.15,
+        func = function()
+          if #G.hand.highlighted == 1 then
+            G.hand.highlighted[1]:flip()
+            play_sound('card1', percent)
+            G.hand.highlighted[1]:juice_up(0.3, 0.3)
+          end
+          return true
+        end
+      }))
+      delay(0.2)
+      G.E_MANAGER:add_event(Event({
+        trigger = 'after',
+        delay = 0.1,
+        func = function()
+          if #G.hand.highlighted == 1 then
+            G.hand.highlighted[1]:set_ability(SMODS.poll_enhancement { guaranteed = true })
+          end
+          return true
+        end
+      }))
+      G.E_MANAGER:add_event(Event({
+        trigger = 'after',
+        delay = 0.15,
+        func = function()
+          if #G.hand.highlighted == 1 then
+            G.hand.highlighted[1]:flip()
+            play_sound('tarot2', 1, 0.6)
+            G.hand.highlighted[1]:juice_up(0.3, 0.3)
+          end
+          return true
+        end
+      }))
+      G.E_MANAGER:add_event(Event({
         trigger = 'after',
         delay = 0.2,
         func = function()
-          card:juice_up()
-          SMODS.destroy_cards(G.hand.highlighted)
+          if #G.hand.highlighted == 1 then
+            G.hand:unhighlight_all()
+          end
           return true
         end
       }))
