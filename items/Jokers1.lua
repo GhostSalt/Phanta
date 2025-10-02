@@ -2450,7 +2450,7 @@ G.Phanta.centers["bloodpact"] = {
 }
 
 G.Phanta.centers["tnetennba"] = {
-  config = { extra = { added_mult = 3, current_mult = 0 } },
+  config = { extra = { added_mult = 2, current_mult = 0 } },
   rarity = 2,
   atlas = 'PhantaMiscAnims2',
   pos = { x = 3, y = 12 },
