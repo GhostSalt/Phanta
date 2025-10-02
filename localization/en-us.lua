@@ -533,21 +533,19 @@ return {
             j_phanta_redkeycards           = {
                 name = 'Red Key Cards',
                 text = {
-                    "Gain {C:red}+#1#{} discards",
-                    "when playing an",
-                    "unscoring {C:attention}Mult{} card",
-                    "{C:inactive}(Once per round,{}",
-                    "{C:inactive}currently #2#){}"
+                    "Gains {C:white,X:mult}X#1#{} Mult if",
+                    "played hand contains",
+                    "an {C:attention}Ace{}, {C:attention}2{} or {C:attention}3{}",
+                    "{C:inactive}(Currently {C:white,X:mult}X#2#{C:inactive} Mult){}"
                 }
             },
             j_phanta_bluekeycards          = {
                 name = 'Blue Key Cards',
                 text = {
-                    "Gain {C:blue}+3{} hands",
-                    "when playing an",
-                    "unscoring {C:attention}Bonus{} card",
-                    "{C:inactive}(Once per round,{}",
-                    "{C:inactive}currently #2#){}"
+                    "Gains {C:chips}+#1#{} Chips if",
+                    "played hand contains",
+                    "a {C:attention}6{}, {C:attention}7{} or {C:attention}8{}",
+                    "{C:inactive}(Currently {C:chips}+#2#{C:inactive} Chips){}"
                 }
             },
             j_phanta_kylehyde              = {

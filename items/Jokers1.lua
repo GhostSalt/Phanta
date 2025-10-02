@@ -867,19 +867,9 @@ G.Phanta.centers["diana"] = {
 }
 
 G.Phanta.centers["redkeycards"] = {
-  config = { extra = { added_discards = 3, will_be_spent = false, is_spent = false } },
+  config = { extra = { added_xmult = 0.09, current_xmult = 1 } },
   loc_vars = function(self, info_queue, card)
-    info_queue[#info_queue + 1] = G.P_CENTERS.m_mult
-    return {
-      vars = { card.ability.extra.added_discards, (function()
-        if card.ability.extra.is_spent then
-          return
-          'inactive'
-        else
-          return 'active'
-        end
-      end)() }
-    }
+    return { vars = { card.ability.extra.added_xmult, card.ability.extra.current_xmult } }
   end,
   rarity = 2,
   atlas = 'Phanta',
@@ -889,49 +879,25 @@ G.Phanta.centers["redkeycards"] = {
   eternal_compat = true,
   perishable_compat = true,
   calculate = function(self, card, context)
-    if context.individual and context.cardarea == "unscored" and SMODS.has_enhancement(context.other_card, "m_mult") and not card.ability.extra.is_spent then
-      card.ability.extra.will_be_spent = true
-      ease_discard(card.ability.extra.added_discards)
+    if context.joker_main and card.ability.extra.current_xmult > 1 then return { xmult = card.ability.extra.current_xmult } end
 
-      local _card = context.other_card
-
-      G.E_MANAGER:add_event(Event({
-        func = function()
-          _card:juice_up()
-          return true
-        end
-      }))
-      return {
-        message = localize { type = 'variable', key = 'a_discards', vars = { card.ability.extra.added_discards } },
-        colour = G.C.RED
-      }
+    if context.before and not context.blueprint then
+      local upgrades = false
+      for _, v in ipairs(context.scoring_hand) do
+        if v:get_id() == 14 or v:get_id() == 2 or v:get_id() == 3 then upgrades = true end
+      end
+      if upgrades then
+        card.ability.extra.current_xmult = card.ability.extra.current_xmult + card.ability.extra.added_xmult
+        return { message = localize("k_upgrade_ex"), colour = G.C.FILTER }
+      end
     end
-
-    -- The whole will be / is spent thing is for Blueprint compat.
-    if context.after and card.ability.extra.will_be_spent then
-      card.ability.extra.will_be_spent = false
-      card.ability.extra.is_spent = true
-    end
-
-    if context.end_of_round then card.ability.extra.is_spent = false end
-  end,
-  enhancement_gate = "m_mult"
+  end
 }
 
 G.Phanta.centers["bluekeycards"] = {
-  config = { extra = { added_hands = 3, will_be_spent = false, is_spent = false } },
+  config = { extra = { added_chips = 18, current_chips = 0 } },
   loc_vars = function(self, info_queue, card)
-    info_queue[#info_queue + 1] = G.P_CENTERS.m_bonus
-    return {
-      vars = { card.ability.extra.added_hands, (function()
-        if card.ability.extra.is_spent then
-          return 'inactive'
-        else
-          return
-          'active'
-        end
-      end)() }
-    }
+    return { vars = { card.ability.extra.added_chips, card.ability.extra.current_chips } }
   end,
   rarity = 2,
   atlas = 'Phanta',
@@ -941,32 +907,19 @@ G.Phanta.centers["bluekeycards"] = {
   eternal_compat = true,
   perishable_compat = true,
   calculate = function(self, card, context)
-    if context.individual and context.cardarea == "unscored" and SMODS.has_enhancement(context.other_card, "m_bonus") and not card.ability.extra.is_spent then
-      card.ability.extra.will_be_spent = true
-      ease_hands_played(card.ability.extra.added_hands)
+    if context.joker_main and card.ability.extra.current_chips > 0 then return { chips = card.ability.extra.current_chips } end
 
-      local _card = context.other_card
-
-      G.E_MANAGER:add_event(Event({
-        func = function()
-          _card:juice_up()
-          return true
-        end
-      }))
-      return {
-        message = localize { type = 'variable', key = 'a_hands', vars = { card.ability.extra.added_hands } },
-        colour = G.C.BLUE
-      }
+    if context.before and not context.blueprint then
+      local upgrades = false
+      for _, v in ipairs(context.scoring_hand) do
+        if v:get_id() == 6 or v:get_id() == 7 or v:get_id() == 8 then upgrades = true end
+      end
+      if upgrades then
+        card.ability.extra.current_chips = card.ability.extra.current_chips + card.ability.extra.added_chips
+        return { message = localize("k_upgrade_ex"), colour = G.C.FILTER }
+      end
     end
-
-    if context.after and card.ability.extra.will_be_spent then
-      card.ability.extra.will_be_spent = false
-      card.ability.extra.is_spent = true
-    end
-
-    if context.end_of_round then card.ability.extra.is_spent = false end
-  end,
-  enhancement_gate = "m_bonus"
+  end
 }
 
 G.Phanta.centers["kylehyde"] = {
