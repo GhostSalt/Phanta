@@ -18,8 +18,6 @@ G.Phanta.centers["ignaize"] = {
       card.children.floating_sprite:draw_shader('dissolve', 0, nil, nil, card.children.center, scale_mod, rotate_mod, nil,
         0.1 + 0.03 * math.sin(1.8 * G.TIMERS.REAL), nil, 0.6)
       card.children.floating_sprite:draw_shader('dissolve', nil, nil, nil, card.children.center, scale_mod, rotate_mod)
-      card.children.floating_sprite:draw_shader('voucher', 0, nil, nil, card.children.center, scale_mod, rotate_mod, nil,
-        0.1 + 0.03 * math.sin(1.8 * G.TIMERS.REAL), nil, 0.6)
       card.children.floating_sprite:draw_shader('voucher', nil, nil, nil, card.children.center, scale_mod, rotate_mod)
     end },
   cost = 20,
@@ -50,8 +48,6 @@ G.Phanta.centers["dimere"] = {
       card.children.floating_sprite:draw_shader('dissolve', 0, nil, nil, card.children.center, scale_mod, rotate_mod, nil,
         0.1 + 0.03 * math.sin(1.8 * G.TIMERS.REAL), nil, 0.6)
       card.children.floating_sprite:draw_shader('dissolve', nil, nil, nil, card.children.center, scale_mod, rotate_mod)
-      card.children.floating_sprite:draw_shader('voucher', 0, nil, nil, card.children.center, scale_mod, rotate_mod, nil,
-        0.1 + 0.03 * math.sin(1.8 * G.TIMERS.REAL), nil, 0.6)
       card.children.floating_sprite:draw_shader('voucher', nil, nil, nil, card.children.center, scale_mod, rotate_mod)
     end },
   cost = 20,
@@ -94,8 +90,6 @@ G.Phanta.centers["goldor"] = {
       card.children.floating_sprite:draw_shader('dissolve', 0, nil, nil, card.children.center, scale_mod, rotate_mod, nil,
         0.1 + 0.03 * math.sin(1.8 * G.TIMERS.REAL), nil, 0.6)
       card.children.floating_sprite:draw_shader('dissolve', nil, nil, nil, card.children.center, scale_mod, rotate_mod)
-      card.children.floating_sprite:draw_shader('voucher', 0, nil, nil, card.children.center, scale_mod, rotate_mod, nil,
-        0.1 + 0.03 * math.sin(1.8 * G.TIMERS.REAL), nil, 0.6)
       card.children.floating_sprite:draw_shader('voucher', nil, nil, nil, card.children.center, scale_mod, rotate_mod)
     end },
   cost = 20,
@@ -134,8 +128,6 @@ G.Phanta.centers["famalia"] = {
       card.children.floating_sprite:draw_shader('dissolve', 0, nil, nil, card.children.center, scale_mod, rotate_mod, nil,
         0.1 + 0.03 * math.sin(1.8 * G.TIMERS.REAL), nil, 0.6)
       card.children.floating_sprite:draw_shader('dissolve', nil, nil, nil, card.children.center, scale_mod, rotate_mod)
-      card.children.floating_sprite:draw_shader('voucher', 0, nil, nil, card.children.center, scale_mod, rotate_mod, nil,
-        0.1 + 0.03 * math.sin(1.8 * G.TIMERS.REAL), nil, 0.6)
       card.children.floating_sprite:draw_shader('voucher', nil, nil, nil, card.children.center, scale_mod, rotate_mod)
     end },
   cost = 20,
@@ -179,8 +171,6 @@ G.Phanta.centers["godoor"] = {
       card.children.floating_sprite:draw_shader('dissolve', 0, nil, nil, card.children.center, scale_mod, rotate_mod, nil,
         0.1 + 0.03 * math.sin(1.8 * G.TIMERS.REAL), nil, 0.6)
       card.children.floating_sprite:draw_shader('dissolve', nil, nil, nil, card.children.center, scale_mod, rotate_mod)
-      card.children.floating_sprite:draw_shader('voucher', 0, nil, nil, card.children.center, scale_mod, rotate_mod, nil,
-        0.1 + 0.03 * math.sin(1.8 * G.TIMERS.REAL), nil, 0.6)
       card.children.floating_sprite:draw_shader('voucher', nil, nil, nil, card.children.center, scale_mod, rotate_mod)
     end },
   cost = 20,
@@ -237,8 +227,6 @@ G.Phanta.centers["fainfol"] = {
       card.children.floating_sprite:draw_shader('dissolve', 0, nil, nil, card.children.center, scale_mod, rotate_mod, nil,
         0.1 + 0.03 * math.sin(1.8 * G.TIMERS.REAL), nil, 0.6)
       card.children.floating_sprite:draw_shader('dissolve', nil, nil, nil, card.children.center, scale_mod, rotate_mod)
-      card.children.floating_sprite:draw_shader('voucher', 0, nil, nil, card.children.center, scale_mod, rotate_mod, nil,
-        0.1 + 0.03 * math.sin(1.8 * G.TIMERS.REAL), nil, 0.6)
       card.children.floating_sprite:draw_shader('voucher', nil, nil, nil, card.children.center, scale_mod, rotate_mod)
     end },
   cost = 20,
@@ -300,8 +288,6 @@ G.Phanta.centers["granwyrm"] = {
       card.children.floating_sprite:draw_shader('dissolve', 0, nil, nil, card.children.center, scale_mod, rotate_mod, nil,
         0.1 + 0.03 * math.sin(1.8 * G.TIMERS.REAL), nil, 0.6)
       card.children.floating_sprite:draw_shader('dissolve', nil, nil, nil, card.children.center, scale_mod, rotate_mod)
-      card.children.floating_sprite:draw_shader('voucher', 0, nil, nil, card.children.center, scale_mod, rotate_mod, nil,
-        0.1 + 0.03 * math.sin(1.8 * G.TIMERS.REAL), nil, 0.6)
       card.children.floating_sprite:draw_shader('voucher', nil, nil, nil, card.children.center, scale_mod, rotate_mod)
     end },
   cost = 20,

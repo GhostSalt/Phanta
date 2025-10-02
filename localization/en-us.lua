@@ -915,8 +915,8 @@ return {
             j_phanta_blottedjoker          = {
                 name = 'Blotted Joker',
                 text = {
-                    "Played {C:attention}2s{}, {C:attention}3s{}",
-                    "{C:attention}4s{} and {C:attention}5s{} become {C:attention}Bonus{}",
+                    "Played {C:attention}2s{}, {C:attention}3s{} {C:attention}4s{} and",
+                    "{C:attention}5s{} become {C:attention}Bonus{}",
                     "cards when scored"
                 }
             },
@@ -1479,8 +1479,8 @@ return {
             j_phanta_donpaolo              = {
                 name = 'Don Paolo',
                 text = {
-                    "Upgrades a {C:attention}random hand{}",
-                    "by {C:attention}#1#{} level when",
+                    "Upgrades a {C:attention}random{}",
+                    "{C:attention}hand{} by {C:attention}#1#{} level when",
                     "selling a {C:tarot}Tarot{} card"
                 }
             },

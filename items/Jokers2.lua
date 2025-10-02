@@ -824,7 +824,7 @@ G.Phanta.centers["donpaolo"] = {
     if context.selling_card and context.card.config.center.set == "Tarot" then
       local valid_hands = {}
       for k, v in pairs(G.GAME.hands) do
-        if v.visible then valid_hands[#valid_hands + 1] = k end
+        if SMODS.is_poker_hand_visible(k) then valid_hands[#valid_hands + 1] = k end
       end
       local chosen_hand = pseudorandom_element(valid_hands, pseudoseed("donpaolo"))
 
