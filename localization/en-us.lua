@@ -2064,6 +2064,14 @@ return {
                     "to learn what it does"
                 },
             },
+            phanta_sleepy = {
+                name = "Sleepy",
+                text = {
+                    "Disabled until",
+                    "after {C:attention}#1#{} rounds",
+                    "{C:inactive}({C:attention}#2#{C:inactive} remaining)",
+                },
+            }
         },
         Partner = {
             pnr_phanta_ghost = {
@@ -2567,16 +2575,6 @@ return {
                     "{s:0.8}Applies all previous Stakes{}"
                 },
             }
-        },
-        Other = {
-            phanta_sleepy = {
-                name = "Sleepy",
-                text = {
-                    "Debuffed until",
-                    "after {C:attention}#1#{} rounds",
-                    "{C:inactive}({C:attention}#2#{C:inactive} remaining)",
-                },
-            },
         },
         Tag = {
             tag_phanta_sol = {
