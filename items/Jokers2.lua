@@ -723,6 +723,7 @@ G.Phanta.centers["flagsignal"] = {
   },
   cost = 5,
   loc_vars = function(self, info_queue, card)
+    info_queue[#info_queue + 1] = G.P_CENTERS.m_lucky
     return { vars = { card.ability.extra.added_mult, card.ability.extra.current_mult } }
   end,
   blueprint_compat = true,
