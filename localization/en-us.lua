@@ -1897,13 +1897,16 @@ return {
             j_phanta_deckjoker_anaglyph = {
                 name = "Deck Joker (Anaglyph)",
                 text = {
-                    ""
+                    "{C:white,X:mult}X#1#{} Mult if the",
+                    "cards held in hand",
+                    "contain a {C:attention}Pair{}"
                 },
             },
             j_phanta_deckjoker_plasma = {
                 name = "Deck Joker (Plasma)",
                 text = {
-                    ""
+                    "{C:chips}+#1#{} Chips if Mult",
+                    "is less than {C:attention}#2#{}"
                 },
             },
             j_phanta_deckjoker_erratic = {

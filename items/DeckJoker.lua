@@ -410,7 +410,7 @@ local deck_joker_painted = {
 
     config = {
         extra = {
-            added_mult = 2, current_mult = 0
+            added_mult = 3, current_mult = 0
         }
     },
     calculate = function(self, card, context)
@@ -424,6 +424,56 @@ local deck_joker_painted = {
 }
 deck_joker_painted.loc_vars = { deck_joker_painted.config.extra.added_mult, deck_joker_painted.config.extra.current_mult }
 phanta_add_deck_joker_deck(deck_joker_painted)
+
+local deck_joker_anaglyph = {
+    key = "b_anaglyph",
+    loc_key = "anaglyph",
+
+    pos = {
+        x = 0,
+        y = 1
+    },
+    atlas = "phanta_PhantaDeckJoker",
+
+    rarity = 2,
+    cost = 6,
+
+    blueprint_compat = true,
+    eternal_compat = true,
+    perishable_compat = true,
+
+    config = { extra = { xmult = 2 } },
+    calculate = function(self, card, context)
+        if context.joker_main and next(get_X_same(2, G.hand.cards)) then return { xmult = card.ability.extra.xmult } end
+    end
+}
+deck_joker_anaglyph.loc_vars = { deck_joker_anaglyph.config.extra.xmult }
+phanta_add_deck_joker_deck(deck_joker_anaglyph)
+
+local deck_joker_plasma = {
+    key = "b_plasma",
+    loc_key = "plasma",
+
+    pos = {
+        x = 1,
+        y = 1
+    },
+    atlas = "phanta_PhantaDeckJoker",
+
+    rarity = 1,
+    cost = 5,
+
+    blueprint_compat = true,
+    eternal_compat = true,
+    perishable_compat = true,
+
+    config = { extra = { chips = 120, threshold = 10 } },
+    calculate = function(self, card, context)
+        if context.joker_main and to_big(mult) < card.ability.extra.threshold then return { chips = card.ability.extra.chips } end
+    end
+}
+deck_joker_plasma.loc_vars = { deck_joker_plasma.config.extra.chips, deck_joker_plasma.config.extra.threshold }
+phanta_add_deck_joker_deck(deck_joker_plasma)
 
 
 
