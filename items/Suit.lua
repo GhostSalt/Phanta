@@ -31,24 +31,26 @@ SMODS.Suit {
 function Card:become_unknown(cause)
     if self.base.suit ~= "phanta_unknown" then self.ability.phanta_actual_suit = self.base.suit end
     if not self.ability.phanta_unknown_causes then self.ability.phanta_unknown_causes = {} end
-    self.ability.phanta_unknown_causes[cause] = true
+    self.ability.phanta_unknown_causes[cause] = (self.ability.phanta_unknown_causes[cause] or 0) + 1
     self:change_suit("phanta_unknown")
 end
 
 function Card:release_unknown(cause)
     if not self.ability.phanta_unknown_causes then self.ability.phanta_unknown_causes = {} end
-    self.ability.phanta_unknown_causes[cause] = nil
+    local cause_comp = self.ability.phanta_unknown_causes[cause]
+    if cause_comp and cause_comp > 0 then self.ability.phanta_unknown_causes[cause] = cause_comp - 1 end
     local no_causes = true
     for k, v in pairs(self.ability.phanta_unknown_causes) do
-        if v then no_causes = false end
+        if v and v > 0 then no_causes = false end
     end
-    if no_causes and self:is_suit("phanta_unknown", nil, nil, true) then self:change_suit(self.ability.phanta_actual_suit or "phanta_unknown", true) end
+    G.phanta_lie_about_unknowns = true
+    if no_causes and self:is_suit("phanta_unknown", nil, nil) then G.phanta_change_from_release = true; self:change_suit(self.ability.phanta_actual_suit or "phanta_unknown") end
 end
 
 local is_suit_ref = Card.is_suit
-function Card:is_suit(suit, bypass_debuff, flush_calc, lie_about_unknowns)
+function Card:is_suit(suit, bypass_debuff, flush_calc)
     local ref_return = nil
-    if self.base.suit == "phanta_unknown" and not lie_about_unknowns then
+    if self.base.suit == "phanta_unknown" and not G.phanta_lie_about_unknowns then
         self.base.suit = self.ability.phanta_actual_suit or "phanta_unknown"
         ref_return = is_suit_ref(self, suit, bypass_debuff, flush_calc)
         self.base.suit = "phanta_unknown"
@@ -58,11 +60,14 @@ function Card:is_suit(suit, bypass_debuff, flush_calc, lie_about_unknowns)
         ref_return = is_suit_ref(self, suit, bypass_debuff, flush_calc)
     end
     
+    G.phanta_lie_about_unknowns = nil
     return ref_return
 end
 
 local change_suit_ref = Card.change_suit
-function Card:change_suit(new_suit, from_release)
+function Card:change_suit(new_suit)
+    local from_release = G.phanta_change_from_release
+    G.phanta_change_from_release = nil
     if self.base.suit == "phanta_unknown" and new_suit ~= "phanta_unknown" and not from_release then
         self.ability.phanta_actual_suit = new_suit
     else
