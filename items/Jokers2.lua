@@ -840,6 +840,12 @@ G.Phanta.centers["donpaolo"] = {
   end
 }
 
+SMODS.Sound({
+  key = "future_luke_sold",
+  path = "phanta_future_luke_sold.ogg",
+  replace = true
+})
+
 G.Phanta.centers["futureluke"] = {
   rarity = 2,
   atlas = 'PhantaLaytonAnims',
@@ -914,6 +920,10 @@ G.Phanta.centers["futureluke"] = {
           return true
         end
       }))
+    end
+
+    if context.selling_self then
+      play_sound("phanta_future_luke_sold", 1, 0.5)
     end
   end
 }

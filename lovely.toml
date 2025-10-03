@@ -290,3 +290,40 @@ pattern = '''G.CONTROLLER.locks.shop_reroll = true'''
 position = 'before'
 payload = '''G.GAME.current_shop_rerolls = (G.GAME.current_shop_rerolls or 0) + 1'''
 match_indent = true
+
+
+
+[[patches]]
+[patches.pattern]
+target = "game.lua"
+pattern = '''
+if G.SPLASH_LOGO then
+    love.graphics.push()
+    G.SPLASH_LOGO:translate_container()
+    G.SPLASH_LOGO:draw()
+    love.graphics.pop()
+end
+'''
+position = "after"
+payload = '''
+
+if G.SPLASH_LOGO_PHANTA_GHOST then
+    love.graphics.push()
+    G.SPLASH_LOGO_PHANTA_GHOST:translate_container()
+    G.SPLASH_LOGO_PHANTA_GHOST:draw()
+    love.graphics.pop()
+end
+'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = "game.lua"
+pattern = '''
+if self.SPLASH_LOGO then self.SPLASH_LOGO:remove(); self.SPLASH_LOGO = nil end
+'''
+position = "after"
+payload = '''
+if self.SPLASH_LOGO_PHANTA_GHOST then self.SPLASH_LOGO_PHANTA_GHOST:remove(); self.SPLASH_LOGO_PHANTA_GHOST = nil end
+'''
+match_indent = true

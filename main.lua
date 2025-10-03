@@ -4,6 +4,19 @@ SMODS.Atlas {
   px = 34,
   py = 34
 }
+SMODS.Atlas {
+  key = "balatro",
+  path = "PhantaLogo.png",
+  px = 333,
+  py = 216,
+  prefix_config = { key = false }
+}
+SMODS.Atlas {
+  key = "PhantaTitleScreenGhost",
+  path = "PhantaLogoOverlay.png",
+  px = 333,
+  py = 216
+}
 
 G.Phanta = {}
 G.Phanta.centers = {}
@@ -19,6 +32,8 @@ G.C.PHANTA.MISC_COLOURS = {
   COPPER_WEATHERED = HEX("838A67"),
   COPPER_OXIDISED = HEX("4FAB90"),
   PHANTA = HEX("4d1575"),
+  PHANTA_MAIN_MENU_PRIMARY = HEX("4B96A0"),
+  PHANTA_MAIN_MENU_SECONDARY = HEX("8FFCDB")
 }
 
 local loc_colour_ref = loc_colour
@@ -544,6 +559,55 @@ function Game:init_game_object()
   return ret
 end
 
+local main_menu_ref = Game.main_menu
+Game.main_menu = function(change_context)
+  local ret = main_menu_ref(change_context)
+
+  local SC_scale = 1.1 * (G.debug_splash_size_toggle and 0.8 or 1)
+  G.SPLASH_LOGO_PHANTA_GHOST = Sprite(0, 0,
+    13 * SC_scale,
+    13 * SC_scale * (G.ASSET_ATLAS["phanta_PhantaTitleScreenGhost"].py / G.ASSET_ATLAS["phanta_PhantaTitleScreenGhost"].px),
+    G.ASSET_ATLAS["phanta_PhantaTitleScreenGhost"], { x = 0, y = 0 }
+  )
+  G.SPLASH_LOGO_PHANTA_GHOST:set_alignment({
+    major = G.title_top,
+    type = 'cm',
+    bond = 'Strong',
+    offset = { x = 0, y = 0 }
+  })
+  G.SPLASH_LOGO_PHANTA_GHOST:define_draw_steps({ {
+    shader = 'dissolve',
+  } })
+
+  G.SPLASH_LOGO_PHANTA_GHOST.dissolve_colours = { G.C.WHITE, G.C.WHITE }
+  G.SPLASH_LOGO_PHANTA_GHOST.dissolve = 1
+
+  G.E_MANAGER:add_event(Event({
+    trigger = 'after',
+    delay = change_context == 'splash' and 1.8 or change_context == 'game' and 2 or 0.5,
+    blockable = false,
+    blocking = false,
+    func = (function()
+      ease_value(G.SPLASH_LOGO_PHANTA_GHOST, 'dissolve', -1, nil, nil, nil,
+        change_context == 'splash' and 2.3 or 0.9)
+      G.VIBRATION = G.VIBRATION + 1.5
+      return true
+    end)
+  }))
+  
+  --[[G.SPLASH_BACK:define_draw_steps({ {
+    shader = 'splash',
+    send = {
+      { name = 'time',       ref_table = G.TIMERS,  ref_value = 'REAL_SHADER' },
+      { name = 'vort_speed', val = 0.4 },
+      { name = 'colour_1',   ref_table = G.C.PHANTA.MISC_COLOURS, ref_value = 'PHANTA_MAIN_MENU_PRIMARY' },
+      { name = 'colour_2',   ref_table = G.C.PHANTA.MISC_COLOURS, ref_value = 'PHANTA_MAIN_MENU_SECONDARY' },
+    }
+  } })]]--
+
+  return ret
+end
+
 function Card:phanta_set_anim_state(state)
   self.config.center.phanta_anim_current_state = state
   self.config.center.phanta_anim_t = 0
@@ -679,7 +743,7 @@ SMODS.DrawStep {
         atlas, self.config.center.pos_extra)
     end
     if self.phanta_extra then
-      if self.config.center.discovered or self.config.center.params.bypass_discovery_center then
+      if self.config.center.discovered or (self.config.center.params and self.config.center.params.bypass_discovery_center) then
         self.phanta_extra:set_sprite_pos(self.config.center.pos_extra)
         self.phanta_extra.role.draw_major = self
         if (self.edition and self.edition.negative and (not self.delay_edition or self.delay_edition.negative)) or (self.ability.name == 'Antimatter' and (self.config.center.discovered or self.bypass_discovery_center)) then
