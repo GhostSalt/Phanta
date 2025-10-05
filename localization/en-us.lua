@@ -1589,6 +1589,13 @@ return {
                     "become {C:attention}Glass{} when scored"
                 }
             },
+            j_phanta_pottedpeashooter      = {
+                name = 'Potted Pea Shooter',
+                text = {
+                    "{C:mult}+#1#{} Mult if this is",
+                    "the {C:attention}rightmost{} Joker"
+                }
+            },
             j_phanta_theriddler            = {
                 name = "The Riddler",
                 text = {
@@ -1721,6 +1728,30 @@ return {
                     "{C:spectral}Ethereal{} Tags from this",
                     "Joker's {C:red}MORE{} menu,",
                     "Tags cost {C:money}$16{} each"
+                }
+            },
+            j_phanta_l                     = {
+                name = 'L',
+                text = {
+                    "{C:white,X:mult}X#1#{} Mult if",
+                    "all played",
+                    "cards {C:attention}scored{}"
+                }
+            },
+            j_phanta_mello                 = {
+                name = 'Mello',
+                text = {
+                    "Gives {C:white,X:mult}X#1#{} Mult for",
+                    "each {C:money}$#2#{} you have",
+                    "{C:inactive}(Currently {C:white,X:mult}X#3#{C:inactive} Mult){}"
+                }
+            },
+            j_phanta_near                  = {
+                name = 'Near',
+                text = {
+                    "{C:white,X:mult}X#1#{} Mult if",
+                    "this is the",
+                    "{C:attention}leftmost{} Joker"
                 }
             },
             j_phanta_deathnote             = {

@@ -515,6 +515,25 @@ G.Phanta.centers["absentjoker"] = {
   end
 }
 
+G.Phanta.centers["pottedpeashooter"] = {
+  config = { extra = { mult = 15 } },
+  loc_vars = function(self, info_queue, card)
+    return { vars = { card.ability.extra.mult } }
+  end,
+  rarity = 1,
+  atlas = 'Phanta2',
+  pos = { x = 1, y = 4 },
+  cost = 4,
+  blueprint_compat = true,
+  eternal_compat = true,
+  perishable_compat = true,
+  calculate = function(self, card, context)
+    if context.joker_main and G.jokers.cards[#G.jokers.cards] == card then
+      return { mult = card.ability.extra.mult }
+    end
+  end
+}
+
 G.Phanta.centers["patientjoker"] = {
   config = { extra = { mult = 12 } },
   loc_vars = function(self, info_queue, card)
@@ -648,7 +667,7 @@ G.Phanta.centers["fanta"] = {
 }
 
 G.Phanta.centers["testpage"] = {
-  config = { extra = { added_chips = 20, current_chips = 0 } },
+  config = { extra = { added_chips = 15, current_chips = 0 } },
   rarity = 1,
   atlas = 'Phanta2',
   pos = { x = 1, y = 3 },
@@ -1787,6 +1806,11 @@ G.Phanta.centers["mrbigmoneybags"] = {
   perishable_compat = true,
   calculate = function(self, card, context)
     if context.joker_main then return { xmult = card.ability.extra.xmult } end
+  end,
+  in_pool = function(self, args)
+    if args.source ~= "buf" then
+      return true
+    end
   end
 }
 
@@ -2010,6 +2034,78 @@ G.FUNCS.phanta_can_purchase_ethereal_tag = function(e)
     e.config.button = nil
   end
 end
+
+G.Phanta.centers["l"] = {
+  config = { extra = { xmult = 2 } },
+  loc_vars = function(self, info_queue, card)
+    return { vars = { card.ability.extra.xmult } }
+  end,
+  rarity = 2,
+  atlas = 'Phanta2',
+  pos = { x = 4, y = 4 },
+  cost = 6,
+  blueprint_compat = true,
+  eternal_compat = true,
+  perishable_compat = true,
+  calculate = function(self, card, context)
+    if context.joker_main then
+      local _, _, _, scoring_hand, _ = G.FUNCS.get_poker_hand_info(G.play.cards)
+
+      local always_scores_count = 0
+      for _, card in pairs(G.play.cards) do
+        if card.config.center.always_scores then always_scores_count = always_scores_count + 1 end
+      end
+
+      if #scoring_hand + always_scores_count >= #G.play.cards then
+        return { xmult = card.ability.extra.xmult }
+      end
+    end
+  end,
+}
+
+G.Phanta.centers["mello"] = {
+  config = { extra = { xmult = 0.1, dollar_threshold = 10 } },
+  loc_vars = function(self, info_queue, card)
+    return {
+      vars = { card.ability.extra.xmult, card.ability.extra.dollar_threshold, 1 + (card.ability.extra.xmult *
+        math.max(0, math.floor((G.GAME.dollars + (G.GAME.dollar_buffer or 0)) / card.ability.extra.dollar_threshold))) }
+    }
+  end,
+  rarity = 2,
+  atlas = 'Phanta2',
+  pos = { x = 2, y = 4 },
+  cost = 6,
+  blueprint_compat = true,
+  eternal_compat = true,
+  perishable_compat = true,
+  calculate = function(self, card, context)
+    if context.joker_main and G.GAME.dollars + (G.GAME.dollar_buffer or 0) >= card.ability.extra.dollar_threshold then
+      return {
+        xmult = 1 + (card.ability.extra.xmult *
+          math.max(0, math.floor((G.GAME.dollars + (G.GAME.dollar_buffer or 0)) / card.ability.extra.dollar_threshold)))
+      }
+    end
+  end,
+}
+
+G.Phanta.centers["near"] = {
+  config = { extra = { xmult = 2 } },
+  loc_vars = function(self, info_queue, card)
+    return { vars = { card.ability.extra.xmult } }
+  end,
+  rarity = 2,
+  atlas = 'Phanta2',
+  pos = { x = 3, y = 4 },
+  cost = 6,
+  blueprint_compat = true,
+  eternal_compat = true,
+  perishable_compat = true,
+  calculate = function(self, card, context)
+    if context.joker_main and G.jokers.cards[1] == card then
+      return { xmult = card.ability.extra.xmult }
+    end
+  end,
+}
 
 G.Phanta.centers["deathnote"] = {
   loc_vars = function(self, info_queue, card)

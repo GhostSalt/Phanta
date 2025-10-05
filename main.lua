@@ -743,7 +743,7 @@ SMODS.DrawStep {
         atlas, self.config.center.pos_extra)
     end
     if self.phanta_extra then
-      if self.config.center.discovered or (self.config.center.params and self.config.center.params.bypass_discovery_center) then
+      if self.config.center.discovered or (self.params and self.params.bypass_discovery_center) then
         self.phanta_extra:set_sprite_pos(self.config.center.pos_extra)
         self.phanta_extra.role.draw_major = self
         if (self.edition and self.edition.negative and (not self.delay_edition or self.delay_edition.negative)) or (self.ability.name == 'Antimatter' and (self.config.center.discovered or self.bypass_discovery_center)) then
