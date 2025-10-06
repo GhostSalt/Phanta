@@ -556,6 +556,7 @@ function Game:init_game_object()
   ret.current_round.train_station_card = { id = nil, value = nil }
   ret.current_round.fainfol_card = { suit = 'Spades' }
   ret.current_round.puzzle_card = { id = nil }
+  ret.current_round.phanta_widget_suit = 'Clubs'
   return ret
 end
 
@@ -629,17 +630,31 @@ function SMODS.Center:phanta_set_anim_extra_state(state)
 end
 
 function SMODS.current_mod.reset_game_globals(run_start)
-  G.GAME.current_round.fainfol_card = { suit = 'Spades' }
-  local valid_cards = {}
+  G.GAME.current_round.fainfol_card = G.GAME.current_round.fainfol_card or 'Clubs'
+  local valid_cards_fainfol = {}
   for i, j in ipairs(G.playing_cards) do
-    if not SMODS.has_no_suit(j) then
-      valid_cards[#valid_cards + 1] = j
+    if not SMODS.has_no_suit(j) and not j:is_suit(G.GAME.current_round.fainfol_card.suit) then
+      valid_cards_fainfol[#valid_cards_fainfol + 1] = j
     end
   end
-  if valid_cards[1] then
-    local chosen_card = pseudorandom_element(valid_cards, pseudoseed('fainfol' .. G.GAME.round_resets.ante))
+  if next(valid_cards_fainfol) then
+    local chosen_card = pseudorandom_element(valid_cards_fainfol, pseudoseed('fainfol' .. G.GAME.round_resets.ante))
     G.GAME.current_round.fainfol_card.suit = chosen_card.base.suit
   end
+
+  G.GAME.current_round.phanta_widget_suit = G.GAME.current_round.phanta_widget_suit or { suit = 'Spades' }
+  local valid_cards_widget = {}
+  for i, j in ipairs(G.playing_cards) do
+    if not SMODS.has_no_suit(j) and not j:is_suit(G.GAME.current_round.phanta_widget_suit) then
+      valid_cards_widget[#valid_cards_widget + 1] = j
+    end
+  end
+  if next(valid_cards_widget) then
+    local chosen_card = pseudorandom_element(valid_cards_widget, pseudoseed('widget' .. G.GAME.round_resets.ante))
+    G.GAME.current_round.phanta_widget_suit = chosen_card.base.suit
+  end
+
+
   if not G.GAME.current_round.train_station_card.id then
     G.GAME.current_round.train_station_card.id = 2
   elseif G.GAME.current_round.train_station_card.id == 14 then

@@ -1581,6 +1581,16 @@ return {
                     "{C:money}$#1#{} when scored",
                 }
             },
+            j_phanta_widget                = {
+                name = 'Widget',
+                text = {
+                    "Gains {C:white,X:mult}X#1#{} Mult when",
+                    "{C:attention}leftmost{} played card is",
+                    "scored if it is a {V:1}#2#{},",
+                    "{s:0.8}suit changes at end of round{}",
+                    "{C:inactive}(Currently {C:white,X:mult}X#3#{C:inactive} Mult){}"
+                }
+            },
             j_phanta_glassjoe              = {
                 name = "Glass Joe",
                 text = {
@@ -1812,7 +1822,7 @@ return {
                 text = {
                     "Each {V:1}#1#{} card held",
                     "in hand gives {C:white,X:mult}X#2#{} Mult,",
-                    "suit changes every round"
+                    "{s:0.8}suit changes at end of round{}",
                 }
             },
             j_phanta_granwyrm              = {

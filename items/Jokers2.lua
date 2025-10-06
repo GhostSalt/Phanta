@@ -1273,6 +1273,137 @@ G.Phanta.centers["yatagarasucard"] = {
   end
 }
 
+G.Phanta.centers["widget"] = {
+  config = { extra = { added_xmult = 0.1, current_xmult = 1 } },
+  loc_vars = function(self, info_queue, card)
+    return {
+      vars = {
+        card.ability.extra.added_xmult,
+        localize(G.GAME.current_round.phanta_widget_suit, 'suits_singular'),
+        card.ability.extra.current_xmult,
+        colours = { G.C.SUITS[G.GAME.current_round.phanta_widget_suit] or G.C.JOKER_GREY }
+      }
+    }
+  end,
+  rarity = 3,
+  atlas = 'PhantaMiscAnims5',
+  pos = { x = 7, y = 4 },
+  phanta_anim = {
+    { xrange = { first = 7, last = 10 }, y = 4, t = 0.2 },
+  },
+  pos_extra = { x = 11, y = 4 },
+  phanta_anim_extra_states = {
+    ["unknown"] = { anim = { { x = 11, y = 4, t = 1 } }, loop = false },
+
+    ["diamonds"] = { anim = { { x = 0, y = 5, t = 1 } }, loop = false },
+    ["hearts"] = { anim = { { x = 1, y = 5, t = 1 } }, loop = false },
+    ["spades"] = { anim = { { x = 2, y = 5, t = 1 } }, loop = false },
+    ["clubs"] = { anim = { { x = 3, y = 5, t = 1 } }, loop = false },
+
+    ["inks"] = { anim = { { x = 4, y = 5, t = 1 } }, loop = false },
+    ["colors"] = { anim = { { x = 5, y = 5, t = 1 } }, loop = false },
+
+    ["clovers"] = { anim = { { x = 6, y = 5, t = 1 } }, loop = false },
+    ["suitless"] = { anim = { { x = 7, y = 5, t = 1 } }, loop = false },
+
+    ["3s"] = { anim = { { x = 8, y = 5, t = 1 } }, loop = false },
+
+    ["notes"] = { anim = { { x = 9, y = 5, t = 1 } }, loop = false },
+
+    ["stars1"] = { anim = { { x = 10, y = 5, t = 1 } }, loop = false },
+    ["moons"] = { anim = { { x = 11, y = 5, t = 1 } }, loop = false },
+
+    ["fleurons"] = { anim = { { x = 0, y = 6, t = 1 } }, loop = false },
+    ["halberds"] = { anim = { { x = 1, y = 6, t = 1 } }, loop = false },
+
+    ["goblets"] = { anim = { { x = 2, y = 6, t = 1 } }, loop = false },
+    ["towers"] = { anim = { { x = 3, y = 6, t = 1 } }, loop = false },
+    ["blooms"] = { anim = { { x = 4, y = 6, t = 1 } }, loop = false },
+    ["daggers"] = { anim = { { x = 5, y = 6, t = 1 } }, loop = false },
+    ["voids"] = { anim = { { x = 6, y = 6, t = 1 } }, loop = false },
+    ["lanterns"] = { anim = { { x = 7, y = 6, t = 1 } }, loop = false },
+
+    ["crowns"] = { anim = { { x = 8, y = 6, t = 1 } }, loop = false },
+    ["stars2"] = { anim = { { x = 9, y = 6, t = 1 } }, loop = false },
+
+    ["thunders"] = { anim = { { x = 10, y = 6, t = 1 } }, loop = false },
+    ["waters"] = { anim = { { x = 11, y = 6, t = 1 } }, loop = false },
+
+    ["eyes"] = { anim = { { x = 0, y = 7, t = 1 } }, loop = false }
+  },
+  cost = 8,
+  blueprint_compat = true,
+  eternal_compat = true,
+  perishable_compat = true,
+  calculate = function(self, card, context)
+    if context.joker_main and card.ability.extra.current_xmult > 1 then
+      return { xmult = card.ability.extra.current_xmult }
+    end
+
+    if context.individual and context.cardarea == G.play and context.scoring_hand[1] == context.other_card and context.other_card:is_suit(G.GAME.current_round.phanta_widget_suit) and not context.blueprint then
+      card.ability.extra.current_xmult = card.ability.extra.current_xmult + card.ability.extra.added_xmult
+      return { message = localize("k_upgrade_ex"), colour = G.C.FILTER, card = card }
+    end
+
+    if context.end_of_round and not context.individual and not context.repetition and not context.blueprint then
+      self:update_widget_suit(card)
+      return { message = localize("k_reset"), colour = G.FILTER }
+    end
+  end,
+  update_widget_suit = function(self, card)
+    local supported_suits = {
+      ["Diamonds"] = "diamonds",
+      ["Hearts"] = "hearts",
+      ["Spades"] = "spades",
+      ["Clubs"] = "clubs", --[[
+
+        ["ink_Inks"] = "inks",
+        ["ink_Colors"] = "colors",
+
+        ["mtg_Clovers"] = "clovers",
+        ["mtg_Suitless"] = "suitless",
+
+        ["minty_3s"] = "3s",
+
+        ["Notes"] = "notes",
+
+        ["six_Stars"] = "stars1",
+        ["six_Moons"] = "moons",
+
+        ["bunc_Fleurons"] = "fleurons",
+        ["bunc_Halberds"] = "halberds",
+
+        ["rgmc_goblets"] = "goblets",
+        ["rgmc_towers"] = "towers",
+        ["rgmc_blooms"] = "blooms",
+        ["rgmc_daggers"] = "daggers",
+        ["rgmc_voids"] = "voids",
+        ["rgmc_lanterns"] = "lanterns",
+
+        ["paperback_Crowns"] = "crowns",
+        ["paperback_Stars"] = "stars2",
+
+        ["rcb_thunders"] = "thunders",
+        ["rcb_waters"] = "waters",
+
+        ["gb_Eyes"] = "eyes"]] --
+    }
+    local displayed_suit = supported_suits[G.GAME.current_round.phanta_widget_suit] or "unknown"
+
+    card:phanta_set_anim_extra_state(displayed_suit)
+    card.ability.extra.suit_key = G.GAME.current_round.phanta_widget_suit
+  end,
+  add_to_deck = function(self, card, from_debuff)
+    self:update_widget_suit(card)
+  end,
+  update = function(self, card, dt)
+    if not self.discovered and not card.params.bypass_discovery_center then
+      return
+    end
+    if card.ability.extra.suit_key ~= G.GAME.current_round.phanta_widget_suit then self:update_widget_suit(card) end
+  end
+}
+
 G.Phanta.centers["glassjoe"] = {
   loc_vars = function(self, info_queue, card)
     info_queue[#info_queue + 1] = G.P_CENTERS.m_glass
