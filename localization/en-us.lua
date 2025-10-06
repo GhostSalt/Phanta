@@ -779,10 +779,9 @@ return {
             j_phanta_grimreaper            = {
                 name = 'The Grim Reaper',
                 text = {
-                    "If hand is played",
-                    "while {C:attention}holding{} a copy",
-                    "of {C:purple}Death{}, {C:red}destroys{}",
-                    "all played cards"
+                    "Gains {C:white,X:mult}X#1#{} when using",
+                    "{C:tarot}Death{} {C:inactive}[Tarot card]{}",
+                    "{C:inactive}(Currently {C:white,X:mult}X#2#{C:inactive} Mult){}"
                 }
             },
             j_phanta_professorlayton       = {
@@ -915,7 +914,7 @@ return {
             j_phanta_blottedjoker          = {
                 name = 'Blotted Joker',
                 text = {
-                    "Played {C:attention}2s{}, {C:attention}3s{} {C:attention}4s{} and",
+                    "Played {C:attention}2s{}, {C:attention}3s{}, {C:attention}4s{} and",
                     "{C:attention}5s{} become {C:attention}Bonus{}",
                     "cards when scored"
                 }
@@ -1463,9 +1462,9 @@ return {
                 name = 'Heartbreak',
                 text = {
                     "Played cards with {C:hearts}Hearts{}",
-                    "suit give {C:white,X:mult}X#1#{} Mult when",
-                    "scored, each has a {C:green}#2# in #3#{}",
-                    "chance to be {C:red}destroyed{}"
+                    "suit give {C:white,X:mult}X#1#{} Mult when {C:attention}scored{},",
+                    "gains {C:white,X:mult}X#2#{} Mult when such",
+                    "a card is {C:red}destroyed{}"
                 }
             },
             j_phanta_distance              = {
@@ -1600,7 +1599,7 @@ return {
                 }
             },
             j_phanta_pottedpeashooter      = {
-                name = 'Potted Pea Shooter',
+                name = 'Potted Peashooter',
                 text = {
                     "{C:mult}+#1#{} Mult if this is",
                     "the {C:attention}rightmost{} Joker"
@@ -2514,20 +2513,26 @@ return {
             }
         },
         Tarot = {
+            c_phanta_gatherer = {
+                name = "The Gatherer",
+                text = {
+                    "Earn {C:money}$#1#{}"
+                }
+            },
             c_phanta_grave = {
                 name = "The Grave",
                 text = {
                     "Enhances {C:attention}#1#{}",
                     "selected card into a",
                     "{C:attention}Ghost Card{}"
-                },
+                }
             },
             c_phanta_beekeeper = {
                 name = "The Beekeeper",
                 text = {
                     "Add {C:dark_edition}Waxed{} to {C:attention}#1#{}",
                     "selected cards in hand",
-                },
+                }
             }
         },
         Spectral = {

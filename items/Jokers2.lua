@@ -761,7 +761,7 @@ G.Phanta.centers["flagsignal"] = {
 }
 
 G.Phanta.centers["heartbreak"] = {
-  config = { extra = { xmult = 1.5, odds = 2 } },
+  config = { extra = { added_xmult = 0.1, current_xmult = 1 } },
   rarity = 2,
   atlas = 'PhantaMiscAnims1',
   pos = { x = 0, y = 9 },
@@ -771,20 +771,25 @@ G.Phanta.centers["heartbreak"] = {
   },
   cost = 6,
   loc_vars = function(self, info_queue, card)
-    local num, denom = SMODS.get_probability_vars(card, 1, card.ability.extra.odds, "heartbreak")
-    return { vars = { card.ability.extra.xmult, num, denom } }
+    return { vars = { card.ability.extra.current_xmult, card.ability.extra.added_xmult } }
   end,
   blueprint_compat = true,
   eternal_compat = true,
-  perishable_compat = true,
+  perishable_compat = false,
   calculate = function(self, card, context)
-    if context.individual and context.cardarea == G.play and context.other_card:is_suit("Hearts") then
-      return { xmult = card.ability.extra.xmult }
+    if context.individual and context.cardarea == G.play and context.other_card:is_suit("Hearts") and card.ability.extra.current_xmult > 1 then
+      return { xmult = card.ability.extra.current_xmult }
     end
 
-    if context.destroy_card and context.cardarea == G.play and context.destroy_card:is_suit("Hearts")
-        and SMODS.pseudorandom_probability(card, "heartbreak", 1, card.ability.extra.odds) then
-      return { remove = true }
+    if context.remove_playing_cards then
+      local count = 0
+      for _, v in ipairs(context.removed) do
+        if v:is_suit("Hearts") then count = count + 1 end
+      end
+      if count > 0 then
+        card.ability.extra.current_xmult = card.ability.extra.current_xmult + (count * card.ability.extra.added_xmult)
+        return { message = localize("k_upgrade_ex"), colour = G.C.FILTER, message_card = card }
+      end
     end
   end
 }
@@ -1928,7 +1933,7 @@ G.Phanta.centers["mrbigmoneybags"] = {
   rarity = 1,
   atlas = 'Phanta2',
   pos = { x = 11, y = 2 },
-  cost = 15,
+  cost = 20,
   loc_vars = function(self, info_queue, card)
     return { vars = { card.ability.extra.xmult } }
   end,

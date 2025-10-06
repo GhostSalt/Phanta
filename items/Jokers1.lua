@@ -1734,45 +1734,27 @@ G.Phanta.centers["calendar"] = {
 }
 
 G.Phanta.centers["grimreaper"] = {
+  config = { extra = { added_xmult = 0.4, current_xmult = 1 } },
   rarity = 3,
   atlas = 'Phanta',
   pos = { x = 9, y = 4 },
   cost = 8,
-  blueprint_compat = false,
+  blueprint_compat = true,
   eternal_compat = true,
-  perishable_compat = true,
+  perishable_compat = false,
   loc_vars = function(self, info_queue, card)
     info_queue[#info_queue + 1] = G.P_CENTERS.c_death
-    return {}
+    return { vars = { card.ability.extra.added_xmult, card.ability.extra.current_xmult } }
   end,
   calculate = function(self, card, context)
-    if context.destroy_card and context.cardarea == G.play and count_tarots() > 0 then
-      local has_death = false
-      for _, v in pairs(G.consumeables.cards) do
-        if not has_death and v.ability.set == "Tarot" and v.config.center.key == "c_death" then has_death = true end
-      end
-
-      if has_death then return { remove = true } end
+    if context.joker_main and card.ability.extra.current_xmult > 1 then
+      return { xmult = card.ability.extra.current_xmult }
     end
 
-    --[[
-    if context.destroy_card and context.cardarea == G.hand and count_tarots() > 0 then
-      for _, v in pairs(G.consumeables.cards) do
-        if v.grim_reaper_queued_to_destroy and not v.getting_sliced then
-          v.getting_sliced = true
-          G.E_MANAGER:add_event(Event({
-            func = function()
-              card:juice_up(0.8, 0.8)
-              v:start_dissolve({ G.C.RED }, nil, 1.6)
-              return true
-            end
-          }))
-        end
-      end
-
-      return false
+    if context.using_consumeable and context.consumeable.config.center.key == "c_death" and not context.blueprint then
+      card.ability.extra.current_xmult = card.ability.extra.current_xmult + card.ability.extra.added_xmult
+      return { message = localize("k_upgrade_ex"), colour = G.C.FILTER }
     end
-    ]] --
   end
 }
 
@@ -2400,7 +2382,6 @@ G.Phanta.centers["cutcorners"] = {
 }
 
 G.Phanta.centers["blottedjoker"] = {
-  config = { extra = { added_chips = 30, current_chips = 0 } },
   rarity = 2,
   atlas = 'Phanta',
   pos = { x = 11, y = 0 },

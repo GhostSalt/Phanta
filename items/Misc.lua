@@ -116,6 +116,34 @@ SMODS.Seal {
 }
 
 SMODS.Tarot {
+  key = "gatherer",
+  pos = { x = 3, y = 3 },
+  config = {
+    extra = { money = 11 },
+  },
+  atlas = "PhantaTarots",
+  loc_vars = function(self, info_queue, card)
+    return { vars = { card.ability.extra.money } }
+  end,
+  can_use = function(self, card)
+    return true
+  end,
+  use = function(self, card, area, copier)
+    G.E_MANAGER:add_event(Event({
+      trigger = 'after',
+      delay = 0.4,
+      func = function()
+        play_sound('timpani')
+        card:juice_up(0.3, 0.5)
+        ease_dollars(card.ability.extra.money, true)
+        return true
+      end
+    }))
+    delay(0.6)
+  end
+}
+
+SMODS.Tarot {
   key = "grave",
   loc_txt = {
     name = 'Grave',
@@ -1019,9 +1047,9 @@ local sell_use_ref = G.UIDEF.use_and_sell_buttons
 
 function G.UIDEF.use_and_sell_buttons(card)
   if not card or ((not card.config or not card.config.center
-  or (card.config.center.key ~= "j_phanta_profile" and card.config.center.key ~= "j_phanta_modping" and card.config.center.key ~= "j_phanta_deathnote"))
-  and (not card.ability or card.ability.set ~= "phanta_Zodiac")
-  and (not card.ability or not card.ability.perishable or card.ability.perish_tally ~= 0)) then
+          or (card.config.center.key ~= "j_phanta_profile" and card.config.center.key ~= "j_phanta_modping" and card.config.center.key ~= "j_phanta_deathnote"))
+        and (not card.ability or card.ability.set ~= "phanta_Zodiac")
+        and (not card.ability or not card.ability.perishable or card.ability.perish_tally ~= 0)) then
     return sell_use_ref(card, self)
   end
 
@@ -2220,7 +2248,7 @@ SMODS.Back {
   end,
   apply = function(self, back)
     G.GAME.starting_params.boosters_in_shop = G.GAME.starting_params.boosters_in_shop -
-    self.config.extra.removed_shop_slots
+        self.config.extra.removed_shop_slots
   end
 }
 
