@@ -234,7 +234,7 @@ G.Phanta.centers["peekaboo"] = {
   eternal_compat = true,
   perishable_compat = true,
   calculate = function(self, card, context)
-    if context.joker_main and not (card.ability.extra.chosen_ability.hands_played and G.GAME.current_round.hands_played ~= 1) then
+    if context.joker_main and card.ability.extra.chosen_ability.hands_played and G.GAME.current_round.hands_played == card.ability.extra.chosen_ability.hands_played - 1 then
       local bonus = { mult = card.ability.extra.mult }
       bonus.chips = card.ability.extra.chosen_ability.chips
       bonus.mult = bonus.mult + (card.ability.extra.chosen_ability.mult or 0)

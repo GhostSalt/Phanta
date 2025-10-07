@@ -829,14 +829,12 @@ G.Phanta.centers["q"] = {
           if v:get_id() == 12 then card.ability.extra.queens[#card.ability.extra.queens + 1] = v end
         end
       end
+      if #card.ability.extra.queens < 2 then card.ability.extra.queens = {} end
     end
 
     if context.individual and context.cardarea == G.play then
       if context.other_card == card.ability.extra.queens[1] or context.other_card == card.ability.extra.queens[2] then
-        return {
-          xmult =
-              card.ability.extra.given_xmult
-        }
+        return { xmult = card.ability.extra.given_xmult }
       end
     end
   end
