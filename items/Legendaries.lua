@@ -1,25 +1,14 @@
--- For rendering shaders on the souls
-
-local scale_mod = 0.07 + 0.02 * math.sin(1.8 * G.TIMERS.REAL) +
-    0.00 * math.sin((G.TIMERS.REAL - math.floor(G.TIMERS.REAL)) * math.pi * 14) *
-    (1 - (G.TIMERS.REAL - math.floor(G.TIMERS.REAL))) ^ 3
-local rotate_mod = 0.05 * math.sin(1.219 * G.TIMERS.REAL) +
-    0.00 * math.sin((G.TIMERS.REAL) * math.pi * 5) * (1 - (G.TIMERS.REAL - math.floor(G.TIMERS.REAL))) ^ 2
-
-    
-
 G.Phanta.centers["ignaize"] = {
+  unlocked = false,
   config = { extra = { current_xmult = 1, added_xmult = 0.1 } },
   rarity = 4,
   atlas = 'Phanta',
   pos = { x = 2, y = 1 },
-  soul_pos = { x = 3, y = 2,
-    draw = function(card, scale_mod, rotate_mod)
-      card.children.floating_sprite:draw_shader('dissolve', 0, nil, nil, card.children.center, scale_mod, rotate_mod, nil,
-        0.1 + 0.03 * math.sin(1.8 * G.TIMERS.REAL), nil, 0.6)
-      card.children.floating_sprite:draw_shader('dissolve', nil, nil, nil, card.children.center, scale_mod, rotate_mod)
-      card.children.floating_sprite:draw_shader('voucher', nil, nil, nil, card.children.center, scale_mod, rotate_mod)
-    end },
+  soul_pos = {
+    x = 3,
+    y = 2
+  },
+  phanta_shiny_soul = true,
   cost = 20,
   loc_vars = function(self, info_queue, card)
     return { vars = { card.ability.extra.added_xmult, card.ability.extra.current_xmult } }
@@ -40,16 +29,15 @@ G.Phanta.centers["ignaize"] = {
 }
 
 G.Phanta.centers["dimere"] = {
+  unlocked = false,
   rarity = 4,
   atlas = 'Phanta',
   pos = { x = 3, y = 1 },
-  soul_pos = { x = 4, y = 2,
-    draw = function(card, scale_mod, rotate_mod)
-      card.children.floating_sprite:draw_shader('dissolve', 0, nil, nil, card.children.center, scale_mod, rotate_mod, nil,
-        0.1 + 0.03 * math.sin(1.8 * G.TIMERS.REAL), nil, 0.6)
-      card.children.floating_sprite:draw_shader('dissolve', nil, nil, nil, card.children.center, scale_mod, rotate_mod)
-      card.children.floating_sprite:draw_shader('voucher', nil, nil, nil, card.children.center, scale_mod, rotate_mod)
-    end },
+  soul_pos = {
+    x = 4,
+    y = 2
+  },
+  phanta_shiny_soul = true,
   cost = 20,
   loc_vars = function(self, info_queue, card)
     info_queue[#info_queue + 1] = G.P_CENTERS.e_negative
@@ -81,17 +69,16 @@ G.Phanta.centers["dimere"] = {
 }
 
 G.Phanta.centers["goldor"] = {
+  unlocked = false,
   config = { extra = { money = 3, xmult = 3 } },
   rarity = 4,
   atlas = 'Phanta',
   pos = { x = 4, y = 1 },
-  soul_pos = { x = 5, y = 2,
-    draw = function(card, scale_mod, rotate_mod)
-      card.children.floating_sprite:draw_shader('dissolve', 0, nil, nil, card.children.center, scale_mod, rotate_mod, nil,
-        0.1 + 0.03 * math.sin(1.8 * G.TIMERS.REAL), nil, 0.6)
-      card.children.floating_sprite:draw_shader('dissolve', nil, nil, nil, card.children.center, scale_mod, rotate_mod)
-      card.children.floating_sprite:draw_shader('voucher', nil, nil, nil, card.children.center, scale_mod, rotate_mod)
-    end },
+  soul_pos = {
+    x = 5,
+    y = 2
+  },
+  phanta_shiny_soul = true,
   cost = 20,
   loc_vars = function(self, info_queue, card)
     info_queue[#info_queue + 1] = G.P_CENTERS.m_gold
@@ -120,16 +107,15 @@ G.Phanta.centers["goldor"] = {
 }
 
 G.Phanta.centers["famalia"] = {
+  unlocked = false,
   rarity = 4,
   atlas = 'Phanta',
   pos = { x = 5, y = 1 },
-  soul_pos = { x = 0, y = 3,
-    draw = function(card, scale_mod, rotate_mod)
-      card.children.floating_sprite:draw_shader('dissolve', 0, nil, nil, card.children.center, scale_mod, rotate_mod, nil,
-        0.1 + 0.03 * math.sin(1.8 * G.TIMERS.REAL), nil, 0.6)
-      card.children.floating_sprite:draw_shader('dissolve', nil, nil, nil, card.children.center, scale_mod, rotate_mod)
-      card.children.floating_sprite:draw_shader('voucher', nil, nil, nil, card.children.center, scale_mod, rotate_mod)
-    end },
+  soul_pos = {
+    x = 0,
+    y = 3
+  },
+  phanta_shiny_soul = true,
   cost = 20,
   loc_vars = function(self, info_queue, card)
     --info_queue[#info_queue+1] = G.P_CENTERS.
@@ -162,17 +148,16 @@ G.Phanta.centers["famalia"] = {
 }
 
 G.Phanta.centers["godoor"] = {
+  unlocked = false,
   config = { extra = { added_xmult = 1, current_xmult = 1, counted_rerolls = 0 } },
   rarity = 4,
   atlas = 'Phanta',
   pos = { x = 0, y = 2 },
-  soul_pos = { x = 1, y = 3,
-    draw = function(card, scale_mod, rotate_mod)
-      card.children.floating_sprite:draw_shader('dissolve', 0, nil, nil, card.children.center, scale_mod, rotate_mod, nil,
-        0.1 + 0.03 * math.sin(1.8 * G.TIMERS.REAL), nil, 0.6)
-      card.children.floating_sprite:draw_shader('dissolve', nil, nil, nil, card.children.center, scale_mod, rotate_mod)
-      card.children.floating_sprite:draw_shader('voucher', nil, nil, nil, card.children.center, scale_mod, rotate_mod)
-    end },
+  soul_pos = {
+    x = 1,
+    y = 3
+  },
+  phanta_shiny_soul = true,
   cost = 20,
   loc_vars = function(self, info_queue, card)
     return { vars = { card.ability.extra.added_xmult, card.ability.extra.current_xmult } }
@@ -218,17 +203,16 @@ G.Phanta.centers["godoor"] = {
 }
 
 G.Phanta.centers["fainfol"] = {
+  unlocked = false,
   config = { extra = { xmult = 1.5 } },
   rarity = 4,
   atlas = 'Phanta',
   pos = { x = 1, y = 2 },
-  soul_pos = { x = 2, y = 3,
-    draw = function(card, scale_mod, rotate_mod)
-      card.children.floating_sprite:draw_shader('dissolve', 0, nil, nil, card.children.center, scale_mod, rotate_mod, nil,
-        0.1 + 0.03 * math.sin(1.8 * G.TIMERS.REAL), nil, 0.6)
-      card.children.floating_sprite:draw_shader('dissolve', nil, nil, nil, card.children.center, scale_mod, rotate_mod)
-      card.children.floating_sprite:draw_shader('voucher', nil, nil, nil, card.children.center, scale_mod, rotate_mod)
-    end },
+  soul_pos = {
+    x = 2,
+    y = 3
+  },
+  phanta_shiny_soul = true,
   cost = 20,
   loc_vars = function(self, info_queue, card)
     return {
@@ -269,27 +253,16 @@ G.Phanta.centers["fainfol"] = {
 }
 
 G.Phanta.centers["granwyrm"] = {
+  unlocked = false,
   config = { extra = { added_xmult = 0.8, current_unscored = 0, target_unscored = 16, current_xmult = 1 } },
   rarity = 4,
   atlas = 'Phanta',
   pos = { x = 2, y = 2 },
-  --[[soul_pos = { x = 3, y = 3,
-    draw = function(card, scale_mod, rotate_mod)
-      card.ARGS.send_to_shader = card.ARGS.send_to_shader or {}
-
-      card.children.floating_sprite:draw_shader(nil, 0, nil, nil, card.children.center, scale_mod, rotate_mod, nil,
-        0.1 + 0.03 * math.sin(1.8 * G.TIMERS.REAL), nil, 0.6)
-      card.children.floating_sprite:draw_shader(nil, nil, nil, nil, card.children.center, scale_mod, rotate_mod)
-      card.children.floating_sprite:draw_shader('voucher', nil, card.ARGS.send_to_shader, nil, card.children.center,
-        scale_mod, rotate_mod, nil, 0.1 + 0.03 * math.sin(1.8 * G.TIMERS.REAL), nil, 0.6)
-    end },]] --
-  soul_pos = { x = 3, y = 3,
-    draw = function(card, scale_mod, rotate_mod)
-      card.children.floating_sprite:draw_shader('dissolve', 0, nil, nil, card.children.center, scale_mod, rotate_mod, nil,
-        0.1 + 0.03 * math.sin(1.8 * G.TIMERS.REAL), nil, 0.6)
-      card.children.floating_sprite:draw_shader('dissolve', nil, nil, nil, card.children.center, scale_mod, rotate_mod)
-      card.children.floating_sprite:draw_shader('voucher', nil, nil, nil, card.children.center, scale_mod, rotate_mod)
-    end },
+  soul_pos = {
+    x = 3,
+    y = 3
+  },
+  phanta_shiny_soul = true,
   cost = 20,
   loc_vars = function(self, info_queue, card)
     return { vars = { card.ability.extra.added_xmult, card.ability.extra.target_unscored, card.ability.extra.target_unscored - card.ability.extra.current_unscored, card.ability.extra.current_xmult } }

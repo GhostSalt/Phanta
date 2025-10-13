@@ -392,7 +392,7 @@ end
 
 local allFolders = { "none", "items" }
 
-local allFiles = { ["none"] = {}, ["items"] = { "Blind", "Jokers1", "Jokers2", "Legendaries", "Misc", "StarterPack", "Stake", "Sticker", "Suit", "DeckJoker" } }
+local allFiles = { ["none"] = {}, ["items"] = { "Blind", "Jokers1", "Jokers2", "Legendaries", "Misc", "StarterPack", "Stake", "Sticker", "Suit", "Unlocks", "DeckJoker" } }
 
 for i = 1, #allFolders do
   if allFolders[i] == "none" then
@@ -520,6 +520,9 @@ end
 
 function SMODS.current_mod:calculate(context)
   if context.end_of_round and not context.repetition and not context.individual then
+    if #G.deck.cards == 4 then
+      check_for_unlock({ type = 'phanta_four_cards_remaining' })
+    end
     for i, v in ipairs(G.jokers.cards) do
       if v.ability.phanta_sleepy then
         v.ability.sleepy_tally = v.ability.sleepy_tally - 1
@@ -548,6 +551,42 @@ function SMODS.current_mod:calculate(context)
   if context.ending_shop then
     G.GAME.current_shop_rerolls = 0
   end
+
+  if context.remove_playing_cards then
+    for _, v in ipairs(context.removed) do
+      if SMODS.has_enhancement(v, "m_phanta_ghostcard") and v.seal == 'phanta_ghostseal' then
+        check_for_unlock({ type = 'phanta_remove_double_ghost' })
+      end
+    end
+  end
+
+  if context.before then
+    if G.play.cards then
+      local text, disp_text = G.FUNCS.get_poker_hand_info(G.play.cards)
+      if text == "phanta_junk" then
+        for _, v in ipairs(context.scoring_hand) do
+          if SMODS.has_enhancement(v, "m_steel") then
+            check_for_unlock({ type = 'phanta_junk_scoring_steel' })
+          end
+        end
+      end
+
+      local counted_marbles = 0
+      for _, v in ipairs(G.play.cards) do
+        if SMODS.has_enhancement(v, "m_phanta_marblecard") then
+          counted_marbles = counted_marbles + 1
+        end
+      end
+      if counted_marbles >= 5 then check_for_unlock({ type = 'phanta_five_marbles' }) end
+    end
+
+    if not G.GAME.phanta_number_of_unscored then G.GAME.phanta_number_of_unscored = 0 end
+    G.GAME.phanta_number_of_unscored = G.GAME.phanta_number_of_unscored + (#G.play.cards - #context.scoring_hand)
+  end
+
+  if context.reroll_shop and G.GAME.current_shop_rerolls >= 10 then
+    check_for_unlock({ type = 'phanta_ten_rerolls' })
+  end
 end
 
 local igo = Game.init_game_object
@@ -567,7 +606,8 @@ Game.main_menu = function(change_context)
   local SC_scale = 1.1 * (G.debug_splash_size_toggle and 0.8 or 1)
   G.SPLASH_LOGO_PHANTA_GHOST = Sprite(0, 0,
     13 * SC_scale,
-    13 * SC_scale * (G.ASSET_ATLAS["phanta_PhantaTitleScreenGhost"].py / G.ASSET_ATLAS["phanta_PhantaTitleScreenGhost"].px),
+    13 * SC_scale *
+    (G.ASSET_ATLAS["phanta_PhantaTitleScreenGhost"].py / G.ASSET_ATLAS["phanta_PhantaTitleScreenGhost"].px),
     G.ASSET_ATLAS["phanta_PhantaTitleScreenGhost"], { x = 0, y = 0 }
   )
   G.SPLASH_LOGO_PHANTA_GHOST:set_alignment({
@@ -595,7 +635,7 @@ Game.main_menu = function(change_context)
       return true
     end)
   }))
-  
+
   --[[G.SPLASH_BACK:define_draw_steps({ {
     shader = 'splash',
     send = {
@@ -604,7 +644,7 @@ Game.main_menu = function(change_context)
       { name = 'colour_1',   ref_table = G.C.PHANTA.MISC_COLOURS, ref_value = 'PHANTA_MAIN_MENU_PRIMARY' },
       { name = 'colour_2',   ref_table = G.C.PHANTA.MISC_COLOURS, ref_value = 'PHANTA_MAIN_MENU_SECONDARY' },
     }
-  } })]]--
+  } })]] --
 
   return ret
 end
@@ -683,8 +723,7 @@ if not Phanta then Phanta = {} end
 Phanta.config = SMODS.current_mod.config
 
 local phantaConfigTab = function()
-  phanta_nodes = {
-  }
+  phanta_nodes = {}
   config = { n = G.UIT.R, config = { align = "tm", padding = 0 }, nodes = { { n = G.UIT.C, config = { align = "tm", padding = 0.05 }, nodes = {} } } }
   phanta_nodes[#phanta_nodes + 1] = config
   phanta_nodes[#phanta_nodes + 1] = create_toggle({
@@ -724,6 +763,14 @@ local phantaConfigTab = function()
     active_colour = HEX("40c76d"),
     ref_table = Phanta.config,
     ref_value = "custom_music_disabled",
+    callback = function()
+    end,
+  })
+  phanta_nodes[#phanta_nodes + 1] = create_toggle({
+    label = localize("phanta_copper_grate_expanded"),
+    active_colour = HEX("40c76d"),
+    ref_table = Phanta.config,
+    ref_value = "copper_grate_expanded",
     callback = function()
     end,
   })
@@ -799,6 +846,28 @@ SMODS.DrawStep {
   end,
   conditions = { vortex = false, facing = 'front' },
 }
+
+SMODS.DrawStep {
+  key = 'shiny_soul',
+  order = 61,
+  func = function(self)
+    if self.config.center.soul_pos and (self.config.center.discovered or self.bypass_discovery_center) and self.config.center.phanta_shiny_soul then
+      local scale_mod = 0.07 + 0.02 * math.sin(1.8 * G.TIMERS.REAL) +
+          0.00 * math.sin((G.TIMERS.REAL - math.floor(G.TIMERS.REAL)) * math.pi * 14) *
+          (1 - (G.TIMERS.REAL - math.floor(G.TIMERS.REAL))) ^ 3
+      local rotate_mod = 0.05 * math.sin(1.219 * G.TIMERS.REAL) +
+          0.00 * math.sin((G.TIMERS.REAL) * math.pi * 5) * (1 - (G.TIMERS.REAL - math.floor(G.TIMERS.REAL))) ^ 2
+
+      if self.children.floating_sprite then
+        self.children.floating_sprite:draw_shader('booster', nil, self.ARGS.send_to_shader, nil, self.children.center,
+          scale_mod, rotate_mod)
+      end
+    end
+  end,
+  conditions = { vortex = false, facing = 'front' },
+}
+
+
 
 local update_ref = Game.update
 function Game:update(dt)

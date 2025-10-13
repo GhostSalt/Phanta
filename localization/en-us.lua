@@ -203,6 +203,41 @@ return {
                     "All cards in played",
                     "hand must score"
                 }
+            },
+            bl_phanta_shark = {
+                name = "The Shark",
+                text = {
+                    "Changes enhancements of",
+                    "all scoring enhanced cards"
+                }
+            },
+            bl_phanta_strings = {
+                name = "The Strings",
+                text = {
+                    "All cards are debuffed",
+                    "until exactly 4 cards played"
+                }
+            },
+            bl_phanta_moth = {
+                name = "The Moth",
+                text = {
+                    "All Aces, 2s and",
+                    "3s are debuffed"
+                }
+            },
+            bl_phanta_toxin = {
+                name = "The Toxin",
+                text = {
+                    "First played hand",
+                    "does not score"
+                }
+            },
+            bl_phanta_centre = {
+                name = "The Centre",
+                text = {
+                    "Top 8 and bottom 4 cards",
+                    "of your deck are debuffed"
+                }
             }
         },
         ["Content Set"] = {
@@ -284,7 +319,7 @@ return {
                 }
             },
             m_phanta_coppergratefresh = {
-                name = 'Copper Grate Card',
+                name = 'Copper Grate Card (Fresh)',
                 text = {
                     "{C:white,X:mult}X#1#{} Mult",
                     "Becomes {C:attention}Exposed{} if",
@@ -292,7 +327,7 @@ return {
                 }
             },
             m_phanta_coppergrateexposed = {
-                name = 'Copper Grate Card',
+                name = 'Copper Grate Card (Exposed)',
                 text = {
                     "{C:white,X:mult}X#1#{} Mult, {C:chips}+#2#{} Chips",
                     "Becomes {C:attention}Weathered{} if",
@@ -300,7 +335,7 @@ return {
                 }
             },
             m_phanta_coppergrateweathered = {
-                name = 'Copper Grate Card',
+                name = 'Copper Grate Card (Weathered)',
                 text = {
                     "{C:white,X:mult}X#1#{} Mult, {C:chips}+#2#{} Chips",
                     "Becomes {C:attention}Oxidised{} if",
@@ -308,11 +343,51 @@ return {
                 }
             },
             m_phanta_coppergrateoxidised = {
-                name = 'Copper Grate Card',
+                name = 'Copper Grate Card (Oxidised)',
                 text = {
                     "{C:chips}+#1#{} Chips",
-                    "Self destructs if",
+                    "{C:red,E:2}Self destructs{} if",
                     "played and not {C:dark_edition}Waxed{}"
+                }
+            },
+            m_phanta_coppergratefreshshorter = {
+                name = 'Copper Grate Card (Fresh)',
+                text = {
+                    "{C:white,X:mult}X#1#{} Mult",
+                    "{C:attention}Oxidises{} when played",
+                    "unless {C:dark_edition}Waxed{}",
+                    "{C:inactive,s:0.9}(4 oxidisation levels, {C:white,X:mult,s:0.9}XMult{}",
+                    "{C:inactive,s:0.9}lessens and {C:chips,s:0.9}Chips{C:inactive,s:0.9} increase){}"
+                }
+            },
+            m_phanta_coppergrateexposedshorter = {
+                name = 'Copper Grate Card (Exposed)',
+                text = {
+                    "{C:white,X:mult}X#1#{} Mult, {C:chips}+#2#{} Chips",
+                    "{C:attention}Oxidises{} when played",
+                    "unless {C:dark_edition}Waxed{}",
+                    "{C:inactive,s:0.9}(4 oxidisation levels, {C:white,X:mult,s:0.9}XMult{}",
+                    "{C:inactive,s:0.9}lessens and {C:chips,s:0.9}Chips{C:inactive,s:0.9} increase){}"
+                }
+            },
+            m_phanta_coppergrateweatheredshorter = {
+                name = 'Copper Grate Card (Weathered)',
+                text = {
+                    "{C:white,X:mult}X#1#{} Mult, {C:chips}+#2#{} Chips",
+                    "{C:attention}Oxidises{} when played",
+                    "unless {C:dark_edition}Waxed{}",
+                    "{C:inactive,s:0.9}(4 oxidisation levels, {C:white,X:mult,s:0.9}XMult{}",
+                    "{C:inactive,s:0.9}lessens and {C:chips,s:0.9}Chips{C:inactive,s:0.9} increase){}"
+                }
+            },
+            m_phanta_coppergrateoxidisedshorter = {
+                name = 'Copper Grate Card (Oxidised)',
+                text = {
+                    "{C:chips}+#1#{} Chips",
+                    "{C:red,E:2}Self destructs{} if",
+                    "played and not {C:dark_edition}Waxed{}",
+                    "{C:inactive,s:0.9}(4 oxidisation levels, {C:white,X:mult,s:0.9}XMult{}",
+                    "{C:inactive,s:0.9}lessens and {C:chips,s:0.9}Chips{C:inactive,s:0.9} increase){}"
                 }
             },
             m_phanta_marblecard = {
@@ -413,8 +488,11 @@ return {
             j_phanta_binman                = {
                 name = 'Binman',
                 text = {
-                    "Gives {C:money}$#1#{} for",
-                    "each {C:red}discarded{} {C:attention}Junk{}"
+                    "Gives {C:money}$#1#{} for each",
+                    "{C:red}discarded{} {C:attention}Junk{}"
+                },
+                unlock = {
+                    "Discard a {C:attention,E:1}Junk{}"
                 }
             },
             j_phanta_onemanstrash          = {
@@ -702,6 +780,10 @@ return {
                     "each {C:tarot}Tarot{} card in",
                     "your {C:attention}consumable{} area",
                     "{C:inactive}(Currently {X:mult,C:white}X#2#{C:inactive} Mult){}"
+                },
+                unlock = {
+                    "Hold 5 {C:attention,E:1}Tarot{}",
+                    "cards at once"
                 }
             },
             j_phanta_html                  = {
@@ -739,6 +821,10 @@ return {
                     "Retriggers the {C:attention}lowest{} played",
                     "and scored card {C:attention}#1#{} times",
                     "if played hand is a {C:attention}Junk{}"
+                },
+                unlock={
+                    "Beat a Boss Blind",
+                    "with a {E:1,C:attention}Junk{}",
                 }
             },
             j_phanta_photocopy             = {
@@ -782,6 +868,10 @@ return {
                     "Gains {C:white,X:mult}X#1#{} when using",
                     "{C:tarot}Death{} {C:inactive}[Tarot card]{}",
                     "{C:inactive}(Currently {C:white,X:mult}X#2#{C:inactive} Mult){}"
+                },
+                unlock = {
+                    "Use {E:1,C:attention}Death{} while",
+                    "holding {E:1,C:attention}Death{}"
                 }
             },
             j_phanta_professorlayton       = {
@@ -820,6 +910,11 @@ return {
                     "a {C:attention}Junk{}, creates a",
                     "copy of {C:tarot}The Chariot{}",
                     "{C:inactive}(Must have room){}"
+                },
+                unlock={
+                    "Play a {E:1,C:attention}Junk{}",
+                    "with a scoring",
+                    "{E:1,C:attention}Steel{} card"
                 }
             },
             j_phanta_medic                 = {
@@ -829,6 +924,10 @@ return {
                     "{C:attention}first hand{} of round contains",
                     "{C:attention}5{} cards with {C:hearts}Hearts{} suit",
                     "{C:inactive}(Must have room){}"
+                },
+                unlock = {
+                    "Use {E:1,C:attention}The Sun{} while",
+                    "holding {E:1,C:attention}The Sun{}"
                 }
             },
             j_phanta_psychelock            = {
@@ -1295,6 +1394,11 @@ return {
                     "{C:chips}+#1#{} Chips if played",
                     "hand contains exactly {C:attention}1{}",
                     "card with {C:diamonds}Diamonds{} suit"
+                },
+                unlock={
+                    "Play a hand that",
+                    "contains {E:1,C:attention}five{}",
+                    "{E:1,C:attention}Aces of Diamonds{}",
                 }
             },
             j_phanta_selfportrait          = {
@@ -1358,6 +1462,11 @@ return {
                     "{C:attention}purchased{}, {C:green}#1# in #2#{} chance",
                     "to create a {C:spectral}Spectral{} card",
                     "{C:inactive}(Must have room){}"
+                },
+                unlock = {
+                    "Have a {C:attention,E:1}Ghost{}",
+                    "playing card with",
+                    "a {C:attention,E:1}Ghost Seal{}",
                 }
             },
             j_phanta_possession            = {
@@ -1367,6 +1476,11 @@ return {
                     "{C:attention}purchased, {C:green}#1# in #2#{}",
                     "chance to make",
                     "it {C:dark_edition}Negative{}"
+                },
+                unlock = {
+                    "Destroy a {C:attention,E:1}Ghost{}",
+                    "playing card with",
+                    "a {C:attention,E:1}Ghost Seal{}",
                 }
             },
             j_phanta_normalface            = {
@@ -1443,10 +1557,12 @@ return {
             j_phanta_testpage              = {
                 name = 'Test Page',
                 text = {
-                    "Gains {C:chips}+#1#{} Chips",
-                    "if played hand",
-                    "is a {C:attention}Junk{}",
+                    "Gains {C:chips}+#1#{} Chips if",
+                    "played hand is a {C:attention}Junk{}",
                     "{C:inactive}(Currently {C:chips}+#2#{C:inactive} Chips){}"
+                },
+                unlock={
+                    "Play a {E:1,C:attention}Junk{}",
                 }
             },
             j_phanta_flagsignal            = {
@@ -1456,6 +1572,14 @@ return {
                     "each played and",
                     "unscored {C:attention}Lucky{} card",
                     "{C:inactive}(Currently {C:mult}+#2#{C:inactive} Mult){}"
+                }
+            },
+            j_phanta_runicjoker            = {
+                name = 'Runic Joker',
+                text = {
+                    "Played {C:attention}Stone{} cards",
+                    "give {C:white,X:mult}X#1#{} Mult",
+                    "when {C:attention}scored{}"
                 }
             },
             j_phanta_heartbreak            = {
@@ -1605,6 +1729,15 @@ return {
                     "the {C:attention}rightmost{} Joker"
                 }
             },
+            j_phanta_flushed               = {
+                name = 'Flushed',
+                text = {
+                    "Gains {C:mult}+#1#{} Mult if",
+                    "{C:attention}second{} hand of round",
+                    "contained a {C:attention}Flush{}",
+                    "{C:inactive}(Currently {C:mult}+#2#{C:inactive} Mult){}"
+                }
+            },
             j_phanta_theriddler            = {
                 name = "The Riddler",
                 text = {
@@ -1745,6 +1878,11 @@ return {
                     "{C:white,X:mult}X#1#{} Mult if",
                     "all played",
                     "cards {C:attention}scored{}"
+                },
+                unlock = {
+                    "Win a run, playing at",
+                    "most 4 {C:attention,E:1}unscored{}",
+                    "cards in total"
                 }
             },
             j_phanta_mello                 = {
@@ -1753,6 +1891,10 @@ return {
                     "Gives {C:white,X:mult}X#1#{} Mult for",
                     "each {C:money}$#2#{} you have",
                     "{C:inactive}(Currently {C:white,X:mult}X#3#{C:inactive} Mult){}"
+                },
+                unlock = {
+                    "Reroll {C:attention,E:1}10{} times",
+                    "in a single shop"
                 }
             },
             j_phanta_near                  = {
@@ -1761,6 +1903,9 @@ return {
                     "{C:white,X:mult}X#1#{} Mult if",
                     "this is the",
                     "{C:attention}leftmost{} Joker"
+                },
+                unlock = {
+                    "Play 5 {C:attention,E:1}Marble{} cards"
                 }
             },
             j_phanta_deathnote             = {
@@ -1771,6 +1916,11 @@ return {
                     "cards with that {C:attention}name{}",
                     "spawn with {C:dark_edition}Negative{} edition",
                     "{C:inactive}(#1#{C:attention}#2#{C:inactive}){}"
+                },
+                unlock = {
+                    "Defeat a {C:attention,E:1}Blind{} with",
+                    "exactly {C:attention,E:1}4{} cards",
+                    "remaining in your deck"
                 }
             },
             j_phanta_ignaize               = {
@@ -1779,6 +1929,9 @@ return {
                     "Gains {X:mult,C:white}X#1#{} Mult when a",
                     "{C:attention}consumable{} card is {C:attention}sold{}",
                     "{C:inactive}(Currently {X:mult,C:white}X#2#{C:inactive} Mult){}"
+                },
+                unlock={
+                    "{E:1,s:1.3}?????{}",
                 }
             },
             j_phanta_dimere                = {
@@ -1788,6 +1941,9 @@ return {
                     "1 random {C:attention}Joker{} becomes",
                     "{C:negative}Negative{} {C:inactive}(except Dimeres{}",
                     "{C:inactive}or Jokers with editions){}"
+                },
+                unlock={
+                    "{E:1,s:1.3}?????{}",
                 }
             },
             j_phanta_goldor                = {
@@ -1796,6 +1952,9 @@ return {
                     "Played {C:attention}Gold{} cards",
                     "each give {C:money}$#2#{} and",
                     "{C:white,X:mult}X#1#{} Mult when scored"
+                },
+                unlock={
+                    "{E:1,s:1.3}?????{}",
                 }
             },
             j_phanta_famalia               = {
@@ -1805,6 +1964,9 @@ return {
                     "adds a {C:attention}King{} with a",
                     "{C:purple}Purple{} seal and {C:dark_edition}edition",
                     "to your hand"
+                },
+                unlock={
+                    "{E:1,s:1.3}?????{}",
                 }
             },
             j_phanta_godoor                = {
@@ -1814,6 +1976,9 @@ return {
                     "end of the {C:attention}shop{} if you",
                     "used exactly {C:attention}1{} {C:green}Reroll{}",
                     "{C:inactive}(Currently {C:white,X:mult}X#2#{C:inactive} Mult){}"
+                },
+                unlock={
+                    "{E:1,s:1.3}?????{}",
                 }
             },
             j_phanta_fainfol               = {
@@ -1822,6 +1987,9 @@ return {
                     "Each {V:1}#1#{} card held",
                     "in hand gives {C:white,X:mult}X#2#{} Mult,",
                     "{s:0.8}suit changes at end of round{}",
+                },
+                unlock={
+                    "{E:1,s:1.3}?????{}",
                 }
             },
             j_phanta_granwyrm              = {
@@ -1831,6 +1999,9 @@ return {
                     "{C:attention}#2#{} {C:inactive}[#3#]{} cards played",
                     "and {C:attention}unscored{}",
                     "{C:inactive}(Currently {C:white,X:mult}X#4#{C:inactive} Mult){}"
+                },
+                unlock={
+                    "{E:1,s:1.3}?????{}",
                 }
             },
 
@@ -3105,6 +3276,7 @@ return {
             phanta_starter_pack_enabled = "Starter Packs",
             phanta_disable_animations = "Disable Animations",
             phanta_disable_custom_music = "Disable Custom Music",
+            phanta_copper_grate_expanded = "Expand Copper Grate Tooltips",
 
             phanta_credit_1 = "Mod by GhostSalt",
             phanta_credit_2 = "Ability brainstorming: BakersDozenBagels",

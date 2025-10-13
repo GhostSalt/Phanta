@@ -534,6 +534,28 @@ G.Phanta.centers["pottedpeashooter"] = {
   end
 }
 
+G.Phanta.centers["flushed"] = {
+  config = { extra = { added_mult = 3, current_mult = 0 } },
+  loc_vars = function(self, info_queue, card)
+    return { vars = { card.ability.extra.added_mult, card.ability.extra.current_mult } }
+  end,
+  rarity = 1,
+  atlas = 'Phanta2',
+  pos = { x = 6, y = 4 },
+  cost = 4,
+  blueprint_compat = true,
+  eternal_compat = true,
+  perishable_compat = false,
+  calculate = function(self, card, context)
+    if context.joker_main then return { mult = card.ability.extra.current_mult } end
+
+    if context.before and G.GAME.current_round.hands_played == 1 and next(context.poker_hands['Flush']) then
+      card.ability.extra.current_mult = card.ability.extra.current_mult + card.ability.extra.added_mult
+      return { message = localize("k_upgrade_ex"), colour = G.C.FILTER }
+    end
+  end
+}
+
 G.Phanta.centers["patientjoker"] = {
   config = { extra = { mult = 12 } },
   loc_vars = function(self, info_queue, card)
@@ -667,7 +689,15 @@ G.Phanta.centers["fanta"] = {
 }
 
 G.Phanta.centers["testpage"] = {
-  config = { extra = { added_chips = 15, current_chips = 0 } },
+  unlocked = false,
+  unlock_condition = { extra = "phanta_junk" },
+  check_for_unlock = function(self, args)
+    if args.cards then
+      local text, disp_text = G.FUNCS.get_poker_hand_info(args.cards)
+      return args.type == "hand_contents" and text == self.unlock_condition.extra
+    end
+  end,
+  config = { extra = { added_chips = 12, current_chips = 0 } },
   rarity = 1,
   atlas = 'Phanta2',
   pos = { x = 1, y = 3 },
@@ -758,6 +788,27 @@ G.Phanta.centers["flagsignal"] = {
     end
   end,
   enhancement_gate = "m_lucky"
+}
+
+G.Phanta.centers["runicjoker"] = {
+  config = { extra = { xmult = 1.5 } },
+  rarity = 2,
+  atlas = 'Phanta2',
+  pos = { x = 7, y = 4 },
+  cost = 6,
+  loc_vars = function(self, info_queue, card)
+    info_queue[#info_queue + 1] = G.P_CENTERS.m_stone
+    return { vars = { card.ability.extra.xmult } }
+  end,
+  blueprint_compat = true,
+  eternal_compat = true,
+  perishable_compat = true,
+  calculate = function(self, card, context)
+    if context.individual and context.cardarea == G.play and SMODS.has_enhancement(context.other_card, "m_stone") then
+      return { xmult = card.ability.extra.xmult }
+    end
+  end,
+  enhancement_gate = "m_stone"
 }
 
 G.Phanta.centers["heartbreak"] = {
@@ -2172,6 +2223,10 @@ G.FUNCS.phanta_can_purchase_ethereal_tag = function(e)
 end
 
 G.Phanta.centers["l"] = {
+  unlocked = false,
+  check_for_unlock = function(self, args)
+    return args.type == "win_custom" and (G.GAME.phanta_number_of_unscored or 0) <= 4
+  end,
   config = { extra = { xmult = 2 } },
   loc_vars = function(self, info_queue, card)
     return { vars = { card.ability.extra.xmult } }
@@ -2200,6 +2255,10 @@ G.Phanta.centers["l"] = {
 }
 
 G.Phanta.centers["mello"] = {
+  unlocked = false,
+  check_for_unlock = function(self, args)
+    return args.type == "phanta_ten_rerolls"
+  end,
   config = { extra = { xmult = 0.1, dollar_threshold = 10 } },
   loc_vars = function(self, info_queue, card)
     return {
@@ -2225,6 +2284,10 @@ G.Phanta.centers["mello"] = {
 }
 
 G.Phanta.centers["near"] = {
+  unlocked = false,
+  check_for_unlock = function(self, args)
+    return args.type == "phanta_five_marbles"
+  end,
   config = { extra = { xmult = 2 } },
   loc_vars = function(self, info_queue, card)
     return { vars = { card.ability.extra.xmult } }
@@ -2244,6 +2307,10 @@ G.Phanta.centers["near"] = {
 }
 
 G.Phanta.centers["deathnote"] = {
+  unlocked = false,
+  check_for_unlock = function(self, args)
+    return args.type == "phanta_four_cards_remaining"
+  end,
   loc_vars = function(self, info_queue, card)
     info_queue[#info_queue + 1] = G.P_CENTERS.e_negative
     local name = card.ability and card.ability.extra and card.ability.extra.card_name and

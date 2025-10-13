@@ -926,6 +926,10 @@ SMODS.Enhancement {
   pos = { x = 0, y = 1 },
   config = { Xmult = 2 },
   loc_vars = function(self, info_queue, center)
+    if center.fake_card and not Phanta.config.copper_grate_expanded then
+      info_queue[#info_queue + 1] = G.P_CENTERS.e_phanta_waxed
+      return { key = "m_phanta_coppergratefreshshorter", vars = { center.ability.Xmult } }
+    end
     info_queue[#info_queue + 1] = G.P_CENTERS.m_phanta_coppergrateexposed
     return { vars = { center.ability.Xmult } }
   end,
@@ -947,6 +951,10 @@ SMODS.Enhancement {
   pos = { x = 1, y = 1 },
   config = { Xmult = 1.75, bonus = 15 },
   loc_vars = function(self, info_queue, center)
+    if center.fake_card and not Phanta.config.copper_grate_expanded then
+      info_queue[#info_queue + 1] = G.P_CENTERS.e_phanta_waxed
+      return { key = "m_phanta_coppergrateexposedshorter", vars = { center.ability.Xmult, center.ability.bonus } }
+    end
     info_queue[#info_queue + 1] = G.P_CENTERS.m_phanta_coppergrateweathered
     return { vars = { center.ability.Xmult, center.ability.bonus } }
   end,
@@ -969,6 +977,10 @@ SMODS.Enhancement {
   pos = { x = 0, y = 2 },
   config = { Xmult = 1.25, bonus = 30 },
   loc_vars = function(self, info_queue, center)
+    if center.fake_card and not Phanta.config.copper_grate_expanded then
+      info_queue[#info_queue + 1] = G.P_CENTERS.e_phanta_waxed
+      return { key = "m_phanta_coppergrateweatheredshorter", vars = { center.ability.Xmult, center.ability.bonus } }
+    end
     info_queue[#info_queue + 1] = G.P_CENTERS.m_phanta_coppergrateoxidised
     return { vars = { center.ability.Xmult, center.ability.bonus } }
   end,
@@ -998,6 +1010,10 @@ SMODS.Enhancement {
   pos = { x = 1, y = 2 },
   config = { bonus = 50, extra = { primed = false } },
   loc_vars = function(self, info_queue, center)
+    if center.fake_card and not Phanta.config.copper_grate_expanded then
+      info_queue[#info_queue + 1] = G.P_CENTERS.e_phanta_waxed
+      return { key = "m_phanta_coppergrateoxidisedshorter", vars = { center.ability.bonus } }
+    end
     info_queue[#info_queue + 1] = G.P_CENTERS.e_phanta_waxed
     return { vars = { center.ability.bonus } }
   end,

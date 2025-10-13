@@ -309,6 +309,11 @@ G.Phanta.centers["puzzle"] = {
 }
 
 G.Phanta.centers["binman"] = {
+  unlocked = false,
+  unlock_condition = { extra = "phanta_junk" },
+  check_for_unlock = function(self, args)
+    return args.type == "discard_custom" and next(evaluate_poker_hand(args.cards)[self.unlock_condition.extra])
+  end,
   config = { extra = { given_money = 4 } },
   rarity = 1,
   atlas = 'Phanta',
@@ -877,7 +882,12 @@ G.Phanta.centers["redkeycards"] = {
   eternal_compat = true,
   perishable_compat = true,
   calculate = function(self, card, context)
-    if context.joker_main and card.ability.extra.current_xmult > 1 then return { xmult = card.ability.extra.current_xmult } end
+    if context.joker_main and card.ability.extra.current_xmult > 1 then
+      return {
+        xmult = card.ability.extra
+            .current_xmult
+      }
+    end
 
     if context.before and not context.blueprint then
       local upgrades = false
@@ -905,7 +915,12 @@ G.Phanta.centers["bluekeycards"] = {
   eternal_compat = true,
   perishable_compat = true,
   calculate = function(self, card, context)
-    if context.joker_main and card.ability.extra.current_chips > 0 then return { chips = card.ability.extra.current_chips } end
+    if context.joker_main and card.ability.extra.current_chips > 0 then
+      return {
+        chips = card.ability.extra
+            .current_chips
+      }
+    end
 
     if context.before and not context.blueprint then
       local upgrades = false
@@ -1163,7 +1178,12 @@ G.Phanta.centers["animalinstinct"] = {
   eternal_compat = true,
   perishable_compat = false,
   calculate = function(self, card, context)
-    if context.joker_main and card.ability.extra.current_xmult > 0 then return { xmult = card.ability.extra.current_xmult } end
+    if context.joker_main and card.ability.extra.current_xmult > 0 then
+      return {
+        xmult = card.ability.extra
+            .current_xmult
+      }
+    end
 
     if context.remove_playing_cards and not context.blueprint then
       card.ability.extra.current_xmult = card.ability.extra.current_xmult +
@@ -1297,7 +1317,7 @@ G.Phanta.centers["teabag"] = {
 }
 
 G.Phanta.centers["forsakenscroll"] = {
-  config = { extra = { odds = 25, given_xmult = 3 } },
+  config = { extra = { odds = 15, given_xmult = 3 } },
   loc_vars = function(self, info_queue, card)
     info_queue[#info_queue + 1] = G.P_CENTERS.m_lucky
     local num, denom = SMODS.get_probability_vars(card, count_lucky_cards(), card.ability.extra.odds, "forsakenscroll")
@@ -1496,6 +1516,10 @@ G.Phanta.centers["shackles"] = {
 }
 
 G.Phanta.centers["ghost"] = {
+  unlocked = false,
+  check_for_unlock = function(self, args)
+    return args.type == "phanta_five_tarots"
+  end,
   config = { extra = { x_mult = 1 } },
   rarity = 3,
   atlas = 'Phanta',
@@ -1503,7 +1527,7 @@ G.Phanta.centers["ghost"] = {
   pos = { x = 0, y = 0 },
   draw = function(self, card, layer)
     if self.discovered or card.params.bypass_discovery_center then
-      card.children.center:draw_shader('voucher', nil, card.ARGS.send_to_shader)
+      card.children.center:draw_shader('booster', nil, card.ARGS.send_to_shader)
     end
   end,
   cost = 8,
@@ -1569,7 +1593,7 @@ G.Phanta.centers["theapparition"] = {
   pos = { x = 7, y = 1 },
   draw = function(self, card, layer)
     if self.discovered or card.params.bypass_discovery_center then
-      card.children.center:draw_shader('voucher', nil, card.ARGS.send_to_shader)
+      card.children.center:draw_shader('booster', nil, card.ARGS.send_to_shader)
     end
   end,
   cost = 6,
@@ -1603,6 +1627,12 @@ G.Phanta.centers["willothewisp"] = {
 }
 
 G.Phanta.centers["stickercollection"] = {
+  unlocked = false,
+  unlock_condition = { extra = "phanta_junk" },
+  check_for_unlock = function(self, args)
+    return args.type == "round_win" and G.GAME.last_hand_played == self.unlock_condition.extra and
+        G.GAME.blind:get_type() == "Boss"
+  end,
   config = { extra = { retriggers = 3 } },
   rarity = 2,
   atlas = 'Phanta',
@@ -1732,6 +1762,10 @@ G.Phanta.centers["calendar"] = {
 }
 
 G.Phanta.centers["grimreaper"] = {
+  unlocked = false,
+  check_for_unlock = function(self, args)
+    return args.type == "phanta_double_death"
+  end,
   config = { extra = { added_xmult = 0.4, current_xmult = 1 } },
   rarity = 3,
   atlas = 'Phanta',
@@ -1884,6 +1918,10 @@ G.Phanta.centers["jeandescole"] = {
 }
 
 G.Phanta.centers["engineer"] = {
+  unlocked = false,
+  check_for_unlock = function(self, args)
+    return args.type == "phanta_junk_scoring_steel"
+  end,
   rarity = 2,
   atlas = 'Phanta',
   pos = { x = 7, y = 8 },
@@ -1917,6 +1955,10 @@ G.Phanta.centers["engineer"] = {
 }
 
 G.Phanta.centers["medic"] = {
+  unlocked = false,
+  check_for_unlock = function(self, args)
+    return args.type == "phanta_double_sun"
+  end,
   rarity = 2,
   atlas = 'Phanta',
   pos = { x = 6, y = 6 },
@@ -2829,7 +2871,12 @@ G.Phanta.centers["charcoaljoker"] = {
   eternal_compat = true,
   perishable_compat = false,
   calculate = function(self, card, context)
-    if context.joker_main and card.ability.extra.current_chips > 0 then return { chips = card.ability.extra.current_chips } end
+    if context.joker_main and card.ability.extra.current_chips > 0 then
+      return {
+        chips = card.ability.extra
+            .current_chips
+      }
+    end
 
     if context.discard and context.other_card == context.full_hand[#context.full_hand] and not context.blueprint then
       local non_spades_present = false
@@ -3329,7 +3376,7 @@ G.Phanta.centers["witchsmark"] = {
 }
 
 G.Phanta.centers["modernart"] = {
-  config = { extra = { bonus_cash = 3 } },
+  config = { extra = { bonus_cash = 2 } },
   rarity = 1,
   atlas = 'Phanta',
   pos = { x = 4, y = 3 },
@@ -4122,6 +4169,18 @@ G.Phanta.centers["evidence"] = {
 }
 
 G.Phanta.centers["lily"] = {
+  unlocked = false,
+  check_for_unlock = function(self, args)
+    if args.type == "hand_contents" then
+      local tally = 0
+      for j = 1, #args.cards do
+        if args.cards[j]:get_id() == 14 and args.cards[j]:is_suit('Diamonds') then
+          tally = tally + 1
+        end
+      end
+      return tally >= 5
+    end
+  end,
   config = { extra = { given_chips = 250 } },
   rarity = 3,
   atlas = 'Phanta',
@@ -4524,10 +4583,19 @@ G.Phanta.centers["perkeossoul"] = {
 }
 
 G.Phanta.centers["spectretile"] = {
+  unlocked = false,
+  check_for_unlock = function(self, args)
+    return args.type == "phanta_double_ghost"
+  end,
   config = { extra = { odds = 3 } },
   rarity = 2,
   atlas = 'Phanta',
   pos = { x = 10, y = 5 },
+  draw = function(self, card, layer)
+    if self.discovered or card.params.bypass_discovery_center then
+      card.children.center:draw_shader('booster', nil, card.ARGS.send_to_shader)
+    end
+  end,
   cost = 6,
   blueprint_compat = true,
   eternal_compat = true,
@@ -4563,6 +4631,10 @@ G.Phanta.centers["spectretile"] = {
 }
 
 G.Phanta.centers["possession"] = {
+  unlocked = false,
+  check_for_unlock = function(self, args)
+    return args.type == "phanta_remove_double_ghost"
+  end,
   config = { extra = { odds = 13 } },
   rarity = 3,
   atlas = 'Phanta',
@@ -4573,6 +4645,7 @@ G.Phanta.centers["possession"] = {
   eternal_compat = true,
   perishable_compat = true,
   loc_vars = function(self, info_queue, card)
+    info_queue[#info_queue + 1] = G.P_CENTERS.e_negative
     local num, denom = SMODS.get_probability_vars(card, 1, card.ability.extra.odds, "possession")
     return { vars = { num, denom } }
   end,

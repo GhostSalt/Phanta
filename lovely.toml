@@ -327,3 +327,25 @@ payload = '''
 if self.SPLASH_LOGO_PHANTA_GHOST then self.SPLASH_LOGO_PHANTA_GHOST:remove(); self.SPLASH_LOGO_PHANTA_GHOST = nil end
 '''
 match_indent = true
+
+
+
+[[patches]]
+[patches.pattern]
+target = "functions/state_events.lua"
+pattern = '''G.GAME.blind:set_blind(G.GAME.round_resets.blind)'''
+position = "at"
+payload = '''if G.GAME.round_resets.blind.key ~= "bl_phanta_centre" then G.GAME.blind:set_blind(G.GAME.round_resets.blind) end'''
+match_indent = true
+[[patches]]
+[patches.pattern]
+target = "functions/state_events.lua"
+pattern = '''
+G.STATE = G.STATES.DRAW_TO_HAND
+G.deck:shuffle('nr'..G.GAME.round_resets.ante)
+'''
+position = "after"
+payload = '''
+if G.GAME.round_resets.blind.key == "bl_phanta_centre" then G.GAME.blind:set_blind(G.GAME.round_resets.blind) end
+'''
+match_indent = true
