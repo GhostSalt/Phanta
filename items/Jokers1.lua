@@ -155,8 +155,8 @@ G.Phanta.centers["yellow"] = {
 }
 
 G.Phanta.centers["purplegoldenjoker"] = {
-  config = { extra = { money = 3, money_cap = 18 } },
-  rarity = 1,
+  config = { extra = { money = 3, money_cap = 15 } },
+  rarity = 2,
   atlas = 'Phanta',
   pos = { x = 8, y = 6 },
   cost = 6,
