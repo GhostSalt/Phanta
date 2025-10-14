@@ -1729,6 +1729,15 @@ return {
                     "the {C:attention}rightmost{} Joker"
                 }
             },
+            j_phanta_venndiagram               = {
+                name = 'Venn Diagram',
+                text = {
+                    "Gains {C:chips}+#1#{} Chips if",
+                    "played hand contains",
+                    "{C:attention}#2#{} of the same {C:attention}suit{}",
+                    "{C:inactive}(Currently {C:chips}+#3#{C:inactive} Chips){}"
+                }
+            },
             j_phanta_flushed               = {
                 name = 'Flushed',
                 text = {

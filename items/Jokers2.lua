@@ -483,6 +483,42 @@ G.Phanta.centers["pottedpeashooter"] = {
   end
 }
 
+G.Phanta.centers["venndiagram"] = {
+  config = { extra = { added_chips = 5, current_chips = 0, required_of_suit = 3 } },
+  loc_vars = function(self, info_queue, card)
+    return { vars = { card.ability.extra.added_chips, card.ability.extra.required_of_suit, card.ability.extra.current_chips } }
+  end,
+  rarity = 1,
+  atlas = 'Phanta2',
+  pos = { x = 8, y = 4 },
+  cost = 4,
+  blueprint_compat = true,
+  eternal_compat = true,
+  perishable_compat = false,
+  calculate = function(self, card, context)
+    if context.joker_main then return { chips = card.ability.extra.current_chips } end
+
+    if context.before then
+      local wilds = 0
+      local suit_counts = {}
+      local triggered = false
+      for i = 1, #context.scoring_hand do
+        if not SMODS.has_any_suit(context.scoring_hand[i]) then
+          suit_counts[context.scoring_hand[i].base.suit] = (suit_counts[context.scoring_hand[i].base.suit] or 0) + 1
+        else
+          wilds = wilds + 1
+        end
+        if (suit_counts[context.scoring_hand[i].base.suit] or 0) + wilds >= card.ability.extra.required_of_suit then triggered = true; break end
+      end
+
+      if triggered then
+        card.ability.extra.current_chips = card.ability.extra.current_chips + card.ability.extra.added_chips
+        return { message = localize("k_upgrade_ex"), colour = G.C.FILTER }
+      end
+    end
+  end
+}
+
 G.Phanta.centers["flushed"] = {
   config = { extra = { added_mult = 3, current_mult = 0 } },
   loc_vars = function(self, info_queue, card)

@@ -41,6 +41,7 @@ local joker_order = {
     "pottedpeashooter",
     "theriddler",
     "dougdimmadome",
+    "venndiagram",
     "flushed",
     "inception",
     "a1z26",
