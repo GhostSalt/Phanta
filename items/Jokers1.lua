@@ -3,61 +3,7 @@ SMODS.current_mod.optional_features = { cardareas = { unscored = true } }
 to_big = to_big or function(x) return x end
 to_number = to_number or function(x) return x end
 
-SMODS.Atlas {
-  key = "Phanta",
-  path = "PhantaJokers1.png",
-  px = 71,
-  py = 95
-}
 
-SMODS.Atlas {
-  key = "PhantaLaytonAnims",
-  path = "PhantaLaytonAnims.png",
-  px = 71,
-  py = 95
-}
-
-SMODS.Atlas {
-  key = "PhantaMiscAnims1",
-  path = "PhantaMiscAnims1.png",
-  px = 71,
-  py = 95
-}
-
-SMODS.Atlas {
-  key = "PhantaMiscAnims2",
-  path = "PhantaMiscAnims2.png",
-  px = 71,
-  py = 95
-}
-
-SMODS.Atlas {
-  key = "PhantaMiscAnims3",
-  path = "PhantaMiscAnims3.png",
-  px = 71,
-  py = 95
-}
-
-SMODS.Atlas {
-  key = "PhantaMiscAnims4",
-  path = "PhantaMiscAnims4.png",
-  px = 71,
-  py = 95
-}
-
-SMODS.Atlas {
-  key = "PhantaMiscAnims5",
-  path = "PhantaMiscAnims5.png",
-  px = 71,
-  py = 95
-}
-
-SMODS.Atlas {
-  key = "PhantaKnowledgeOfTheCollegeAnim",
-  path = "PhantaKnowledgeOfTheCollegeAnim.png",
-  px = 71,
-  py = 95
-}
 
 G.Phanta.centers["bootleg"] = {
   config = { extra = { chips = 30, mult = 2 } },
@@ -588,12 +534,6 @@ G.Phanta.centers["mazebean"] = {
     end
   end
 }
-
-SMODS.Sound({
-  key = "xhands",
-  path = "phanta_xhands.ogg",
-  replace = true
-})
 
 G.Phanta.centers["new2dsxl"] = {
   config = { extra = { lost_hand_size = 2, given_xhands = 2 } },
@@ -1273,12 +1213,6 @@ G.Phanta.centers["teastainedjoker"] = {
   end,
   enhancement_gate = "m_lucky"
 }
-
-SMODS.Sound({
-  key = "teabag",
-  path = "phanta_teabag.ogg",
-  replace = true
-})
 
 G.Phanta.centers["teabag"] = {
   loc_vars = function(self, info_queue, card)
@@ -2088,12 +2022,6 @@ G.Phanta.centers["apollosbracelet"] = {
   end
 }
 
-SMODS.Sound({
-  key = "diamondaxe",
-  path = "phanta_diamondaxe.ogg",
-  replace = true
-})
-
 G.Phanta.centers["diamondaxe"] = {
   rarity = 2,
   atlas = 'Phanta',
@@ -2471,8 +2399,8 @@ G.Phanta.centers["bloodpact"] = {
 }
 
 G.Phanta.centers["tnetennba"] = {
-  config = { extra = { added_mult = 2, current_mult = 0 } },
-  rarity = 2,
+  config = { extra = { added_mult = 1, current_mult = 0 } },
+  rarity = 1,
   atlas = 'PhantaMiscAnims2',
   pos = { x = 3, y = 12 },
   phanta_anim = {
@@ -2487,7 +2415,7 @@ G.Phanta.centers["tnetennba"] = {
     { x = 11, y = 12, t = 1.3 }, { x = 4, y = 12, t = 0.1 },
     { x = 11, y = 12, t = 0.7 }, { x = 4, y = 12, t = 0.1 },
   },
-  cost = 6,
+  cost = 5,
   loc_vars = function(self, info_queue, card)
     return { vars = { card.ability.extra.added_mult, card.ability.extra.current_mult } }
   end,

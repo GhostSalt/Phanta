@@ -1,47 +1,3 @@
-SMODS.Atlas {
-  key = "Phanta2",
-  path = "PhantaJokers2.png",
-  px = 71,
-  py = 95
-}
-
-SMODS.Sound({
-  key = "lobotomy_0",
-  path = "phanta_lobotomy_0.ogg",
-  replace = true
-})
-
-SMODS.Sound({
-  key = "lobotomy_1",
-  path = "phanta_lobotomy_1.ogg",
-  replace = true
-})
-
-SMODS.Sound({
-  key = "lobotomy_2",
-  path = "phanta_lobotomy_2.ogg",
-  replace = true
-})
-
-SMODS.Sound({
-  key = "lobotomy_die",
-  path = "phanta_lobotomy_die.ogg",
-  replace = true
-})
-
-SMODS.Sound({
-  vol = 1,
-  pitch = 1,
-  key = "polargeist_music",
-  path = "phanta_polargeist.ogg",
-  select_music_track = function()
-    if #SMODS.find_card('j_phanta_normalface') > 0 and not Phanta.config["custom_music_disabled"] then
-      return 1e6
-    end
-    return false
-  end
-})
-
 G.Phanta.centers["normalface"] = {
   config = { extra = { mult = 10, amazing_grace = false } },
   loc_vars = function(self, info_queue, card)
@@ -393,13 +349,6 @@ G.Phanta.centers["peekaboo"] = {
 }
 
 
-
-SMODS.Atlas {
-  key = "PhantaDeckJoker",
-  path = "PhantaDeckJoker.png",
-  px = 71,
-  py = 95
-}
 
 G.Phanta.centers["deckjoker"] = {
   rarity = 1,
@@ -1984,7 +1933,7 @@ G.Phanta.centers["mrbigmoneybags"] = {
   rarity = 1,
   atlas = 'Phanta2',
   pos = { x = 11, y = 2 },
-  cost = 20,
+  cost = 30,
   loc_vars = function(self, info_queue, card)
     return { vars = { card.ability.extra.xmult } }
   end,
@@ -1995,7 +1944,7 @@ G.Phanta.centers["mrbigmoneybags"] = {
     if context.joker_main then return { xmult = card.ability.extra.xmult } end
   end,
   in_pool = function(self, args)
-    if args.source ~= "buf" then
+    if args.source ~= "buf" and args.source ~= "jud" then
       return true
     end
   end

@@ -1,23 +1,3 @@
-SMODS.Atlas {
-  key = "modicon",
-  path = "PhantaIcon.png",
-  px = 34,
-  py = 34
-}
-SMODS.Atlas {
-  key = "balatro",
-  path = "PhantaLogo.png",
-  px = 333,
-  py = 216,
-  prefix_config = { key = false }
-}
-SMODS.Atlas {
-  key = "PhantaTitleScreenGhost",
-  path = "PhantaLogoOverlay.png",
-  px = 333,
-  py = 216
-}
-
 G.Phanta = {}
 G.Phanta.centers = {}
 
@@ -392,7 +372,35 @@ end
 
 local allFolders = { "none", "items" }
 
-local allFiles = { ["none"] = {}, ["items"] = { "Blind", "Jokers1", "Jokers2", "Legendaries", "Misc", "StarterPack", "Stake", "Sticker", "Suit", "Unlocks", "DeckJoker" } }
+local allFiles = { ["none"] = {}, ["items"] = {
+  "Atlases",
+  "Sounds",
+  ------------------------------------
+  "Blinds",
+  "Boosters",
+  "Decks",
+  "Editions",
+  "Enhancements",
+  "Jokers1",
+  "Jokers2",
+  "Legendaries",
+  "Misc",
+  "Planets",
+  "PokerHands",
+  "Seals",
+  "Shaders",
+  "Spectrals",
+  "Stakes",
+  "StarterPacks",
+  "Stickers",
+  "Suits",
+  "Tags",
+  "Tarots",
+  "Unlocks",
+  "Vouchers",
+  "Zodiacs",
+  "DeckJoker"
+} }
 
 for i = 1, #allFolders do
   if allFolders[i] == "none" then
@@ -420,19 +428,9 @@ assert(SMODS.load_file("items/Ordering.lua"))()
 
 
 
-SMODS.Atlas {
-  key = "PhantaZodiacUpgrades",
-  path = "PhantaZodiacUpgrades.png",
-  px = 71,
-  py = 95,
-}
 
-SMODS.Atlas {
-  key = "PhantaBirthstoneUpgrades",
-  path = "PhantaBirthstoneUpgrades.png",
-  px = 71,
-  py = 95,
-}
+
+
 
 for k, v in pairs(SMODS.Centers) do
   if v.set == "phanta_Zodiac" or v.set == "phanta_Birthstone" then
