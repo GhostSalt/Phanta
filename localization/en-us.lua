@@ -454,7 +454,7 @@ return {
                 text = {
                     "Earn {C:money}$#1#{} at end of round",
                     "for each held {C:tarot}Tarot{} card",
-                    "{C:inactive}(Will give {C:money}$#2#{C:inactive}){}"
+                    "{C:inactive}(Will give {C:money}$#2#{C:inactive}, capped at {C:money}$#3#{C:inactive}){}"
                 }
             },
             j_phanta_holeinthejoker        = {

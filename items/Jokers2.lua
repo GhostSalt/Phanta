@@ -762,14 +762,14 @@ G.Phanta.centers["runicjoker"] = {
 
 G.Phanta.centers["heartbreak"] = {
   config = { extra = { added_xmult = 0.1, current_xmult = 1 } },
-  rarity = 2,
+  rarity = 3,
   atlas = 'PhantaMiscAnims1',
   pos = { x = 0, y = 9 },
   phanta_anim = {
     { xrange = { first = 0, last = 11 }, yrange = { first = 9, last = 10 }, t = 0.1 },
     { xrange = { first = 0, last = 3 },  y = 11,                            t = 0.1 }
   },
-  cost = 6,
+  cost = 8,
   loc_vars = function(self, info_queue, card)
     return { vars = { card.ability.extra.current_xmult, card.ability.extra.added_xmult } }
   end,

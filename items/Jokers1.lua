@@ -155,7 +155,7 @@ G.Phanta.centers["yellow"] = {
 }
 
 G.Phanta.centers["purplegoldenjoker"] = {
-  config = { extra = { money = 3 } },
+  config = { extra = { money = 3, money_cap = 18 } },
   rarity = 1,
   atlas = 'Phanta',
   pos = { x = 8, y = 6 },
@@ -164,21 +164,21 @@ G.Phanta.centers["purplegoldenjoker"] = {
   eternal_compat = true,
   perishable_compat = true,
   loc_vars = function(self, info_queue, card)
-    return { vars = { card.ability.extra.money, count_tarots() * card.ability.extra.money } }
+    return { vars = { card.ability.extra.money, math.min(count_tarots() * card.ability.extra.money, card.ability.extra.money_cap), card.ability.extra.money_cap } }
   end,
   calc_dollar_bonus = function(self, card)
     if count_tarots() > 0 then
-      return count_tarots() * card.ability.extra.money
+      return math.min(count_tarots() * card.ability.extra.money, card.ability.extra.money_cap)
     end
   end
 }
 
 G.Phanta.centers["holeinthejoker"] = {
   config = { extra = { money = 3 } },
-  rarity = 1,
+  rarity = 2,
   atlas = 'Phanta',
   pos = { x = 7, y = 3 },
-  cost = 4,
+  cost = 6,
   blueprint_compat = true,
   eternal_compat = true,
   perishable_compat = true,
@@ -540,7 +540,7 @@ G.Phanta.centers["new2dsxl"] = {
   loc_vars = function(self, info_queue, card)
     return { vars = { card.ability.extra.lost_hand_size, card.ability.extra.given_xhands } }
   end,
-  rarity = 3,
+  rarity = 2,
   atlas = 'PhantaMiscAnims5',
   pos = { x = 0, y = 0 },
   phanta_anim_states = {
@@ -577,7 +577,7 @@ G.Phanta.centers["new2dsxl"] = {
       loop = true
     },
   },
-  cost = 8,
+  cost = 6,
   blueprint_compat = true,
   eternal_compat = true,
   perishable_compat = true,
@@ -1293,7 +1293,7 @@ G.Phanta.centers["exitsign"] = {
 
 G.Phanta.centers["task"] = {
   config = { extra = { added_money = 2, current_money = 0 } },
-  rarity = 2,
+  rarity = 1,
   atlas = 'PhantaMiscAnims1',
   pos = { x = 0, y = 3 },
   phanta_anim = {
@@ -1500,7 +1500,7 @@ G.Phanta.centers["html"] = {
 
 G.Phanta.centers["knowledgeofthecollege"] = {
   config = { extra = { given_xmult = 3 } },
-  rarity = 3,
+  rarity = 2,
   atlas = 'PhantaKnowledgeOfTheCollegeAnim',
   pos = { x = 0, y = 0 },
   phanta_anim = {
@@ -2711,7 +2711,7 @@ G.Phanta.centers["shoppinglist"] = {
 
 G.Phanta.centers["ransomnote"] = {
   config = { extra = { money = 5 } },
-  rarity = 2,
+  rarity = 1,
   atlas = 'Phanta',
   pos = { x = 3, y = 10 },
   cost = 4,
@@ -3329,10 +3329,10 @@ G.Phanta.centers["modernart"] = {
 
 G.Phanta.centers["sketch"] = {
   config = { extra = { xmult = 0.5 } },
-  rarity = 3,
+  rarity = 2,
   atlas = 'Phanta',
   pos = { x = 5, y = 3 },
-  cost = 8,
+  cost = 6,
   loc_vars = function(self, info_queue, card)
     return { vars = { card.ability.extra.xmult } }
   end,
@@ -3354,7 +3354,7 @@ G.Phanta.centers["conspiracist"] = {
   rarity = 1,
   atlas = 'Phanta',
   pos = { x = 0, y = 5 },
-  cost = 5,
+  cost = 4,
   loc_vars = function(self, info_queue, card)
     info_queue[#info_queue + 1] = G.P_CENTERS.c_earth
     local num, denom = SMODS.get_probability_vars(card, 1, card.ability.extra.odds, "conspiracist")
@@ -3780,10 +3780,10 @@ G.Phanta.centers["dottodot"] = {
 }
 
 G.Phanta.centers["diningtable"] = {
-  rarity = 3,
+  rarity = 2,
   atlas = 'Phanta',
   pos = { x = 1, y = 10 },
-  cost = 8,
+  cost = 7,
   loc_vars = function(self, info_queue, card)
     info_queue[#info_queue + 1] = G.P_CENTERS.m_glass
     return {}
