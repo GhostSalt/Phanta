@@ -1480,7 +1480,7 @@ G.Phanta.centers["ghost"] = {
 }
 
 G.Phanta.centers["html"] = {
-  config = { extra = { given_mult = 6 } },
+  config = { extra = { given_mult = 5 } },
   rarity = 1,
   atlas = 'Phanta',
   pos = { x = 9, y = 3 },
