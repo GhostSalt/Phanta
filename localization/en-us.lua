@@ -454,7 +454,7 @@ return {
                 text = {
                     "Earn {C:money}$#1#{} at end of round",
                     "for each held {C:tarot}Tarot{} card",
-                    "{C:inactive}(Will give {C:money}$#2#{C:inactive}){}"
+                    "{C:inactive}(Will give {C:money}$#2#{C:inactive}, max of {C:money}$#3#{C:inactive}){}"
                 }
             },
             j_phanta_holeinthejoker        = {
@@ -821,7 +821,7 @@ return {
                     "and scored card {C:attention}#1#{} times",
                     "if played hand is a {C:attention}Junk{}"
                 },
-                unlock={
+                unlock = {
                     "Beat a Boss Blind",
                     "with a {E:1,C:attention}Junk{}",
                 }
@@ -910,7 +910,7 @@ return {
                     "copy of {C:tarot}The Chariot{}",
                     "{C:inactive}(Must have room){}"
                 },
-                unlock={
+                unlock = {
                     "Play a {E:1,C:attention}Junk{}",
                     "with a scoring",
                     "{E:1,C:attention}Steel{} card"
@@ -1394,7 +1394,7 @@ return {
                     "hand contains exactly {C:attention}1{}",
                     "card with {C:diamonds}Diamonds{} suit"
                 },
-                unlock={
+                unlock = {
                     "Play a hand that",
                     "contains {E:1,C:attention}five{}",
                     "{E:1,C:attention}Aces of Diamonds{}",
@@ -1560,7 +1560,7 @@ return {
                     "played hand is a {C:attention}Junk{}",
                     "{C:inactive}(Currently {C:chips}+#2#{C:inactive} Chips){}"
                 },
-                unlock={
+                unlock = {
                     "Play a {E:1,C:attention}Junk{}",
                 }
             },
@@ -1726,6 +1726,15 @@ return {
                 text = {
                     "{C:mult}+#1#{} Mult if this is",
                     "the {C:attention}rightmost{} Joker"
+                }
+            },
+            j_phanta_venndiagram               = {
+                name = 'Venn Diagram',
+                text = {
+                    "Gains {C:chips}+#1#{} Chips if",
+                    "played hand contains",
+                    "{C:attention}#2#{} of the same {C:attention}suit{}",
+                    "{C:inactive}(Currently {C:chips}+#3#{C:inactive} Chips){}"
                 }
             },
             j_phanta_flushed               = {
@@ -1929,7 +1938,7 @@ return {
                     "{C:attention}consumable{} card is {C:attention}sold{}",
                     "{C:inactive}(Currently {X:mult,C:white}X#2#{C:inactive} Mult){}"
                 },
-                unlock={
+                unlock = {
                     "{E:1,s:1.3}?????{}",
                 }
             },
@@ -1941,7 +1950,7 @@ return {
                     "{C:negative}Negative{} {C:inactive}(except Dimeres{}",
                     "{C:inactive}or Jokers with editions){}"
                 },
-                unlock={
+                unlock = {
                     "{E:1,s:1.3}?????{}",
                 }
             },
@@ -1952,7 +1961,7 @@ return {
                     "each give {C:money}$#2#{} and",
                     "{C:white,X:mult}X#1#{} Mult when scored"
                 },
-                unlock={
+                unlock = {
                     "{E:1,s:1.3}?????{}",
                 }
             },
@@ -1964,7 +1973,7 @@ return {
                     "{C:purple}Purple{} seal and {C:dark_edition}edition",
                     "to your hand"
                 },
-                unlock={
+                unlock = {
                     "{E:1,s:1.3}?????{}",
                 }
             },
@@ -1976,7 +1985,7 @@ return {
                     "used exactly {C:attention}1{} {C:green}Reroll{}",
                     "{C:inactive}(Currently {C:white,X:mult}X#2#{C:inactive} Mult){}"
                 },
-                unlock={
+                unlock = {
                     "{E:1,s:1.3}?????{}",
                 }
             },
@@ -1987,7 +1996,7 @@ return {
                     "in hand gives {C:white,X:mult}X#2#{} Mult,",
                     "{s:0.8}suit changes at end of round{}",
                 },
-                unlock={
+                unlock = {
                     "{E:1,s:1.3}?????{}",
                 }
             },
@@ -1999,7 +2008,7 @@ return {
                     "and {C:attention}unscored{}",
                     "{C:inactive}(Currently {C:white,X:mult}X#4#{C:inactive} Mult){}"
                 },
-                unlock={
+                unlock = {
                     "{E:1,s:1.3}?????{}",
                 }
             },
@@ -2697,6 +2706,22 @@ return {
                     "{C:attention}Ghost Card{}"
                 }
             },
+            c_phanta_brazier = {
+                name = 'The Brazier',
+                text = {
+                    "Enhances {C:attention}#1#{}",
+                    "selected card into a",
+                    "{C:attention}Copper Grate Card{} {C:inactive}(Fresh){}"
+                }
+            },
+            c_phanta_sculptor = {
+                name = 'The Sculptor',
+                text = {
+                    "Enhances {C:attention}#1#{}",
+                    "selected card into a",
+                    "{C:attention}Marble Card{}"
+                }
+            },
             c_phanta_beekeeper = {
                 name = "The Beekeeper",
                 text = {
@@ -2710,7 +2735,7 @@ return {
                 name = "Jinn",
                 text = {
                     "Add a {C:attention}Ghost Seal{}",
-                    "to {C:attention}1{} selected",
+                    "to {C:attention}#1#{} selected",
                     "card held in hand"
                 },
             },
@@ -2722,7 +2747,67 @@ return {
                     "during this run",
                     "{s:0.8,C:spectral}Shard{s:0.8} excluded"
                 }
-            }
+            },
+            c_phanta_orbit = {
+                name = 'Orbit',
+                text = {
+                    "Upgrade your",
+                    "most played",
+                    "{C:attention}poker hand{}",
+                    "{C:attention}#1#{} times"
+                }
+            },
+            c_phanta_norwellwall = {
+                name = 'Norwell Wall',
+                text = {
+                    "Permanently gain",
+                    "{C:attention}+#1#{} hand size"
+                }
+            },
+            c_phanta_follower = {
+                name = 'Follower',
+                text = {
+                    "{C:attention}+#1#{} card slot",
+                    "available in shop"
+                }
+            },
+            c_phanta_timeline = {
+                name = 'Timeline',
+                text = {
+                    "{C:attention}-#1#{} Ante,",
+                    "{C:attention}-#2#{} hand size"
+                }
+            },
+            c_phanta_bazaar = {
+                name = 'Bazaar',
+                text = {
+                    "Creates a",
+                    "{C:attention}Voucher Tag{}"
+                }
+            },
+            c_phanta_handprint = {
+                name = 'Handprint',
+                text = {
+                    "Permanently gain",
+                    "{C:blue}+#1#{} hand per round"
+                }
+            },
+            c_phanta_exile = {
+                name = 'Exile',
+                text = {
+                    "Permanently gain",
+                    "{C:red}+#1#{} discard per round"
+                }
+            },
+            c_phanta_genius = {
+                name = 'Genius',
+                text = {
+                    "Adds {C:attention}random seals{} to",
+                    "up to {C:attention}#1#{} selected",
+                    "cards, their suits",
+                    "become {C:attention}unknown{}"
+                }
+            },
         },
         Stake = {
             stake_phanta_white = {
@@ -3343,6 +3428,10 @@ return {
             s_hands = "-#1# Hands",
             a_tarot = "+#1# Tarot",
             a_tarots = "+#1# Tarots",
+            a_planet = "+#1# Planet",
+            a_planets = "+#1# Planets",
+            a_spectral = "+#1# Spectral",
+            a_spectrals = "+#1# Spectrals",
         }
     }
 }
