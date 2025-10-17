@@ -785,6 +785,18 @@ return {
                     "cards at once"
                 }
             },
+            j_phanta_doodah                = {
+                name = 'Doodah',
+                text = {
+                    "Creates a {C:planet}Planet{}",
+                    "card when the",
+                    "{C:attention}shop{} is {C:green}rerolled{}",
+                    "{C:inactive}(Must have room){}"
+                },
+                unlock = {
+                    "?"
+                }
+            },
             j_phanta_html                  = {
                 name = 'HTML',
                 text = {
@@ -1728,7 +1740,7 @@ return {
                     "the {C:attention}rightmost{} Joker"
                 }
             },
-            j_phanta_venndiagram               = {
+            j_phanta_venndiagram           = {
                 name = 'Venn Diagram',
                 text = {
                     "Gains {C:chips}+#1#{} Chips if",
@@ -1762,6 +1774,15 @@ return {
                     "most common {C:attention}rank & suit{}",
                     "pair in your {C:attention}full deck{}",
                     "{C:inactive}(Currently {C:white,X:mult}X#2#{C:inactive} Mult){}"
+                }
+            },
+            j_phanta_thetrick              = {
+                name = "The Trick",
+                text = {
+                    "Replaces all",
+                    "the {C:planet}Planet{} cards",
+                    "with {C:attention}superior{}",
+                    "{C:planet}Planet{} cards"
                 }
             },
             j_phanta_magiceggcup           = {

@@ -337,6 +337,7 @@ pattern = '''G.GAME.blind:set_blind(G.GAME.round_resets.blind)'''
 position = "at"
 payload = '''if G.GAME.round_resets.blind.key ~= "bl_phanta_centre" then G.GAME.blind:set_blind(G.GAME.round_resets.blind) end'''
 match_indent = true
+
 [[patches]]
 [patches.pattern]
 target = "functions/state_events.lua"
@@ -348,4 +349,14 @@ position = "after"
 payload = '''
 if G.GAME.round_resets.blind.key == "bl_phanta_centre" then G.GAME.blind:set_blind(G.GAME.round_resets.blind) end
 '''
+match_indent = true
+
+
+
+[[patches]]
+[patches.pattern]
+target = "card.lua"
+pattern = '''level_up_hand(used_tarot, self.ability.consumeable.hand_type)'''
+position = "at"
+payload = '''level_up_hand(used_tarot, self.ability.consumeable.hand_type, nil, count_tricks and (count_tricks(used_tarot) + 1))'''
 match_indent = true

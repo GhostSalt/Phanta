@@ -3218,8 +3218,7 @@ G.Phanta.centers["spaceinvader"] = {
           card_eval_status_text(context.blueprint_card or card, 'extra', nil, nil, nil,
             {
               message = localize { type = 'variable', key = 'a_planets', vars = { card.ability.extra.no_of_planets } },
-              colour =
-                  G.C.Planet
+              colour = G.C.SECONDARY_SET.Planet
             })
           play_sound("timpani")
 

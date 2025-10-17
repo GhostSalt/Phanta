@@ -1546,6 +1546,16 @@ G.Phanta.centers["dougdimmadome"] = {
   end
 }
 
+G.Phanta.centers["thetrick"] = {
+  rarity = 2,
+  atlas = 'Phanta2',
+  pos = { x = 9, y = 4 },
+  cost = 6,
+  blueprint_compat = false,
+  eternal_compat = true,
+  perishable_compat = true
+}
+
 G.Phanta.centers["magiceggcup"] = {
   config = { extra = { is_first = true } },
   rarity = 1,
@@ -2457,3 +2467,32 @@ function SMODS:create_card(t)
   end
   return card
 end
+
+G.Phanta.centers["doodah"] = {
+  rarity = 3,
+  atlas = 'Phanta2',
+  pos = { x = 10, y = 4 },
+  cost = 8,
+  blueprint_compat = true,
+  eternal_compat = true,
+  perishable_compat = true,
+  calculate = function(self, card, context)
+    if context.reroll_shop and count_consumables() < G.consumeables.config.card_limit then
+      G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
+      G.E_MANAGER:add_event(Event({
+        delay = 0.3,
+        blockable = false,
+        func = function()
+          play_sound("timpani")
+          local new_card = create_card("Planet", G.consumables, nil, nil, nil, nil, nil, "doodah")
+          new_card:add_to_deck()
+          G.consumeables:emplace(new_card)
+          G.GAME.consumeable_buffer = 0
+          new_card:juice_up(0.3, 0.5)
+          return true
+        end
+      }))
+      return { message = localize{ type = 'variable', key = 'a_planet', vars = { 1 } }, colour = G.C.SECONDARY_SET.Planet }
+    end
+  end
+}

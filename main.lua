@@ -16,6 +16,22 @@ G.C.PHANTA.MISC_COLOURS = {
   PHANTA_MAIN_MENU_SECONDARY = HEX("8FFCDB")
 }
 
+G.Phanta.thetrick_supported_planets = {
+  "c_pluto",
+  "c_mercury",
+  "c_uranus",
+  "c_venus",
+  "c_saturn",
+  "c_jupiter",
+  "c_earth",
+  "c_mars",
+  "c_neptune",
+  "c_planet_x",
+  "c_ceres",
+  "c_eris",
+  "c_phanta_junk"
+}
+
 local loc_colour_ref = loc_colour
 
 function loc_colour(_c, default)
@@ -76,8 +92,17 @@ end
 function count_prognosticators(card)
   return #SMODS.find_card("j_phanta_prognosticator") +
       (G.GAME.selected_sleeve == "sleeve_phanta_todayandtomorrow" and 1 or 0) +
-      ((is_current_month(card) and 2 or 0) * #SMODS.find_card("j_phanta_calendar")) +
+      ((card and is_current_month(card) and 2 or 0) * #SMODS.find_card("j_phanta_calendar")) +
       (G.GAME and G.GAME.selected_back and G.GAME.selected_back and G.GAME.selected_back.effect and G.GAME.selected_back.effect.center.key == "b_phanta_todayandtomorrow" and 1 or 0)
+end
+
+function count_tricks(card)
+  if #SMODS.find_card("j_phanta_thetrick") == 0 then return 0 end
+  local supported_by_trick = false
+  for _, v in ipairs(G.Phanta.thetrick_supported_planets) do
+    if card.key == v or (card.config and card.config.center and card.config.center.key == v) then supported_by_trick = true; break end
+  end
+  return supported_by_trick and #SMODS.find_card("j_phanta_thetrick") or 0
 end
 
 function count_lucky_cards()
@@ -372,35 +397,39 @@ end
 
 local allFolders = { "none", "items" }
 
-local allFiles = { ["none"] = {}, ["items"] = {
-  "Atlases",
-  "Sounds",
-  ------------------------------------
-  "Blinds",
-  "Boosters",
-  "Decks",
-  "Editions",
-  "Enhancements",
-  "Jokers1",
-  "Jokers2",
-  "Legendaries",
-  "Misc",
-  "Planets",
-  "PokerHands",
-  "Seals",
-  "Shaders",
-  "Spectrals",
-  "Stakes",
-  "StarterPacks",
-  "Stickers",
-  "Suits",
-  "Tags",
-  "Tarots",
-  "Unlocks",
-  "Vouchers",
-  "Zodiacs",
-  "DeckJoker"
-} }
+local allFiles = {
+  ["none"] = {},
+  ["items"] = {
+    "Atlases",
+    "Sounds",
+    ------------------------------------
+    "Blinds",
+    "Boosters",
+    "Decks",
+    "Editions",
+    "Enhancements",
+    "Jokers1",
+    "Jokers2",
+    "Legendaries",
+    "Misc",
+    "Planets",
+    "PlanetUpgrades",
+    "PokerHands",
+    "Seals",
+    "Shaders",
+    "Spectrals",
+    "Stakes",
+    "StarterPacks",
+    "Stickers",
+    "Suits",
+    "Tags",
+    "Tarots",
+    "Unlocks",
+    "Vouchers",
+    "Zodiacs",
+    "DeckJoker"
+  }
+}
 
 for i = 1, #allFolders do
   if allFolders[i] == "none" then
@@ -432,13 +461,15 @@ assert(SMODS.load_file("items/Ordering.lua"))()
 
 
 
-for k, v in pairs(SMODS.Centers) do
-  if v.set == "phanta_Zodiac" or v.set == "phanta_Birthstone" then
+for k, v in pairs(G.P_CENTERS) do
+  if v.set == "phanta_Zodiac" or v.set == "phanta_Birthstone" or v.set == "Planet" then
     if not v.atlas_extra then
       if v.set == "phanta_Zodiac" then
         v.atlas_extra = "phanta_PhantaZodiacUpgrades"
       elseif v.set == "phanta_Birthstone" then
         v.atlas_extra = "phanta_PhantaBirthstoneUpgrades"
+      elseif v.set == "Planet" then
+        v.atlas_extra = "phanta_PhantaPlanetUpgrades"
       end
     end
     v.phanta_anim_extra_states = {
@@ -488,6 +519,22 @@ function SMODS.Consumable:phanta_update_zodiac_level_anim()
 
   if state ~= self.phanta_anim_extra_current_state then
     self:phanta_set_anim_extra_state(state)
+  end
+end
+
+function phanta_update_planet_level_anim(center)
+  if not center.discovered and not (center.params and center.params.bypass_discovery_center) then
+    return
+  end
+  local tricks = count_tricks(center)
+  local state = "0"
+  if tricks == 1 then state = "1" end
+  if tricks == 2 then state = "2" end
+  if tricks == 3 then state = "3" end
+  if tricks >= 4 then state = "4+" end
+
+  if state ~= center.phanta_anim_extra_current_state then
+    phanta_set_anim_extra_state(center, state)
   end
 end
 
@@ -665,6 +712,16 @@ end
 function SMODS.Center:phanta_set_anim_extra_state(state)
   self.phanta_anim_extra_current_state = state
   self.phanta_anim_extra_t = 0
+end
+
+function phanta_set_anim_state(center, state)
+  center.config.center.phanta_anim_current_state = state
+  center.config.center.phanta_anim_t = 0
+end
+
+function phanta_set_anim_extra_state(center, state)
+  center.phanta_anim_extra_current_state = state
+  center.phanta_anim_extra_t = 0
 end
 
 function SMODS.current_mod.reset_game_globals(run_start)
@@ -887,6 +944,7 @@ function Game:update(dt)
       handle_phanta_anim_extra(v, dt)
 
       if v.set == 'phanta_Zodiac' or v.set == 'phanta_Birthstone' then v:phanta_update_zodiac_level_anim() end
+      if v.set == 'Planet' then phanta_update_planet_level_anim(v) end
     end
   else
     for k, v in pairs(G.P_CENTERS) do
