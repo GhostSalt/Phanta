@@ -2094,8 +2094,7 @@ G.Phanta.centers["honeydew"] = {
       local candidates = {}
       for i = 1, #G.hand.cards do
         if not (G.hand.cards[i].edition and G.hand.cards[i].edition.key ~= nil) then
-          candidates[#candidates + 1] = G
-              .hand.cards[i]
+          candidates[#candidates + 1] = G.hand.cards[i]
         end
       end
       if #candidates > 0 then

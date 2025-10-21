@@ -12,6 +12,7 @@ SMODS.Consumable {
     return { vars = { card.ability.max_highlighted } }
   end,
   use = function(self, card, area, copier)
+    G.GAME.phanta_jinn_used = true
     local conv_card = G.hand.highlighted[1]
     G.E_MANAGER:add_event(Event({
       func = function()
@@ -39,6 +40,9 @@ SMODS.Consumable {
         return true
       end
     }))
+  end,
+  in_pool = function()
+    return not (G.GAME and G.GAME.phanta_jinn_used)
   end
 }
 

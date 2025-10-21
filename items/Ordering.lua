@@ -43,6 +43,7 @@ local joker_order = {
     "dougdimmadome",
     "thetrick",
     "venndiagram",
+    "88888888",
     "flushed",
     "inception",
     "a1z26",

@@ -508,7 +508,9 @@ G.Phanta.centers["venndiagram"] = {
         else
           wilds = wilds + 1
         end
-        if (suit_counts[context.scoring_hand[i].base.suit] or 0) + wilds >= card.ability.extra.required_of_suit then triggered = true; break end
+        if (suit_counts[context.scoring_hand[i].base.suit] or 0) + wilds >= card.ability.extra.required_of_suit then
+          triggered = true; break
+        end
       end
 
       if triggered then
@@ -518,6 +520,63 @@ G.Phanta.centers["venndiagram"] = {
     end
   end
 }
+
+G.Phanta.centers["88888888"] = {
+  config = { extra = { given_chips = 8, given_mult = 8 } },
+  loc_vars = function(self, info_queue, card)
+    return { vars = { card.ability.extra.given_chips, card.ability.extra.given_mult } }
+  end,
+  rarity = 1,
+  atlas = 'Phanta2',
+  pos = { x = 11, y = 4 },
+  cost = 8,
+  blueprint_compat = true,
+  eternal_compat = true,
+  perishable_compat = true,
+  calculate = function(self, card, context)
+    if context.individual and context.cardarea == G.play and context.other_card:get_id() == 8 then
+      return { chips = card.ability.extra.given_chips, mult = card.ability.extra.given_mult }
+    end
+
+    if context.phanta_card_pressed and context.phanta_card_pressed == card then
+      G.E_MANAGER:add_event(Event({
+        func = function()
+          play_sound("phanta_88888888", 1, 0.75)
+          return true
+        end
+      }))
+    end
+
+    if context.phanta_eight_pressed
+        or (context.phanta_card_pressed and context.phanta_card_pressed.config and context.phanta_card_pressed.config.center
+          and (context.phanta_card_pressed.config.center.set == "Default" or context.phanta_card_pressed.config.center.set == "Enhanced")
+          and context.phanta_card_pressed:get_id() == 8) then
+      G.E_MANAGER:add_event(Event({
+        func = function()
+          card:juice_up()
+          play_sound("phanta_88888888", 1, 0.75)
+          return true
+        end
+      }))
+    end
+  end
+}
+
+local L_cursor_press_ref = Controller.L_cursor_press
+function Controller:L_cursor_press(x, y)
+  L_cursor_press_ref(self, x, y)
+  if G and G.jokers and G.jokers.cards and not G.SETTINGS.paused then
+    SMODS.calculate_context({ phanta_card_pressed = self.cursor_down.target })
+  end
+end
+
+local key_press_ref = Controller.key_press
+function Controller:key_press(key)
+  key_press_ref(self, key)
+  if self.pressed_keys["8"] then
+    SMODS.calculate_context({ phanta_eight_pressed = true })
+  end
+end
 
 G.Phanta.centers["flushed"] = {
   config = { extra = { added_mult = 3, current_mult = 0 } },
@@ -941,7 +1000,7 @@ G.Phanta.centers["futureluke"] = {
         func = function()
           if #G.hand.highlighted == 1 then
             G.hand.highlighted[1]:flip()
-            play_sound('card1', percent)
+            play_sound('card1', 1)
             G.hand.highlighted[1]:juice_up(0.3, 0.3)
           end
           return true
@@ -1990,9 +2049,7 @@ G.Phanta.centers["mrbigmoneybags"] = {
     if context.joker_main then return { xmult = card.ability.extra.xmult } end
   end,
   in_pool = function(self, args)
-    if args.source ~= "buf" and args.source ~= "jud" then
-      return true
-    end
+    return args.source ~= "buf" and args.source ~= "jud" and args.source ~= "iris_chuff_a" and args.source ~= "iris_chuff_b"
   end
 }
 
@@ -2492,7 +2549,11 @@ G.Phanta.centers["doodah"] = {
           return true
         end
       }))
-      return { message = localize{ type = 'variable', key = 'a_planet', vars = { 1 } }, colour = G.C.SECONDARY_SET.Planet }
+      return {
+        message = localize { type = 'variable', key = 'a_planet', vars = { 1 } },
+        colour = G.C.SECONDARY_SET
+            .Planet
+      }
     end
   end
 }

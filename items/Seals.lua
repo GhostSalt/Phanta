@@ -29,5 +29,8 @@ SMODS.Seal {
         message_card = card
       }
     end
+  end,
+  in_pool = function()
+    return false
   end
 }

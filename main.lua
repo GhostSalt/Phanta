@@ -3,7 +3,9 @@ G.Phanta.centers = {}
 
 G.C.PHANTA = {
   Zodiac = HEX("4E5779"),
-  ZodiacAlt = HEX("5998ff")
+  ZodiacAlt = HEX("5998ff"),
+  Hanafuda = HEX("DB534A"),
+  HanafudaAlt = HEX("FB8536")
 }
 
 G.C.PHANTA.MISC_COLOURS = {
@@ -408,6 +410,11 @@ local allFiles = {
     "Decks",
     "Editions",
     "Enhancements",
+
+    "Zodiacs",
+    "Hanafudas",
+    "StarterPacks",
+
     "Jokers1",
     "Jokers2",
     "Legendaries",
@@ -419,14 +426,13 @@ local allFiles = {
     "Shaders",
     "Spectrals",
     "Stakes",
-    "StarterPacks",
     "Stickers",
     "Suits",
     "Tags",
     "Tarots",
     "Unlocks",
     "Vouchers",
-    "Zodiacs",
+    
     "DeckJoker"
   }
 }
@@ -798,6 +804,14 @@ local phantaConfigTab = function()
     end,
   })
   phanta_nodes[#phanta_nodes + 1] = create_toggle({
+    label = localize("phanta_hanafuda_enabled"),
+    active_colour = HEX("40c76d"),
+    ref_table = Phanta.config,
+    ref_value = "hanafuda_enabled",
+    callback = function()
+    end,
+  })
+  phanta_nodes[#phanta_nodes + 1] = create_toggle({
     label = localize("phanta_starter_pack_enabled"),
     active_colour = HEX("40c76d"),
     ref_table = Phanta.config,
@@ -940,11 +954,12 @@ function Game:update(dt)
     for k, v in pairs(G.P_CENTERS) do
       if not v.default_pos then v.default_pos = v.pos end
       if not v.default_pos_extra then v.default_pos_extra = v.pos_extra end
-      handle_phanta_anim(v, dt)
-      handle_phanta_anim_extra(v, dt)
 
       if v.set == 'phanta_Zodiac' or v.set == 'phanta_Birthstone' then v:phanta_update_zodiac_level_anim() end
       if v.set == 'Planet' then phanta_update_planet_level_anim(v) end
+
+      handle_phanta_anim(v, dt)
+      handle_phanta_anim_extra(v, dt)
     end
   else
     for k, v in pairs(G.P_CENTERS) do

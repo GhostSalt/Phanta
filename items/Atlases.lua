@@ -142,6 +142,20 @@ SMODS.Atlas {
 }
 
 SMODS.Atlas {
+  key = "PhantaHanafudas",
+  path = "PhantaHanafudas.png",
+  px = 71,
+  py = 95,
+}
+
+SMODS.Atlas {
+  key = "PhantaHanafudasWithHotPot",
+  path = "PhantaHanafudasWithHotPot.png",
+  px = 71,
+  py = 95,
+}
+
+SMODS.Atlas {
   key = "PhantaBoosters",
   path = "PhantaBoosters.png",
   px = 71,

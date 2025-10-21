@@ -245,13 +245,13 @@ return {
                 name = "Jokers",
                 text = {
                     "{C:attention}Jokers{} from Phanta",
-                },
+                }
             },
             set_phanta_spectral = {
                 name = "Spectral Cards",
                 text = {
                     "{C:spectral}Spectral{} cards from Phanta",
-                },
+                }
             },
             set_phanta_tarot = {
                 name = "Tarot Cards",
@@ -265,7 +265,7 @@ return {
                 name = "Waxed",
                 text = {
                     "{X:mult,C:white}X#1#{} Mult",
-                },
+                }
             },
             e_phanta_waxed_showcase = {
                 name = "Waxed",
@@ -278,13 +278,13 @@ return {
                         "{X:mult,C:white}X#2#{} Mult",
                         "{s:0.9}when on Jokers{}"
                     }
-                },
+                }
             },
             e_phanta_drilled = {
                 name = "Drilled",
                 text = {
                     "{C:attention}+#1#{} consumable slot",
-                },
+                }
             },
             e_phanta_drilled_playingcard = {
                 name = "Drilled",
@@ -292,7 +292,7 @@ return {
                     "{C:red}+#1#{} discard",
                     "when played",
                     "and scored"
-                },
+                }
             },
             e_phanta_drilled_showcase = {
                 name = "Drilled",
@@ -1749,6 +1749,14 @@ return {
                     "{C:inactive}(Currently {C:chips}+#3#{C:inactive} Chips){}"
                 }
             },
+            j_phanta_88888888              = {
+                name = '88888888',
+                text = {
+                    "Played {C:attention}8s{} give",
+                    "{C:chips}+#1#{} Chips and {C:mult}+#2#{} Mult",
+                    "when scored"
+                }
+            },
             j_phanta_flushed               = {
                 name = 'Flushed',
                 text = {
@@ -2109,7 +2117,7 @@ return {
                 text = {
                     "Played {C:attention}Aces{} give",
                     "{C:mult}+#1#{} Mult when scored",
-                },
+                }
             },
             j_phanta_deckjoker_checkered = {
                 name = "Deck Joker (Checkered)",
@@ -2117,14 +2125,14 @@ return {
                     "Gains {C:mult}+#1#{} Mult if",
                     "played hand is a {C:attention}Flush{}",
                     "{C:inactive}(Currently {C:mult}+#2#{C:inactive} Mult){}"
-                },
+                }
             },
             j_phanta_deckjoker_zodiac = {
                 name = "Deck Joker (Zodiac)",
                 text = {
                     "{C:attention}#1#{} free {C:green}Reroll",
                     "per shop"
-                },
+                }
             },
             j_phanta_deckjoker_painted = {
                 name = "Deck Joker (Painted)",
@@ -2132,7 +2140,7 @@ return {
                     "Gains {C:mult}+#1#{} Mult if played",
                     "hand is a {C:attention}Straight Flush{}",
                     "{C:inactive}(Currently {C:mult}+#2#{C:inactive} Mult){}"
-                },
+                }
             },
             j_phanta_deckjoker_anaglyph = {
                 name = "Deck Joker (Anaglyph)",
@@ -2140,20 +2148,20 @@ return {
                     "{C:white,X:mult}X#1#{} Mult if the",
                     "cards held in hand",
                     "contain a {C:attention}Pair{}"
-                },
+                }
             },
             j_phanta_deckjoker_plasma = {
                 name = "Deck Joker (Plasma)",
                 text = {
                     "{C:chips}+#1#{} Chips if Mult",
                     "is less than {C:attention}#2#{}"
-                },
+                }
             },
             j_phanta_deckjoker_erratic = {
                 name = "Deck Joker (Erratic)",
                 text = {
                     ""
-                },
+                }
             },
 
 
@@ -2210,7 +2218,7 @@ return {
                     "each played",
                     "and scored",
                     "{C:attention}2{}, {C:attention}3{}, {C:attention}4{}, or {C:attention}5{}"
-                },
+                }
             },
 
             -- Original ability text implied that unscored face cards were retriggered.
@@ -2230,7 +2238,7 @@ return {
                     "Choose {C:attention}#1#{} of up to",
                     "{C:attention}#2#{C:phanta_zodiac} Zodiac{} cards",
                     "to take",
-                },
+                }
             },
             p_phanta_zodiac_normal2 = {
                 name = "Zodiac Pack",
@@ -2238,7 +2246,7 @@ return {
                     "Choose {C:attention}#1#{} of up to",
                     "{C:attention}#2#{C:phanta_zodiac} Zodiac{} cards",
                     "to take",
-                },
+                }
             },
             p_phanta_zodiac_normal3 = {
                 name = "Zodiac Pack",
@@ -2246,7 +2254,7 @@ return {
                     "Choose {C:attention}#1#{} of up to",
                     "{C:attention}#2#{C:phanta_zodiac} Zodiac{} cards",
                     "to take",
-                },
+                }
             },
             p_phanta_zodiac_normal4 = {
                 name = "Zodiac Pack",
@@ -2254,7 +2262,7 @@ return {
                     "Choose {C:attention}#1#{} of up to",
                     "{C:attention}#2#{C:phanta_zodiac} Zodiac{} cards",
                     "to take",
-                },
+                }
             },
             p_phanta_zodiac_jumbo1 = {
                 name = "Jumbo Zodiac Pack",
@@ -2262,7 +2270,7 @@ return {
                     "Choose {C:attention}#1#{} of up to",
                     "{C:attention}#2#{C:phanta_zodiac} Zodiac{} cards",
                     "to take",
-                },
+                }
             },
             p_phanta_zodiac_jumbo2 = {
                 name = "Jumbo Zodiac Pack",
@@ -2270,7 +2278,7 @@ return {
                     "Choose {C:attention}#1#{} of up to",
                     "{C:attention}#2#{C:phanta_zodiac} Zodiac{} cards",
                     "to take",
-                },
+                }
             },
             p_phanta_zodiac_mega1 = {
                 name = "Mega Zodiac Pack",
@@ -2278,7 +2286,7 @@ return {
                     "Choose {C:attention}#1#{} of up to",
                     "{C:attention}#2#{C:phanta_zodiac} Zodiac{} cards",
                     "to take",
-                },
+                }
             },
             p_phanta_zodiac_mega2 = {
                 name = "Mega Zodiac Pack",
@@ -2286,15 +2294,89 @@ return {
                     "Choose {C:attention}#1#{} of up to",
                     "{C:attention}#2#{C:phanta_zodiac} Zodiac{} cards",
                     "to take",
-                },
+                }
             },
+
+            p_phanta_hanafuda_normal1 = {
+                name = "Hanafuda Pack",
+                text = {
+                    "Choose {C:attention}#1#{} of up to",
+                    "{C:attention}#2#{} {C:phanta_hanafuda}Hanafuda{} cards to",
+                    "be used immediately"
+                }
+            },
+            p_phanta_hanafuda_normal2 = {
+                name = "Hanafuda Pack",
+                text = {
+                    "Choose {C:attention}#1#{} of up to",
+                    "{C:attention}#2#{} {C:phanta_hanafuda}Hanafuda{} cards to",
+                    "be used immediately"
+                }
+            },
+            p_phanta_hanafuda_normal3 = {
+                name = "Hanafuda Pack",
+                text = {
+                    "Choose {C:attention}#1#{} of up to",
+                    "{C:attention}#2#{} {C:phanta_hanafuda}Hanafuda{} cards to",
+                    "be used immediately"
+                }
+            },
+            p_phanta_hanafuda_normal4 = {
+                name = "Hanafuda Pack",
+                text = {
+                    "Choose {C:attention}#1#{} of up to",
+                    "{C:attention}#2#{} {C:phanta_hanafuda}Hanafuda{} cards to",
+                    "be used immediately"
+                }
+            },
+            p_phanta_hanafuda_jumbo1 = {
+                name = "Jumbo Hanafuda Pack",
+                text = {
+                    "Choose {C:attention}#1#{} of up to",
+                    "{C:attention}#2#{} {C:phanta_hanafuda}Hanafuda{} cards to",
+                    "be used immediately"
+                }
+            },
+            p_phanta_hanafuda_jumbo2 = {
+                name = "Jumbo Hanafuda Pack",
+                text = {
+                    "Choose {C:attention}#1#{} of up to",
+                    "{C:attention}#2#{} {C:phanta_hanafuda}Hanafuda{} cards to",
+                    "be used immediately"
+                }
+            },
+            p_phanta_hanafuda_mega1 = {
+                name = "Mega Hanafuda Pack",
+                text = {
+                    "Choose {C:attention}#1#{} of up to",
+                    "{C:attention}#2#{} {C:phanta_hanafuda}Hanafuda{} cards to",
+                    "be used immediately"
+                }
+            },
+            p_phanta_hanafuda_mega2 = {
+                name = "Mega Hanafuda Pack",
+                text = {
+                    "Choose {C:attention}#1#{} of up to",
+                    "{C:attention}#2#{} {C:phanta_hanafuda}Hanafuda{} cards to",
+                    "be used immediately"
+                }
+            },
+
             undiscovered_phanta_zodiac = {
                 name = "Not Discovered",
                 text = {
                     "Obtain this card in",
                     "an unseeded run to",
                     "learn what it does",
-                },
+                }
+            },
+            undiscovered_phanta_hanafuda = {
+                name = "Not Discovered",
+                text = {
+                    "Obtain this card in",
+                    "an unseeded run to",
+                    "learn what it does",
+                }
             },
             undiscovered_phanta_starterpack = {
                 name = "Not Discovered",
@@ -2302,7 +2384,7 @@ return {
                     "Open this pack",
                     "in an unseeded run",
                     "to learn what it does"
-                },
+                }
             },
             phanta_sleepy = {
                 name = "Sleepy",
@@ -2758,7 +2840,7 @@ return {
                     "Add a {C:attention}Ghost Seal{}",
                     "to {C:attention}#1#{} selected",
                     "card held in hand"
-                },
+                }
             },
             c_phanta_shard = {
                 name = "Shard",
@@ -2836,7 +2918,7 @@ return {
                 text = {
                     "{C:attention}Vanilla{} and {C:tarot}Phanta{} content only",
                     "{C:tarot}Phanta{} Jokers only"
-                },
+                }
             },
             stake_phanta_red = {
                 name = "Red Stake (Phanta)",
@@ -2852,7 +2934,7 @@ return {
                     "Required score scales",
                     "faster for each {C:attention}Ante",
                     "{s:0.8}Applies all previous Stakes{}"
-                },
+                }
             },
             stake_phanta_black = {
                 name = "Black Stake (Phanta)",
@@ -2862,7 +2944,7 @@ return {
                     "{C:inactive,s:0.8}destroyed, may be used){}",
                     "{C:inactive,s:0.8}(Excludes Starter Packs){}",
                     "{s:0.8}Applies all previous Stakes{}"
-                },
+                }
             },
             stake_phanta_blue = {
                 name = "Blue Stake (Phanta)",
@@ -2871,7 +2953,7 @@ return {
                     "{C:inactive,s:0.8}(Debuffed after 2 rounds){}",
                     "{C:inactive,s:0.8}(Excludes Starter Packs){}",
                     "{s:0.8}Applies all previous Stakes{}"
-                },
+                }
             },
             stake_phanta_purple = {
                 name = "Purple Stake (Phanta)",
@@ -2879,7 +2961,7 @@ return {
                     "Required score scales",
                     "faster for each {C:attention}Ante",
                     "{s:0.8}Applies all previous Stakes{}"
-                },
+                }
             },
             stake_phanta_orange = {
                 name = "Orange Stake (Phanta)",
@@ -2887,7 +2969,7 @@ return {
                     "Shop can have {C:attention}Sleepy{} Jokers",
                     "{C:inactive,s:0.8}(Debuffed until after 2 rounds){}",
                     "{s:0.8}Applies all previous Stakes{}"
-                },
+                }
             },
             stake_phanta_gold = {
                 name = "Gold Stake (Phanta)",
@@ -2907,6 +2989,398 @@ return {
                 },
             }
         },
+        phanta_Hanafuda = {
+            c_phanta_pine_chaff_a = {
+                name = "Pine Chaff",
+                text = {
+                    "Creates up to {C:attention}#1#{}",
+                    "random {C:tarot}Tarot{} cards",
+                    "{C:inactive}(Must have room){}"
+                }
+            },
+            c_phanta_pine_chaff_b = {
+                name = "Pine Chaff",
+                text = {
+                    "Creates up to {C:attention}#1#{}",
+                    "random {C:tarot}Tarot{} cards",
+                    "{C:inactive}(Must have room){}"
+                }
+            },
+            c_phanta_pine_ribbon = {
+                name = "Pine Poetry Ribbon",
+                text = {
+                    "Creates {C:attention}#1#{} {C:dark_edition}Negative{}",
+                    "{C:tarot}Tarot{} card"
+                }
+            },
+            c_phanta_pine_crane = {
+                name = "Crane",
+                text = {
+                    "Creates {C:attention}#1#{} {C:dark_edition}Negative{}",
+                    "{C:tarot}Tarot{} cards"
+                }
+            },
+
+            c_phanta_plum_blossom_chaff_a = {
+                name = "Plum Blossom Chaff",
+                text = {
+                    "Creates {C:attention}#1#{} copy of",
+                    "{C:attention}1{} selected card",
+                    "in your hand",
+                }
+            },
+            c_phanta_plum_blossom_chaff_b = {
+                name = "Plum Blossom Chaff",
+                text = {
+                    "Creates {C:attention}#1#{} copy of",
+                    "{C:attention}1{} selected card",
+                    "in your hand",
+                }
+            },
+            c_phanta_plum_blossom_ribbon = {
+                name = "Plum Blossom Poetry Ribbon",
+                text = {
+                    "Creates {C:attention}#1#{} copies of",
+                    "{C:attention}1{} selected card",
+                    "in your hand",
+                }
+            },
+            c_phanta_plum_blossom_bush_warbler = {
+                name = "Bush Warbler",
+                text = {
+                    "Creates {C:attention}#1#{} copies of",
+                    "{C:attention}1{} selected card",
+                    "in your hand",
+                }
+            },
+
+            c_phanta_cherry_blossom_chaff_a = {
+                name = "Cherry Blossom Chaff",
+                text = {
+                    "Creates {C:attention}#1#{} random",
+                    "{C:phanta_hanafuda}Chaff Hanafuda{} card",
+                    "{C:inactive}(Must have room){}"
+                }
+            },
+            c_phanta_cherry_blossom_chaff_b = {
+                name = "Cherry Blossom Chaff",
+                text = {
+                    "Creates {C:attention}#1#{} random",
+                    "{C:phanta_hanafuda}Chaff Hanafuda{} card",
+                    "{C:inactive}(Must have room){}"
+                }
+            },
+            c_phanta_cherry_blossom_ribbon = {
+                name = "Cherry Blossom Poetry Ribbon",
+                text = {
+                    "Creates up to {C:attention}#1#{} random",
+                    "{C:phanta_hanafuda}Chaff Hanafuda{} cards",
+                    "{C:inactive}(Must have room){}"
+                }
+            },
+            c_phanta_cherry_blossom_flower_viewing_curtain = {
+                name = "Flower Viewing Curtain",
+                text = {
+                    "Creates up to {C:attention}#1#{} random",
+                    "{C:phanta_hanafuda}Animal Hanafuda{} cards",
+                    "{C:inactive}(Must have room){}"
+                }
+            },
+
+
+
+            c_phanta_wisteria_chaff_a = {
+                name = "Wisteria Chaff",
+                text = {
+                    "Destroys up to",
+                    "{C:attention}#1#{} selected cards"
+                }
+            },
+            c_phanta_wisteria_chaff_b = {
+                name = "Wisteria Chaff",
+                text = {
+                    "Destroys up to",
+                    "{C:attention}#1#{} selected cards"
+                }
+            },
+            c_phanta_wisteria_ribbon = {
+                name = "Wisteria Plain Ribbon",
+                text = {
+                    "Destroys up to",
+                    "{C:attention}#1#{} selected cards"
+                }
+            },
+            c_phanta_wisteria_cuckoo = {
+                name = "Cuckoo with Cresent Moon",
+                text = {
+                    "Destroys up to",
+                    "{C:attention}#1#{} selected cards"
+                }
+            },
+
+            c_phanta_iris_chaff_a = {
+                name = "Iris Chaff",
+                text = {
+                    "Creates a random",
+                    "{C:blue}Common{} {C:attention}Joker{}",
+                    "{C:inactive}(Must have room)"
+                }
+            },
+            c_phanta_iris_chaff_b = {
+                name = "Iris Chaff",
+                text = {
+                    "Creates a random",
+                    "{C:blue}Common{} {C:attention}Joker{}",
+                    "{C:inactive}(Must have room)"
+                }
+            },
+            c_phanta_iris_ribbon = {
+                name = "Iris Plain Ribbon",
+                text = {
+                    "Lose {C:money}$#1#{}, creates a",
+                    "random {C:green}Uncommon{} {C:attention}Joker{}",
+                    "{C:inactive}(Must have room)"
+                }
+            },
+            c_phanta_iris_eight_plank_bridge = {
+                name = "Eight-Plank Bridge",
+                text = {
+                    "Lose {C:money}$#1#{}, creates",
+                    "a random {C:red}Rare{} {C:attention}Joker{}",
+                    "{C:inactive}(Must have room)"
+                }
+            },
+
+            c_phanta_peony_chaff_a = {
+                name = "Peony Chaff",
+                text = {
+                    "Adds a random {C:attention}playing{}",
+                    "{C:attention}card{} with a random",
+                    "{C:attention}seal{} to your hand"
+                }
+            },
+            c_phanta_peony_chaff_b = {
+                name = "Peony Chaff",
+                text = {
+                    "Adds a random {C:attention}playing{}",
+                    "{C:attention}card{} with a random",
+                    "{C:attention}seal{} to your hand"
+                }
+            },
+            c_phanta_peony_ribbon = {
+                name = "Peony Blue Ribbon",
+                text = {
+                    "Adds a {C:attention}random Seal{}",
+                    "to {C:attention}#1#{} selected",
+                    "card in your hand"
+                }
+            },
+            c_phanta_peony_butterflies = {
+                name = "Butterflies",
+                text = {
+                    "Adds a {C:red}Red Seal{} to",
+                    "up to {C:attention}#1#{} selected",
+                    "cards in your hand"
+                }
+            },
+
+            c_phanta_bush_clover_chaff_a = {
+                name = "Bush Clover Chaff",
+                text = {
+                    "Increases rank",
+                    "of {C:attention}#1#{} selected",
+                    "card by {C:attention}#2#{}"
+                }
+            },
+            c_phanta_bush_clover_chaff_b = {
+                name = "Bush Clover Chaff",
+                text = {
+                    "Increases rank",
+                    "of {C:attention}#1#{} selected",
+                    "card by {C:attention}#2#{}"
+                }
+            },
+            c_phanta_bush_clover_ribbon = {
+                name = "Bush Clover Plain Ribbon",
+                text = {
+                    "Increases rank of",
+                    "up to {C:attention}#1#{} selected",
+                    "cards by {C:attention}#2#{}"
+                }
+            },
+            c_phanta_bush_clover_boar = {
+                name = "Boar",
+                text = {
+                    "Increases rank of",
+                    "up to {C:attention}#1#{} selected",
+                    "cards by {C:attention}#2#{}"
+                }
+            },
+
+            c_phanta_suzuki_grass_chaff_a = {
+                name = "Suzuki Grass Chaff",
+                text = {
+                    "{C:green}#1# in #2#{} chance to add",
+                    "a random {C:dark_edition}edition{}",
+                    "to leftmost {C:attention}Joker",
+                    "{C:inactive}(Cannot apply Negative){}"
+                }
+            },
+            c_phanta_suzuki_grass_chaff_b = {
+                name = "Suzuki Grass Chaff",
+                text = {
+                    "{C:green}#1# in #2#{} chance to add",
+                    "a random {C:dark_edition}edition{}",
+                    "to leftmost {C:attention}Joker",
+                    "{C:inactive}(Cannot apply Negative){}"
+                }
+            },
+            c_phanta_suzuki_grass_geese = {
+                name = "Geese",
+                text = {
+                    "{C:green}#1# in #2#{} chance to add",
+                    "a random {C:dark_edition}edition{}",
+                    "to leftmost {C:attention}Joker{}",
+                    "{C:inactive}(Cannot apply Negative){}"
+                }
+            },
+            c_phanta_suzuki_grass_full_moon = {
+                name = "Full Moon",
+                text = {
+                    "Adds a random",
+                    "{C:dark_edition}edition{} to leftmost {C:attention}Joker{}",
+                    "{C:inactive}(Cannot apply Negative){}"
+                }
+            },
+
+            c_phanta_chrysanthemum_chaff_a = {
+                name = "Chrysanthemum Chaff",
+                text = {
+                    "Enhances {C:attention}#1#{}",
+                    "selected cards to",
+                    "{C:attention}random enhancements{}"
+                }
+            },
+            c_phanta_chrysanthemum_chaff_b = {
+                name = "Chrysanthemum Chaff",
+                text = {
+                    "Enhances {C:attention}#1#{}",
+                    "selected cards to",
+                    "{C:attention}random enhancements{}"
+                }
+            },
+            c_phanta_chrysanthemum_ribbon = {
+                name = "Chrysanthemum Blue Ribbon",
+                text = {
+                    "Select up to {C:attention}#1#{} cards,",
+                    "all cards gain the",
+                    "{C:attention}enhancement{} of the",
+                    "{C:attention}rightmost{} card"
+                }
+            },
+            c_phanta_chrysanthemum_sake_cup = {
+                name = "Sake Cup",
+                text = {
+                    "Select up to {C:attention}#1#{} cards,",
+                    "all cards gain the",
+                    "{C:attention}enhancement{} of the",
+                    "{C:attention}rightmost{} card"
+                }
+            },
+
+            c_phanta_maple_chaff_a = {
+                name = "Maple Chaff",
+                text = {
+                    "Doubles money",
+                    "{C:inactive}(Max of {C:money}$#1#{C:inactive}){}"
+                }
+            },
+            c_phanta_maple_chaff_b = {
+                name = "Maple Chaff",
+                text = {
+                    "Doubles money",
+                    "{C:inactive}(Max of {C:money}$#1#{C:inactive}){}"
+                }
+            },
+            c_phanta_maple_ribbon = {
+                name = "Maple Blue Ribbon",
+                text = {
+                    "Doubles money",
+                    "{C:inactive}(Max of {C:money}$#1#{C:inactive}){}"
+                }
+            },
+            c_phanta_maple_deer = {
+                name = "Deer",
+                text = {
+                    "Triples money",
+                    "{C:inactive}(Max of {C:money}$#1#{C:inactive}){}"
+                }
+            },
+
+            c_phanta_willow_chaff = {
+                name = "Lightning",
+                text = {
+                    "Enhances {C:attention}#1#{} selected",
+                    "card into a {C:attention}Wild Card{}"
+                }
+            },
+            c_phanta_willow_ribbon = {
+                name = "Willow Plain Ribbon",
+                text = {
+                    "Select up to {C:attention}#1#{} cards,",
+                    "converts all cards",
+                    "into the {C:attention}suit{} of",
+                    "the {C:attention}rightmost{} card"
+                }
+            },
+            c_phanta_willow_swallow = {
+                name = "Swallow",
+                text = {
+                    "Select up to {C:attention}#1#{} cards,",
+                    "converts all cards",
+                    "into the {C:attention}suit{} of",
+                    "the {C:attention}rightmost{} card"
+                }
+            },
+            c_phanta_willow_rain_man = {
+                name = "Rain Man",
+                text = {
+                    "Select up to {C:attention}#1#{} cards,",
+                    "converts all cards",
+                    "into the {C:attention}suit{} of",
+                    "the {C:attention}rightmost{} card"
+                }
+            },
+
+            c_phanta_paulownia_chaff_a = {
+                name = "Paulownia Chaff",
+                text = {
+                    "Adds {C:money}$#1#{} of {C:attention}sell value{}",
+                    "to all {C:attention}Jokers{}"
+                }
+            },
+            c_phanta_paulownia_chaff_b = {
+                name = "Paulownia Chaff",
+                text = {
+                    "Adds {C:money}$#1#{} of {C:attention}sell value{}",
+                    "to all {C:attention}Jokers{}"
+                }
+            },
+            c_phanta_paulownia_chaff_yellow = {
+                name = "Yellow Paulownia Chaff",
+                text = {
+                    "Adds {C:money}$#1#{} of {C:attention}sell value{}",
+                    "to all {C:attention}Jokers{}"
+                }
+            },
+            c_phanta_paulownia_phoenix = {
+                name = "Phoenix",
+                text = {
+                    "Adds {C:money}$#1#{} of {C:attention}sell value{}",
+                    "to all {C:attention}Jokers{}"
+                }
+            },
+        },
         phanta_Zodiac = {
             c_phanta_aries = {
                 name = "Aries",
@@ -2914,7 +3388,7 @@ return {
                     "Creates a {C:tarot}Tarot{} card",
                     "when {C:attention}#1#{}hand is played",
                     "{C:inactive}(Must have room){}"
-                },
+                }
             },
             c_phanta_taurus = {
                 name = "Taurus",
@@ -2922,7 +3396,7 @@ return {
                     "Retriggers the {C:attention}first{}",
                     "played card used",
                     "in scoring {C:attention}#1#{} time#2#"
-                },
+                }
             },
             c_phanta_gemini = {
                 name = "Gemini",
@@ -2930,7 +3404,7 @@ return {
                     "Earn {C:money}$#1#{} if played",
                     "hand contains a",
                     "{C:attention}Two Pair{}"
-                },
+                }
             },
             c_phanta_cancer = {
                 name = "Cancer",
@@ -2938,7 +3412,7 @@ return {
                     "Played cards with",
                     "{C:clubs}Clubs{} suit give",
                     "{C:chips}+#1#{} Chips when scored"
-                },
+                }
             },
             c_phanta_leo = {
                 name = "Leo",
@@ -2946,7 +3420,7 @@ return {
                     "Played cards with",
                     "{C:hearts}Hearts{} suit give",
                     "{C:mult}+#1#{} Mult when scored"
-                },
+                }
             },
             c_phanta_virgo = {
                 name = "Virgo",
@@ -2954,7 +3428,7 @@ return {
                     "If {C:attention}Blind{} is defeated",
                     "in #1#{C:blue}#2#{} hand#3#,#4#",
                     "#5#a {C:attention}Standard{} Tag"
-                },
+                }
             },
             c_phanta_libra = {
                 name = "Libra",
@@ -2962,7 +3436,7 @@ return {
                     "Played cards with",
                     "{C:spades}Spades{} suit give",
                     "{C:white,X:mult}X#1#{} Mult when scored"
-                },
+                }
             },
             c_phanta_scorpio = {
                 name = "Scorpio",
@@ -2972,21 +3446,21 @@ return {
                     "create {C:planet}Planet{} cards#1#",
                     "#2#when scored",
                     "{C:inactive}(Must have room){}"
-                },
+                }
             },
             c_phanta_sagittarius = {
                 name = "Sagittarius",
                 text = {
                     "{C:red}+#1#{} discard#2#",
                     "each round"
-                },
+                }
             },
             c_phanta_capricorn = {
                 name = "Capricorn",
                 text = {
                     "Earn {C:money}$#1#{} for each",
                     "{C:attention}reroll{} in the shop"
-                },
+                }
             },
             c_phanta_aquarius = {
                 name = "Aquarius",
@@ -3001,7 +3475,7 @@ return {
                     "Gains {C:money}$#1#{} of {C:attention}sell{}",
                     "{C:attention}value{} for each",
                     "skipped {C:attention}Booster Pack{}"
-                },
+                }
             },
             c_phanta_darkhour = {
                 name = "Dark Hour",
@@ -3019,7 +3493,7 @@ return {
                     "Creates #1# {C:dark_edition}Negative{} {C:tarot}Tarot{}",
                     "card#2# when {C:attention}second{}",
                     "hand is played",
-                },
+                }
             },
             c_phanta_sapphire = {
                 name = "Sapphire",
@@ -3027,7 +3501,7 @@ return {
                     "Retriggers all but",
                     "the {C:attention}first{} played card",
                     "used in scoring {C:attention}#1#{} time#2#"
-                },
+                }
             },
             c_phanta_agate = {
                 name = "Agate",
@@ -3035,7 +3509,7 @@ return {
                     "Earn {C:money}$#1#{} if played",
                     "hand contains a",
                     "{C:attention}Four of a Kind{}"
-                },
+                }
             },
             c_phanta_emerald = {
                 name = "Emerald",
@@ -3043,7 +3517,7 @@ return {
                     "{C:chips}+#1#{} Chips if played",
                     "hand contains a",
                     "card with {C:clubs}Clubs{} suit"
-                },
+                }
             },
             c_phanta_onyx = {
                 name = "Onyx",
@@ -3051,7 +3525,7 @@ return {
                     "{C:mult}+#1#{} Mult if played",
                     "hand contains a",
                     "card with {C:hearts}Hearts{} suit"
-                },
+                }
             },
             c_phanta_carnelian = {
                 name = "Carnelian",
@@ -3059,7 +3533,7 @@ return {
                     "If {C:attention}Blind{} is defeated",
                     "in #1#{C:blue}#2#{} hand#3#,#4#",
                     "#5#a {C:attention}Rare{} Tag"
-                },
+                }
             },
             c_phanta_peridot = {
                 name = "Peridot",
@@ -3067,7 +3541,7 @@ return {
                     "{C:white,X:mult}X#1#{} Mult if played",
                     "hand contains a",
                     "card with {C:spades}Spades{} suit"
-                },
+                }
             },
             c_phanta_aquamarine = {
                 name = "Aquamarine",
@@ -3076,7 +3550,7 @@ return {
                     "{C:planet}Planet{} card#2# if played",
                     "hand contains a",
                     "card with {C:diamonds}Diamonds{} suit"
-                },
+                }
             },
             c_phanta_topaz = {
                 name = "Topaz",
@@ -3084,7 +3558,7 @@ return {
                     "{C:red}+#1#{} discards",
                     "when selecting",
                     "any {C:attention}Boss Blind{}"
-                },
+                }
             },
             c_phanta_ruby = {
                 name = "Ruby",
@@ -3092,7 +3566,7 @@ return {
                     "Earn {C:money}$#1#{} at the end",
                     "of the {C:attention}shop{} if you",
                     "did not {C:attention}reroll{}"
-                },
+                }
             },
             c_phanta_garnet = {
                 name = "Garnet",
@@ -3109,7 +3583,7 @@ return {
                     "{C:attention}shop{}, gains {C:money}$#1#{} of",
                     "{C:attention}sell{} {C:attention}value{} for each",
                     "unopened {C:attention}Booster Pack{}"
-                },
+                }
             },
             c_phanta_moonstone = {
                 name = "Moonstone",
@@ -3336,6 +3810,9 @@ return {
             b_phanta_zodiac_cards = "Zodiac Cards",
             k_phanta_zodiac = "Zodiac",
             k_phanta_zodiac_pack = "Zodiac Pack",
+            b_phanta_hanafuda_cards = "Hanafuda Cards",
+            k_phanta_hanafuda = "Hanafuda",
+            k_phanta_hanafuda_pack = "Hanafuda Pack",
             b_phanta_birthstone_cards = "Birthstone Cards",
             k_phanta_birthstone = "Birthstone",
             b_phanta_starterpack_cards = "Starter Packs",
@@ -3378,6 +3855,7 @@ return {
 
             phanta_junk_enabled = "Enable Junk (Poker Hand)",
             phanta_zodiac_enabled = "Zodiac Cards",
+            phanta_hanafuda_enabled = "Hanafuda Cards",
             phanta_starter_pack_enabled = "Starter Packs",
             phanta_disable_animations = "Disable Animations",
             phanta_disable_custom_music = "Disable Custom Music",

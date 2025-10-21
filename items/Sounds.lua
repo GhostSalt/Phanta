@@ -41,6 +41,12 @@ SMODS.Sound({
 })
 
 SMODS.Sound({
+  key = "88888888",
+  path = "phanta_88888888.ogg",
+  replace = true
+})
+
+SMODS.Sound({
   vol = 1,
   pitch = 1,
   key = "polargeist_music",
@@ -83,6 +89,26 @@ SMODS.Sound({
           or SMODS.OPENED_BOOSTER.config.center.key == 'p_phanta_zodiac_jumbo2'
           or SMODS.OPENED_BOOSTER.config.center.key == 'p_phanta_zodiac_mega1'
           or SMODS.OPENED_BOOSTER.config.center.key == 'p_phanta_zodiac_mega2') then
+      return true
+    end
+    return false
+  end
+})
+
+SMODS.Sound({
+  vol = 1,
+  key = "hanafuda_pack_music",
+  path = "phanta_hanafuda_pack.ogg",
+  select_music_track = function()
+    if G.booster_pack and SMODS.OPENED_BOOSTER and
+        (SMODS.OPENED_BOOSTER.config.center.key == 'p_phanta_hanafuda_normal1'
+          or SMODS.OPENED_BOOSTER.config.center.key == 'p_phanta_hanafuda_normal2'
+          or SMODS.OPENED_BOOSTER.config.center.key == 'p_phanta_hanafuda_normal3'
+          or SMODS.OPENED_BOOSTER.config.center.key == 'p_phanta_hanafuda_normal4'
+          or SMODS.OPENED_BOOSTER.config.center.key == 'p_phanta_hanafuda_jumbo1'
+          or SMODS.OPENED_BOOSTER.config.center.key == 'p_phanta_hanafuda_jumbo2'
+          or SMODS.OPENED_BOOSTER.config.center.key == 'p_phanta_hanafuda_mega1'
+          or SMODS.OPENED_BOOSTER.config.center.key == 'p_phanta_hanafuda_mega2') then
       return true
     end
     return false
