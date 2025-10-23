@@ -16,7 +16,7 @@ SMODS.Edition {
       key = key .. "_showcase"
       return { key = key, vars = { self.config.xmult, self.config.joker_xmult } }
     end
-    if card.config.center.set == "Joker" then
+    if card.config.center.set == "Joker" or card.ability.consumeable then
       return { key = key, vars = { self.config.joker_xmult } }
     else
       return { key = key, vars = { self.config.xmult } }

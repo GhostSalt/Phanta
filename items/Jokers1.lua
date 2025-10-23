@@ -540,7 +540,7 @@ G.Phanta.centers["new2dsxl"] = {
   loc_vars = function(self, info_queue, card)
     return { vars = { card.ability.extra.lost_hand_size, card.ability.extra.given_xhands } }
   end,
-  rarity = 2,
+  rarity = 3,
   atlas = 'PhantaMiscAnims5',
   pos = { x = 0, y = 0 },
   phanta_anim_states = {
@@ -577,7 +577,7 @@ G.Phanta.centers["new2dsxl"] = {
       loop = true
     },
   },
-  cost = 6,
+  cost = 8,
   blueprint_compat = true,
   eternal_compat = true,
   perishable_compat = true,
@@ -843,7 +843,7 @@ G.Phanta.centers["redkeycards"] = {
 }
 
 G.Phanta.centers["bluekeycards"] = {
-  config = { extra = { added_chips = 18, current_chips = 0 } },
+  config = { extra = { added_chips = 9, current_chips = 0 } },
   loc_vars = function(self, info_queue, card)
     return { vars = { card.ability.extra.added_chips, card.ability.extra.current_chips } }
   end,

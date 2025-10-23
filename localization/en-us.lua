@@ -276,7 +276,7 @@ return {
                     },
                     {
                         "{X:mult,C:white}X#2#{} Mult",
-                        "{s:0.9}when on Jokers{}"
+                        "{s:0.9}on anything else{}"
                     }
                 }
             },
@@ -1563,6 +1563,14 @@ return {
                     "add a {C:attention}Gold Seal{}",
                     "to {C:attention}1{} random",
                     "card in your hand"
+                }
+            },
+            j_phanta_sprinkles                 = {
+                name = 'Sprinkles',
+                text = {
+                    "Sell this Joker to",
+                    "add random {C:dark_edition}editions{}",
+                    "to held {C:attention}consumables{}"
                 }
             },
             j_phanta_testpage              = {

@@ -53,6 +53,7 @@ local joker_order = {
     "animalinstinct",
     "target",
     "fanta",
+    "sprinkles",
     "teastainedjoker",
     "teabag",
     "forsakenscroll",

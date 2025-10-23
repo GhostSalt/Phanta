@@ -732,6 +732,38 @@ G.Phanta.centers["fanta"] = {
   end
 }
 
+G.Phanta.centers["sprinkles"] = {
+  rarity = 2,
+  atlas = 'Phanta2',
+  pos = { x = 1, y = 5 },
+  cost = 6,
+  blueprint_compat = true,
+  eternal_compat = false,
+  perishable_compat = true,
+  calculate = function(self, card, context)
+    if context.selling_self and G.consumeables then
+      G.E_MANAGER:add_event(Event({
+        func = function()
+          play_sound('tarot1')
+          card:juice_up(0.3, 0.5)
+          return true
+        end
+      }))
+
+      G.E_MANAGER:add_event(Event({
+        trigger = 'after',
+        delay = 0.1,
+        func = function()
+          for _, v in ipairs(G.consumeables.cards) do
+            v:set_edition(poll_edition("sprinklesed", nil, true, true))
+          end
+          return true
+        end
+      }))
+    end
+  end
+}
+
 G.Phanta.centers["testpage"] = {
   unlocked = false,
   unlock_condition = { extra = "phanta_junk" },
@@ -2035,7 +2067,7 @@ G.Phanta.centers["plugsocket"] = {
 
 G.Phanta.centers["mrbigmoneybags"] = {
   config = { extra = { xmult = 2 } },
-  rarity = 1,
+  rarity = 2,
   atlas = 'Phanta2',
   pos = { x = 11, y = 2 },
   cost = 30,

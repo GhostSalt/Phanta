@@ -149,7 +149,7 @@ G.Phanta.centers["famalia"] = {
 
 G.Phanta.centers["godoor"] = {
   unlocked = false,
-  config = { extra = { added_xmult = 1, current_xmult = 1, counted_rerolls = 0 } },
+  config = { extra = { added_xmult = 0.6, current_xmult = 1, counted_rerolls = 0 } },
   rarity = 4,
   atlas = 'Phanta',
   pos = { x = 0, y = 2 },
