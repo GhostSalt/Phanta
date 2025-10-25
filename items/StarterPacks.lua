@@ -146,8 +146,8 @@ SMODS.Consumable {
   pos = { x = 2, y = 0 },
   cost = 8,
   config = { starter_cards = {
-    { count = 2, enhancement = "m_steel", seal = "Red", rank = "King", suit = "Hearts" },
-    { count = 2 } } },
+    { count = 1, enhancement = "m_steel", seal = "Red", rank = "King", suit = "Hearts" },
+    { count = 3 } } },
   atlas = "PhantaStarterPacks1",
   loc_vars = function(self, info_queue, card)
     info_queue[#info_queue + 1] = G.P_SEALS["Red"]

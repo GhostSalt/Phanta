@@ -1,5 +1,6 @@
 G.Phanta = {}
 G.Phanta.centers = {}
+G.Phanta.profile_cost = 20    -- Eventually move this to be card-based, so the value can be modified.
 
 G.C.PHANTA = {
   Zodiac = HEX("4E5779"),
@@ -629,6 +630,17 @@ function SMODS.current_mod:calculate(context)
         end
       end
       if counted_marbles >= 5 then check_for_unlock({ type = 'phanta_five_marbles' }) end
+
+      local played_blue = false
+      local held_blue = false
+      for _, v in ipairs(G.play.cards) do
+        if v.seal == "Blue" then played_blue = true; break end
+      end
+      for _, v in ipairs(G.hand.cards) do
+        if v.seal == "Blue" then held_blue = true; break end
+      end
+
+      if played_blue and held_blue then check_for_unlock({ type = 'phanta_played_and_held_blue' }) end
     end
 
     if not G.GAME.phanta_number_of_unscored then G.GAME.phanta_number_of_unscored = 0 end

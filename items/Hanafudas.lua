@@ -302,7 +302,7 @@ SMODS.Consumable {
   key = "cherry_blossom_chaff_a",
   pos = { x = 2, y = 2 },
   atlas = hanafuda_atlas,
-  config = { phanta_chaff = true, extra = { hanafudas = 1 } },
+  config = { phanta_chaff = true, extra = { hanafudas = 2 } },
   loc_vars = function(self, info_queue, card)
     return { vars = { card.ability.extra.hanafudas } }
   end,
@@ -335,7 +335,7 @@ SMODS.Consumable {
   key = "cherry_blossom_chaff_b",
   pos = { x = 2, y = 3 },
   atlas = hanafuda_atlas,
-  config = { phanta_chaff = true, extra = { hanafudas = 1 } },
+  config = { phanta_chaff = true, extra = { hanafudas = 2 } },
   loc_vars = function(self, info_queue, card)
     return { vars = { card.ability.extra.hanafudas } }
   end,
@@ -384,7 +384,7 @@ SMODS.Consumable {
         func = function()
           if count_consumables() < G.consumeables.config.card_limit then
             play_sound('timpani')
-            local new_card = phanta_create_hanafuda_chaff("cherry_blossom_ribbon")
+            local new_card = phanta_create_hanafuda_ribbon("cherry_blossom_ribbon")
             new_card:add_to_deck()
             G.consumeables:emplace(new_card)
             card:juice_up(0.3, 0.5)

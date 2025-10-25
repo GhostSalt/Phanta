@@ -578,6 +578,117 @@ function Controller:key_press(key)
   end
 end
 
+G.Phanta.centers["burnerphone"] = {
+  loc_vars = function(self, info_queue, card)
+    local _vars = -- Brace yourself.
+
+        not (card.area and card.area == G.jokers) and
+        { "Unknown", "", "", "(Obtain this Joker", "", "", "to learn this info)", "", "" }
+        --or not G.GAME.blind.in_blind and { "Unknown", "", "", "(Not currently in", "", "", "a round)", "", "" }
+        or (G.deck and G.deck.cards[1] and {
+
+          ((G.deck.cards[#G.deck.cards].base.value and not SMODS.has_no_rank(G.deck.cards[#G.deck.cards]) and localize(G.deck.cards[#G.deck.cards].base.value or 14, 'ranks'))
+            or G.deck.cards[#G.deck.cards].ability.name),
+
+          (not SMODS.has_no_rank(G.deck.cards[#G.deck.cards]) and not SMODS.has_no_suit(G.deck.cards[#G.deck.cards])) and " of " or "",
+
+          ((SMODS.has_no_suit(G.deck.cards[#G.deck.cards]) and "")
+            or localize(G.deck.cards[#G.deck.cards].base.suit, 'suits_plural')),
+
+          G.deck.cards[#G.deck.cards - 1] and ((G.deck.cards[#G.deck.cards - 1].base.value and not SMODS.has_no_rank(G.deck.cards[#G.deck.cards - 1]) and localize(G.deck.cards[#G.deck.cards - 1].base.value or 14, 'ranks'))
+            or G.deck.cards[#G.deck.cards - 1].ability.name) or "None",
+
+          G.deck.cards[#G.deck.cards - 1] and (not SMODS.has_no_rank(G.deck.cards[#G.deck.cards - 1]) and not SMODS.has_no_suit(G.deck.cards[#G.deck.cards - 1])) and " of " or "",
+
+          G.deck.cards[#G.deck.cards - 1] and ((SMODS.has_no_suit(G.deck.cards[#G.deck.cards - 1]) and "")
+            or localize(G.deck.cards[#G.deck.cards - 1].base.suit, 'suits_plural')) or "",
+
+          G.deck.cards[#G.deck.cards - 2] and ((G.deck.cards[#G.deck.cards - 2].base.value and not SMODS.has_no_rank(G.deck.cards[#G.deck.cards - 2]) and localize(G.deck.cards[#G.deck.cards - 2].base.value or 14, 'ranks'))
+            or G.deck.cards[#G.deck.cards - 2].ability.name) or "None",
+
+          G.deck.cards[#G.deck.cards - 2] and (not SMODS.has_no_rank(G.deck.cards[#G.deck.cards - 2]) and not SMODS.has_no_suit(G.deck.cards[#G.deck.cards - 2])) and " of " or "",
+
+          G.deck.cards[#G.deck.cards - 2] and ((SMODS.has_no_suit(G.deck.cards[#G.deck.cards - 2]) and "")
+            or localize(G.deck.cards[#G.deck.cards - 2].base.suit, 'suits_plural')) or "" })
+        or { "None", "", "", "None", "", "", "None", "", "" }
+
+    if not (card.area and card.area == G.jokers) or not G.GAME.blind.in_blind then
+      _vars.colours = { G.C.JOKER_GREY, G.C.JOKER_GREY, G.C.JOKER_GREY, G.C.JOKER_GREY, G.C.JOKER_GREY, G.C.JOKER_GREY }
+    else
+      _vars.colours = {
+        (G.deck and G.deck.cards[#G.deck.cards] and G.C.IMPORTANT) or G.C.JOKER_GREY,
+        (G.deck and G.deck.cards[#G.deck.cards] and G.C.SUITS[G.deck.cards[#G.deck.cards].base.suit]) or G.C.JOKER_GREY,
+        (G.deck and G.deck.cards[#G.deck.cards - 1] and G.C.IMPORTANT) or G.C.JOKER_GREY,
+        (G.deck and G.deck.cards[#G.deck.cards - 1] and G.C.SUITS[G.deck.cards[#G.deck.cards - 1].base.suit]) or
+        G.C.JOKER_GREY,
+        (G.deck and G.deck.cards[#G.deck.cards - 2] and G.C.IMPORTANT) or G.C.JOKER_GREY,
+        (G.deck and G.deck.cards[#G.deck.cards - 2] and G.C.SUITS[G.deck.cards[#G.deck.cards - 2].base.suit]) or
+        G.C.JOKER_GREY,
+      }
+    end
+
+    return { vars = _vars }
+  end,
+  rarity = 1,
+  atlas = 'PhantaMiscAnims5',
+  pos = { x = 0, y = 8 },
+  phanta_anim = {
+    { xrange = { first = 0, last = 11 }, yrange = { first = 8, last = 9 }, t = 0.1 },
+    { xrange = { first = 0, last = 3 }, y = 10, t = 0.1 }
+  },
+  pos_extra = { x = 4, y = 10 },
+  phanta_anim_extra = {
+    { x = 4, y = 10, t = 1.1 },
+    { x = 5, y = 10, t = 0.075 },
+    { x = 4, y = 10, t = 0.6 },
+    { x = 5, y = 10, t = 0.075 },
+    { x = 6, y = 10, t = 0.075 },
+    { x = 5, y = 10, t = 0.075 },
+    { x = 4, y = 10, t = 1.4 },
+    { x = 5, y = 10, t = 0.075 },
+    { x = 4, y = 10, t = 0.4 },
+    { x = 5, y = 10, t = 0.075 },
+    { x = 6, y = 10, t = 0.075 },
+    { x = 7, y = 10, t = 0.075 }, { x = 8, y = 10, t = 0.075 },
+    { x = 7, y = 10, t = 0.075 }, { x = 8, y = 10, t = 0.075 },
+    { x = 7, y = 10, t = 0.075 }, { x = 8, y = 10, t = 0.075 },
+    { x = 7, y = 10, t = 0.075 }, { x = 8, y = 10, t = 0.075 },
+    { x = 9, y = 10, t = 0.075 }, { x = 10, y = 10, t = 0.075 },
+    { x = 9, y = 10, t = 0.075 }, { x = 10, y = 10, t = 0.075 },
+    { x = 9, y = 10, t = 0.075 }, { x = 10, y = 10, t = 0.075 },
+    { x = 9, y = 10, t = 0.075 }, { x = 10, y = 10, t = 0.075 },
+    { x = 6, y = 10, t = 0.075 },
+    { x = 5, y = 10, t = 0.075 },
+    { x = 4, y = 10, t = 1.6 },
+    { x = 5, y = 10, t = 0.075 },
+    { x = 4, y = 10, t = 1.4 },
+    { x = 5, y = 10, t = 0.075 },
+    { x = 4, y = 10, t = 0.5 },
+    { x = 5, y = 10, t = 0.075 },
+    { x = 4, y = 10, t = 1.2 },
+    { x = 5, y = 10, t = 0.075 },
+    { x = 6, y = 10, t = 0.075 },
+    { x = 11, y = 10, t = 0.075 }, { x = 10, y = 11, t = 0.075 }, { x = 11, y = 11, t = 0.075 },
+    { x = 6, y = 10, t = 0.075 },
+    { x = 11, y = 10, t = 0.075 }, { x = 10, y = 11, t = 0.075 }, { x = 11, y = 11, t = 0.075 },
+    { x = 11, y = 10, t = 0.075 }, { x = 10, y = 11, t = 0.075 }, { x = 11, y = 11, t = 0.075 },
+    { x = 11, y = 10, t = 0.075 }, { x = 10, y = 11, t = 0.075 }, { x = 11, y = 11, t = 0.075 },
+    { x = 11, y = 10, t = 0.075 }, { x = 10, y = 11, t = 0.075 }, { x = 11, y = 11, t = 0.075 },
+    { x = 6, y = 10, t = 0.075 },
+    { x = 11, y = 10, t = 0.075 }, { x = 10, y = 11, t = 0.075 }, { x = 11, y = 11, t = 0.075 },
+    { x = 6, y = 10, t = 0.075 },
+    { x = 5, y = 10, t = 0.075 },
+    { x = 4, y = 10, t = 1.9 },
+    { x = 5, y = 10, t = 0.075 },
+    { x = 4, y = 10, t = 0.5 },
+    { x = 5, y = 10, t = 0.075 }
+  },
+  cost = 4,
+  blueprint_compat = false,
+  eternal_compat = true,
+  perishable_compat = true
+}
+
 G.Phanta.centers["flushed"] = {
   config = { extra = { added_mult = 3, current_mult = 0 } },
   loc_vars = function(self, info_queue, card)
@@ -734,8 +845,26 @@ G.Phanta.centers["fanta"] = {
 
 G.Phanta.centers["sprinkles"] = {
   rarity = 2,
-  atlas = 'Phanta2',
-  pos = { x = 1, y = 5 },
+  atlas = 'PhantaMiscAnims5',
+  pos = { x = 1, y = 7 },
+  phanta_anim = {
+    { xrange = { first = 0, last = 3 }, y = 7, t = 0.1 }
+  },
+  pos_extra = { x = 4, y = 7 },
+  phanta_anim_extra = {
+    { x = 4,  y = 7, t = 0.075 },
+    { x = 5,  y = 7, t = 0.125 },
+    { x = 6,  y = 7, t = 0.175 },
+    { x = 7,  y = 7, t = 0.3 },
+    { x = 6,  y = 7, t = 0.175 },
+    { x = 5,  y = 7, t = 0.125 },
+    { x = 4,  y = 7, t = 0.075 },
+    { x = 8,  y = 7, t = 0.125 },
+    { x = 9,  y = 7, t = 0.175 },
+    { x = 10, y = 7, t = 0.3 },
+    { x = 9,  y = 7, t = 0.175 },
+    { x = 8,  y = 7, t = 0.125 }
+  },
   cost = 6,
   blueprint_compat = true,
   eternal_compat = false,
@@ -1647,10 +1776,53 @@ G.Phanta.centers["thetrick"] = {
   perishable_compat = true
 }
 
+G.Phanta.centers["doublingcube"] = {
+  config = { extra = { xmult = 2 } },
+  loc_vars = function(self, info_queue, card)
+    return { vars = { card.ability.extra.xmult } }
+  end,
+  rarity = 2,
+  atlas = "PhantaMiscAnims5",
+  pos = { x = 0, y = 11 },
+  phanta_anim = {
+    { xrange = { first = 0, last = 2 }, y = 11, t = 0.1 }
+  },
+  pos_extra = { x = 0, y = 11 },
+  phanta_anim_extra = {
+    { x = 3, y = 11, t = 0.075 },
+    { x = 4, y = 11, t = 0.125 },
+    { x = 5, y = 11, t = 0.175 },
+    { x = 6, y = 11, t = 0.3 },
+    { x = 5, y = 11, t = 0.175 },
+    { x = 4, y = 11, t = 0.125 },
+    { x = 3, y = 11, t = 0.075 },
+    { x = 7, y = 11, t = 0.125 },
+    { x = 8, y = 11, t = 0.175 },
+    { x = 9, y = 11, t = 0.3 },
+    { x = 8, y = 11, t = 0.175 },
+    { x = 7, y = 11, t = 0.125 }
+  },
+  cost = 6,
+  blueprint_compat = true,
+  eternal_compat = true,
+  perishable_compat = true,
+  calculate = function(self, card, context)
+    if context.joker_main and count_consumables() < G.consumeables.config.card_limit then
+      local contains_only_numbers = true
+      for i = 1, #context.scoring_hand do
+        if SMODS.has_no_rank(context.scoring_hand[i]) or context.scoring_hand[i]:is_face() or context.scoring_hand[i]:get_id() == 14 then
+          contains_only_numbers = false
+        end
+      end
+      if contains_only_numbers then return { xmult = card.ability.extra.xmult } end
+    end 
+  end
+}
+
 G.Phanta.centers["magiceggcup"] = {
   config = { extra = { is_first = true } },
   rarity = 1,
-  atlas = 'PhantaMiscAnims4',
+  atlas = "PhantaMiscAnims4",
   pos = { x = 7, y = 10 },
   pos_extra = { x = 0, y = 11 },
   phanta_anim_states = {
@@ -1835,7 +2007,7 @@ G.Phanta.centers["doublelift"] = {
     }
   end,
   rarity = 1,
-  atlas = 'Phanta2',
+  atlas = "Phanta2",
   pos = { x = 5, y = 3 },
   cost = 4,
   blueprint_compat = false,
@@ -1999,6 +2171,42 @@ G.Phanta.centers["shamrock"] = {
   enhancement_gate = "m_lucky"
 }
 
+G.Phanta.centers["manga"] = {
+  rarity = 2,
+  atlas = 'Phanta2',
+  pos = { x = 0, y = 5 },
+  cost = 6,
+  blueprint_compat = true,
+  eternal_compat = true,
+  perishable_compat = true,
+  calculate = function(self, card, context)
+    if context.discard and context.other_card == context.full_hand[#context.full_hand] and count_consumables() < G.consumeables.config.card_limit then
+      local is_seven = false
+      local is_eight = false
+      for k, v in ipairs(context.full_hand) do
+        if v:get_id() == 7 then is_seven = true end
+        if v:get_id() == 8 then is_eight = true end
+      end
+      if is_seven and is_eight then
+        G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
+        G.E_MANAGER:add_event(Event({
+          func = function()
+            local new_card = create_card('phanta_Hanafuda', G.consumeables, nil, nil, nil, nil, nil, "manga")
+            new_card:add_to_deck()
+            G.consumeables:emplace(new_card)
+            G.GAME.consumeable_buffer = 0
+            return true
+          end
+        }))
+        return { message = localize("k_plus_hanafuda"), colour = G.C.PHANTA.Hanafuda }
+      end
+    end
+  end,
+  in_pool = function()
+    return Phanta.config["hanafuda_enabled"]
+  end
+}
+
 G.Phanta.centers["metalhead"] = {
   loc_vars = function(self, info_queue, card)
     info_queue[#info_queue + 1] = G.P_CENTERS.m_steel
@@ -2081,7 +2289,8 @@ G.Phanta.centers["mrbigmoneybags"] = {
     if context.joker_main then return { xmult = card.ability.extra.xmult } end
   end,
   in_pool = function(self, args)
-    return args.source ~= "buf" and args.source ~= "jud" and args.source ~= "iris_chuff_a" and args.source ~= "iris_chuff_b"
+    return args.source ~= "buf" and args.source ~= "jud" and args.source ~= "iris_chuff_a" and
+        args.source ~= "iris_chuff_b"
   end
 }
 
@@ -2238,7 +2447,7 @@ G.FUNCS.phanta_purchase_charm_tag = function(e)
     end)
   }))
 
-  ease_dollars(-16)
+  ease_dollars(-G.Phanta.profile_cost)
 
   if G.OVERLAY_MENU then G.FUNCS.exit_overlay_menu() end
   G.SETTINGS.paused = true
@@ -2257,7 +2466,7 @@ G.FUNCS.phanta_purchase_meteor_tag = function(e)
     end)
   }))
 
-  ease_dollars(-16)
+  ease_dollars(-G.Phanta.profile_cost)
 
   if G.OVERLAY_MENU then G.FUNCS.exit_overlay_menu() end
   G.SETTINGS.paused = true
@@ -2276,7 +2485,7 @@ G.FUNCS.phanta_purchase_ethereal_tag = function(e)
     end)
   }))
 
-  ease_dollars(-16)
+  ease_dollars(-G.Phanta.profile_cost)
 
   if G.OVERLAY_MENU then G.FUNCS.exit_overlay_menu() end
   G.SETTINGS.paused = true
@@ -2286,21 +2495,21 @@ G.FUNCS.phanta_purchase_ethereal_tag = function(e)
 end
 
 G.FUNCS.phanta_can_purchase_charm_tag = function(e)
-  if G.GAME.dollars - 16 < to_big(G.GAME.bankrupt_at) then
+  if G.GAME.dollars - G.Phanta.profile_cost < to_big(G.GAME.bankrupt_at) then
     e.config.colour = G.C.UI.BACKGROUND_INACTIVE
     e.config.button = nil
   end
 end
 
 G.FUNCS.phanta_can_purchase_meteor_tag = function(e)
-  if G.GAME.dollars - 16 < to_big(G.GAME.bankrupt_at) then
+  if G.GAME.dollars - G.Phanta.profile_cost < to_big(G.GAME.bankrupt_at) then
     e.config.colour = G.C.UI.BACKGROUND_INACTIVE
     e.config.button = nil
   end
 end
 
 G.FUNCS.phanta_can_purchase_ethereal_tag = function(e)
-  if G.GAME.dollars - 16 < to_big(G.GAME.bankrupt_at) then
+  if G.GAME.dollars - G.Phanta.profile_cost < to_big(G.GAME.bankrupt_at) then
     e.config.colour = G.C.UI.BACKGROUND_INACTIVE
     e.config.button = nil
   end
@@ -2558,6 +2767,10 @@ function SMODS:create_card(t)
 end
 
 G.Phanta.centers["doodah"] = {
+  unlocked = false,
+  check_for_unlock = function(self, args)
+    return args.type == "phanta_played_and_held_blue"
+  end,
   rarity = 3,
   atlas = 'Phanta2',
   pos = { x = 10, y = 4 },

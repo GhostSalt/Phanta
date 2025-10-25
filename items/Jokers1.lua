@@ -624,64 +624,18 @@ G.Phanta.centers["new2dsxl"] = {
 }
 
 G.Phanta.centers["playerpin"] = {
-  --config = { extra = {  } },
-  loc_vars = function(self, info_queue, card)
-    local _vars = -- Brace yourself.
-
-        not (card.area and card.area == G.jokers) and
-        { "Unknown", "", "", "(Obtain this Joker", "", "", "to learn this info)", "", "" }
-        or not G.GAME.blind.in_blind and { "Unknown", "", "", "(Not currently in", "", "", "a round)", "", "" }
-        or (G.deck and G.deck.cards[1] and {
-
-          ((G.deck.cards[#G.deck.cards].base.value and not SMODS.has_no_rank(G.deck.cards[#G.deck.cards]) and localize(G.deck.cards[#G.deck.cards].base.value or 14, 'ranks'))
-            or G.deck.cards[#G.deck.cards].ability.name),
-
-          (not SMODS.has_no_rank(G.deck.cards[#G.deck.cards]) and not SMODS.has_no_suit(G.deck.cards[#G.deck.cards])) and " of " or "",
-
-          ((SMODS.has_no_suit(G.deck.cards[#G.deck.cards]) and "")
-            or localize(G.deck.cards[#G.deck.cards].base.suit, 'suits_plural')),
-
-          G.deck.cards[#G.deck.cards - 1] and ((G.deck.cards[#G.deck.cards - 1].base.value and not SMODS.has_no_rank(G.deck.cards[#G.deck.cards - 1]) and localize(G.deck.cards[#G.deck.cards - 1].base.value or 14, 'ranks'))
-            or G.deck.cards[#G.deck.cards - 1].ability.name) or "None",
-
-          G.deck.cards[#G.deck.cards - 1] and (not SMODS.has_no_rank(G.deck.cards[#G.deck.cards - 1]) and not SMODS.has_no_suit(G.deck.cards[#G.deck.cards - 1])) and " of " or "",
-
-          G.deck.cards[#G.deck.cards - 1] and ((SMODS.has_no_suit(G.deck.cards[#G.deck.cards - 1]) and "")
-            or localize(G.deck.cards[#G.deck.cards - 1].base.suit, 'suits_plural')) or "",
-
-          G.deck.cards[#G.deck.cards - 2] and ((G.deck.cards[#G.deck.cards - 2].base.value and not SMODS.has_no_rank(G.deck.cards[#G.deck.cards - 2]) and localize(G.deck.cards[#G.deck.cards - 2].base.value or 14, 'ranks'))
-            or G.deck.cards[#G.deck.cards - 2].ability.name) or "None",
-
-          G.deck.cards[#G.deck.cards - 2] and (not SMODS.has_no_rank(G.deck.cards[#G.deck.cards - 2]) and not SMODS.has_no_suit(G.deck.cards[#G.deck.cards - 2])) and " of " or "",
-
-          G.deck.cards[#G.deck.cards - 2] and ((SMODS.has_no_suit(G.deck.cards[#G.deck.cards - 2]) and "")
-            or localize(G.deck.cards[#G.deck.cards - 2].base.suit, 'suits_plural')) or "" })
-        or { "None", "", "", "None", "", "", "None", "", "" }
-
-    if not (card.area and card.area == G.jokers) or not G.GAME.blind.in_blind then
-      _vars.colours = { G.C.JOKER_GREY, G.C.JOKER_GREY, G.C.JOKER_GREY, G.C.JOKER_GREY, G.C.JOKER_GREY, G.C.JOKER_GREY }
-    else
-      _vars.colours = {
-        (G.deck and G.deck.cards[#G.deck.cards] and G.C.IMPORTANT) or G.C.JOKER_GREY,
-        (G.deck and G.deck.cards[#G.deck.cards] and G.C.SUITS[G.deck.cards[#G.deck.cards].base.suit]) or G.C.JOKER_GREY,
-        (G.deck and G.deck.cards[#G.deck.cards - 1] and G.C.IMPORTANT) or G.C.JOKER_GREY,
-        (G.deck and G.deck.cards[#G.deck.cards - 1] and G.C.SUITS[G.deck.cards[#G.deck.cards - 1].base.suit]) or
-        G.C.JOKER_GREY,
-        (G.deck and G.deck.cards[#G.deck.cards - 2] and G.C.IMPORTANT) or G.C.JOKER_GREY,
-        (G.deck and G.deck.cards[#G.deck.cards - 2] and G.C.SUITS[G.deck.cards[#G.deck.cards - 2].base.suit]) or
-        G.C.JOKER_GREY,
-      }
-    end
-
-    return { vars = _vars }
-  end,
-  rarity = 1,
+  rarity = 2,
   atlas = 'Phanta',
   pos = { x = 9, y = 6 },
-  cost = 5,
-  blueprint_compat = false,
+  cost = 6,
+  blueprint_compat = true,
   eternal_compat = true,
-  perishable_compat = true
+  perishable_compat = true,
+  calculate = function(self, card, context)
+    if context.cardarea == G.play and context.repetition and context.other_card ~= context.scoring_hand[1] and context.other_card ~= context.scoring_hand[#context.scoring_hand] then
+      return { repetitions = 1 }
+    end
+  end
 }
 
 G.Phanta.centers["junpei"] = {
@@ -724,9 +678,9 @@ G.Phanta.centers["sigma"] = {
 }
 
 G.Phanta.centers["carlos"] = {
-  config = { extra = { added_hands = 1, current_hands = 0 } },
+  config = { extra = { added_chips = 4, current_chips = 0 } },
   loc_vars = function(self, info_queue, card)
-    return { vars = { card.ability.extra.current_hands, card.ability.extra.current_hands == 1 and "" or localize("phanta_plural"), card.ability.extra.added_hands } }
+    return { vars = { card.ability.extra.added_chips, card.ability.extra.current_chips } }
   end,
   rarity = 1,
   atlas = 'Phanta',
@@ -736,6 +690,14 @@ G.Phanta.centers["carlos"] = {
   eternal_compat = true,
   perishable_compat = true,
   calculate = function(self, card, context)
+    if context.joker_main and card.ability.extra.current_chips > 0 then return { chips = card.ability.extra.current_chips } end
+
+    if context.before and G.GAME.current_round.discards_left > 0 and not context.blueprint then
+      card.ability.extra.current_chips = card.ability.extra.current_chips + card.ability.extra.added_chips
+      return { message = localize("k_upgrade_ex"), colour = G.C.FILTER }
+    end
+  end
+  --[[calculate = function(self, card, context)
     if context.selling_card and context.card.ability.consumeable then
       card.ability.extra.current_hands = card.ability.extra.current_hands + card.ability.extra.added_hands
       return { message = localize("k_upgrade_ex"), colour = G.C.FILTER }
@@ -751,7 +713,7 @@ G.Phanta.centers["carlos"] = {
         colour = G.C.BLUE
       }
     end
-  end
+  end]]--
 }
 
 G.Phanta.centers["q"] = {
@@ -1058,8 +1020,7 @@ G.Phanta.centers["badhairday"] = {
                 return true
               end
             }))
-            card_eval_status_text(context.blueprint_card or card, 'extra', nil, nil, nil,
-              { message = "+1 Lovers", colour = G.C.PURPLE })
+            card_eval_status_text(context.blueprint_card or card, 'extra', nil, nil, nil, { message = "+1 Lovers", colour = G.C.PURPLE })
             return true
           end
         }))
@@ -1071,42 +1032,29 @@ G.Phanta.centers["badhairday"] = {
 }
 
 G.Phanta.centers["scratchart"] = {
-  config = { extra = { odds = 2 } },
+  config = { extra = { added_xmult = 0.25, current_xmult = 1 } },
   loc_vars = function(self, info_queue, card)
-    info_queue[#info_queue + 1] = G.P_CENTERS.m_wild
-    local num, denom = SMODS.get_probability_vars(card, 1, card.ability.extra.odds, "scratchart")
-    return { vars = { num, denom } }
+    return { vars = { card.ability.extra.added_xmult, card.ability.extra.current_xmult } }
   end,
-  rarity = 3,
+  rarity = 2,
   atlas = 'Phanta',
   pos = { x = 11, y = 6 },
-  cost = 8,
+  cost = 7,
   blueprint_compat = true,
   eternal_compat = true,
-  perishable_compat = true,
+  perishable_compat = false,
   calculate = function(self, card, context)
-    if context.individual and context.cardarea == "unscored" and SMODS.has_enhancement(context.other_card, "m_wild") and SMODS.pseudorandom_probability(card, "scratchart", 1, card.ability.extra.odds) then
-      local _card = context.other_card
-      G.E_MANAGER:add_event(Event({
-        func = function()
-          _card:set_edition('e_polychrome', true, true)
-          _card:juice_up()
-          return true
-        end
-      }))
-      return {
-        message = localize { type = 'name_text', key = 'e_polychrome', set = 'Edition' },
-        colour = G.C.FILTER,
-        card =
-            card
-      }
+    if context.joker_main and card.ability.extra.current_xmult > 1 then return { xmult = card.ability.extra.current_xmult } end
+
+    if context.before and G.GAME.current_round.hands_played == 2 and not context.blueprint then
+      card.ability.extra.current_xmult = card.ability.extra.current_xmult + card.ability.extra.added_xmult
+      return { message = localize("k_upgrade_ex"), colour = G.C.FILTER }
     end
-  end,
-  enhancement_gate = "m_wild"
+  end
 }
 
 G.Phanta.centers["animalinstinct"] = {
-  config = { extra = { added_xmult = 0.15, current_xmult = 1 } },
+  config = { extra = { added_xmult = 0.1, current_xmult = 1 } },
   loc_vars = function(self, info_queue, card)
     return { vars = { card.ability.extra.added_xmult, card.ability.extra.current_xmult } }
   end,
@@ -1118,12 +1066,7 @@ G.Phanta.centers["animalinstinct"] = {
   eternal_compat = true,
   perishable_compat = false,
   calculate = function(self, card, context)
-    if context.joker_main and card.ability.extra.current_xmult > 0 then
-      return {
-        xmult = card.ability.extra
-            .current_xmult
-      }
-    end
+    if context.joker_main and card.ability.extra.current_xmult > 1 then return { xmult = card.ability.extra.current_xmult } end
 
     if context.remove_playing_cards and not context.blueprint then
       card.ability.extra.current_xmult = card.ability.extra.current_xmult +
@@ -1405,8 +1348,7 @@ G.Phanta.centers["stitchintime"] = {
   calculate = function(self, card, context)
     if context.joker_main and card.ability.extra.current_chips > 0 then
       return {
-        chips = card.ability.extra
-            .current_chips
+        chips = card.ability.extra.current_chips
       }
     end
 

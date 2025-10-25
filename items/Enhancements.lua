@@ -2,7 +2,7 @@ SMODS.Enhancement {
   key = "ghostcard",
   atlas = "PhantaEnhancements",
   pos = { x = 0, y = 0 },
-  config = { h_x_mult = 1, extra = { added_xmult = 0.25 } },
+  config = { h_x_mult = 1, extra = { added_xmult = 0.2 } },
   loc_vars = function(self, info_queue, center)
     return { vars = { center.ability.h_x_mult, center.ability.extra.added_xmult } }
   end,
