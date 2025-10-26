@@ -1272,8 +1272,8 @@ return {
                 name = 'Wavy Joker',
                 text = {
                     "When skipping any",
-                    "{C:attention}Blind{}, creates {C:attention}#1#{}",
-                    "{C:tarot}Tarot{} cards",
+                    "{C:attention}Blind{}, creates up to",
+                    "{C:attention}#1#{} {C:tarot}Tarot{} cards",
                     "{C:inactive}(Must have room){}"
                 }
             },
@@ -3166,7 +3166,7 @@ return {
             c_phanta_cherry_blossom_chaff_a = {
                 name = "Cherry Blossom Chaff",
                 text = {
-                    "Creates {C:attention}#1#{} random",
+                    "Creates up to {C:attention}#1#{} random",
                     "{C:phanta_hanafuda}Chaff Hanafuda{} cards",
                     "{C:inactive}(Must have room){}"
                 }
@@ -3174,7 +3174,7 @@ return {
             c_phanta_cherry_blossom_chaff_b = {
                 name = "Cherry Blossom Chaff",
                 text = {
-                    "Creates {C:attention}#1#{} random",
+                    "Creates up to {C:attention}#1#{} random",
                     "{C:phanta_hanafuda}Chaff Hanafuda{} cards",
                     "{C:inactive}(Must have room){}"
                 }

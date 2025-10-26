@@ -1,6 +1,6 @@
 G.Phanta = {}
 G.Phanta.centers = {}
-G.Phanta.profile_cost = 20    -- Eventually move this to be card-based, so the value can be modified.
+G.Phanta.profile_cost = 20 -- Eventually move this to be card-based, so the value can be modified.
 
 G.C.PHANTA = {
   Zodiac = HEX("4E5779"),
@@ -103,7 +103,9 @@ function count_tricks(card)
   if #SMODS.find_card("j_phanta_thetrick") == 0 then return 0 end
   local supported_by_trick = false
   for _, v in ipairs(G.Phanta.thetrick_supported_planets) do
-    if card.key == v or (card.config and card.config.center and card.config.center.key == v) then supported_by_trick = true; break end
+    if card.key == v or (card.config and card.config.center and card.config.center.key == v) then
+      supported_by_trick = true; break
+    end
   end
   return supported_by_trick and #SMODS.find_card("j_phanta_thetrick") or 0
 end
@@ -433,7 +435,7 @@ local allFiles = {
     "Tarots",
     "Unlocks",
     "Vouchers",
-    
+
     "DeckJoker"
   }
 }
@@ -468,50 +470,7 @@ assert(SMODS.load_file("items/Ordering.lua"))()
 
 
 
-for k, v in pairs(G.P_CENTERS) do
-  if v.set == "phanta_Zodiac" or v.set == "phanta_Birthstone" or v.set == "Planet" then
-    if not v.atlas_extra then
-      if v.set == "phanta_Zodiac" then
-        v.atlas_extra = "phanta_PhantaZodiacUpgrades"
-      elseif v.set == "phanta_Birthstone" then
-        v.atlas_extra = "phanta_PhantaBirthstoneUpgrades"
-      elseif v.set == "Planet" then
-        v.atlas_extra = "phanta_PhantaPlanetUpgrades"
-      end
-    end
-    v.phanta_anim_extra_states = {
-      ["0"] = {
-        anim = {
-          { x = 0, y = 0, t = 1 } }
-      },
-      ["1"] = {
-        anim = {
-          { xrange = { first = 0, last = 3 }, y = 1, t = 0.1 },
-          { xrange = { first = 2, last = 1 }, y = 1, t = 0.1 }
-        }
-      },
-      ["2"] = {
-        anim = {
-          { xrange = { first = 0, last = 3 }, y = 2, t = 0.1 },
-          { xrange = { first = 2, last = 1 }, y = 2, t = 0.1 }
-        }
-      },
-      ["3"] = {
-        anim = {
-          { xrange = { first = 0, last = 3 }, y = 3, t = 0.1 },
-          { xrange = { first = 2, last = 1 }, y = 3, t = 0.1 }
-        }
-      },
-      ["4+"] = {
-        anim = {
-          { xrange = { first = 0, last = 3 }, y = 4, t = 0.1 },
-          { xrange = { first = 2, last = 1 }, y = 4, t = 0.1 }
-        }
-      }
-    }
-    v.phanta_anim_extra_current_state = "0"
-  end
-end
+
 
 function SMODS.Consumable:phanta_update_zodiac_level_anim()
   if not self.discovered and not (self.params and self.params.bypass_discovery_center) then
@@ -634,10 +593,14 @@ function SMODS.current_mod:calculate(context)
       local played_blue = false
       local held_blue = false
       for _, v in ipairs(G.play.cards) do
-        if v.seal == "Blue" then played_blue = true; break end
+        if v.seal == "Blue" then
+          played_blue = true; break
+        end
       end
       for _, v in ipairs(G.hand.cards) do
-        if v.seal == "Blue" then held_blue = true; break end
+        if v.seal == "Blue" then
+          held_blue = true; break
+        end
       end
 
       if played_blue and held_blue then check_for_unlock({ type = 'phanta_played_and_held_blue' }) end
@@ -708,6 +671,51 @@ Game.main_menu = function(change_context)
       { name = 'colour_2',   ref_table = G.C.PHANTA.MISC_COLOURS, ref_value = 'PHANTA_MAIN_MENU_SECONDARY' },
     }
   } })]] --
+
+  for k, v in pairs(G.P_CENTERS) do
+    if v.set == "phanta_Zodiac" or v.set == "phanta_Birthstone" or v.set == "Planet" then
+      if not v.atlas_extra then
+        if v.set == "phanta_Zodiac" then
+          v.atlas_extra = "phanta_PhantaZodiacUpgrades"
+        elseif v.set == "phanta_Birthstone" then
+          v.atlas_extra = "phanta_PhantaBirthstoneUpgrades"
+        elseif v.set == "Planet" then
+          v.atlas_extra = "phanta_PhantaPlanetUpgrades"
+        end
+      end
+      v.phanta_anim_extra_states = {
+        ["0"] = {
+          anim = {
+            { x = 0, y = 0, t = 1 } }
+        },
+        ["1"] = {
+          anim = {
+            { xrange = { first = 0, last = 3 }, y = 1, t = 0.1 },
+            { xrange = { first = 2, last = 1 }, y = 1, t = 0.1 }
+          }
+        },
+        ["2"] = {
+          anim = {
+            { xrange = { first = 0, last = 3 }, y = 2, t = 0.1 },
+            { xrange = { first = 2, last = 1 }, y = 2, t = 0.1 }
+          }
+        },
+        ["3"] = {
+          anim = {
+            { xrange = { first = 0, last = 3 }, y = 3, t = 0.1 },
+            { xrange = { first = 2, last = 1 }, y = 3, t = 0.1 }
+          }
+        },
+        ["4+"] = {
+          anim = {
+            { xrange = { first = 0, last = 3 }, y = 4, t = 0.1 },
+            { xrange = { first = 2, last = 1 }, y = 4, t = 0.1 }
+          }
+        }
+      }
+      v.phanta_anim_extra_current_state = "0"
+    end
+  end
 
   return ret
 end
