@@ -3725,9 +3725,9 @@ return {
                 name = "Powerhouse Pack",
                 text = {
                     "Contains:",
-                    "2 {C:attention}Red Seal Steel{}",
+                    "1 {C:attention}Red Seal Steel{}",
                     "King of Hearts",
-                    "2 {C:attention}random{} cards"
+                    "3 {C:attention}random{} cards"
                 }
             },
             c_phanta_passionatepack = {

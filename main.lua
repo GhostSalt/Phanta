@@ -788,14 +788,17 @@ function SMODS.current_mod.reset_game_globals(run_start)
   G.GAME.current_round.train_station_card.value = value_table[G.GAME.current_round.train_station_card.id - 1]
 
   if not G.GAME.current_round.puzzle_card then G.GAME.current_round.puzzle_card = { id = 2 } end
+  local valid_cards_puzzle = {}
+  for i, j in ipairs(G.playing_cards) do
+    if not SMODS.has_no_rank(j) then
+      valid_cards_puzzle[#valid_cards_puzzle + 1] = j
+    end
+  end
 
   if (get_previous_blind() and get_previous_blind() == "boss") or not G.GAME.last_blind then
-    if G.playing_cards then
-      G.GAME.current_round.puzzle_card.id = pseudorandom_element(G.playing_cards,
-        pseudoseed('puzzle' .. G.GAME.round_resets.ante)):get_id()
-      if not G.GAME.current_round.puzzle_card.id then G.GAME.current_round.puzzle_card.id = 2 end
-    else
-      G.GAME.current_round.puzzle_card.id = 2
+    if next(valid_cards_puzzle) then
+      local chosen_card = pseudorandom_element(valid_cards_puzzle, pseudoseed('puzzle' .. G.GAME.round_resets.ante))
+      G.GAME.current_round.puzzle_card = { id = chosen_card:get_id() }
     end
   end
 end
