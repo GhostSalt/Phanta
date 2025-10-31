@@ -15,7 +15,7 @@ SMODS.Stake {
     sticker_atlas = "PhantaStickers",
     sticker_pos = { x = 1, y = 0 },
     modifiers = function()
-        G.GAME.modifiers.phanta_only = true
+        G.GAME.modifiers.modded_only = true
     end,
     colour = G.C.WHITE
 }

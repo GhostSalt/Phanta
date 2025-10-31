@@ -457,6 +457,11 @@ if next(SMODS.find_mod('partner')) then assert(SMODS.load_file("items/Partners.l
 if next(SMODS.find_mod('CardSleeves')) then assert(SMODS.load_file("items/Sleeves.lua"))() end
 if next(SMODS.find_mod('artbox')) then assert(SMODS.load_file("items/ArtBox.lua"))() end
 if next(SMODS.find_mod('entr')) then assert(SMODS.load_file("items/Entropy.lua"))() end
+if JokerDisplay then
+  assert(SMODS.load_file("items/JokerDisplayDefs1.lua"))()
+  assert(SMODS.load_file("items/JokerDisplayDefs2.lua"))()
+  assert(SMODS.load_file("items/JokerDisplayDefsLegendaries.lua"))()
+end
 local aura_enabled = next(SMODS.find_mod('Aura'))
 
 

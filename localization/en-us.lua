@@ -1604,6 +1604,14 @@ return {
                     "{C:inactive}(Currently {C:mult}+#2#{C:inactive} Mult){}"
                 }
             },
+            j_phanta_jackolantern            = {
+                name = "Jack-'o-lantern",
+                text = {
+                    "Played {C:attention}face{} cards",
+                    "give {C:white,X:mult}X#1#{} Mult",
+                    "when {C:attention}scored{}"
+                }
+            },
             j_phanta_runicjoker            = {
                 name = 'Runic Joker',
                 text = {
@@ -3025,8 +3033,7 @@ return {
             stake_phanta_white = {
                 name = "White Stake (Phanta)",
                 text = {
-                    "{C:attention}Vanilla{} and {C:tarot}Phanta{} content only",
-                    "{C:tarot}Phanta{} Jokers only"
+                    "{C:attention}Modded{} Jokers only"
                 }
             },
             stake_phanta_red = {
@@ -3970,6 +3977,29 @@ return {
             phanta_disable_animations = "Disable Animations",
             phanta_disable_custom_music = "Disable Custom Music",
             phanta_copper_grate_expanded = "Expand Copper Grate Tooltips",
+
+
+
+            k_phanta_second_hand = "Second hand",
+            k_phanta_unscored = "Unscored",
+            k_phanta_timetable_next = "Next: ",
+            k_phanta_wild_cards = "Wild Cards",
+            k_phanta_exactly_three_suits = "Exactly 3 suits",
+            k_phanta_ace_of_spades = "Ace of Spades",
+            k_phanta_king_and_queen = "King and Queen",
+            k_phanta_face_cards = "Face cards",
+            k_phanta_stone_cards = "Stone cards",
+            k_phanta_gold_cards = "Gold cards",
+            k_phanta_twos = "2s",
+            k_phanta_threes = "3s",
+            k_phanta_fives = "5s",
+            k_phanta_sixes = "6s",
+            k_phanta_sevens = "7s",
+            k_phanta_eights = "8s",
+            k_phanta_nines = "9s",
+            k_phanta_queens = "Queens",
+
+
 
             phanta_credit_1 = "Mod by GhostSalt",
             phanta_credit_2 = "Ability brainstorming: BakersDozenBagels",

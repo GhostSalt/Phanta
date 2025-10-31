@@ -457,9 +457,7 @@ G.Phanta.centers["absentjoker"] = {
   perishable_compat = true,
   calculate = function(self, card, context)
     if context.joker_main and G.jokers.config.card_limit - #G.jokers.cards == 1 then
-      return {
-        mult = card.ability.extra.mult
-      }
+      return { mult = card.ability.extra.mult }
     end
   end
 }
@@ -612,7 +610,7 @@ G.Phanta.centers["burnerphone"] = {
             or localize(G.deck.cards[#G.deck.cards - 2].base.suit, 'suits_plural')) or "" })
         or { "None", "", "", "None", "", "", "None", "", "" }
 
-    if not (card.area and card.area == G.jokers) or not G.GAME.blind.in_blind then
+    if not (card.area and card.area == G.jokers) then
       _vars.colours = { G.C.JOKER_GREY, G.C.JOKER_GREY, G.C.JOKER_GREY, G.C.JOKER_GREY, G.C.JOKER_GREY, G.C.JOKER_GREY }
     else
       _vars.colours = {
@@ -995,6 +993,67 @@ G.Phanta.centers["flagsignal"] = {
   enhancement_gate = "m_lucky"
 }
 
+G.Phanta.centers["jackolantern"] = {
+  config = { extra = { xmult = 1.5 } },
+  rarity = 3,
+  atlas = 'PhantaMiscAnims6',
+  pos = { x = 0, y = 0 },
+  phanta_anim = {
+    { x = 0, y = 0, t = 0.1 },
+    { x = 2, y = 0, t = 0.1 },
+    { x = 1, y = 0, t = 0.1 },
+    { x = 4, y = 0, t = 0.1 },
+    { x = 0, y = 0, t = 0.1 },
+    { x = 3, y = 0, t = 0.1 },
+    { x = 4, y = 0, t = 0.1 },
+    { x = 0, y = 0, t = 0.1 },
+    { x = 1, y = 0, t = 0.1 },
+    { x = 2, y = 0, t = 0.1 },
+    { x = 1, y = 0, t = 0.1 },
+    { x = 3, y = 0, t = 0.1 },
+    { x = 4, y = 0, t = 0.1 },
+    { x = 2, y = 0, t = 0.1 },
+    { x = 3, y = 0, t = 0.1 },
+    { x = 0, y = 0, t = 0.1 },
+    { x = 3, y = 0, t = 0.1 },
+    { x = 1, y = 0, t = 0.1 },
+    { x = 4, y = 0, t = 0.1 },
+    { x = 0, y = 0, t = 0.1 },
+    { x = 1, y = 0, t = 0.1 },
+    { x = 0, y = 0, t = 0.1 },
+    { x = 2, y = 0, t = 0.1 },
+    { x = 3, y = 0, t = 0.1 },
+    { x = 1, y = 0, t = 0.1 },
+    { x = 2, y = 0, t = 0.1 },
+    { x = 4, y = 0, t = 0.1 },
+    { x = 0, y = 0, t = 0.1 },
+    { x = 2, y = 0, t = 0.1 },
+    { x = 3, y = 0, t = 0.1 },
+    { x = 4, y = 0, t = 0.1 },
+    { x = 3, y = 0, t = 0.1 },
+    { x = 2, y = 0, t = 0.1 },
+    { x = 0, y = 0, t = 0.1 },
+    { x = 1, y = 0, t = 0.1 },
+    { x = 0, y = 0, t = 0.1 },
+    { x = 1, y = 0, t = 0.1 },
+    { x = 4, y = 0, t = 0.1 },
+    { x = 3, y = 0, t = 0.1 },
+    { x = 2, y = 0, t = 0.1 },
+  },
+  cost = 8,
+  loc_vars = function(self, info_queue, card)
+    return { vars = { card.ability.extra.xmult } }
+  end,
+  blueprint_compat = true,
+  eternal_compat = true,
+  perishable_compat = true,
+  calculate = function(self, card, context)
+    if context.individual and context.cardarea == G.play and context.other_card:is_face() then
+      return { xmult = card.ability.extra.xmult }
+    end
+  end
+}
+
 G.Phanta.centers["runicjoker"] = {
   config = { extra = { xmult = 1.5 } },
   rarity = 2,
@@ -1301,7 +1360,8 @@ G.Phanta.centers["theblackraven"] = {
   end,
   remove_from_deck = function(self, card, from_debuff)
     G.GAME.phanta_black_raven_cards = G.GAME.phanta_black_raven_cards - card.ability.extra.no_of_cards
-  end
+  end,
+  hpot_unbreedable = true
 }
 
 function phanta_black_raven_add_to_shop(no_of_cards)
@@ -1385,7 +1445,8 @@ G.Phanta.centers["zeroiii"] = {
     end
 
     if context.destroy_card and context.destroy_card.phanta_zeroiii_marked_for_death then return { remove = true } end
-  end
+  end,
+  hpot_unbreedable = true
 }
 
 G.Phanta.centers["theriddler"] = {
@@ -1484,7 +1545,8 @@ G.Phanta.centers["valantgramarye"] = {
   end,
   set_badges = function(self, card, badges)
     badges[#badges + 1] = create_badge(localize('credit_bobisnotaperson'), G.C.PHANTA.MISC_COLOURS.PHANTA, G.C.WHITE, 1)
-  end
+  end,
+  hpot_unbreedable = true
 }]] --
 
 G.Phanta.centers["bloodyace"] = {
@@ -2330,10 +2392,11 @@ G.Phanta.centers["neonjoker"] = {
       for i = 1, #G.hand.cards do
         if not SMODS.has_any_suit(G.hand.cards[i]) then
           local is_new = true
+          local suit = G.hand.cards[i].ability.phanta_actual_suit or G.hand.cards[i].base.suit
           for j = 1, #counted_suits do
-            if G.hand.cards[i].base.suit == counted_suits[j] then is_new = false end
+            if suit == counted_suits[j] then is_new = false end
           end
-          if is_new then counted_suits[#counted_suits + 1] = G.hand.cards[i].base.suit end
+          if is_new then counted_suits[#counted_suits + 1] = suit end
         else
           wilds = wilds + 1
         end

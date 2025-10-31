@@ -154,6 +154,7 @@ local joker_order = {
     "themace",
     "thedagger",
     "corkboard",
+    "jackolantern",
     "runicjoker",
     "evidence",
     "crystaljoker",
