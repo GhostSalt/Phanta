@@ -289,22 +289,19 @@ return {
             e_phanta_drilled_playingcard = {
                 name = "Drilled",
                 text = {
-                    "{C:red}+#1#{} discard",
-                    "when played",
-                    "and scored"
+                    "{C:mult}+#1#{} Mult"
                 }
             },
             e_phanta_drilled_showcase = {
                 name = "Drilled",
                 text = {
                     {
-                        "{C:red}+#1#{} discard when",
-                        "played and scored",
+                        "{C:mult}+#1#{} Mult",
                         "{s:0.9}when on playing cards{}"
                     },
                     {
                         "{C:attention}+#1#{} consumable slot",
-                        "{s:0.9}when on Jokers{}"
+                        "{s:0.9}on anything else{}"
                     }
                 },
             }
