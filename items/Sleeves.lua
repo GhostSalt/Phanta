@@ -406,6 +406,35 @@ function get_new_boss()
 end
 
 CardSleeves.Sleeve {
+  key = "retired",
+  name = "Retired Sleeve",
+  atlas = "PhantaSleeves",
+  pos = { x = 1, y = 4 },
+  unlocked = false,
+  unlock_condition = { deck = "b_phanta_retired", stake = "stake_white" },
+  loc_vars = function(self)
+    if self.get_current_deck_key() == "b_phanta_retired" then
+      key = self.key .. "_alt"
+    else
+      key = self.key
+    end
+    return { key = key }
+  end,
+  apply = function(self, back)
+    G.E_MANAGER:add_event(Event({
+      func = function()
+        for i = 1, #G.playing_cards do
+          if G.playing_cards[i]:get_id() == 14 or self.get_current_deck_key() == "b_phanta_retired" then
+            G.playing_cards[i]:set_edition("e_phanta_drilled", true, true)
+          end
+        end
+        return true
+      end,
+    }))
+  end
+}
+
+CardSleeves.Sleeve {
   key = "bee",
   name = "Bee Sleeve",
   atlas = "PhantaSleeves",

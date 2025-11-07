@@ -2775,6 +2775,20 @@ return {
                     "the {C:attention,T:bl_final_acorn}Amber Acorn{}"
                 }
             },
+            sleeve_phanta_retired = {
+                name = 'Retired Sleeve',
+                text = {
+                    "All {C:attention}Aces{} start",
+                    "as {C:attention,T:e_drilled}Drilled{} cards",
+                }
+            },
+            sleeve_phanta_retired_alt = {
+                name = 'Retired Sleeve',
+                text = {
+                    "All {C:attention}cards{} start",
+                    "as {C:attention,T:e_drilled}Drilled{} cards",
+                }
+            },
             sleeve_phanta_bee = {
                 name = 'Bee Sleeve',
                 text = {
