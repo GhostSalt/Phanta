@@ -4,13 +4,7 @@ SMODS.Atlas {
   px = 34,
   py = 34
 }
-SMODS.Atlas {
-  key = "balatro",
-  path = "PhantaLogo.png",
-  px = 333,
-  py = 216,
-  prefix_config = { key = false }
-}
+
 SMODS.Atlas {
   key = "PhantaTitleScreenGhost",
   path = "PhantaLogoOverlay.png",

@@ -289,18 +289,20 @@ return {
             e_phanta_drilled_playingcard = {
                 name = "Drilled",
                 text = {
-                    "{C:mult}+#1#{} Mult"
+                    "{C:chips}+#1#{} Chips,",
+                    "{C:mult}+#2#{} Mult"
                 }
             },
             e_phanta_drilled_showcase = {
                 name = "Drilled",
                 text = {
                     {
-                        "{C:mult}+#1#{} Mult",
+                        "{C:chips}+#1#{} Chips,",
+                        "{C:mult}+#2#{} Mult",
                         "{s:0.9}when on playing cards{}"
                     },
                     {
-                        "{C:attention}+#1#{} consumable slot",
+                        "{C:attention}+#3#{} consumable slot",
                         "{s:0.9}on anything else{}"
                     }
                 },
@@ -1601,7 +1603,7 @@ return {
                     "{C:inactive}(Currently {C:mult}+#2#{C:inactive} Mult){}"
                 }
             },
-            j_phanta_jackolantern            = {
+            j_phanta_jackolantern          = {
                 name = "Jack-'o-lantern",
                 text = {
                     "Played {C:attention}face{} cards",
@@ -1827,7 +1829,7 @@ return {
                     "{C:planet}Planet{} cards"
                 }
             },
-            j_phanta_doublingcube           = {
+            j_phanta_doublingcube          = {
                 name = "Doubling Cube",
                 text = {
                     "{C:white,X:mult}X#1#{} Mult if played",
@@ -2950,9 +2952,9 @@ return {
                         "card held in hand"
                     },
                     {
-                        "Once this card is",
-                        "used, it may no",
-                        "longer appear"
+                        "Once used, this card",
+                        "will not appear",
+                        "again this run"
                     }
                 }
             },
@@ -3200,8 +3202,6 @@ return {
                 }
             },
 
-
-
             c_phanta_wisteria_chaff_a = {
                 name = "Wisteria Chaff",
                 text = {
@@ -3283,7 +3283,7 @@ return {
             c_phanta_peony_ribbon = {
                 name = "Peony Blue Ribbon",
                 text = {
-                    "Adds a {C:attention}random Seal{}",
+                    "Adds a {C:attention}random seal{}",
                     "to {C:attention}#1#{} selected",
                     "card in your hand"
                 }
@@ -3967,12 +3967,14 @@ return {
             credit_goat3730 = "OC by goat3730",
             credit_bobisnotaperson = "bobisnotaperson's Truesona",
 
+            phanta_requires_restart = "(Requires restart)",
             phanta_junk_enabled = "Enable Junk (Poker Hand)",
             phanta_zodiac_enabled = "Zodiac Cards",
             phanta_hanafuda_enabled = "Hanafuda Cards",
             phanta_starter_pack_enabled = "Starter Packs",
             phanta_disable_animations = "Disable Animations",
             phanta_disable_custom_music = "Disable Custom Music",
+            phanta_custom_title_screen = "Custom Title Screen",
             phanta_copper_grate_expanded = "Expand Copper Grate Tooltips",
 
 

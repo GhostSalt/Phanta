@@ -634,38 +634,40 @@ local main_menu_ref = Game.main_menu
 Game.main_menu = function(change_context)
   local ret = main_menu_ref(change_context)
 
-  local SC_scale = 1.1 * (G.debug_splash_size_toggle and 0.8 or 1)
-  G.SPLASH_LOGO_PHANTA_GHOST = Sprite(0, 0,
-    13 * SC_scale,
-    13 * SC_scale *
-    (G.ASSET_ATLAS["phanta_PhantaTitleScreenGhost"].py / G.ASSET_ATLAS["phanta_PhantaTitleScreenGhost"].px),
-    G.ASSET_ATLAS["phanta_PhantaTitleScreenGhost"], { x = 0, y = 0 }
-  )
-  G.SPLASH_LOGO_PHANTA_GHOST:set_alignment({
-    major = G.title_top,
-    type = 'cm',
-    bond = 'Strong',
-    offset = { x = 0, y = 0 }
-  })
-  G.SPLASH_LOGO_PHANTA_GHOST:define_draw_steps({ {
-    shader = 'dissolve',
-  } })
+  if Phanta.config["custom_title_screen"] then
+    local SC_scale = 1.1 * (G.debug_splash_size_toggle and 0.8 or 1)
+    G.SPLASH_LOGO_PHANTA_GHOST = Sprite(0, 0,
+      13 * SC_scale,
+      13 * SC_scale *
+      (G.ASSET_ATLAS["phanta_PhantaTitleScreenGhost"].py / G.ASSET_ATLAS["phanta_PhantaTitleScreenGhost"].px),
+      G.ASSET_ATLAS["phanta_PhantaTitleScreenGhost"], { x = 0, y = 0 }
+    )
+    G.SPLASH_LOGO_PHANTA_GHOST:set_alignment({
+      major = G.title_top,
+      type = 'cm',
+      bond = 'Strong',
+      offset = { x = 0, y = 0 }
+    })
+    G.SPLASH_LOGO_PHANTA_GHOST:define_draw_steps({ {
+      shader = 'dissolve',
+    } })
 
-  G.SPLASH_LOGO_PHANTA_GHOST.dissolve_colours = { G.C.WHITE, G.C.WHITE }
-  G.SPLASH_LOGO_PHANTA_GHOST.dissolve = 1
+    G.SPLASH_LOGO_PHANTA_GHOST.dissolve_colours = { G.C.WHITE, G.C.WHITE }
+    G.SPLASH_LOGO_PHANTA_GHOST.dissolve = 1
 
-  G.E_MANAGER:add_event(Event({
-    trigger = 'after',
-    delay = change_context == 'splash' and 1.8 or change_context == 'game' and 2 or 0.5,
-    blockable = false,
-    blocking = false,
-    func = (function()
-      ease_value(G.SPLASH_LOGO_PHANTA_GHOST, 'dissolve', -1, nil, nil, nil,
-        change_context == 'splash' and 2.3 or 0.9)
-      G.VIBRATION = G.VIBRATION + 1.5
-      return true
-    end)
-  }))
+    G.E_MANAGER:add_event(Event({
+      trigger = 'after',
+      delay = change_context == 'splash' and 1.8 or change_context == 'game' and 2 or 0.5,
+      blockable = false,
+      blocking = false,
+      func = (function()
+        ease_value(G.SPLASH_LOGO_PHANTA_GHOST, 'dissolve', -1, nil, nil, nil,
+          change_context == 'splash' and 2.3 or 0.9)
+        G.VIBRATION = G.VIBRATION + 1.5
+        return true
+      end)
+    }))
+  end
 
   --[[G.SPLASH_BACK:define_draw_steps({ {
     shader = 'splash',
@@ -811,6 +813,16 @@ end
 if not Phanta then Phanta = {} end
 Phanta.config = SMODS.current_mod.config
 
+if Phanta.config["custom_title_screen"] then
+  SMODS.Atlas {
+    key = "balatro",
+    path = "PhantaLogo.png",
+    px = 333,
+    py = 216,
+    prefix_config = { key = false }
+  }
+end
+
 local phantaConfigTab = function()
   phanta_nodes = {}
   config = { n = G.UIT.R, config = { align = "tm", padding = 0 }, nodes = { { n = G.UIT.C, config = { align = "tm", padding = 0.05 }, nodes = {} } } }
@@ -862,6 +874,15 @@ local phantaConfigTab = function()
     ref_value = "custom_music_disabled",
     callback = function()
     end,
+  })
+  phanta_nodes[#phanta_nodes + 1] = create_toggle({
+    label = localize("phanta_custom_title_screen"),
+    active_colour = HEX("40c76d"),
+    ref_table = Phanta.config,
+    ref_value = "custom_title_screen",
+    callback = function()
+    end,
+    info = { localize("phanta_requires_restart") }
   })
   phanta_nodes[#phanta_nodes + 1] = create_toggle({
     label = localize("phanta_copper_grate_expanded"),

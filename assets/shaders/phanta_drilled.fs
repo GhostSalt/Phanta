@@ -13,7 +13,7 @@ extern bool shadow;
 extern MY_HIGHP_OR_MEDIUMP vec4 burn_colour_1;
 extern MY_HIGHP_OR_MEDIUMP vec4 burn_colour_2;
 
-vec2 hole_pos = vec2(-1, -1);
+vec2 hole_pos = vec2(0.5, 0.5);
 
 vec4 dissolve_mask(vec4 tex, vec2 texture_coords, vec2 uv)
 {
@@ -57,13 +57,6 @@ vec4 effect( vec4 colour, Image texture, vec2 texture_coords, vec2 screen_coords
 {
     vec4 tex = Texel( texture, texture_coords);
     vec2 uv = (((texture_coords)*(image_details)) - texture_details.xy*texture_details.ba)/texture_details.ba;
-
-    if (hole_pos.x < 0) {
-        hole_pos.x = 0.5 + (mod(time * 100, 1) - 0.5) / 6;
-    }
-    if (hole_pos.y < 0) {
-        hole_pos.y = 0.5 + (mod(time * 1000, 1) - 0.5) / 6;
-    }
 
     if (drilled.x == -12345){
         hole_pos.x += 0.00001;

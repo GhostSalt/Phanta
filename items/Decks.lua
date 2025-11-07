@@ -275,12 +275,12 @@ function get_new_boss()
   end
 end
 
---[[SMODS.Back {
+SMODS.Back {
   key = 'retired',
   atlas = 'Decks',
   pos = { x = 1, y = 4 },
   draw = function(self, back, layer)
-    back.children.center:draw_shader('drilled', nil, card.ARGS.send_to_shader)
+    back.children.center:draw_shader('drilled', nil, back.ARGS.send_to_shader)
   end,
   apply = function(self, back)
     G.E_MANAGER:add_event(Event({
@@ -294,7 +294,7 @@ end
       end,
     }))
   end
-}]] --
+}
 
 SMODS.Back {
   key = 'bee',

@@ -41,40 +41,35 @@ SMODS.Shader {
   path = "phanta_drilled.fs"
 }
 
-SMODS.Shader {
-  key = "drilled_consistent",
-  path = "phanta_drilled_consistent.fs"
-}
-
 SMODS.Edition {
   key = 'drilled',
   shader = 'drilled',
   disable_base_shader = true,
   in_shop = true,
   sound = { sound = "phanta_drilled_card", per = 1, vol = 0.5 },
-  weight = 5,
+  weight = 7,
   badge_colour = HEX('BFC7D5'),
   extra_cost = 1,
   get_weight = function(self)
     return G.GAME.edition_rate * self.weight
   end,
-  config = { extra = { slots = 1, mult = 1 } },
+  config = { extra = { slots = 1, chips = 30, mult = 4 } },
   loc_vars = function(self, info_queue, card)
     key = self.key
     if card.config.center.set == "Edition" then
       key = key .. "_showcase"
-      return { key = key, vars = { self.config.extra.mult, self.config.extra.slots } }
+      return { key = key, vars = { self.config.extra.chips, self.config.extra.mult, self.config.extra.slots } }
     end
     if card.config.center.set == "Default" or card.config.center.set == "Enhanced" then
       key = key .. "_playingcard"
-      return { key = key, vars = { self.config.extra.mult } }
+      return { key = key, vars = { self.config.extra.chips, self.config.extra.mult } }
     else
       return { key = key, vars = { self.config.extra.slots } }
     end
   end,
   calculate = function(self, card, context)
     if context.main_scoring and context.cardarea == G.play then
-      return { mult = self.config.extra.mult }
+      return { chips = self.config.extra.chips, mult = self.config.extra.mult }
     end
   end
 }
@@ -84,6 +79,13 @@ function Card:add_to_deck(from_debuff)
   if self and self.edition and self.edition.key == "e_phanta_drilled" and self.config and self.config.center and not (self.area and self.area.config and self.area.config.collection) and not (self.config.center.set == "Default" or self.config.center.set == "Enhanced")
       and G.consumeables and G.consumeables.config and G.consumeables.config.card_limit then
     G.consumeables.config.card_limit = G.consumeables.config.card_limit + self.edition.extra.slots
+
+    self.phanta_drilled_release = function()
+      G.consumeables.config.card_limit = G.consumeables.config.card_limit - self.edition.extra.slots
+      play_sound("phanta_undo_edition", 0.9, 0.3)
+      card_eval_status_text(self, 'extra', nil, nil, nil, { message = localize("minus_consumable_slot"), colour = G.C.FILTER })
+    end
+
     play_sound("foil2", 0.9, 0.3)
     card_eval_status_text(self, 'extra', nil, nil, nil, { message = localize("plus_consumable_slot"), colour = G.C.FILTER })
   end
@@ -98,11 +100,11 @@ SMODS.Sound({
 
 local rfdref = Card.remove_from_deck
 function Card:remove_from_deck(from_debuff)
-  if self and self.edition and self.edition.key == "e_phanta_drilled" and self.config and self.config.center and not (self.area and self.area.config and self.area.config.collection) and not (self.config.center.set == "Default" or self.config.center.set == "Enhanced")
-      and G.consumeables and G.consumeables.config and G.consumeables.config.card_limit then
-    G.consumeables.config.card_limit = G.consumeables.config.card_limit - self.edition.extra.slots
-    play_sound("phanta_undo_edition", 0.9, 0.3)
-    card_eval_status_text(self, 'extra', nil, nil, nil, { message = localize("minus_consumable_slot"), colour = G.C.FILTER })
+  if self.phanta_drilled_release then
+    if self and self.edition and self.edition.key == "e_phanta_drilled" and self.config and self.config.center and not (self.area and self.area.config and self.area.config.collection) and not (self.config.center.set == "Default" or self.config.center.set == "Enhanced")
+        and G.consumeables and G.consumeables.config and G.consumeables.config.card_limit then
+      self:phanta_drilled_release()
+    end
   end
   rfdref(self, from_debuff)
 end
