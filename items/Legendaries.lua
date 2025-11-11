@@ -25,7 +25,8 @@ G.Phanta.centers["ignaize"] = {
       card_eval_status_text(card, 'extra', nil, nil, nil, { message = localize("k_upgrade_ex") })
       return true
     end
-  end
+  end,
+  pronouns = "it_its"
 }
 
 G.Phanta.centers["dimere"] = {
@@ -65,7 +66,8 @@ G.Phanta.centers["dimere"] = {
       card_eval_status_text(card, 'extra', nil, nil, nil,
         { message = "+Negative" })
     end
-  end
+  end,
+  pronouns = "it_its"
 }
 
 G.Phanta.centers["goldor"] = {
@@ -103,7 +105,8 @@ G.Phanta.centers["goldor"] = {
         card = card
       }
     end
-  end
+  end,
+  pronouns = "it_its"
 }
 
 G.Phanta.centers["famalia"] = {
@@ -144,7 +147,8 @@ G.Phanta.centers["famalia"] = {
 
       playing_card_joker_effects({ true })
     end
-  end
+  end,
+  pronouns = "it_its"
 }
 
 G.Phanta.centers["godoor"] = {
@@ -199,7 +203,8 @@ G.Phanta.centers["godoor"] = {
       end
       card.ability.extra.counted_rerolls = 0
     end
-  end
+  end,
+  pronouns = "it_its"
 }
 
 G.Phanta.centers["fainfol"] = {
@@ -249,7 +254,8 @@ G.Phanta.centers["fainfol"] = {
         colour = G.FILTER
       }
     end
-  end
+  end,
+  pronouns = "it_its"
 }
 
 G.Phanta.centers["granwyrm"] = {
@@ -293,5 +299,6 @@ G.Phanta.centers["granwyrm"] = {
         }
       end
     end
-  end
+  end,
+  pronouns = "it_its"
 }

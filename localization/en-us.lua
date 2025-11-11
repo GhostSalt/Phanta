@@ -3116,6 +3116,13 @@ return {
                     "Gives a free",
                     "{C:phanta_zodiac}Jumbo Zodiac Pack{}"
                 },
+            },
+            tag_phanta_flower = {
+                name = "Flower Tag",
+                text = {
+                    "Gives a free",
+                    "{C:phanta_hanafuda}Jumbo Hanafuda Pack{}"
+                },
             }
         },
         phanta_Hanafuda = {

@@ -42,7 +42,8 @@ G.Phanta.centers["normalface"] = {
       card_eval_status_text(card, 'extra', nil, nil, nil, { message = ">:(", colour = G.C.RED })
       delay(4.5)
     end
-  end
+  end,
+  pronouns = "any_all"
 }
 
 
@@ -345,7 +346,8 @@ G.Phanta.centers["peekaboo"] = {
   end,
   calc_dollar_bonus = function(self, card)
     if card.ability.extra.chosen_ability.eormoney then return card.ability.extra.chosen_ability.eormoney end
-  end
+  end,
+  pronouns = "any_all"
 }
 
 
@@ -357,7 +359,8 @@ G.Phanta.centers["deckjoker"] = {
   cost = 4,
   in_pool = function()
     return G.GAME.phanta_deck_joker_selected_deck
-  end
+  end,
+  pronouns = "any_all"
 }
 
 function phanta_assign_deck_joker()
@@ -459,7 +462,8 @@ G.Phanta.centers["absentjoker"] = {
     if context.joker_main and G.jokers.config.card_limit - #G.jokers.cards == 1 then
       return { mult = card.ability.extra.mult }
     end
-  end
+  end,
+  pronouns = "they_them"
 }
 
 G.Phanta.centers["pottedpeashooter"] = {
@@ -479,6 +483,7 @@ G.Phanta.centers["pottedpeashooter"] = {
       return { mult = card.ability.extra.mult }
     end
   end
+  -- Pronouns are random
 }
 
 G.Phanta.centers["venndiagram"] = {
@@ -516,7 +521,8 @@ G.Phanta.centers["venndiagram"] = {
         return { message = localize("k_upgrade_ex"), colour = G.C.FILTER }
       end
     end
-  end
+  end,
+  pronouns = "it_its"
 }
 
 G.Phanta.centers["88888888"] = {
@@ -564,7 +570,8 @@ G.Phanta.centers["88888888"] = {
         end
       }))
     end
-  end
+  end,
+  pronouns = "it_its"
 }
 
 local key_press_ref = Controller.key_press
@@ -691,7 +698,8 @@ G.Phanta.centers["burnerphone"] = {
   cost = 4,
   blueprint_compat = false,
   eternal_compat = true,
-  perishable_compat = true
+  perishable_compat = true,
+  pronouns = "it_its"
 }
 
 G.Phanta.centers["flushed"] = {
@@ -713,7 +721,8 @@ G.Phanta.centers["flushed"] = {
       card.ability.extra.current_mult = card.ability.extra.current_mult + card.ability.extra.added_mult
       return { message = localize("k_upgrade_ex"), colour = G.C.FILTER }
     end
-  end
+  end,
+  pronouns = "she_they"
 }
 
 G.Phanta.centers["patientjoker"] = {
@@ -734,7 +743,8 @@ G.Phanta.centers["patientjoker"] = {
         if v:is_suit("Diamonds") then return { mult = card.ability.extra.mult } end
       end
     end
-  end
+  end,
+  pronouns = "they_them"
 }
 
 G.Phanta.centers["blissedjoker"] = {
@@ -755,7 +765,8 @@ G.Phanta.centers["blissedjoker"] = {
         if v:is_suit("Hearts") then return { mult = card.ability.extra.mult } end
       end
     end
-  end
+  end,
+  pronouns = "they_them"
 }
 
 G.Phanta.centers["forgivingjoker"] = {
@@ -776,7 +787,8 @@ G.Phanta.centers["forgivingjoker"] = {
         if v:is_suit("Spades") then return { mult = card.ability.extra.mult } end
       end
     end
-  end
+  end,
+  pronouns = "they_them"
 }
 
 G.Phanta.centers["temperedjoker"] = {
@@ -797,7 +809,8 @@ G.Phanta.centers["temperedjoker"] = {
         if v:is_suit("Clubs") then return { mult = card.ability.extra.mult } end
       end
     end
-  end
+  end,
+  pronouns = "they_them"
 }
 
 G.Phanta.centers["fanta"] = {
@@ -845,7 +858,8 @@ G.Phanta.centers["fanta"] = {
         end
       }))
     end
-  end
+  end,
+  pronouns = "it_its"
 }
 
 G.Phanta.centers["sprinkles"] = {
@@ -895,7 +909,8 @@ G.Phanta.centers["sprinkles"] = {
         end
       }))
     end
-  end
+  end,
+  pronouns = "it_its"
 }
 
 G.Phanta.centers["testpage"] = {
@@ -929,7 +944,8 @@ G.Phanta.centers["testpage"] = {
   end,
   in_pool = function()
     return G.GAME.hands["phanta_junk"].visible and Phanta.config["junk_enabled"]
-  end
+  end,
+  pronouns = "it_its"
 }
 
 G.Phanta.centers["flagsignal"] = {
@@ -998,6 +1014,7 @@ G.Phanta.centers["flagsignal"] = {
     end
   end,
   enhancement_gate = "m_lucky"
+  -- Pronouns are random
 }
 
 G.Phanta.centers["jackolantern"] = {
@@ -1058,7 +1075,8 @@ G.Phanta.centers["jackolantern"] = {
     if context.individual and context.cardarea == G.play and context.other_card:is_face() then
       return { xmult = card.ability.extra.xmult }
     end
-  end
+  end,
+  pronouns = "she_her"
 }
 
 G.Phanta.centers["runicjoker"] = {
@@ -1079,7 +1097,8 @@ G.Phanta.centers["runicjoker"] = {
       return { xmult = card.ability.extra.xmult }
     end
   end,
-  enhancement_gate = "m_stone"
+  enhancement_gate = "m_stone",
+  pronouns = "they_them"
 }
 
 G.Phanta.centers["heartbreak"] = {
@@ -1113,7 +1132,8 @@ G.Phanta.centers["heartbreak"] = {
         return { message = localize("k_upgrade_ex"), colour = G.C.FILTER, message_card = card }
       end
     end
-  end
+  end,
+  pronouns = "she_her"
 }
 
 G.Phanta.centers["distance"] = {
@@ -1142,7 +1162,8 @@ G.Phanta.centers["distance"] = {
   end,
   calculate = function(self, card, context)
     if context.joker_main then return { chips = card.ability.extra.chips } end
-  end
+  end,
+  pronouns = "she_her"
 }
 
 G.Phanta.centers["donpaolo"] = {
@@ -1183,7 +1204,8 @@ G.Phanta.centers["donpaolo"] = {
       }))
       return { message = localize('k_level_up_ex'), colour = G.C.FILTER }
     end
-  end
+  end,
+  pronouns = "he_him"
 }
 
 SMODS.Sound({
@@ -1271,7 +1293,8 @@ G.Phanta.centers["futureluke"] = {
     if context.selling_self then
       play_sound("phanta_future_luke_sold", 1, 0.5)
     end
-  end
+  end,
+  pronouns = "he_him"
 }
 
 G.Phanta.centers["barton"] = {
@@ -1307,7 +1330,8 @@ G.Phanta.centers["barton"] = {
         return { mult = card.ability.extra.mult }
       end
     end
-  end
+  end,
+  pronouns = "he_him"
 }
 
 G.Phanta.centers["inspectorchelmey"] = {
@@ -1343,7 +1367,8 @@ G.Phanta.centers["inspectorchelmey"] = {
         return { xmult = card.ability.extra.xmult }
       end
     end
-  end
+  end,
+  pronouns = "he_him"
 }
 
 G.Phanta.centers["theblackraven"] = {
@@ -1368,7 +1393,8 @@ G.Phanta.centers["theblackraven"] = {
   remove_from_deck = function(self, card, from_debuff)
     G.GAME.phanta_black_raven_cards = G.GAME.phanta_black_raven_cards - card.ability.extra.no_of_cards
   end,
-  hpot_unbreedable = true
+  hpot_unbreedable = true,
+  pronouns = "they_them"
 }
 
 function phanta_black_raven_add_to_shop(no_of_cards)
@@ -1407,7 +1433,8 @@ G.Phanta.centers["zero"] = {
 
       if total == 9 then return { remove = true } end
     end
-  end
+  end,
+  pronouns = "they_them"
 }
 
 G.Phanta.centers["zeroii"] = {
@@ -1427,7 +1454,8 @@ G.Phanta.centers["zeroii"] = {
     if context.discard and G.GAME.current_round.discards_used <= 0 and SMODS.pseudorandom_probability(card, "zeroii", 1, card.ability.extra.odds) then
       return { remove = true }
     end
-  end
+  end,
+  pronouns = "he_they"
 }
 
 G.Phanta.centers["zeroiii"] = {
@@ -1453,7 +1481,8 @@ G.Phanta.centers["zeroiii"] = {
 
     if context.destroy_card and context.destroy_card.phanta_zeroiii_marked_for_death then return { remove = true } end
   end,
-  hpot_unbreedable = true
+  hpot_unbreedable = true,
+  pronouns = "it_its"
 }
 
 G.Phanta.centers["theriddler"] = {
@@ -1506,7 +1535,8 @@ G.Phanta.centers["theriddler"] = {
         v:release_unknown("phanta_theriddler")
       end
     end
-  end
+  end,
+  pronouns = "he_him"
 }
 
 local add_to_deck_ref = Card.add_to_deck
@@ -1533,7 +1563,8 @@ G.Phanta.centers["valantgramarye"] = {
     if context.evaluate_poker_hand and context.scoring_name == "Straight Flush" then
       return { replace_scoring_name = "Straight" }
     end
-  end
+  end,
+  pronouns = "he_him"
 }
 
 --[[G.Phanta.centers["snoinches"] = {
@@ -1581,7 +1612,8 @@ G.Phanta.centers["bloodyace"] = {
       end
       if ace_counter >= 2 then return { replace_scoring_name = "Full House" } end
     end
-  end
+  end,
+  pronouns = "it_its"
 }
 
 G.Phanta.centers["yatagarasucard"] = {
@@ -1600,7 +1632,8 @@ G.Phanta.centers["yatagarasucard"] = {
     if context.individual and context.cardarea == G.play and context.other_card:get_id() == 3 then
       return { dollars = card.ability.extra.money }
     end
-  end
+  end,
+  pronouns = "it_its"
 }
 
 G.Phanta.centers["widget"] = {
@@ -1731,7 +1764,8 @@ G.Phanta.centers["widget"] = {
       return
     end
     if card.ability.extra.suit_key ~= G.GAME.current_round.phanta_widget_suit then self:update_widget_suit(card) end
-  end
+  end,
+  pronouns = "it_its"
 }
 
 G.Phanta.centers["glassjoe"] = {
@@ -1783,7 +1817,8 @@ G.Phanta.centers["glassjoe"] = {
       }))
       return { message = localize("k_glass"), colour = G.C.FILTER }
     end
-  end
+  end,
+  pronouns = "he_him"
 }
 
 
@@ -1832,7 +1867,8 @@ G.Phanta.centers["dougdimmadome"] = {
       local xmult = 1 + (card.ability.extra.added_xmult * phanta_dougdimmadome_count_duplicates())
       if xmult > 1 then return { xmult = xmult } end
     end
-  end
+  end,
+  pronouns = "he_him"
 }
 
 G.Phanta.centers["thetrick"] = {
@@ -1842,7 +1878,8 @@ G.Phanta.centers["thetrick"] = {
   cost = 6,
   blueprint_compat = false,
   eternal_compat = true,
-  perishable_compat = true
+  perishable_compat = true,
+  pronouns = "he_they"
 }
 
 G.Phanta.centers["doublingcube"] = {
@@ -1885,7 +1922,8 @@ G.Phanta.centers["doublingcube"] = {
       end
       if contains_only_numbers then return { xmult = card.ability.extra.xmult } end
     end 
-  end
+  end,
+  pronouns = "it_its"
 }
 
 G.Phanta.centers["magiceggcup"] = {
@@ -2065,7 +2103,8 @@ G.Phanta.centers["magiceggcup"] = {
         end
       }))
     end
-  end
+  end,
+  pronouns = "it_its"
 }
 
 G.Phanta.centers["doublelift"] = {
@@ -2093,7 +2132,8 @@ G.Phanta.centers["doublelift"] = {
         return { cards_to_draw = card.ability.extra.cards_to_draw }
       end
     end
-  end
+  end,
+  pronouns = "it_its"
 }
 
 G.Phanta.centers["modping"] = {
@@ -2110,7 +2150,8 @@ G.Phanta.centers["modping"] = {
   cost = 5,
   blueprint_compat = false,
   eternal_compat = true,
-  perishable_compat = true
+  perishable_compat = true,
+  pronouns = "it_its"
 }
 
 G.FUNCS.phanta_can_modping_use = function(e)
@@ -2151,7 +2192,8 @@ G.Phanta.centers["clapperboard"] = {
   perishable_compat = true,
   in_pool = function()
     return #SMODS.find_card('v_retcon') == 0
-  end
+  end,
+  pronouns = "it_its"
 }
 
 G.Phanta.centers["birthdaycard"] = {
@@ -2187,7 +2229,8 @@ G.Phanta.centers["birthdaycard"] = {
         return { message = localize("k_upgrade_ex"), colour = G.C.FILTER, card = card }
       end
     end
-  end
+  end,
+  pronouns = "it_its"
 
   -- ADD EDITION GATE!!!!!!!!!! :triumph:
 }
@@ -2208,7 +2251,8 @@ G.Phanta.centers["leprechaun"] = {
     if context.joker_main and G.hand.cards[#G.hand.cards]:get_id() == 7 then
       return { mult = card.ability.extra.mult }
     end
-  end
+  end,
+  pronouns = "he_him"
 }
 
 G.Phanta.centers["shamrock"] = {
@@ -2237,7 +2281,8 @@ G.Phanta.centers["shamrock"] = {
       return { message = "7 of Clubs", colour = G.C.SUITS.Clubs }
     end
   end,
-  enhancement_gate = "m_lucky"
+  enhancement_gate = "m_lucky",
+  pronouns = "it_its"
 }
 
 G.Phanta.centers["manga"] = {
@@ -2273,7 +2318,8 @@ G.Phanta.centers["manga"] = {
   end,
   in_pool = function()
     return Phanta.config["hanafuda_enabled"]
-  end
+  end,
+  pronouns = "she_they"
 }
 
 G.Phanta.centers["metalhead"] = {
@@ -2306,7 +2352,8 @@ G.Phanta.centers["metalhead"] = {
         return { message = localize { key = "m_steel", type = "name_text", set = "Enhanced" }, colour = G.C.FILTER }
       end
     end
-  end
+  end,
+  pronouns = "he_they"
 }
 
 G.Phanta.centers["plugsocket"] = {
@@ -2339,7 +2386,8 @@ G.Phanta.centers["plugsocket"] = {
         return { xmult = 1 + (copper_grates * card.ability.extra.xmult) }
       end
     end
-  end
+  end,
+  pronouns = "it_its"
 }
 
 G.Phanta.centers["mrbigmoneybags"] = {
@@ -2360,7 +2408,8 @@ G.Phanta.centers["mrbigmoneybags"] = {
   in_pool = function(self, args)
     return args.source ~= "buf" and args.source ~= "jud" and args.source ~= "iris_chuff_a" and
         args.source ~= "iris_chuff_b"
-  end
+  end,
+  pronouns = "he_him"
 }
 
 G.Phanta.centers["neonjoker"] = {
@@ -2413,7 +2462,8 @@ G.Phanta.centers["neonjoker"] = {
         return { xmult = card.ability.extra.xmult }
       end
     end
-  end
+  end,
+  pronouns = "any_all"
 }
 
 G.Phanta.centers["technojoker"] = {
@@ -2436,7 +2486,8 @@ G.Phanta.centers["technojoker"] = {
         return { xmult = 1 + (missing_ranks * card.ability.extra.xmult) }
       end
     end
-  end
+  end,
+  pronouns = "they_them"
 }
 
 G.Phanta.centers["crystaljoker"] = {
@@ -2461,7 +2512,8 @@ G.Phanta.centers["crystaljoker"] = {
       return { xmult = context.other_card.ability.Xmult }
     end
   end,
-  enhancement_gate = "m_glass"
+  enhancement_gate = "m_glass",
+  pronouns = "any_all"
 }
 
 G.Phanta.centers["profile"] = {
@@ -2477,7 +2529,8 @@ G.Phanta.centers["profile"] = {
   cost = 8,
   blueprint_compat = false,
   eternal_compat = true,
-  perishable_compat = true
+  perishable_compat = true,
+  pronouns = "he_they"
 }
 
 G.FUNCS.run_profile_menu = function(e)
@@ -2615,6 +2668,7 @@ G.Phanta.centers["l"] = {
       end
     end
   end,
+  pronouns = "he_him"
 }
 
 G.Phanta.centers["mello"] = {
@@ -2644,6 +2698,7 @@ G.Phanta.centers["mello"] = {
       }
     end
   end,
+  pronouns = "he_him"
 }
 
 G.Phanta.centers["near"] = {
@@ -2667,6 +2722,7 @@ G.Phanta.centers["near"] = {
       return { xmult = card.ability.extra.xmult }
     end
   end,
+  pronouns = "he_him"
 }
 
 G.Phanta.centers["deathnote"] = {
@@ -2686,7 +2742,8 @@ G.Phanta.centers["deathnote"] = {
   cost = 4,
   blueprint_compat = false,
   eternal_compat = true,
-  perishable_compat = true
+  perishable_compat = true,
+  pronouns = "it_its"
 }
 
 G.FUNCS.run_deathnote_menu = function(e)
@@ -2869,5 +2926,6 @@ G.Phanta.centers["doodah"] = {
         colour = G.C.SECONDARY_SET.Planet
       }
     end
-  end
+  end,
+  pronouns = "it_its"
 }
