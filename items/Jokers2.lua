@@ -708,8 +708,11 @@ G.Phanta.centers["flushed"] = {
     return { vars = { card.ability.extra.added_mult, card.ability.extra.current_mult } }
   end,
   rarity = 1,
-  atlas = 'Phanta2',
-  pos = { x = 6, y = 4 },
+  atlas = 'PhantaMiscAnims6',
+  pos = { x = 0, y = 1 },
+  phanta_anim = {
+    { xrange = { first = 0, last = 3 }, y = 1, t = 0.1 }
+  },
   cost = 4,
   blueprint_compat = true,
   eternal_compat = true,
@@ -723,6 +726,123 @@ G.Phanta.centers["flushed"] = {
     end
   end,
   pronouns = "she_they"
+}
+
+G.Phanta.centers["smilingimp"] = {
+  rarity = 2,
+  atlas = 'PhantaMiscAnims6',
+  pos = { x = 4, y = 1 },
+  phanta_anim = {
+    { xrange = { first = 4, last = 7 }, y = 1, t = 0.1 }
+  },
+  cost = 6,
+  blueprint_compat = true,
+  eternal_compat = true,
+  perishable_compat = false,
+  calculate = function(self, card, context)
+    if context.individual and context.cardarea == "unscored" and context.other_card:get_id() == 6 and count_consumables() < G.consumeables.config.card_limit then
+      G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
+      return {
+        extra = {
+          focus = card,
+          message = localize('k_plus_tarot'),
+          func = function()
+            G.E_MANAGER:add_event(Event({
+              trigger = 'before',
+              delay = 0.0,
+              func = function()
+                play_sound("timpani")
+                local new_card = create_card("Tarot", G.consumables, nil, nil, nil, nil, nil, "smilingimp")
+                new_card:add_to_deck()
+                G.consumeables:emplace(new_card)
+                G.GAME.consumeable_buffer = 0
+                new_card:juice_up(0.3, 0.5)
+                return true
+              end
+            }))
+          end
+        },
+        colour = G.C.SECONDARY_SET.Tarot,
+        card = card
+      }
+    end
+  end,
+  pronouns = "he_they"
+}
+
+G.Phanta.centers["coldjoker"] = {
+  config = { extra = { planets = 2 } },
+  loc_vars = function(self, info_queue, card)
+    return { vars = { card.ability.extra.planets } }
+  end,
+  rarity = 1,
+  atlas = 'PhantaMiscAnims6',
+  pos = { x = 8, y = 1 },
+  phanta_anim = {
+    { x = 8, y = 1, t = 1.1 }, { x = 9, y = 1, t = 0.3 }, { x = 9, y = 2, t = 0.1 },
+    { x = 9, y = 1, t = 0.5 }, { x = 9, y = 2, t = 0.1 },
+    { x = 9, y = 1, t = 0.9 }, { x = 9, y = 2, t = 0.1 },
+    { x = 10, y = 1, t = 0.2 }, { x = 10, y = 2, t = 0.4 },
+    { x = 10, y = 1, t = 0.2 }, { x = 9, y = 2, t = 0.4 },
+    { x = 10, y = 1, t = 0.2 }, { x = 10, y = 2, t = 0.4 },
+    { x = 10, y = 1, t = 0.2 }, { x = 9, y = 2, t = 0.4 },
+    { x = 10, y = 1, t = 0.2 }, { x = 10, y = 2, t = 0.4 },
+    { x = 10, y = 1, t = 0.2 }, { x = 9, y = 2, t = 0.3 }, { x = 9, y = 2, t = 0.1 }, 
+    { x = 9, y = 1, t = 1.2 }, { x = 9, y = 2, t = 0.1 }, 
+    { x = 9, y = 1, t = 0.3 }, { x = 9, y = 2, t = 0.1 }, 
+    { x = 9, y = 1, t = 0.8 }, { x = 9, y = 2, t = 0.3 }, 
+    { x = 0, y = 2, t = 0.1 }, { x = 1, y = 2, t = 0.4 }, 
+    { x = 2, y = 2, t = 1.2 }, { x = 3, y = 2, t = 0.1 }, { x = 4, y = 2, t = 0.1 },
+    { x = 5, y = 2, t = 0.1 }, { x = 6, y = 2, t = 0.1 }, { x = 5, y = 2, t = 0.1 }, { x = 7, y = 2, t = 0.1 },
+    { x = 5, y = 2, t = 0.1 }, { x = 6, y = 2, t = 0.1 }, { x = 5, y = 2, t = 0.1 }, { x = 7, y = 2, t = 0.1 },
+    { x = 5, y = 2, t = 0.1 }, { x = 6, y = 2, t = 0.1 }, { x = 5, y = 2, t = 0.1 }, { x = 7, y = 2, t = 0.1 },
+    { x = 5, y = 2, t = 0.1 }, { x = 6, y = 2, t = 0.1 }, { x = 5, y = 2, t = 0.1 }, { x = 7, y = 2, t = 0.1 },
+    { x = 5, y = 2, t = 0.3 }, { x = 4, y = 2, t = 0.1 }, { x = 3, y = 2, t = 0.1 }, { x = 1, y = 2, t = 0.1 },
+    { x = 2, y = 2, t = 1.2 }, { x = 3, y = 2, t = 0.1 }, { x = 4, y = 2, t = 0.1 },
+    { x = 5, y = 2, t = 0.1 }, { x = 6, y = 2, t = 0.1 }, { x = 5, y = 2, t = 0.1 }, { x = 7, y = 2, t = 0.1 },
+    { x = 5, y = 2, t = 0.1 }, { x = 6, y = 2, t = 0.1 }, { x = 5, y = 2, t = 0.1 }, { x = 7, y = 2, t = 0.1 },
+    { x = 5, y = 2, t = 0.1 }, { x = 6, y = 2, t = 0.1 }, { x = 5, y = 2, t = 0.1 }, { x = 7, y = 2, t = 0.1 },
+    { x = 5, y = 2, t = 0.1 }, { x = 6, y = 2, t = 0.1 }, { x = 5, y = 2, t = 0.1 }, { x = 7, y = 2, t = 0.1 },
+    { x = 5, y = 2, t = 0.3 }, { x = 11, y = 2, t = 0.1 },
+    { x = 9, y = 1, t = 0.9 }, { x = 9, y = 2, t = 0.1 },
+    { x = 9, y = 1, t = 1.4 }, { x = 9, y = 2, t = 0.1 },
+    { x = 9, y = 1, t = 0.3 }, { x = 9, y = 2, t = 0.1 },
+    { x = 10, y = 1, t = 0.2 }, { x = 10, y = 2, t = 0.4 },
+    { x = 10, y = 1, t = 0.2 }, { x = 9, y = 2, t = 0.4 },
+    { x = 10, y = 1, t = 0.2 }, { x = 10, y = 2, t = 0.4 },
+    { x = 10, y = 1, t = 0.2 }, { x = 9, y = 2, t = 0.4 },
+    { x = 10, y = 1, t = 0.2 }, { x = 10, y = 2, t = 0.4 },
+    { x = 10, y = 1, t = 0.2 }, { x = 9, y = 2, t = 0.3 },
+    { x = 9, y = 1, t = 1.5 }, { x = 9, y = 2, t = 0.1 }, 
+    { x = 9, y = 1, t = 0.6 }, { x = 9, y = 2, t = 0.2 }, { x = 10, y = 1, t = 0.5 }, 
+    { x = 8, y = 2, t = 0.2 }, { x = 8, y = 1, t = 0.3 },
+  },
+  cost = 5,
+  blueprint_compat = true,
+  eternal_compat = true,
+  perishable_compat = true,
+  calculate = function(self, card, context)
+    if context.cardarea == G.jokers and context.before and G.GAME.current_round.hands_left == 0 and count_consumables() < G.consumeables.config.card_limit then
+      local no_of_planets = math.min(G.consumeables.config.card_limit - count_consumables(), card.ability.extra.planets)
+      G.E_MANAGER:add_event(Event({
+        func = function()
+          play_sound("timpani")
+
+          for i = 1, card.ability.extra.planets do
+            if count_consumables() < G.consumeables.config.card_limit then
+              local new_card = create_card("Planet", G.consumables, nil, nil, nil, nil)
+              new_card:add_to_deck()
+              G.consumeables:emplace(new_card)
+              new_card:juice_up(0.3, 0.5)
+            end
+          end
+          return true
+        end
+      }))
+      return { message = localize { type = 'variable', key = no_of_planets == 1 and 'a_planet' or 'a_planets', vars = { no_of_planets } }, colour = G.C.SECONDARY_SET.Planet }
+    end
+  end,
+  pronouns = "they_them"
 }
 
 G.Phanta.centers["patientjoker"] = {

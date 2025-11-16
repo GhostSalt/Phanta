@@ -103,7 +103,7 @@ SMODS.Consumable {
 SMODS.Consumable {
   set = "Spectral",
   key = "orbit",
-  pos = { x = 0, y = 1 },
+  pos = { x = 4, y = 0 },
   config = { extra = { no_of_upgrades = 3 } },
   atlas = "PhantaTarots",
   loc_vars = function(self, info_queue, card)
@@ -153,7 +153,7 @@ SMODS.Consumable {
 SMODS.Consumable {
   set = "Spectral",
   key = "norwellwall",
-  pos = { x = 1, y = 1 },
+  pos = { x = 0, y = 1 },
   config = { extra = { added_hand_size = 1 } },
   atlas = "PhantaTarots",
   loc_vars = function(self, info_queue, card)
@@ -187,7 +187,7 @@ SMODS.Consumable {
   object_type = "Consumable",
   set = "Spectral",
   key = "follower",
-  pos = { x = 2, y = 1 },
+  pos = { x = 1, y = 1 },
   config = { extra = { added_shop_slots = 1 } },
   atlas = "PhantaTarots",
   loc_vars = function(self, info_queue, card)
@@ -221,7 +221,7 @@ SMODS.Consumable {
   object_type = "Consumable",
   set = "Spectral",
   key = "timeline",
-  pos = { x = 3, y = 1 },
+  pos = { x = 2, y = 1 },
   config = { extra = { minus_antes = 1 } },
   atlas = "PhantaTarots",
   loc_vars = function(self, info_queue, card)
@@ -258,7 +258,7 @@ SMODS.Consumable {
   object_type = "Consumable",
   set = "Spectral",
   key = "bazaar",
-  pos = { x = 1, y = 2 },
+  pos = { x = 4, y = 1 },
   atlas = "PhantaTarots",
   loc_vars = function(self, info_queue, card)
     info_queue[#info_queue + 1] = G.P_TAGS.tag_voucher
@@ -293,7 +293,7 @@ SMODS.Consumable {
   object_type = "Consumable",
   set = "Spectral",
   key = "handprint",
-  pos = { x = 0, y = 3 },
+  pos = { x = 2, y = 2 },
   config = { extra = { added_hands = 1 } },
   atlas = "PhantaTarots",
   loc_vars = function(self, info_queue, card)
@@ -328,7 +328,7 @@ SMODS.Consumable {
   object_type = "Consumable",
   set = "Spectral",
   key = "exile",
-  pos = { x = 1, y = 3 },
+  pos = { x = 3, y = 2 },
   config = { extra = { added_discards = 1 } },
   atlas = "PhantaTarots",
   loc_vars = function(self, info_queue, card)
@@ -363,7 +363,7 @@ SMODS.Consumable {
   object_type = "Consumable",
   set = "Spectral",
   key = "genius",
-  pos = { x = 2, y = 3 },
+  pos = { x = 4, y = 2 },
   config = {
     max_highlighted = 3
   },
@@ -431,6 +431,45 @@ SMODS.Consumable {
   end,
   in_pool = function()
     return azran_active()
+  end,
+  set_badges = function(self, card, badges)
+    badges[#badges + 1] = create_badge(localize('phanta_azran_exclusive'), G.C.SECONDARY_SET.Spectral, G.C.WHITE, 1)
+  end
+}
+
+SMODS.Consumable {
+  set = "Spectral",
+  key = "halo",
+  pos = { x = 1, y = 3 },
+  config = { extra = { brights = 2 } },
+  atlas = "PhantaTarots",
+  loc_vars = function(self, info_queue, card)
+    return { vars = { card.ability.extra.brights } }
+  end,
+  can_use = function(self, card)
+    return G.consumeables.config.card_limit >= count_consumables()
+  end,
+  use = function(self, card, area, copier)
+    for i = 1, card.ability.extra.brights do
+      G.E_MANAGER:add_event(Event({
+        trigger = 'after',
+        delay = 0.4,
+        func = function()
+          if G.consumeables.config.card_limit > count_consumables() then
+            play_sound('timpani')
+            local new_card = phanta_create_hanafuda_bright("halo")
+            new_card:add_to_deck()
+            G.consumeables:emplace(new_card)
+            card:juice_up(0.3, 0.5)
+          end
+          return true
+        end
+      }))
+    end
+    delay(0.6)
+  end,
+  in_pool = function()
+    return azran_active() and Phanta.config["hanafuda_enabled"]
   end,
   set_badges = function(self, card, badges)
     badges[#badges + 1] = create_badge(localize('phanta_azran_exclusive'), G.C.SECONDARY_SET.Spectral, G.C.WHITE, 1)

@@ -684,6 +684,15 @@ return {
                     "{C:inactive}(Currently {C:white,X:mult}X#2#{C:inactive} Mult){}"
                 }
             },
+            j_phanta_coldjoker                = {
+                name = "Cold Joker",
+                text = {
+                    "Creates up to {C:attention}2{} {C:planet}Planet{}",
+                    "cards when {C:attention}final hand{}",
+                    "of round is played",
+                    "{C:inactive}(Must have room){}"
+                }
+            },
             j_phanta_target                = {
                 name = "Target",
                 text = {
@@ -1800,6 +1809,15 @@ return {
                     "{C:attention}second{} hand of round",
                     "contained a {C:attention}Flush{}",
                     "{C:inactive}(Currently {C:mult}+#2#{C:inactive} Mult){}"
+                }
+            },
+            j_phanta_smilingimp               = {
+                name = 'Smiling Imp',
+                text = {
+                    "Played {C:attention}6s{} create",
+                    "{C:tarot}Tarot{} cards",
+                    "when {C:attention}unscored{}",
+                    "{C:inactive}(Must have room){}"
                 }
             },
             j_phanta_theriddler            = {
@@ -3041,6 +3059,14 @@ return {
                     "become {C:attention}unknown{}"
                 }
             },
+            c_phanta_halo = {
+                name = 'Halo',
+                text = {
+                    "Creates up to {C:attention}#1#{} random",
+                    "{C:phanta_hanafuda}Bright Hanafuda{} cards",
+                    "{C:inactive}(Must have room){}"
+                }
+            }
         },
         Stake = {
             stake_phanta_white = {

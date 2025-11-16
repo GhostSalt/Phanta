@@ -1,7 +1,7 @@
 SMODS.Consumable {
   set = "Planet",
   key = "rubbish",
-  pos = { x = 0, y = 2 },
+  pos = { x = 3, y = 1 },
   config = {
     hand_type = "phanta_junk",
     softlock = true

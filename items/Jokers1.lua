@@ -4569,6 +4569,7 @@ G.Phanta.centers["spectretile"] = {
   end,
   calculate = function(self, card, context)
     if context.buying_card and context.card.config.center.set == "Joker" and SMODS.pseudorandom_probability(card, "spectretile", 1, card.ability.extra.odds) and count_consumables() < G.consumeables.config.card_limit then
+      G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
       local _card = card
       G.E_MANAGER:add_event(Event({
         func = function()
