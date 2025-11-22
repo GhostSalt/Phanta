@@ -330,6 +330,7 @@ SMODS.Consumable {
   end,
 
   hidden = true,
+  soul_set = false,
   soul_rate = 0.005,
   can_repeat_soul = false
 }

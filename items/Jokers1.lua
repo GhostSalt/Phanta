@@ -78,8 +78,7 @@ G.Phanta.centers["trainstation"] = {
 
     if context.end_of_round and not context.individual and not context.repetition and not context.blueprint then
       return {
-        message =
-            localize("phanta_increased"),
+        message = localize("phanta_increased"),
         colour = G.FILTER
       }
     end
@@ -100,7 +99,7 @@ G.Phanta.centers["hintcoin"] = {
     { x = 2, y = 7, t = 0.15 },
     { x = 1, y = 7, t = 0.15 },
 },]] --
-  cost = 4,
+  cost = 5,
   blueprint_compat = true,
   eternal_compat = true,
   perishable_compat = true,
@@ -186,7 +185,7 @@ G.Phanta.centers["holeinthejoker"] = {
   atlas = 'Phanta',
   pos = { x = 7, y = 3 },
   cost = 6,
-  blueprint_compat = true,
+  blueprint_compat = false,
   eternal_compat = true,
   perishable_compat = true,
   loc_vars = function(self, info_queue, card)
@@ -211,14 +210,14 @@ G.Phanta.centers["shootingstar"] = {
   atlas = 'Phanta',
   pos = { x = 10, y = 4 },
   cost = 5,
-  blueprint_compat = true,
+  blueprint_compat = false,
   eternal_compat = true,
   perishable_compat = false,
   loc_vars = function(self, info_queue, card)
     return { vars = { card.ability.extra.money, card.ability.extra.added_money } }
   end,
   calculate = function(self, card, context)
-    if context.remove_playing_cards then
+    if context.remove_playing_cards and not context.blueprint then -- Allow Blueprint compat later.
       local reward = 0
       for k, v in ipairs(context.removed) do
         if v:is_suit("Diamonds") then
@@ -304,13 +303,11 @@ G.Phanta.centers["onemanstrash"] = {
   pos = { x = 3, y = 7 },
   cost = 4,
   blueprint_compat = true,
-  eternal_compat = false,
+  eternal_compat = false, -- I wanna make sure Another Man's Treasure is able to be spawned.
   perishable_compat = true,
   calculate = function(self, card, context)
     if context.joker_main then
-      return {
-        mult = card.ability.extra.current_mult,
-      }
+      return { mult = card.ability.extra.current_mult }
     end
     if context.discard and not context.blueprint then
       card.ability.extra.current_mult = card.ability.extra.current_mult + card.ability.extra.added_mult
@@ -341,7 +338,7 @@ G.Phanta.centers["anothermanstreasure"] = {
   pos = { x = 0, y = 11 },
   cost = 6,
   blueprint_compat = true,
-  eternal_compat = false, -- I wanna make sure Another Man's Treasure is able to be spawned.
+  eternal_compat = true,
   perishable_compat = true,
   calculate = function(self, card, context)
     if context.joker_main then
@@ -467,7 +464,7 @@ G.Phanta.centers["timetable"] = {
     end
   end,
   calculate = function(self, card, context)
-    if context.setting_blind then
+    if context.setting_blind and not context.blueprint then
       if is_blind_small() then
         G.E_MANAGER:add_event(Event({
           func = function()
@@ -510,7 +507,7 @@ G.Phanta.centers["timetable"] = {
       end
     end
 
-    if context.end_of_round and not context.individual and not context.repetition then
+    if context.end_of_round and not context.individual and not context.repetition and not context.blueprint then
       if is_blind_boss() and card.ability.extra.is_happening then
         G.hand:change_size(-card.ability.extra.hand_size)
         card.ability.extra.is_happening = false
@@ -529,7 +526,7 @@ G.Phanta.centers["mazebean"] = {
   atlas = 'Phanta',
   pos = { x = 8, y = 10 },
   cost = 6,
-  blueprint_compat = false,
+  blueprint_compat = true,
   eternal_compat = false,
   perishable_compat = false,
   calculate = function(self, card, context)
@@ -541,7 +538,7 @@ G.Phanta.centers["mazebean"] = {
       }
     end
 
-    if context.end_of_round and not context.individual and not context.repetition and G.GAME.last_blind and G.GAME.last_blind.boss then
+    if context.end_of_round and not context.individual and not context.repetition and G.GAME.last_blind and G.GAME.last_blind.boss and not context.blueprint then
       card.ability.extra.current_antes = card.ability.extra.current_antes + 1
       if card.ability.extra.current_antes >= card.ability.extra.target_antes then
         card.ability.extra.current_hand_size = card.ability.extra.current_hand_size + 1
@@ -613,28 +610,24 @@ G.Phanta.centers["new2dsxl"] = {
     set_phanta_new2dsxl_streetpass(card, true)
   end,
   calculate = function(self, card, context)
-    if context.setting_blind and not (context.blueprint_card or card).getting_sliced then
+    if context.setting_blind and not card.getting_sliced then
       G.E_MANAGER:add_event(Event({
         trigger = 'before',
         delay = 0.5,
         func = function()
           play_sound("phanta_xhands")
           ease_hands_played(G.GAME.current_round.hands_left * (card.ability.extra.given_xhands - 1), true)
-          --[[card_eval_status_text(context.blueprint_card or card, 'extra', nil, nil, nil,
-            { message = "X" .. card.ability.extra.given_xhands .. " Hands", colour = G.C.BLUE, card = context.blueprint_card or card })]] --
           return true
         end
       }))
 
       return {
         message = "X" .. card.ability.extra.given_xhands .. " Hands",
-        colour = G.C.BLUE,
-        card = context
-            .blueprint_card or card
+        colour = G.C.BLUE
       }
     end
 
-    if card.config.center.phanta_anim_current_state ~= "streetpass" then
+    if not context.blueprint and card.config.center.phanta_anim_current_state ~= "streetpass" then
       if context.after and G.GAME.current_round.hands_left == 1 and not context.blueprint and card.config.center.phanta_anim_current_state ~= "low battery" then
         card:phanta_set_anim_state("low battery")
       end
@@ -793,7 +786,7 @@ G.Phanta.centers["diana"] = {
   calculate = function(self, card, context)
     if context.joker_main and card.ability.extra.current_mult > 0 then return { mult = card.ability.extra.current_mult } end
 
-    if context.individual and context.cardarea == G.play and SMODS.has_enhancement(context.other_card, "m_bonus") then
+    if not context.blueprint and context.individual and context.cardarea == G.play and SMODS.has_enhancement(context.other_card, "m_bonus") then
       card.ability.extra.current_mult = card.ability.extra.current_mult + card.ability.extra.added_mult
       return { message = localize("k_upgrade_ex"), colour = G.C.FILTER, card = card }
     end
@@ -895,7 +888,7 @@ G.Phanta.centers["kylehyde"] = {
 }
 
 G.Phanta.centers["inception"] = {
-  config = { extra = { current_mult = 0, added_mult = 5 } },
+  config = { extra = { current_mult = 0, added_mult = 4 } },
   rarity = 1,
   atlas = 'PhantaMiscAnims4',
   pos = { x = 10, y = 4 },
@@ -917,7 +910,7 @@ G.Phanta.centers["inception"] = {
       if not context.blueprint then
         card.ability.extra.current_mult = card.ability.extra.current_mult + card.ability.extra.added_mult
       end
-      return { mult = card.ability.extra.current_mult }
+      return { mult = card.ability.extra.current_mult + (context.blueprint and card.ability.extra.added_mult or 0) }
     elseif context.end_of_round and not context.individual and not context.repetition and not context.blueprint then
       card.ability.extra.current_mult = 0
       return {
@@ -1044,7 +1037,7 @@ G.Phanta.centers["badhairday"] = {
                 return true
               end
             }))
-            card_eval_status_text(context.blueprint_card or card, 'extra', nil, nil, nil, { message = "+1 Lovers", colour = G.C.PURPLE })
+            card_eval_status_text(card, 'extra', nil, nil, nil, { message = "+1 Lovers", colour = G.C.PURPLE })
             return true
           end
         }))
@@ -1104,7 +1097,7 @@ G.Phanta.centers["animalinstinct"] = {
 }
 
 G.Phanta.centers["target"] = {
-  config = { extra = { added_mult = 7, current_mult = 0 } },
+  config = { extra = { added_mult = 5, current_mult = 0 } },
   loc_vars = function(self, info_queue, card)
     return { vars = { card.ability.extra.added_mult, card.ability.extra.current_mult } }
   end,
@@ -1243,7 +1236,7 @@ G.Phanta.centers["forsakenscroll"] = {
 }
 
 G.Phanta.centers["exitsign"] = {
-  config = { extra = { money_given = 10 } },
+  config = { extra = { money_given = 8 } },
   rarity = 1,
   atlas = 'Phanta',
   pos = { x = 8, y = 1 },
@@ -1326,7 +1319,7 @@ G.Phanta.centers["saltcircle"] = {
     { xrange = { first = 5, last = 0 }, y = 2, t = 0.1 }
   },
   cost = 4,
-  blueprint_compat = false,
+  blueprint_compat = true,
   eternal_compat = true,
   perishable_compat = true,
   loc_vars = function(self, info_queue, card)
@@ -1512,10 +1505,7 @@ G.Phanta.centers["theapparition"] = {
   perishable_compat = true,
   calculate = function(self, card, context)
     if context.repetition and context.cardarea == "unscored" then
-      return {
-        message = localize("k_again_ex"),
-        repetitions = 1
-      }
+      return { repetitions = 1 }
     end
   end,
   pronouns = "she_her"
@@ -1558,10 +1548,7 @@ G.Phanta.centers["stickercollection"] = {
   perishable_compat = true,
   calculate = function(self, card, context)
     if context.repetition and context.scoring_name == "phanta_junk" and get_lowest(context.scoring_hand)[1][1]:get_id() == context.other_card:get_id() and context.cardarea == G.play then
-      return {
-        message = localize("k_again_ex"),
-        repetitions = card.ability.extra.retriggers
-      }
+      return { repetitions = card.ability.extra.retriggers }
     end
   end,
   in_pool = function()
@@ -1709,7 +1696,7 @@ G.Phanta.centers["grimreaper"] = {
 }
 
 G.Phanta.centers["professorlayton"] = {
-  config = { extra = { out_of_odds = 4, added_mult = 50 } },
+  config = { extra = { out_of_odds = 4, added_mult = 30 } },
   rarity = 2,
   atlas = 'PhantaLaytonAnims',
   pos = { x = 0, y = 0 },
@@ -1803,7 +1790,7 @@ G.Phanta.centers["jeandescole"] = {
     { x = 1, y = 6, t = 0.15 }
   },
   cost = 6,
-  blueprint_compat = false,
+  blueprint_compat = true,
   eternal_compat = true,
   perishable_compat = true,
   loc_vars = function(self, info_queue, card)
@@ -1832,7 +1819,9 @@ G.Phanta.centers["jeandescole"] = {
           end
         }))
       end
-      return { remove = true }
+      if not context.blueprint then
+        return { remove = true }
+      end
     end
   end,
   enhancement_gate = "m_stone",
@@ -1899,7 +1888,7 @@ G.Phanta.centers["medic"] = {
       juice_card_until(card, eval, true)
     end
 
-    if G.GAME.current_round.hands_played == 0 and context.cardarea == G.jokers and context.before and not (context.blueprint_card or card).getting_sliced and count_consumables() < G.consumeables.config.card_limit and #G.play.cards >= 5 then
+    if G.GAME.current_round.hands_played == 0 and context.cardarea == G.jokers and context.before and not card.getting_sliced and count_consumables() < G.consumeables.config.card_limit and #G.play.cards >= 5 then
       local counted_hearts = 0
       for i = 1, #G.play.cards do
         if G.play.cards[i]:is_suit("Hearts") then
@@ -2006,10 +1995,7 @@ G.Phanta.centers["apollosbracelet"] = {
   perishable_compat = true,
   calculate = function(self, card, context)
     if context.repetition and context.cardarea == G.play and next(SMODS.get_enhancements(context.other_card)) then
-      return {
-        message = localize("k_again_ex"),
-        repetitions = 1
-      }
+      return { repetitions = 1 }
     end
   end,
   pronouns = "it_its"
@@ -2189,28 +2175,27 @@ G.Phanta.centers["candle"] = {
   calculate = function(self, card, context)
     if context.joker_main then return { xmult = card.ability.extra.current_xmult } end
 
-    if context.setting_blind and not (context.blueprint_card or card).getting_sliced then
+    if context.setting_blind and not context.blueprint and not card.getting_sliced then
       local destructable_tarot = {}
       for i = 1, count_consumables() do
         if G.consumeables.cards[i].ability.set == "Tarot" and not G.consumeables.cards[i].getting_sliced and not G.consumeables.cards[i].ability.eternal then
           destructable_tarot[#destructable_tarot + 1] = G.consumeables.cards[i]
         end
       end
-      local tarot_to_destroy = #destructable_tarot > 0 and pseudorandom_element(destructable_tarot, pseudoseed("candle")) or
-          nil
+      local tarot_to_destroy = #destructable_tarot > 0 and pseudorandom_element(destructable_tarot, pseudoseed("candle")) or nil
 
       if tarot_to_destroy then
         tarot_to_destroy.getting_sliced = true
         card.ability.extra.current_xmult = card.ability.extra.current_xmult + card.ability.extra.added_xmult
         G.E_MANAGER:add_event(Event({
           func = function()
-            (context.blueprint_card or card):juice_up(0.8, 0.8)
+            card:juice_up(0.8, 0.8)
             tarot_to_destroy:start_dissolve({ G.C.RED }, nil, 1.6)
             return true
           end,
         }))
-        if not (context.blueprint_card or card).getting_sliced then
-          card_eval_status_text(context.blueprint_card or card, "extra", nil, nil, nil, {
+        if not card.getting_sliced then
+          card_eval_status_text(card, "extra", nil, nil, nil, {
             message = localize { type = 'variable', key = 'a_xmult', vars = { card.ability.extra.current_xmult } },
             colour = G.C.RED,
             card = card
@@ -2218,12 +2203,6 @@ G.Phanta.centers["candle"] = {
         end
         return nil, true
       end
-    end
-  end,
-  set_badges = function(self, card, badges)
-    if next(SMODS.find_mod("GSBFDI")) then
-      badges[#badges + 1] = create_badge(localize('contestant_joker_badge'), G.C.BFDI.MISC_COLOURS.BFDI_GREEN, G.C.WHITE,
-        1)
     end
   end,
   pronouns = "she_her"
@@ -2271,7 +2250,7 @@ G.Phanta.centers["goo"] = {
   eternal_compat = true,
   perishable_compat = true,
   calculate = function(self, card, context)
-    if context.cardarea == G.jokers and context.before and G.GAME.current_round.hands_left == 0 then
+    if context.cardarea == G.jokers and context.before and G.GAME.current_round.hands_left == 0 and not context.blueprint then
       G.E_MANAGER:add_event(Event({
         func = function()
           context.full_hand[1]:set_seal('Blue', true, true)
@@ -2280,12 +2259,6 @@ G.Phanta.centers["goo"] = {
         end
       }))
       return { message = localize("phanta_created_blue_seal"), colour = G.C.BLUE, card = card }
-    end
-  end,
-  set_badges = function(self, card, badges)
-    if next(SMODS.find_mod("GSBFDI")) then
-      badges[#badges + 1] = create_badge(localize('contestant_joker_badge'), G.C.BFDI.MISC_COLOURS.BFDI_GREEN, G.C.WHITE,
-        1)
     end
   end,
   pronouns = "he_him"
@@ -2312,7 +2285,7 @@ G.Phanta.centers["web"] = {
       card.ability.extra.counted_spades = 0
     end
 
-    if context.cardarea == G.hand and not context.blueprint and context.other_card and context.other_card:is_suit("Spades") then
+    if context.cardarea == G.hand and not context.blueprint and context.other_card and context.other_card:is_suit("Spades") and not context.repetition then -- Logic here is weird, replace with iteration over hand.
       card.ability.extra.counted_spades = card.ability.extra.counted_spades + 1
     end
   end,
@@ -2361,7 +2334,7 @@ G.Phanta.centers["blottedjoker"] = {
   eternal_compat = true,
   perishable_compat = true,
   calculate = function(self, card, context)
-    if context.cardarea == G.play and context.individual and (context.other_card:get_id() == 2 or context.other_card:get_id() == 3 or context.other_card:get_id() == 4 or context.other_card:get_id() == 5) then
+    if context.cardarea == G.play and context.individual and not context.blueprint and (context.other_card:get_id() == 2 or context.other_card:get_id() == 3 or context.other_card:get_id() == 4 or context.other_card:get_id() == 5) then
       local _card = context.other_card
       _card:set_ability("m_bonus", nil, true)
       G.E_MANAGER:add_event(Event({
@@ -2673,15 +2646,19 @@ G.Phanta.centers["crescent"] = {
   perishable_compat = true,
   calculate = function(self, card, context)
     if context.selling_card and context.card.config.center.set == "Planet" and count_consumables() <= G.consumeables.config.card_limit then
+      G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
       G.E_MANAGER:add_event(Event({
         delay = 0.3,
         blockable = false,
         func = function()
-          play_sound("timpani")
-          local new_card = create_card("Tarot", G.consumables, nil, nil, nil, nil)
-          new_card:add_to_deck()
-          G.consumeables:emplace(new_card)
-          new_card:juice_up(0.3, 0.5)
+          if count_consumables() < G.consumeables.config.card_limit then
+            play_sound("timpani")
+            local new_card = create_card("Tarot", G.consumables, nil, nil, nil, nil)
+            new_card:add_to_deck()
+            G.consumeables:emplace(new_card)
+            new_card:juice_up(0.3, 0.5)
+            G.GAME.consumeable_buffer = 0
+          end
           return true
         end
       }))
@@ -2731,7 +2708,7 @@ G.Phanta.centers["ransomnote"] = {
   eternal_compat = true,
   perishable_compat = true,
   calculate = function(self, card, context)
-    if context.selling_card and context.card.config.center.set == "Joker" and not card.getting_sliced then
+    if context.selling_card and context.card.config.center.set == "Joker" and context.card ~= card and not card.getting_sliced then
       return { dollars = card.ability.extra.money }
     end
   end,
@@ -2754,6 +2731,7 @@ G.Phanta.centers["purplejoker"] = {
     if context.joker_main then
       return { mult = card.ability.extra.current_mult }
     end
+
     if context.before and not context.blueprint then
       if count_tarots() > 0 then
         card.ability.extra.current_mult = card.ability.extra.current_mult + card.ability.extra.mult_per_hand
@@ -2776,7 +2754,7 @@ G.Phanta.centers["monetjoker"] = {
   eternal_compat = true,
   perishable_compat = true,
   calculate = function(self, card, context)
-    if context.discard and #context.full_hand == 1 then
+    if context.discard and #context.full_hand == 1 and count_consumables() < G.consumeables.config.card_limit then
       G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
       G.E_MANAGER:add_event(Event({
         trigger = 'before',
@@ -2844,18 +2822,18 @@ G.Phanta.centers["goldenfiddle"] = {
   eternal_compat = true,
   perishable_compat = true,
   calculate = function(self, card, context)
-    if context.setting_blind and not (context.blueprint_card or self).getting_sliced and count_consumables() < G.consumeables.config.card_limit then
+    if context.setting_blind and not card.getting_sliced and count_consumables() < G.consumeables.config.card_limit then
       G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
       G.E_MANAGER:add_event(Event({
         func = function()
           local chosen_message = '+1 Devil'
+          local chosen_card = 'c_devil'
+          if pseudorandom('goldenfiddle', 1, 2) == 1 then
+            chosen_card = 'c_chariot'
+            chosen_message = '+1 Chariot'
+          end
           G.E_MANAGER:add_event(Event({
             func = function()
-              local chosen_card = 'c_devil'
-              if pseudorandom('goldenfiddle', 1, 2) == 1 then
-                chosen_card = 'c_chariot'
-                chosen_message = '+1 Chariot'
-              end
               local new_card = create_card("Tarot", G.consumables, nil, nil, nil, nil, chosen_card, 'goldenfiddle')
               new_card:add_to_deck()
               G.consumeables:emplace(new_card)
@@ -2864,7 +2842,7 @@ G.Phanta.centers["goldenfiddle"] = {
               return true
             end
           }))
-          card_eval_status_text(context.blueprint_card or card, 'extra', nil, nil, nil,
+          card_eval_status_text(card, 'extra', nil, nil, nil,
             { message = chosen_message, colour = G.C.PURPLE })
           return true
         end
@@ -2891,18 +2869,18 @@ G.Phanta.centers["reverie"] = {
   eternal_compat = true,
   perishable_compat = true,
   calculate = function(self, card, context)
-    if context.setting_blind and not (context.blueprint_card or self).getting_sliced and count_consumables() < G.consumeables.config.card_limit then
+    if context.setting_blind and not card.getting_sliced and count_consumables() < G.consumeables.config.card_limit then
       G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
       G.E_MANAGER:add_event(Event({
         func = function()
           local chosen_message = '+1 Temperance'
+          local chosen_card = 'c_temperance'
+          if pseudorandom('reverie', 1, 2) == 1 then
+            chosen_card = 'c_tower'
+            chosen_message = '+1 Tower'
+          end
           G.E_MANAGER:add_event(Event({
             func = function()
-              local chosen_card = 'c_temperance'
-              if pseudorandom('reverie', 1, 2) == 1 then
-                chosen_card = 'c_tower'
-                chosen_message = '+1 Tower'
-              end
               local new_card = create_card("Tarot", G.consumables, nil, nil, nil, nil, chosen_card, 'reverie')
               new_card:add_to_deck()
               G.consumeables:emplace(new_card)
@@ -2911,7 +2889,7 @@ G.Phanta.centers["reverie"] = {
               return true
             end
           }))
-          card_eval_status_text(context.blueprint_card or card, 'extra', nil, nil, nil,
+          card_eval_status_text(card, 'extra', nil, nil, nil,
             { message = chosen_message, colour = G.C.PURPLE })
           return true
         end
@@ -2935,18 +2913,18 @@ G.Phanta.centers["sees"] = {
   eternal_compat = true,
   perishable_compat = true,
   calculate = function(self, card, context)
-    if context.setting_blind and not (context.blueprint_card or self).getting_sliced and count_consumables() < G.consumeables.config.card_limit then
+    if context.setting_blind and not card.getting_sliced and count_consumables() < G.consumeables.config.card_limit then
       G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
       G.E_MANAGER:add_event(Event({
         func = function()
           local chosen_message = '+1 Moon'
+          local chosen_card = 'c_moon'
+          if pseudorandom('sees', 1, 2) == 1 then
+            chosen_card = 'c_justice'
+            chosen_message = '+1 Justice'
+          end
           G.E_MANAGER:add_event(Event({
             func = function()
-              local chosen_card = 'c_moon'
-              if pseudorandom('sees', 1, 2) == 1 then
-                chosen_card = 'c_justice'
-                chosen_message = '+1 Justice'
-              end
               local new_card = create_card("Tarot", G.consumables, nil, nil, nil, nil, chosen_card, 'sees')
               new_card:add_to_deck()
               G.consumeables:emplace(new_card)
@@ -2955,7 +2933,7 @@ G.Phanta.centers["sees"] = {
               return true
             end
           }))
-          card_eval_status_text(context.blueprint_card or card, 'extra', nil, nil, nil,
+          card_eval_status_text(card, 'extra', nil, nil, nil,
             { message = chosen_message, colour = G.C.PURPLE })
           return true
         end
@@ -2978,7 +2956,7 @@ G.Phanta.centers["scissorsaresharp"] = {
   eternal_compat = true,
   perishable_compat = true,
   calculate = function(self, card, context)
-    if context.setting_blind and not (context.blueprint_card or self).getting_sliced and count_consumables() < G.consumeables.config.card_limit then
+    if context.setting_blind and not card.getting_sliced and count_consumables() < G.consumeables.config.card_limit then
       G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
       G.E_MANAGER:add_event(Event({
         func = function()
@@ -2992,7 +2970,7 @@ G.Phanta.centers["scissorsaresharp"] = {
               return true
             end
           }))
-          card_eval_status_text(context.blueprint_card or card, 'extra', nil, nil, nil,
+          card_eval_status_text(card, 'extra', nil, nil, nil,
             { message = "+1 Judgement", colour = G.C.PURPLE })
           return true
         end
@@ -3015,7 +2993,7 @@ G.Phanta.centers["caesarcipher"] = {
   eternal_compat = true,
   perishable_compat = true,
   calculate = function(self, card, context)
-    if context.setting_blind and not (context.blueprint_card or self).getting_sliced and count_consumables() < G.consumeables.config.card_limit then
+    if context.setting_blind and not card.getting_sliced and count_consumables() < G.consumeables.config.card_limit then
       G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
       G.E_MANAGER:add_event(Event({
         func = function()
@@ -3039,10 +3017,10 @@ G.Phanta.centers["caesarcipher"] = {
             end
           }))
           if random_card == 1 then
-            card_eval_status_text(context.blueprint_card or card, 'extra', nil, nil, nil,
+            card_eval_status_text(card, 'extra', nil, nil, nil,
               { message = "+1 Planet", colour = G.C.BLUE })
           else
-            card_eval_status_text(context.blueprint_card or card, 'extra', nil, nil, nil,
+            card_eval_status_text(card, 'extra', nil, nil, nil,
               { message = "+1 Strength", colour = G.C.PURPLE })
           end
           return true
@@ -3066,7 +3044,7 @@ G.Phanta.centers["timepiece"] = {
   eternal_compat = true,
   perishable_compat = true,
   calculate = function(self, card, context)
-    if context.cardarea == G.jokers and context.before and G.GAME.current_round.hands_left == 0 and not (context.blueprint_card or card).getting_sliced and count_consumables() < G.consumeables.config.card_limit then
+    if context.cardarea == G.jokers and context.before and G.GAME.current_round.hands_left == 0 and not card.getting_sliced and count_consumables() < G.consumeables.config.card_limit then
       G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
       G.E_MANAGER:add_event(Event({
         func = function()
@@ -3103,7 +3081,7 @@ G.Phanta.centers["introspection"] = {
   eternal_compat = true,
   perishable_compat = true,
   calculate = function(self, card, context)
-    if context.setting_blind and not (context.blueprint_card or card).getting_sliced and count_consumables() < G.consumeables.config.card_limit then
+    if context.setting_blind and not card.getting_sliced and count_consumables() < G.consumeables.config.card_limit then
       G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
       G.E_MANAGER:add_event(Event({
         func = (function()
@@ -3118,11 +3096,10 @@ G.Phanta.centers["introspection"] = {
               return true
             end
           }))
-          card_eval_status_text(context.blueprint_card or card, 'extra', nil, nil, nil,
+          card_eval_status_text(card, 'extra', nil, nil, nil,
             {
               message = localize(({ 'k_plus_tarot', 'k_plus_planet' })[card.ability.extra.chosen_type + 1]),
-              colour = ({ G.C.PURPLE, G.C.BLUE })
-                  [card.ability.extra.chosen_type + 1]
+              colour = ({ G.C.PURPLE, G.C.BLUE })[card.ability.extra.chosen_type + 1]
             })
           return true
         end)
@@ -3161,7 +3138,7 @@ G.Phanta.centers["blindjoker"] = {
           aces = aces + 1
         end
       end
-      if aces == card.ability.extra.no_of_aces then
+      if aces >= card.ability.extra.no_of_aces then
         G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
         G.E_MANAGER:add_event(Event({
           trigger = 'before',
@@ -3231,14 +3208,14 @@ G.Phanta.centers["spaceinvader"] = {
     if context.setting_blind and count_consumables() == 0 then
       G.E_MANAGER:add_event(Event({
         func = function()
-          card_eval_status_text(context.blueprint_card or card, 'extra', nil, nil, nil,
+          card_eval_status_text(card, 'extra', nil, nil, nil,
             {
               message = localize { type = 'variable', key = 'a_planets', vars = { card.ability.extra.no_of_planets } },
               colour = G.C.SECONDARY_SET.Planet
             })
           play_sound("timpani")
 
-          for i = 1, card.ability.extra.no_of_planets do
+          for i = 1, card.ability.extra.no_of_planets do -- Do what you did with Wavy Joker here.
             if count_consumables() < G.consumeables.config.card_limit then
               local new_card = create_card("Planet", G.consumables, nil, nil, nil, nil)
               new_card:add_to_deck()
@@ -3333,7 +3310,7 @@ G.Phanta.centers["modernart"] = {
   eternal_compat = true,
   perishable_compat = true,
   calculate = function(self, card, context)
-    if context.before and context.scoring_name == "High Card" then
+    if context.before and context.scoring_name == "High Card" and not context.blueprint then
       card.ability.extra_value = card.ability.extra_value + card.ability.extra.bonus_cash
       card:set_cost()
       return {
@@ -3380,7 +3357,7 @@ G.Phanta.centers["conspiracist"] = {
   eternal_compat = true,
   perishable_compat = true,
   calculate = function(self, card, context)
-    if context.before and not (context.blueprint_card or card).getting_sliced and count_consumables() < G.consumeables.config.card_limit
+    if context.before and not card.getting_sliced and count_consumables() < G.consumeables.config.card_limit
         and SMODS.pseudorandom_probability(card, "conspiracist", 1, card.ability.extra.odds) and next(context.poker_hands['Full House']) then
       G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
       G.E_MANAGER:add_event(Event({
@@ -3415,19 +3392,23 @@ G.Phanta.centers["wavyjoker"] = {
     if context.skip_blind then
       G.E_MANAGER:add_event(Event({
         func = function()
-          card_eval_status_text(context.blueprint_card or card, 'extra', nil, nil, nil,
+          card_eval_status_text(card, 'extra', nil, nil, nil,
             {
               message = localize { type = 'variable', key = 'a_tarots', vars = { card.ability.extra.no_of_tarots } },
-              colour =
-                  G.C.Tarot
+              colour = G.C.Tarot
             })
           play_sound("timpani")
           for i = 1, card.ability.extra.no_of_tarots do
             if count_consumables() < G.consumeables.config.card_limit then
-              local new_card = create_card("Tarot", G.consumables, nil, nil, nil, nil)
-              new_card:add_to_deck()
-              G.consumeables:emplace(new_card)
-              new_card:juice_up(0.3, 0.5)
+              G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
+              G.E_MANAGER:add_event(Event({
+                func = function()
+                  local new_card = create_card("Tarot", G.consumables, nil, nil, nil, nil)
+                  new_card:add_to_deck()
+                  G.consumeables:emplace(new_card)
+                  new_card:juice_up(0.3, 0.5)
+                end
+              }))
             end
           end
           return true
@@ -3477,10 +3458,10 @@ G.Phanta.centers["slidingpuzzle"] = {
   calculate = function(self, card, context)
     if context.first_hand_drawn then
       G.E_MANAGER:add_event(Event({
-        func = function()
+        func = function() -- Did I forget about enhancements, here?
           SMODS.add_card { set = "Playing Card", seal = SMODS.poll_seal { key = 'slidingpuzzle_seal' .. G.GAME.round_resets.ante, mod = 10 }, edition = poll_edition('slidingpuzzle_edition' .. G.GAME.round_resets.ante, 2, true) }
           G.hand:sort()
-          if context.blueprint_card then context.blueprint_card:juice_up() else card:juice_up() end
+          card:juice_up()
           return true
         end
       }))
@@ -3518,11 +3499,11 @@ G.Phanta.centers["sudoku"] = {
       }
     }
   end,
-  blueprint_compat = true,
+  blueprint_compat = false,
   eternal_compat = true,
   perishable_compat = true,
   calculate = function(self, card, context)
-    if context.cardarea == G.jokers and context.before then
+    if context.cardarea == G.jokers and context.before and not context.blueprint then -- Maybe consider Blueprint here.
       for i = 1, #context.scoring_hand do
         if card.ability.extra.ranks[context.scoring_hand[i]:get_id() .. ""] and card.ability.extra.ranks[context.scoring_hand[i]:get_id() .. ""] == 0 then
           card.ability.extra.ranks[context.scoring_hand[i]:get_id() .. ""] = 1
@@ -3538,7 +3519,7 @@ G.Phanta.centers["sudoku"] = {
             ["9"] = "9",
             ["14"] = "Ace"
           }
-          card_eval_status_text(context.blueprint_card or card, 'extra', nil, nil, nil,
+          card_eval_status_text(card, 'extra', nil, nil, nil,
             { message = ranks_to_string[context.scoring_hand[i]:get_id() .. ""], colour = G.C.FILTER })
 
           if card.ability.extra.ranks["14"] == 1
@@ -3561,7 +3542,7 @@ G.Phanta.centers["sudoku"] = {
               ["9"] = 0,
               ["14"] = 0
             }
-            card_eval_status_text(context.blueprint_card or card, 'extra', nil, nil, nil,
+            card_eval_status_text(card, 'extra', nil, nil, nil,
               { message = localize('k_upgrade_ex') })
             update_hand_text({ sound = 'button', volume = 0.7, pitch = 0.8, delay = 0.3 },
               {
@@ -3602,15 +3583,14 @@ G.Phanta.centers["ceaseanddesist"] = {
     if context.skipping_booster then
       G.E_MANAGER:add_event(Event({
         func = function()
-          card_eval_status_text(context.blueprint_card or card, 'extra', nil, nil, nil,
+          card_eval_status_text(card, 'extra', nil, nil, nil,
             { message = localize('k_upgrade_ex') })
           update_hand_text({ sound = 'button', volume = 0.7, pitch = 0.8, delay = 0.3 },
             {
               handname = "Straight",
               chips = G.GAME.hands["Straight"].chips,
               mult = G.GAME.hands["Straight"].mult,
-              level =
-                  G.GAME.hands["Straight"].level
+              level = G.GAME.hands["Straight"].level
             })
           level_up_hand(card, "Straight", nil, card.ability.extra.no_of_upgrades)
           update_hand_text({ sound = 'button', volume = 0.7, pitch = 0.8, delay = 0.3 },
@@ -3654,15 +3634,14 @@ G.Phanta.centers["thepolicemun"] = {
     if context.skip_blind then
       G.E_MANAGER:add_event(Event({
         func = function()
-          card_eval_status_text(context.blueprint_card or card, 'extra', nil, nil, nil,
+          card_eval_status_text(card, 'extra', nil, nil, nil,
             { message = localize('k_upgrade_ex') })
           update_hand_text({ sound = 'button', volume = 0.7, pitch = 0.8, delay = 0.3 },
             {
               handname = "Straight",
               chips = G.GAME.hands["Straight"].chips,
               mult = G.GAME.hands["Straight"].mult,
-              level =
-                  G.GAME.hands["Straight"].level
+              level = G.GAME.hands["Straight"].level
             })
           level_up_hand(card, "Straight", nil, card.ability.extra.no_of_upgrades)
           update_hand_text({ sound = 'button', volume = 0.7, pitch = 0.8, delay = 0.3 },
@@ -3721,7 +3700,7 @@ G.Phanta.centers["lotteryticket"] = {
   eternal_compat = true,
   perishable_compat = true,
   calculate = function(self, card, context)
-    if context.first_hand_drawn then
+    if context.first_hand_drawn and not context.blueprint then
       local eval = function() return G.GAME.current_round.hands_played == 0 end
       juice_card_until(card, eval, true)
     end
@@ -3729,15 +3708,14 @@ G.Phanta.centers["lotteryticket"] = {
     if G.GAME.current_round.hands_played == 0 and context.before and context.scoring_name == "Straight" then
       G.E_MANAGER:add_event(Event({
         func = function()
-          card_eval_status_text(context.blueprint_card or card, 'extra', nil, nil, nil,
+          card_eval_status_text(card, 'extra', nil, nil, nil,
             { message = localize('k_upgrade_ex') })
           update_hand_text({ sound = 'button', volume = 0.7, pitch = 0.8, delay = 0.3 },
             {
               handname = "Straight Flush",
               chips = G.GAME.hands["Straight Flush"].chips,
               mult = G.GAME.hands["Straight Flush"].mult,
-              level =
-                  G.GAME.hands["Straight Flush"].level
+              level = G.GAME.hands["Straight Flush"].level
             })
           level_up_hand(card, "Straight Flush", nil, card.ability.extra.no_of_upgrades)
           update_hand_text({ sound = 'button', volume = 0.7, pitch = 0.8, delay = 0.3 },
@@ -3788,7 +3766,7 @@ G.Phanta.centers["dottodot"] = {
       return { xmult = card.ability.extra.xmult }
     end
 
-    if context.after then
+    if context.after and not context.blueprint then
       local was_straight = next(context.poker_hands['Straight'])
       if card.ability.extra.active and not was_straight then
         card:phanta_set_anim_state("fading")
@@ -3814,7 +3792,7 @@ G.Phanta.centers["diningtable"] = {
   eternal_compat = true,
   perishable_compat = true,
   calculate = function(self, card, context)
-    if context.cardarea == G.jokers and context.before and not card.getting_sliced and next(context.poker_hands['Full House']) then
+    if context.cardarea == G.jokers and context.before and not card.getting_sliced and next(context.poker_hands['Full House']) and not context.blueprint then
       local rank_tallies = {}
       for k, v in ipairs(context.scoring_hand) do
         if not rank_tallies[v:get_id()] then
@@ -3881,17 +3859,14 @@ G.Phanta.centers["plumber"] = {
   perishable_compat = false,
   calculate = function(self, card, context)
     if context.joker_main and card.ability.extra.current_xmult > 1 then
-      return {
-        xmult = card.ability.extra
-            .current_xmult
-      }
+      return { xmult = card.ability.extra.current_xmult }
     end
 
     if context.pre_discard and not context.blueprint then
       local text, disp_text = G.FUNCS.get_poker_hand_info(G.hand.highlighted)
       if text == "Flush" then
         card.ability.extra.current_xmult = card.ability.extra.current_xmult + card.ability.extra.added_xmult
-        card_eval_status_text(context.blueprint_card or card, 'extra', nil, nil, nil,
+        card_eval_status_text(card, 'extra', nil, nil, nil,
           { message = localize('k_upgrade_ex') })
       end
     end
@@ -3917,7 +3892,7 @@ G.Phanta.centers["thespear"] = {
       end
       if #spade_cards > 0 then
         pseudorandom_element(spade_cards, pseudoseed("thespear")).phanta_weapon_marked_for_death = true
-        card_eval_status_text(context.blueprint_card or card, 'extra', nil, nil, nil,
+        card_eval_status_text(card, 'extra', nil, nil, nil,
           { message = localize('k_upgrade_ex') })
         update_hand_text({ sound = 'button', volume = 0.7, pitch = 0.8, delay = 0.3 },
           {
@@ -3932,8 +3907,7 @@ G.Phanta.centers["thespear"] = {
           {
             handname = context.scoring_name,
             chips = G.GAME.hands[context.scoring_name].chips,
-            mult = G.GAME.hands
-                [context.scoring_name].mult,
+            mult = G.GAME.hands[context.scoring_name].mult,
             level = G.GAME.hands[context.scoring_name].level
           })
       end
@@ -4023,7 +3997,7 @@ G.Phanta.centers["themace"] = {
 }
 
 G.Phanta.centers["thedagger"] = {
-  config = { extra = { added_mult = 3, current_mult = 0 } },
+  config = { extra = { added_mult = 2, current_mult = 0 } },
   rarity = 3,
   atlas = 'Phanta',
   pos = { x = 3, y = 6 },
@@ -4188,14 +4162,14 @@ G.Phanta.centers["selfportrait"] = {
       }
     end
 
-    if context.buying_card and context.card.config.center.set == "Joker" and card.ability.extra.current_rounds >= card.ability.extra.rounds_required then
+    if context.buying_card and context.card.config.center.set == "Joker" and card.ability.extra.current_rounds >= card.ability.extra.rounds_required and not context.blueprint then
       --[[ocal eval = function(card)
         return (card.ability.extra.current_rounds == card.ability.extra.rounds_required) and
             not G.RESET_JIGGLES
       end
       juice_card_until(card, eval, true)]] --
       if #G.jokers.cards <= G.jokers.config.card_limit then
-        card_eval_status_text(context.blueprint_card or card, 'extra', nil, nil, nil,
+        card_eval_status_text(card, 'extra', nil, nil, nil,
           { message = localize('k_duplicated_ex') })
         local new_card = copy_card(context.card, nil, nil, nil, context.card.edition and context.card.edition.negative)
         card.ability.extra.current_rounds = 0
@@ -4223,7 +4197,7 @@ G.Phanta.centers["selfportrait"] = {
         new_card:add_to_deck()
         G.jokers:emplace(new_card)
       else
-        card_eval_status_text(context.blueprint_card or card, 'extra', nil, nil, nil,
+        card_eval_status_text(card, 'extra', nil, nil, nil,
           { message = localize('k_no_room_ex') })
       end
     end
@@ -4394,7 +4368,7 @@ G.Phanta.centers["yorickssoul"] = {
       return { xmult = card.ability.extra.current_xmult }
     end
 
-    if context.end_of_round and not context.individual and not context.repetition and G.GAME.current_round.discards_left > 0 then
+    if context.end_of_round and not context.individual and not context.repetition and G.GAME.current_round.discards_left > 0 and not context.blueprint then
       card.ability.extra.current_xmult = card.ability.extra.current_xmult - card.ability.extra.lost_xmult
       if card.ability.extra.current_xmult <= 1 then
         G.E_MANAGER:add_event(Event({
@@ -4450,7 +4424,7 @@ G.Phanta.centers["chicotssoul"] = {
       return { xmult = card.ability.extra.current_xmult }
     end
 
-    if context.before and G.GAME.current_round.hands_played == 1 then
+    if context.before and G.GAME.current_round.hands_played == 1 and not context.blueprint then
       card.ability.extra.current_xmult = card.ability.extra.current_xmult - card.ability.extra.lost_xmult
       if card.ability.extra.current_xmult <= 1 then
         G.E_MANAGER:add_event(Event({
@@ -4506,7 +4480,7 @@ G.Phanta.centers["perkeossoul"] = {
       return { xmult = card.ability.extra.current_xmult }
     end
 
-    if context.end_of_round and not context.individual and not context.repetition and count_consumables() < G.consumeables.config.card_limit then
+    if context.end_of_round and not context.individual and not context.repetition and count_consumables() < G.consumeables.config.card_limit and not context.blueprint then
       card.ability.extra.current_xmult = card.ability.extra.current_xmult - card.ability.extra.lost_xmult
       if card.ability.extra.current_xmult <= 1 then
         G.E_MANAGER:add_event(Event({
@@ -4568,29 +4542,21 @@ G.Phanta.centers["spectretile"] = {
     return { vars = { num, denom } }
   end,
   calculate = function(self, card, context)
-    if context.buying_card and context.card.config.center.set == "Joker" and SMODS.pseudorandom_probability(card, "spectretile", 1, card.ability.extra.odds) and count_consumables() < G.consumeables.config.card_limit then
+    if context.buying_card and context.card.config.center.set == "Joker" and context.card ~= card and SMODS.pseudorandom_probability(card, "spectretile", 1, card.ability.extra.odds) and count_consumables() < G.consumeables.config.card_limit then
       G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
-      local _card = card
+      play_sound('timpani')
       G.E_MANAGER:add_event(Event({
+        delay = 0.3,
+        blockable = false,
         func = function()
-          play_sound('timpani')
-          G.E_MANAGER:add_event(Event({
-            delay = 0.3,
-            blockable = false,
-            func = function()
-              local new_card = create_card("Spectral", G.consumables, nil, nil, nil, nil)
-              new_card:add_to_deck()
-              G.consumeables:emplace(new_card)
-              return true
-            end
-          }))
+          local new_card = create_card("Spectral", G.consumables, nil, nil, nil, nil)
+          new_card:add_to_deck()
+          G.consumeables:emplace(new_card)
           return true
         end
       }))
-      card_eval_status_text(_card, 'extra', nil, nil, nil,
-        { message = localize('k_plus_spectral'), colour = G.C.SECONDARY_SET.Spectral })
-      return true
     end
+    return { message = localize('k_plus_spectral'), colour = G.C.SECONDARY_SET.Spectral }
   end,
   pronouns = "she_her"
 }
@@ -4615,7 +4581,7 @@ G.Phanta.centers["possession"] = {
     return { vars = { num, denom } }
   end,
   calculate = function(self, card, context)
-    if context.buying_card and context.card.config.center.set == "Joker" and not context.card.edition and SMODS.pseudorandom_probability(card, "possession", 1, card.ability.extra.odds) then
+    if context.buying_card and context.card.config.center.set == "Joker" and context.card ~= card and not context.card.edition and SMODS.pseudorandom_probability(card, "possession", 1, card.ability.extra.odds) then
       G.E_MANAGER:add_event(Event({
         func = function()
           context.card:set_edition { negative = true }

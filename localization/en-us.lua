@@ -283,26 +283,24 @@ return {
             e_phanta_drilled = {
                 name = "Drilled",
                 text = {
-                    "{C:attention}+#1#{} consumable slot",
+                    "{C:attention}+1{} consumable slot",
                 }
             },
             e_phanta_drilled_playingcard = {
                 name = "Drilled",
                 text = {
-                    "{C:chips}+#1#{} Chips,",
-                    "{C:mult}+#2#{} Mult"
+                    "{C:chips}+#1#{} Chips, {C:mult}+#2#{} Mult"
                 }
             },
             e_phanta_drilled_showcase = {
                 name = "Drilled",
                 text = {
                     {
-                        "{C:chips}+#1#{} Chips,",
-                        "{C:mult}+#2#{} Mult",
+                        "{C:chips}+#1#{} Chips, {C:mult}+#2#{} Mult",
                         "{s:0.9}when on playing cards{}"
                     },
                     {
-                        "{C:attention}+#3#{} consumable slot",
+                        "{C:attention}+1{} consumable slot",
                         "{s:0.9}on anything else{}"
                     }
                 },
@@ -1229,7 +1227,7 @@ return {
                 text = {
                     "Creates the {C:planet}Planet{} card",
                     "for hands that contain",
-                    "exactly #1# {C:attention}Aces{}",
+                    "at least #1# {C:attention}Aces{}",
                     "{C:inactive}(Must have room){}"
                 }
             },
@@ -3188,7 +3186,7 @@ return {
                 text = {
                     "Creates {C:attention}#1#{} copy of",
                     "{C:attention}1{} selected card",
-                    "in your hand",
+                    "in your hand"
                 }
             },
             c_phanta_plum_blossom_chaff_b = {
@@ -3196,15 +3194,15 @@ return {
                 text = {
                     "Creates {C:attention}#1#{} copy of",
                     "{C:attention}1{} selected card",
-                    "in your hand",
+                    "in your hand"
                 }
             },
             c_phanta_plum_blossom_ribbon = {
                 name = "Plum Blossom Poetry Ribbon",
                 text = {
-                    "Creates {C:attention}#1#{} copies of",
-                    "{C:attention}1{} selected card",
-                    "in your hand",
+                    "Select exactly {C:attention}#1#{} cards,",
+                    "creates {C:attention}#2#{} copy of",
+                    "both selected cards"
                 }
             },
             c_phanta_plum_blossom_bush_warbler = {
@@ -3212,7 +3210,7 @@ return {
                 text = {
                     "Creates {C:attention}#1#{} copies of",
                     "{C:attention}1{} selected card",
-                    "in your hand",
+                    "in your hand"
                 }
             },
 
@@ -3338,7 +3336,7 @@ return {
             c_phanta_peony_butterflies = {
                 name = "Butterflies",
                 text = {
-                    "Adds a {C:red}Red Seal{} to",
+                    "Adds a {C:red}random seal{} to",
                     "up to {C:attention}#1#{} selected",
                     "cards in your hand"
                 }
@@ -3862,7 +3860,7 @@ return {
                 name = "Pirate Pack",
                 text = {
                     "Contains:",
-                    "3 {C:attention}Lucky{} Jack of Spades",
+                    "2 {C:attention}Lucky{} Jack of Spades",
                     "1 {C:attention}Gold{} Ace of Diamonds",
                     "1 {C:attention}Steel{} King of Spades"
                 }
@@ -3896,7 +3894,7 @@ return {
                 text = {
                     "Contains:",
                     "3 {C:attention}Ghost{} cards",
-                    "1 {C:attention}Ghost{} seal card"
+                    "1 random {C:attention}Ace{}"
                 }
             },
             c_phanta_potmakerpack = {
@@ -3998,7 +3996,7 @@ return {
             phanta_set = "SET",
             phanta_profile_more_tooltip = {
                 "Charm, Meteor and Ethereal Tags",
-                "cost $16 each"
+                "cost $20 each"
             },
             phanta_deathnote_more_tooltip = {
                 "Enter the name of a card.",
@@ -4044,6 +4042,13 @@ return {
             k_phanta_eights = "8s",
             k_phanta_nines = "9s",
             k_phanta_queens = "Queens",
+
+
+
+            phanta_chaff_badge = "Chaff",
+            phanta_ribbon_badge = "Ribbon",
+            phanta_animal_badge = "Animal",
+            phanta_bright_badge = "Bright",
 
 
 

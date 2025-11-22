@@ -236,30 +236,32 @@ SMODS.Consumable {
   key = "plum_blossom_ribbon",
   pos = { x = 1, y = 1 },
   atlas = hanafuda_atlas,
-  config = { phanta_ribbon = true, max_highlighted = 1, extra = { copies = 2 } },
+  config = { phanta_ribbon = true, max_highlighted = 2, min_highlighted = 2, extra = { copies = 1 } },
   loc_vars = function(self, info_queue, card)
-    return { vars = { card.ability.extra.copies } }
+    return { vars = { card.ability.max_highlighted, card.ability.extra.copies } }
   end,
   use = function(self, card, area, copier)
-    G.E_MANAGER:add_event(Event({
-      func = function()
-        local _first_dissolve = nil
-        local new_cards = {}
-        for i = 1, card.ability.extra.copies do
-          G.playing_card = (G.playing_card and G.playing_card + 1) or 1
-          local new_card = copy_card(G.hand.highlighted[1], nil, nil, G.playing_card)
-          new_card:add_to_deck()
-          G.deck.config.card_limit = G.deck.config.card_limit + 1
-          table.insert(G.playing_cards, new_card)
-          G.hand:emplace(new_card)
-          new_card:start_materialize(nil, _first_dissolve)
-          _first_dissolve = true
-          new_cards[#new_cards + 1] = new_card
+    for _, v in ipairs(G.hand.highlighted) do
+      G.E_MANAGER:add_event(Event({
+        func = function()
+          local _first_dissolve = nil
+          local new_cards = {}
+          for i = 1, card.ability.extra.copies do
+            G.playing_card = (G.playing_card and G.playing_card + 1) or 1
+            local new_card = copy_card(v, nil, nil, G.playing_card)
+            new_card:add_to_deck()
+            G.deck.config.card_limit = G.deck.config.card_limit + 1
+            table.insert(G.playing_cards, new_card)
+            G.hand:emplace(new_card)
+            new_card:start_materialize(nil, _first_dissolve)
+            _first_dissolve = true
+            new_cards[#new_cards + 1] = new_card
+          end
+          playing_card_joker_effects(new_cards)
+          return true
         end
-        playing_card_joker_effects(new_cards)
-        return true
-      end
-    }))
+      }))
+    end
   end
 }
 
@@ -268,7 +270,7 @@ SMODS.Consumable {
   key = "plum_blossom_bush_warbler",
   pos = { x = 1, y = 0 },
   atlas = hanafuda_atlas,
-  config = { phanta_animal = true, max_highlighted = 1, extra = { copies = 3 } },
+  config = { phanta_animal = true, max_highlighted = 1, extra = { copies = 2 } },
   loc_vars = function(self, info_queue, card)
     return { vars = { card.ability.extra.copies } }
   end,
@@ -568,7 +570,7 @@ SMODS.Consumable {
   key = "wisteria_cuckoo",
   pos = { x = 3, y = 0 },
   atlas = hanafuda_atlas,
-  config = { phanta_animal = true, max_highlighted = 5 },
+  config = { phanta_animal = true, max_highlighted = 4 },
   loc_vars = function(self, info_queue, card)
     return { vars = { card.ability.max_highlighted } }
   end,
@@ -698,7 +700,7 @@ SMODS.Consumable {
   key = "iris_eight_plank_bridge",
   pos = { x = 4, y = 0 },
   atlas = hanafuda_atlas,
-  config = { phanta_bright = true, extra = { lost_money = 10 } },
+  config = { phanta_animal = true, extra = { lost_money = 10 } },
   loc_vars = function(self, info_queue, card)
     return { vars = { card.ability.extra.lost_money } }
   end,
@@ -859,7 +861,7 @@ SMODS.Consumable {
         trigger = 'after',
         delay = 0.2,
         func = function()
-          G.hand.highlighted[i]:set_seal("Red", nil, true)
+          G.hand.highlighted[i]:set_seal(SMODS.poll_seal({ key = "peony_butterflies", guaranteed = true }), nil, true)
           return true
         end
       }))
@@ -2050,7 +2052,7 @@ SMODS.Consumable {
   key = "paulownia_phoenix",
   pos = { x = 11, y = 0 },
   atlas = hanafuda_atlas,
-  config = { phanta_bright = true, extra = { sell_value = 5 } },
+  config = { phanta_bright = true, extra = { sell_value = 4 } },
   loc_vars = function(self, info_queue, card)
     return { vars = { card.ability.extra.sell_value } }
   end,
@@ -2096,37 +2098,54 @@ SMODS.Consumable {
 
 
 
+function check_for_created_hanafuda_validity(v, type)
+  if v.set == "phanta_Hanafuda" and v.config and v.config[type] then
+    local add = true
 
+    if G.GAME.used_jokers[v.key] then
+      add = false
+    end
+
+    if v.yes_pool_flag and not G.GAME.pool_flags[v.yes_pool_flag] then
+      add = false
+    end
+
+    if v.no_pool_flag and G.GAME.pool_flags[v.no_pool_flag] then
+      add = false
+    end
+
+    return add
+  end
+end
 
 function phanta_create_hanafuda_chaff(key, skip_materialise)
   local chaffs = {}
   for k, v in pairs(G.P_CENTERS) do
-    if v.set == "phanta_Hanafuda" and v.config and v.config.phanta_chaff then chaffs[#chaffs + 1] = k end
+    if check_for_created_hanafuda_validity(v, "phanta_chaff") then chaffs[#chaffs + 1] = k end
   end
 
   return create_card('phanta_Hanafuda', G.consumeables, nil, nil, skip_materialise, nil,
-  pseudorandom_element(chaffs, pseudoseed(key)),
-    key)
+    #chaffs > 0 and pseudorandom_element(chaffs, pseudoseed(key)) or "c_phanta_pine_chaff_a", key)
 end
 
 function phanta_create_hanafuda_ribbon(key, skip_materialise)
   local ribbons = {}
   for k, v in pairs(G.P_CENTERS) do
-    if v.set == "phanta_Hanafuda" and v.config and v.config.phanta_ribbon then ribbons[#ribbons + 1] = k end
+    if check_for_created_hanafuda_validity(v, "phanta_ribbon") then ribbons[#ribbons + 1] = k end
   end
 
   return create_card('phanta_Hanafuda', G.consumeables, nil, nil, skip_materialise, nil,
-    pseudorandom_element(ribbons, pseudoseed(key)), key)
+    #ribbons > 0 and pseudorandom_element(ribbons, pseudoseed(key)) or "c_phanta_pine_ribbon", key)
 end
 
 function phanta_create_hanafuda_animal(key, skip_materialise)
   local animals = {}
   for k, v in pairs(G.P_CENTERS) do
-    if v.set == "phanta_Hanafuda" and v.config and v.config.phanta_animal then animals[#animals + 1] = k end
+    if check_for_created_hanafuda_validity(v, "phanta_animal") then animals[#animals + 1] = k end
   end
 
   return create_card('phanta_Hanafuda', G.consumeables, nil, nil, skip_materialise, nil,
-    pseudorandom_element(animals, pseudoseed(key)), key)
+    #animals > 0 and pseudorandom_element(animals, pseudoseed(key)) or "c_phanta_plum_blossom_bush_warbler", key)
 end
 
 function phanta_create_hanafuda_ribbon_animal(key, skip_materialise)
@@ -2140,9 +2159,41 @@ end
 function phanta_create_hanafuda_bright(key, skip_materialise)
   local brights = {}
   for k, v in pairs(G.P_CENTERS) do
-    if v.set == "phanta_Hanafuda" and v.config and v.config.phanta_bright then brights[#brights + 1] = k end
+    if check_for_created_hanafuda_validity(v, "phanta_bright") then brights[#brights + 1] = k end
   end
 
   return create_card('phanta_Hanafuda', G.consumeables, nil, nil, skip_materialise, nil,
-    pseudorandom_element(brights, pseudoseed(key)), key)
+    #brights > 0 and pseudorandom_element(brights, pseudoseed(key)) or "c_phanta_pine_crane", key)
+end
+
+local ref = Game.main_menu
+function Game:main_menu(change_context)
+  for k, v in pairs(G.P_CENTERS) do
+    if v.config and type(v.config) == "table" then
+      if v.config.phanta_chaff then
+        v.set_badges = function(self, card, badges)
+          badges[#badges + 1] = create_badge(localize('phanta_chaff_badge'), G.C.PHANTA.HanafudaAlt, G.C.WHITE, 1)
+        end
+      end
+
+      if v.config.phanta_ribbon then
+        v.set_badges = function(self, card, badges)
+          badges[#badges + 1] = create_badge(localize('phanta_ribbon_badge'), G.C.PHANTA.HanafudaAlt, G.C.WHITE, 1)
+        end
+      end
+
+      if v.config.phanta_animal then
+        v.set_badges = function(self, card, badges)
+          badges[#badges + 1] = create_badge(localize('phanta_animal_badge'), G.C.PHANTA.HanafudaAlt, G.C.WHITE, 1)
+        end
+      end
+
+      if v.config.phanta_bright then
+        v.set_badges = function(self, card, badges)
+          badges[#badges + 1] = create_badge(localize('phanta_bright_badge'), G.C.PHANTA.HanafudaAlt, G.C.WHITE, 1)
+        end
+      end
+    end
+  end
+  ref(self, change_context)
 end
