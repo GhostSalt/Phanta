@@ -1295,7 +1295,7 @@ G.Phanta.centers["distance"] = {
 }
 
 G.Phanta.centers["donpaolo"] = {
-  config = { extra = { levels = 1 } },
+  config = { extra = { levels = 2 } },
   rarity = 2,
   atlas = 'PhantaLaytonAnims',
   pos = { x = 0, y = 2 },
@@ -1343,6 +1343,7 @@ SMODS.Sound({
 })
 
 G.Phanta.centers["futureluke"] = {
+  config = { extra = { max_highlighted = 2 } },
   rarity = 2,
   atlas = 'PhantaLaytonAnims',
   pos = { x = 0, y = 3 },
@@ -1358,68 +1359,75 @@ G.Phanta.centers["futureluke"] = {
     { x = 2, y = 3, t = 0.1 }, { x = 1, y = 3, t = 0.3 },
   },
   cost = 6,
+  loc_vars = function(self, info_queue, card)
+    return { vars = { card.ability.extra.max_highlighted } }
+  end,
   blueprint_compat = false,
   eternal_compat = true,
   perishable_compat = true,
   calculate = function(self, card, context)
-    if context.selling_card and context.card.config.center.set == "Planet" and #G.hand.highlighted == 1 and not context.blueprint then
+    if context.selling_card and context.card.config.center.set == "Planet" and #G.hand.highlighted <= card.ability.extra.max_highlighted and #G.hand.highlighted > 0 and not context.blueprint then
       G.E_MANAGER:add_event(Event({
         func = function()
-          if #G.hand.highlighted == 1 then
+          if #G.hand.highlighted > 0 then
             card:juice_up()
           end
           return true
         end
       }))
-      G.E_MANAGER:add_event(Event({
-        trigger = 'after',
-        delay = 0.15,
-        func = function()
-          if #G.hand.highlighted == 1 then
-            G.hand.highlighted[1]:flip()
-            play_sound('card1', 1)
-            G.hand.highlighted[1]:juice_up(0.3, 0.3)
+      for i = 1, #G.hand.highlighted do
+        local percent = 1.15 - (i - 0.999) / (#G.hand.highlighted - 0.998) * 0.3
+        G.E_MANAGER:add_event(Event({
+          trigger = 'after',
+          delay = 0.15,
+          func = function()
+            if #G.hand.highlighted > 0 then -- This needs to be here in case of duplicates.
+              G.hand.highlighted[i]:flip()
+              play_sound('card1', percent)
+              G.hand.highlighted[i]:juice_up(0.3, 0.3)
+            end
+            return true
           end
-          return true
-        end
-      }))
+        }))
+      end
       delay(0.2)
       G.E_MANAGER:add_event(Event({
         trigger = 'after',
         delay = 0.1,
         func = function()
-          if #G.hand.highlighted == 1 then
-            G.hand.highlighted[1]:set_ability(SMODS.poll_enhancement { guaranteed = true })
+          for i = 1, #G.hand.highlighted do
+            G.hand.highlighted[i]:set_ability(SMODS.poll_enhancement { guaranteed = true })
           end
           return true
         end
       }))
-      G.E_MANAGER:add_event(Event({
-        trigger = 'after',
-        delay = 0.15,
-        func = function()
-          if #G.hand.highlighted == 1 then
-            G.hand.highlighted[1]:flip()
-            play_sound('tarot2', 1, 0.6)
-            G.hand.highlighted[1]:juice_up(0.3, 0.3)
+      for i = 1, #G.hand.highlighted do
+        local percent = 0.85 + (i - 0.999) / (#G.hand.highlighted - 0.998) * 0.3
+        G.E_MANAGER:add_event(Event({
+          trigger = 'after',
+          delay = 0.15,
+          func = function()
+            if #G.hand.highlighted > 0 then
+              G.hand.highlighted[i]:flip()
+              play_sound('tarot2', percent, 0.6)
+              G.hand.highlighted[i]:juice_up(0.3, 0.3)
+            end
+            return true
           end
-          return true
-        end
-      }))
+        }))
+      end
       G.E_MANAGER:add_event(Event({
         trigger = 'after',
         delay = 0.2,
         func = function()
-          if #G.hand.highlighted == 1 then
-            G.hand:unhighlight_all()
-          end
+          G.hand:unhighlight_all()
           return true
         end
       }))
     end
 
     if context.selling_self and not context.blueprint then
-      play_sound("phanta_future_luke_sold", 1, 0.5)
+      play_sound("phanta_future_luke_sold", 1, 0.8)
     end
   end,
   pronouns = "he_him"
@@ -1542,10 +1550,10 @@ end
 
 G.Phanta.centers["zero"] = {
   config = { extra = { sum = 9 } },
-  rarity = 2,
+  rarity = 3,
   atlas = 'Phanta2',
   pos = { x = 9, y = 2 },
-  cost = 6,
+  cost = 9,
   blueprint_compat = false,
   eternal_compat = true,
   perishable_compat = true,
@@ -1567,10 +1575,10 @@ G.Phanta.centers["zero"] = {
 
 G.Phanta.centers["zeroii"] = {
   config = { extra = { odds = 3 } },
-  rarity = 2,
+  rarity = 3,
   atlas = 'Phanta2',
   pos = { x = 1, y = 1 },
-  cost = 6,
+  cost = 9,
   blueprint_compat = true,
   eternal_compat = true,
   perishable_compat = true,
@@ -1588,10 +1596,10 @@ G.Phanta.centers["zeroii"] = {
 
 G.Phanta.centers["zeroiii"] = {
   config = { extra = { cards = 3 } },
-  rarity = 2,
+  rarity = 3,
   atlas = 'Phanta2',
   pos = { x = 9, y = 3 },
-  cost = 6,
+  cost = 9,
   blueprint_compat = false,
   eternal_compat = true,
   perishable_compat = true,

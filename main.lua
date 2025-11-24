@@ -32,7 +32,7 @@ G.Phanta.thetrick_supported_planets = {
   "c_planet_x",
   "c_ceres",
   "c_eris",
-  "c_phanta_junk"
+  "c_phanta_rubbish"
 }
 
 local loc_colour_ref = loc_colour

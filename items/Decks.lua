@@ -77,7 +77,7 @@ SMODS.Back {
   end,
   calculate = function(self, back, context)
     if context.individual and context.cardarea == "unscored" then
-      SMODS.calculate_effect({ dollars = self.config.extra.given_money }, context.other_card)
+      return { dollars = self.config.extra.given_money, message_card = context.other_card }
     end
   end
 }

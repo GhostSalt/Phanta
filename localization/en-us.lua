@@ -1648,17 +1648,17 @@ return {
                 name = 'Don Paolo',
                 text = {
                     "Upgrades a {C:attention}random{}",
-                    "{C:attention}hand{} by {C:attention}#1#{} level when",
+                    "{C:attention}hand{} by {C:attention}#1#{} levels when",
                     "selling a {C:tarot}Tarot{} card"
                 }
             },
             j_phanta_futureluke            = {
                 name = 'Future Luke',
                 text = {
-                    "If a {C:attention}single{} card",
-                    "is selected, sell a",
-                    "{C:planet}Planet{} card to give it",
-                    "a {C:attention}random enhancement{}"
+                    "If up to {C:attention}2{} cards are",
+                    "selected, sell a {C:planet}Planet{}",
+                    "card to give them",
+                    "{C:attention}random enhancements{}"
                 }
             },
             j_phanta_barton                = {
