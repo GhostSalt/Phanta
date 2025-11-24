@@ -590,9 +590,9 @@ return {
                 name = 'Q',
                 text = {
                     "If played hand contains",
-                    "at least {C:attention}2 Queens{},",
-                    "the first 2 give {C:white,X:mult}X#1#{}",
-                    "Mult when scored"
+                    "at least {C:attention}2 Queens{}, the",
+                    "{C:attention}leftmost{} 2 Queens give",
+                    "{C:white,X:mult}X#1#{} Mult when scored"
                 }
             },
             j_phanta_diana                 = {
@@ -953,8 +953,9 @@ return {
                 name = 'Psyche-Lock',
                 text = {
                     "Gives {C:white,X:mult}X#1#{} Mult",
-                    "for each {C:attention}9{}",
-                    "in played hand"
+                    "for each {C:attention}9{} in",
+                    "played hand",
+                    "{C:inactive}(Starts at {C:white,X:mult}X1{C:inactive} Mult){}"
                 }
             },
             j_phanta_milesedgeworth        = {

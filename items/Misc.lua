@@ -5,8 +5,8 @@ local sell_use_ref = G.UIDEF.use_and_sell_buttons
 function G.UIDEF.use_and_sell_buttons(card)
   if not card or ((not card.config or not card.config.center
           or (card.config.center.key ~= "j_phanta_profile" and card.config.center.key ~= "j_phanta_modping" and card.config.center.key ~= "j_phanta_deathnote"))
-        and (not card.ability or card.ability.set ~= "phanta_Zodiac")
-        and (not card.ability or not card.ability.perishable or card.ability.perish_tally ~= 0)) then
+        and not (card.ability and (card.ability.set == "phanta_Zodiac" or card.ability.set == "phanta_Birthstone"))
+        and not (card.ability and card.ability.perishable and card.ability.perish_tally ~= 0)) then
     return sell_use_ref(card, self)
   end
 

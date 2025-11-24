@@ -3407,6 +3407,7 @@ G.Phanta.centers["wavyjoker"] = {
                   new_card:add_to_deck()
                   G.consumeables:emplace(new_card)
                   new_card:juice_up(0.3, 0.5)
+                  return true
                 end
               }))
             end
@@ -4555,8 +4556,8 @@ G.Phanta.centers["spectretile"] = {
           return true
         end
       }))
+      return { message = localize('k_plus_spectral'), colour = G.C.SECONDARY_SET.Spectral }
     end
-    return { message = localize('k_plus_spectral'), colour = G.C.SECONDARY_SET.Spectral }
   end,
   pronouns = "she_her"
 }
