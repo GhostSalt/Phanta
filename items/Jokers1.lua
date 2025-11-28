@@ -2177,7 +2177,7 @@ G.Phanta.centers["candle"] = {
 
     if context.setting_blind and not context.blueprint and not card.getting_sliced then
       local destructable_tarot = {}
-      for i = 1, count_consumables() do
+      for i = 1, #G.consumeables.cards do
         if G.consumeables.cards[i].ability.set == "Tarot" and not G.consumeables.cards[i].getting_sliced and not G.consumeables.cards[i].ability.eternal then
           destructable_tarot[#destructable_tarot + 1] = G.consumeables.cards[i]
         end
