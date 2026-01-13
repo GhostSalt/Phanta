@@ -276,12 +276,57 @@ function get_new_boss()
 end
 
 SMODS.Back {
+  key = 'thebel',
+  atlas = 'Decks',
+  pos = { x = 4, y = 4 },
+  phanta_deck_shader = "booster",
+  apply = function(self, back)
+    delay(0.4)
+    G.E_MANAGER:add_event(Event({
+      func = function()
+        SMODS.add_card({ key = "c_moon", edition = "e_negative" })
+        SMODS.add_card({ key = "c_justice", edition = "e_negative" })
+        SMODS.add_card({ key = "c_death", edition = "e_negative" })
+        return true
+      end
+    }))
+  end
+}
+
+SMODS.Back {
+  key = 'rebel',
+  atlas = 'Decks',
+  pos = { x = 0, y = 5 },
+  calculate = function(self, back, context)
+    if context.individual and context.cardarea == G.play and context.other_card:get_id() == 14 and context.other_card:is_suit("Hearts") and count_consumables() < G.consumeables.config.card_limit then
+      return {
+        extra = {
+          focus = context.other_card,
+          message = localize('k_plus_tarot'),
+          func = function()
+            G.E_MANAGER:add_event(Event({
+              trigger = 'before',
+              delay = 0.0,
+              func = function()
+                play_sound("timpani")
+                local new_card = SMODS.add_card({ set = "Tarot", key_append = "rebeldeck" })
+                return true
+              end
+            }))
+          end
+        },
+        colour = G.C.PURPLE,
+        card = context.other_card
+      }
+    end
+  end
+}
+
+SMODS.Back {
   key = 'retired',
   atlas = 'Decks',
   pos = { x = 1, y = 4 },
-  draw = function(self, back, layer)
-    back.children.center:draw_shader('drilled', nil, back.ARGS.send_to_shader)
-  end,
+  phanta_deck_shader = "phanta_drilled",
   apply = function(self, back)
     G.E_MANAGER:add_event(Event({
       func = function()
@@ -300,6 +345,7 @@ SMODS.Back {
   key = 'bee',
   atlas = 'Decks',
   pos = { x = 2, y = 4 },
+  phanta_deck_shader = "phanta_waxed",
   apply = function(self, back)
     G.E_MANAGER:add_event(Event({
       func = function()

@@ -145,12 +145,28 @@ function count_common_jokers()
   end
 end
 
-function count_consumables()
+function count_consumables(args)
+  local count = 0
+
   if G.consumeables.get_total_count then
-    return G.consumeables:get_total_count()
+    count = G.consumeables:get_total_count()
   else
-    return #G.consumeables.cards + G.GAME.consumeable_buffer
+    count = #G.consumeables.cards + G.GAME.consumeable_buffer
   end
+
+
+  if SMODS.find_mod('GSCatan') and args and args.ignore_catan then
+    for _, v in ipairs(G.consumeables.cards) do
+      if v.config.center.set == "catan_Resource"
+          or v.config.center.set == "catan_Building"
+          or v.config.center.set == "catan_DevelopmentCard" then
+        count = count - 1
+      end
+    end
+  end
+
+  if count < 0 then count = 0 end
+  return count
 end
 
 function find_consumable(key)
@@ -962,8 +978,61 @@ SMODS.DrawStep {
       end
     end
   end,
-  conditions = { vortex = false, facing = 'front' },
+  conditions = { vortex = false, facing = 'front' }
 }
+
+
+SMODS.DrawStep:take_ownership("back", {
+  func = function(self)
+    if self.children.back then
+      local cback = self.params.galdur_back or (not self.params.viewed_back and G.GAME.selected_back) or
+          (self.params.viewed_back and G.GAME.viewed_back)
+      if not (cback and cback.effect.center.key == "b_phanta_retired") then
+        local overlay = G.C.WHITE
+        if self.area and self.area.config.type == 'deck' and self.rank > 3 then
+          self.back_overlay = self.back_overlay or {}
+          self.back_overlay[1] = 0.5 + ((#self.area.cards - self.rank) % 7) / 50
+          self.back_overlay[2] = 0.5 + ((#self.area.cards - self.rank) % 7) / 50
+          self.back_overlay[3] = 0.5 + ((#self.area.cards - self.rank) % 7) / 50
+          self.back_overlay[4] = 1
+          overlay = self.back_overlay
+        end
+
+        if self.area and self.area.config.type == 'deck' then
+          self.children.back:draw(overlay)
+        else
+          self.children.back:draw_shader('dissolve')
+        end
+      end
+    end
+  end,
+}, true)
+
+-- Stolen from Hot Potato, which itself got this from TMD.
+SMODS.DrawStep {
+  key = 'deck_shader',
+  order = 5,
+  func = function(self)
+    if self.children.back then
+      local cback = self.params.galdur_back or (not self.params.viewed_back and G.GAME.selected_back) or
+          (self.params.viewed_back and G.GAME.viewed_back)
+      if cback then
+        local shader = nil
+        if cback.effect.center.phanta_deck_shader then shader = cback.effect.center.phanta_deck_shader end
+
+        if (shader and (self.config.center.set ~= "Sleeve"))
+            and ((self.area and not self.area.config.stake_select and not self.area.config.stake_chips) or not self.area) then
+          local t = (self.area and self.area.config.type == "deck") or self.config.center.set == "Back"
+          if t and not self.states.drag.is then self.ARGS.send_to_shader = { 1.0, self.ARGS.send_to_shader[2] } end
+
+          self.children.back:draw_shader(shader, nil, self.ARGS.send_to_shader, t, self.children.center, 0, 0)
+        end
+      end
+    end
+  end,
+  conditions = { vortex = false, facing = 'back' }
+}
+
 
 SMODS.DrawStep {
   key = 'shiny_soul',
@@ -982,7 +1051,7 @@ SMODS.DrawStep {
       end
     end
   end,
-  conditions = { vortex = false, facing = 'front' },
+  conditions = { vortex = false, facing = 'front' }
 }
 
 

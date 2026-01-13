@@ -773,9 +773,9 @@ G.Phanta.centers["smilingimp"] = {
 }
 
 G.Phanta.centers["coldjoker"] = {
-  config = { extra = { planets = 2 } },
+  config = { extra = { added_chips = 10, current_chips = 0 } },
   loc_vars = function(self, info_queue, card)
-    return { vars = { card.ability.extra.planets } }
+    return { vars = { card.ability.extra.added_chips, card.ability.extra.current_chips } }
   end,
   rarity = 1,
   atlas = 'PhantaMiscAnims6',
@@ -822,26 +822,13 @@ G.Phanta.centers["coldjoker"] = {
   cost = 5,
   blueprint_compat = true,
   eternal_compat = true,
-  perishable_compat = true,
+  perishable_compat = false,
   calculate = function(self, card, context)
-    if context.cardarea == G.jokers and context.before and G.GAME.current_round.hands_left == 0 and count_consumables() < G.consumeables.config.card_limit then
-      local no_of_planets = math.min(G.consumeables.config.card_limit - count_consumables(), card.ability.extra.planets)
-      G.E_MANAGER:add_event(Event({
-        func = function()
-          play_sound("timpani")
+    if context.joker_main and card.ability.extra.current_chips > 0 then return { chips = card.ability.extra.current_chips } end
 
-          for i = 1, card.ability.extra.planets do
-            if count_consumables() < G.consumeables.config.card_limit then
-              local new_card = create_card("Planet", G.consumables, nil, nil, nil, nil)
-              new_card:add_to_deck()
-              G.consumeables:emplace(new_card)
-              new_card:juice_up(0.3, 0.5)
-            end
-          end
-          return true
-        end
-      }))
-      return { message = localize { type = 'variable', key = no_of_planets == 1 and 'a_planet' or 'a_planets', vars = { no_of_planets } }, colour = G.C.SECONDARY_SET.Planet }
+    if context.end_of_round and not context.individual and not context.repetition and not context.blueprint and count_consumables({ignore_catan = true}) > 0 then
+      card.ability.extra.current_chips = card.ability.extra.current_chips + (card.ability.extra.added_chips * count_consumables({ignore_catan = true}))
+      return { message = localize("k_upgrade_ex"), colour = G.C.FILTER }
     end
   end,
   pronouns = "they_them"
