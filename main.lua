@@ -146,27 +146,24 @@ function count_common_jokers()
 end
 
 function count_consumables(args)
-  local count = 0
-
-  if G.consumeables.get_total_count then
-    count = G.consumeables:get_total_count()
-  else
-    count = #G.consumeables.cards + G.GAME.consumeable_buffer
-  end
 
 
   if SMODS.find_mod('GSCatan') and args and args.ignore_catan then
+    local count = 0
     for _, v in ipairs(G.consumeables.cards) do
-      if v.config.center.set == "catan_Resource"
-          or v.config.center.set == "catan_Building"
-          or v.config.center.set == "catan_DevelopmentCard" then
-        count = count - 1
+      if v.config.center.set ~= "catan_Resource"
+          and v.config.center.set ~= "catan_Building"
+          and v.config.center.set ~= "catan_DevelopmentCard" then
+        count = count + 1
       end
     end
   end
 
-  if count < 0 then count = 0 end
-  return count
+  if G.consumeables.get_total_count then
+    return G.consumeables:get_total_count()
+  else
+    return #G.consumeables.cards + G.GAME.consumeable_buffer
+  end
 end
 
 function find_consumable(key)
