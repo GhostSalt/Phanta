@@ -146,8 +146,6 @@ function count_common_jokers()
 end
 
 function count_consumables(args)
-
-
   if SMODS.find_mod('GSCatan') and args and args.ignore_catan then
     local count = 0
     for _, v in ipairs(G.consumeables.cards) do
@@ -157,6 +155,7 @@ function count_consumables(args)
         count = count + 1
       end
     end
+    return count
   end
 
   if G.consumeables.get_total_count then
