@@ -42,6 +42,7 @@ local joker_order = {
     "pottedpeashooter",
     "theriddler",
     "dougdimmadome",
+    "stampedjoker",
     "thetrick",
     "venndiagram",
     "88888888",

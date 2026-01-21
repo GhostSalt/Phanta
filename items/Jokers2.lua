@@ -2132,6 +2132,26 @@ G.Phanta.centers["thetrick"] = {
   pronouns = "he_they"
 }
 
+G.Phanta.centers["stampedjoker"] = {
+  rarity = 2,
+  atlas = 'Phanta2',
+  pos = { x = 11, y = 5 },
+  cost = 7,
+  blueprint_compat = false,
+  eternal_compat = true,
+  perishable_compat = true,
+  pronouns = "she_they"
+}
+
+SMODS.Booster:take_ownership_by_kind('Standard', {
+  create_card = function(self, card, i)
+    local _edition = poll_edition('standard_edition'..G.GAME.round_resets.ante, 2, true)
+    local _seal = SMODS.poll_seal({mod = 10, guaranteed = next(SMODS.find_card("j_phanta_stampedjoker")) and true})
+    return {set = (pseudorandom(pseudoseed('stdset'..G.GAME.round_resets.ante)) > 0.6) and "Enhanced" or "Base", edition = _edition, seal = _seal, area = G.pack_cards, skip_materialize = true, soulable = true, key_append = "sta"}
+  end,
+  loc_vars = pack_loc_vars,
+})
+
 G.Phanta.centers["doublingcube"] = {
   config = { extra = { xmult = 2 } },
   loc_vars = function(self, info_queue, card)

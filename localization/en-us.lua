@@ -1881,6 +1881,14 @@ return {
                     "{C:inactive}(Currently {C:white,X:mult}X#2#{C:inactive} Mult){}"
                 }
             },
+            j_phanta_stampedjoker               = {
+                name = "Stamped Joker",
+                text = {
+                    "All cards in {C:attention}Standard{}",
+                    "{C:attention}Packs{} are {C:green}guaranteed{}",
+                    "to have {C:attention}seals{}"
+                }
+            },
             j_phanta_thetrick               = {
                 name = "The Trick",
                 text = {

@@ -338,3 +338,13 @@ pattern = '''level_up_hand(used_tarot, self.ability.consumeable.hand_type)'''
 position = "at"
 payload = '''level_up_hand(used_tarot, self.ability.consumeable.hand_type, nil, count_tricks and (count_tricks(used_tarot) + 1))'''
 match_indent = true
+
+
+
+[[patches]]
+[patches.pattern]
+target = "card.lua"
+pattern = '''card:set_seal(SMODS.poll_seal({mod = 10}), true, true)'''
+position = "at"
+payload = '''card:set_seal(SMODS.poll_seal({mod = 10, guaranteed = next(SMODS.find_card("j_phanta_stampedjoker")) and true}), true, true) print("kjdfngdf")'''
+match_indent = true
