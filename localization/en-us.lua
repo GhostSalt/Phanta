@@ -1609,6 +1609,15 @@ return {
                     "with {C:clubs}Clubs{} suit"
                 }
             },
+            j_phanta_returnticket           = {
+                name = 'Return Ticket',
+                text = {
+                    "After {C:attention}#1#{} rounds, sell",
+                    "this card to create",
+                    "a free {C:attention}Polychrome Tag{}",
+                    "{C:inactive}(Currently {C:attention}#2#{C:inactive}/#1#)"
+                }
+            },
             j_phanta_fanta                  = {
                 name = 'Fanta',
                 text = {

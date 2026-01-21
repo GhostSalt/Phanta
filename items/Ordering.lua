@@ -56,6 +56,7 @@ local joker_order = {
     "animalinstinct",
     "coldjoker",
     "target",
+    "returnticket",
     "fanta",
     "sprinkles",
     "teastainedjoker",

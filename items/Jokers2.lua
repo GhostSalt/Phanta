@@ -1008,6 +1008,47 @@ G.Phanta.centers["temperedjoker"] = {
   pronouns = "they_them"
 }
 
+G.Phanta.centers["returnticket"] = {
+  config = { extra = { current_rounds = 0, rounds_required = 2 } },
+  loc_vars = function(self, info_queue, card)
+    info_queue[#info_queue + 1] = G.P_TAGS.tag_polychrome
+    return { vars = { card.ability.extra.rounds_required, card.ability.extra.current_rounds } }
+  end,
+  rarity = 1,
+  atlas = 'Phanta2',
+  pos = { x = 7, y = 5 },
+  cost = 6,
+  blueprint_compat = false,
+  eternal_compat = false,
+  perishable_compat = true,
+  calculate = function(self, card, context)
+    if context.selling_self and card.ability.extra.current_rounds >= card.ability.extra.rounds_required then
+      G.E_MANAGER:add_event(Event({
+        func = (function()
+          add_tag(Tag('tag_polychrome'))
+          play_sound('holo1', 1.2 + math.random() * 0.1, 0.4)
+          return true
+        end)
+      }))
+
+      return { message = localize { key = "tag_polychrome", type = "name_text", set = "Tag" }, colour = G.C.FILTER }
+    end
+
+    if context.end_of_round and not context.individual and not context.repetition and not context.blueprint then
+      card.ability.extra.current_rounds = card.ability.extra.current_rounds + 1
+      if card.ability.extra.current_rounds == card.ability.extra.rounds_required then
+        local eval = function(card) return not card.REMOVED end
+        juice_card_until(card, eval, true)
+      end
+      return {
+        message = (card.ability.extra.current_rounds < card.ability.extra.rounds_required) and
+            (card.ability.extra.current_rounds .. '/' .. card.ability.extra.rounds_required) or localize('k_active_ex')
+      }
+    end
+  end,
+  pronouns = "it_its"
+}
+
 G.Phanta.centers["fanta"] = {
   rarity = 1,
   atlas = 'Phanta2',
