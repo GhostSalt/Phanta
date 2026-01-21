@@ -302,3 +302,36 @@ G.Phanta.centers["granwyrm"] = {
   end,
   pronouns = "it_its"
 }
+
+G.Phanta.centers["lightyagami"] = {
+  unlocked = false,
+  config = { extra = { xmult = 2.5 } },
+  rarity = 4,
+  atlas = 'Phanta2',
+  pos = { x = 9, y = 5 },
+  soul_pos = {
+    x = 10,
+    y = 5
+  },
+  cost = 20,
+  loc_vars = function(self, info_queue, card)
+    info_queue[#info_queue + 1] = { key = "perishable", set = "Other", vars = { G.GAME.perishable_rounds, G.GAME.perishable_rounds } }
+    return { vars = { card.ability.extra.xmult } }
+  end,
+  blueprint_compat = true,
+  eternal_compat = true,
+  perishable_compat = true,
+  calculate = function(self, card, context)
+    if context.card_added and context.card.config.center.set == "Joker" and context.card ~= card
+        and context.card.config.center.perishable_compat and not (context.card.ability and context.card.ability.perishable) then
+      context.card:add_sticker("perishable", true)
+      card:juice_up()
+      return { message = localize("perishable", "labels"), colour = G.C.PERISHABLE }
+    end
+
+    if context.other_joker and context.other_joker ~= card and context.other_joker.ability and context.other_joker.ability.perishable then
+      return { xmult = card.ability.extra.xmult }
+    end
+  end,
+  pronouns = "he_him"
+}

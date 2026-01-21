@@ -17,6 +17,7 @@ local joker_order = {
     "holeinthejoker",
     "shootingstar",
     "puzzle",
+    "datacube",
     "onemanstrash",
     "anothermanstreasure",
     "oracle",
@@ -190,6 +191,7 @@ local joker_order = {
     "godoor",
     "fainfol",
     "granwyrm",
+    "lightyagami",
 }
 
 for i = 1, #joker_order do

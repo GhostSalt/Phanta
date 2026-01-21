@@ -1561,6 +1561,14 @@ return {
                     "selected {C:attention}deck{}"
                 }
             },
+            j_phanta_datacube            = {
+                name = 'Data Cube',
+                text = {
+                    "Earn {C:money}$#1#{} if played",
+                    "hand contains a {C:attention}#2#{},",
+                    "{s:0.8}rank changes at end of round{}"
+                }
+            },
             j_phanta_absentjoker            = {
                 name = 'Absent Joker',
                 text = {
@@ -2124,6 +2132,18 @@ return {
                     "{C:attention}#2#{} {C:inactive}[#3#]{} cards played",
                     "and {C:attention}unscored{}",
                     "{C:inactive}(Currently {C:white,X:mult}X#4#{C:inactive} Mult){}"
+                },
+                unlock = {
+                    "{E:1,s:1.3}?????{}",
+                }
+            },
+            j_phanta_lightyagami            = {
+                name = 'Light Yagami',
+                text = {
+                    "Obtained {C:attention}Jokers{}",
+                    "become {C:perishable}Perishable{}",
+                    "Other {C:perishable}Perishable{}",
+                    "{C:attention}Jokers{} give {C:white,X:mult}X#1#{} Mult"
                 },
                 unlock = {
                     "{E:1,s:1.3}?????{}",

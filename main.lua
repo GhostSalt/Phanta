@@ -47,7 +47,8 @@ function loc_colour(_c, default)
       copper_fresh = G.C.COPPER_FRESH,
       copper_exposed = G.C.COPPER_EXPOSED,
       copper_weathered = G.C.COPPER_WEATHERED,
-      copper_oxidised = G.C.COPPER_OXIDISED
+      copper_oxidised = G.C.COPPER_OXIDISED,
+      perishable = G.C.PERISHABLE
     }
 
     for k, v in pairs(new_colors) do
@@ -639,6 +640,7 @@ function Game:init_game_object()
   ret.current_round.fainfol_card = { suit = 'Spades' }
   ret.current_round.puzzle_card = { id = nil }
   ret.current_round.phanta_widget_suit = 'Clubs'
+  ret.current_round.datacube_card = { id = nil, value = nil }
   return ret
 end
 
@@ -820,6 +822,19 @@ function SMODS.current_mod.reset_game_globals(run_start)
       G.GAME.current_round.puzzle_card = { id = chosen_card:get_id() }
     end
   end
+
+  if not G.GAME.current_round.datacube_card then G.GAME.current_round.datacube_card = { id = 2, value = "2" } end
+  local valid_cards_datacube = {}
+  for i, j in ipairs(G.playing_cards) do
+    if not SMODS.has_no_rank(j) then
+      valid_cards_datacube[#valid_cards_datacube + 1] = j
+    end
+  end
+
+  if next(valid_cards_datacube) then
+    local chosen_card = pseudorandom_element(valid_cards_datacube, pseudoseed('datacube' .. G.GAME.round_resets.ante))
+    G.GAME.current_round.datacube_card = { id = chosen_card:get_id(), value = chosen_card.base.value }
+  end
 end
 
 if not Phanta then Phanta = {} end
@@ -904,6 +919,14 @@ local phantaConfigTab = function()
     callback = function()
     end,
   })
+  phanta_nodes[#phanta_nodes + 1] = create_toggle({
+    label = localize("phanta_dougdimmadome_disable_hat"),
+    active_colour = HEX("40c76d"),
+    ref_table = Phanta.config,
+    ref_value = "dougdimmadome_disable_hat",
+    callback = function()
+    end,
+  })
   return {
     n = G.UIT.ROOT,
     config = {
@@ -923,7 +946,29 @@ end
 
 
 
+-- This DrawStep is courtesy of notmario.
+SMODS.DrawStep {
+  key = "doug_hat",
+  order = -9,
+  func = function(self)
+    if not self:should_draw_base_shader() then return nil end
+    if not (self.config.center.discovered or self.bypass_discovery_center) then return nil end
+    if self.config.center.key ~= "j_phanta_dougdimmadome" then return nil end
+    if Phanta.config["dougdimmadome_disable_hat"] then return nil end
+    if not G.phanta_dougdimmadome_hat_sprite then
+      G.phanta_dougdimmadome_hat_sprite = Sprite(
+        0, 0, 71, 95, G.ASSET_ATLAS["phanta_Phanta2"], { x = 11, y = 3 }
+      )
+    end
 
+    G.phanta_dougdimmadome_hat_sprite.role.draw_major = self
+    for i = 0, 25 do
+      local hoff = -1 - i * 0.4
+      G.phanta_dougdimmadome_hat_sprite:draw_shader('dissolve', nil, nil, nil, self.children.center, 0, 0, 0, hoff)
+    end
+  end,
+  conditions = { vortex = false, facing = "front" },
+}
 
 SMODS.DrawStep {
   key = 'extra',

@@ -447,6 +447,92 @@ end
 
 
 
+
+G.Phanta.centers["datacube"] = {
+  config = { extra = { money = 4, rank_key = "unknown" } },
+  loc_vars = function(self, info_queue, card)
+    return { vars = { card.ability.extra.money, localize((G.GAME.current_round.datacube_card.value or 2) .. "", 'ranks') } }
+  end,
+  rarity = 1,
+  atlas = 'PhantaMiscAnims6',
+  pos = { x = 0, y = 3 },
+  pos_extra = { x = 1, y = 3 },
+  phanta_anim_states = {
+    ["unknown"] = { anim = { { x = 0, y = 3, t = 1 } }, loop = false },
+    ["2"] = { anim = { { x = 0, y = 3, t = 1 } }, loop = false },
+    ["3"] = { anim = { { x = 0, y = 3, t = 1 } }, loop = false },
+    ["4"] = { anim = { { x = 0, y = 3, t = 1 } }, loop = false },
+    ["5"] = { anim = { { x = 0, y = 3, t = 1 } }, loop = false },
+    ["6"] = { anim = { { x = 0, y = 3, t = 1 } }, loop = false },
+    ["7"] = { anim = { { x = 0, y = 3, t = 1 } }, loop = false },
+    ["8"] = { anim = { { x = 0, y = 3, t = 1 } }, loop = false },
+    ["9"] = { anim = { { x = 0, y = 3, t = 1 } }, loop = false },
+    ["10"] = { anim = { { x = 0, y = 3, t = 1 } }, loop = false },
+    ["Jack"] = { anim = { { x = 11, y = 3, t = 1 } }, loop = false },
+    ["Queen"] = { anim = { { x = 11, y = 3, t = 1 } }, loop = false },
+    ["King"] = { anim = { { x = 11, y = 3, t = 1 } }, loop = false },
+    ["Ace"] = { anim = { { x = 11, y = 3, t = 1 } }, loop = false },
+    ["paperback_Apostle"] = { anim = { { x = 11, y = 3, t = 1 } }, loop = false },
+  },
+  phanta_anim_extra_states = {
+    ["unknown"] = { anim = { { x = 1, y = 3, t = 1 } }, loop = false },
+    ["2"] = { anim = { { x = 2, y = 3, t = 1 } }, loop = false },
+    ["3"] = { anim = { { x = 3, y = 3, t = 1 } }, loop = false },
+    ["4"] = { anim = { { x = 4, y = 3, t = 1 } }, loop = false },
+    ["5"] = { anim = { { x = 5, y = 3, t = 1 } }, loop = false },
+    ["6"] = { anim = { { x = 6, y = 3, t = 1 } }, loop = false },
+    ["7"] = { anim = { { x = 7, y = 3, t = 1 } }, loop = false },
+    ["8"] = { anim = { { x = 8, y = 3, t = 1 } }, loop = false },
+    ["9"] = { anim = { { x = 9, y = 3, t = 1 } }, loop = false },
+    ["10"] = { anim = { { x = 10, y = 3, t = 1 } }, loop = false },
+    ["Jack"] = { anim = { { x = 0, y = 4, t = 1 } }, loop = false },
+    ["Queen"] = { anim = { { x = 1, y = 4, t = 1 } }, loop = false },
+    ["King"] = { anim = { { x = 2, y = 4, t = 1 } }, loop = false },
+    ["Ace"] = { anim = { { x = 3, y = 4, t = 1 } }, loop = false },
+    ["paperback_Apostle"] = { anim = { { x = 3, y = 4, t = 1 } }, loop = false }
+  },
+  phanta_anim_extra_current_state = "unknown",
+  cost = 5,
+  blueprint_compat = true,
+  eternal_compat = true,
+  perishable_compat = true,
+  calculate = function(self, card, context)
+    if context.before then
+      for _, v in ipairs(context.scoring_hand) do
+        if v:get_id() == G.GAME.current_round.datacube_card.id then
+          return { dollars = card.ability.extra.money }
+        end
+      end
+    end
+
+    if context.end_of_round and not context.individual and not context.repetition and not context.blueprint then
+      return { message = localize("k_reset") }
+    end
+  end,
+  update_datacube_rank = function(self, card)
+    local displayed_rank = "unknown"
+    if card.config.center.phanta_anim_extra_states[G.GAME.current_round.datacube_card.value] then
+      displayed_rank = G.GAME.current_round.datacube_card.value
+    end
+
+    card:phanta_set_anim_state(displayed_rank)
+    card:phanta_set_anim_extra_state(displayed_rank)
+    card.ability.extra.rank_key = displayed_rank
+  end,
+  add_to_deck = function(self, card, from_debuff)
+    self:update_datacube_rank(card)
+  end,
+  update = function(self, card, dt)
+    if not self.discovered and not card.params.bypass_discovery_center then
+      return
+    end
+    if card.ability.extra.rank_key ~= G.GAME.current_round.datacube_card.value then self:update_datacube_rank(card) end
+  end,
+  pronouns = "it_its"
+}
+
+
+
 G.Phanta.centers["absentjoker"] = {
   config = { extra = { mult = 15 } },
   loc_vars = function(self, info_queue, card)
@@ -826,8 +912,8 @@ G.Phanta.centers["coldjoker"] = {
   calculate = function(self, card, context)
     if context.joker_main and card.ability.extra.current_chips > 0 then return { chips = card.ability.extra.current_chips } end
 
-    if context.end_of_round and not context.individual and not context.repetition and not context.blueprint and count_consumables({ignore_catan = true}) > 0 then
-      card.ability.extra.current_chips = card.ability.extra.current_chips + (card.ability.extra.added_chips * count_consumables({ignore_catan = true}))
+    if context.end_of_round and not context.individual and not context.repetition and not context.blueprint and count_consumables({ ignore_catan = true }) > 0 then
+      card.ability.extra.current_chips = card.ability.extra.current_chips + (card.ability.extra.added_chips * count_consumables({ ignore_catan = true }))
       return { message = localize("k_upgrade_ex"), colour = G.C.FILTER }
     end
   end,
