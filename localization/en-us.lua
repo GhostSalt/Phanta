@@ -1906,6 +1906,15 @@ return {
                     "{C:attention}number{} cards"
                 }
             },
+            j_phanta_robojoker            = {
+                name = "Robo-joker",
+                text = {
+                    "Played cards under",
+                    "{C:attention}10{} have a {C:green}#1# in #2#{}",
+                    "chance to increase",
+                    "rank by {C:attention}1{} when scored"
+                }
+            },
             j_phanta_magiceggcup            = {
                 name = "Magic Egg Cup",
                 text = {

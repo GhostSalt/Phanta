@@ -101,6 +101,7 @@ local joker_order = {
     "candle",
     "goo",
     "doublingcube",
+    "robojoker",
     "magiceggcup",
     "doublelift",
     "web",

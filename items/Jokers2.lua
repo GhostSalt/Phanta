@@ -2196,6 +2196,62 @@ G.Phanta.centers["doublingcube"] = {
   pronouns = "it_its"
 }
 
+G.Phanta.centers["robojoker"] = {
+  config = { extra = { odds = 10 } },
+  rarity = 1,
+  atlas = "Phanta2",
+  pos = { x = 0, y = 6 },
+  cost = 5,
+  blueprint_compat = true,
+  eternal_compat = true,
+  perishable_compat = true,
+  loc_vars = function(self, info_queue, card)
+    local num, denom = SMODS.get_probability_vars(card, 1, card.ability.extra.odds, "robojoker")
+    return { vars = { num, denom } }
+  end,
+  calculate = function(self, card, context)
+    if context.individual and context.cardarea == G.play and context.other_card:get_id() < 10 and SMODS.pseudorandom_probability(card, "robojoker", 1, card.ability.extra.odds) then
+      local _card = context.other_card
+      G.E_MANAGER:add_event(Event({
+        func = function()
+          play_sound('tarot1')
+          card:juice_up()
+          return true
+        end
+      }))
+      G.E_MANAGER:add_event(Event({
+        trigger = 'after',
+        delay = 0.15,
+        func = function()
+          _card:flip()
+          play_sound('card1', 1)
+          _card:juice_up(0.3, 0.3)
+          delay(0.2)
+          return true
+        end
+      }))
+      G.E_MANAGER:add_event(Event({
+        delay = 0.1,
+        func = function()
+          assert(SMODS.modify_rank(_card, 1))
+          return true
+        end
+      }))
+      G.E_MANAGER:add_event(Event({
+        delay = 0.1,
+        func = function()
+          _card:flip()
+          play_sound('tarot2', 1)
+          _card:juice_up(0.3, 0.3)
+          return true
+        end
+      }))
+      delay(0.2)
+    end
+  end,
+  pronouns = "they_them"
+}
+
 G.Phanta.centers["magiceggcup"] = {
   config = { extra = { is_first = true } },
   rarity = 1,
