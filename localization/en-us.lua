@@ -1561,7 +1561,7 @@ return {
                     "selected {C:attention}deck{}"
                 }
             },
-            j_phanta_datacube            = {
+            j_phanta_datacube               = {
                 name = 'Data Cube',
                 text = {
                     "Earn {C:money}$#1#{} if played",
@@ -1653,6 +1653,13 @@ return {
                     "each played and",
                     "unscored {C:attention}Lucky{} card",
                     "{C:inactive}(Currently {C:mult}+#2#{C:inactive} Mult){}"
+                }
+            },
+            j_phanta_signofthehorns         = {
+                name = "Sign of the Horns",
+                text = {
+                    "Each {C:attention}3{} held in",
+                    "hand gives {C:mult}+#1#{} Mult",
                 }
             },
             j_phanta_jackolantern           = {
@@ -1881,7 +1888,7 @@ return {
                     "{C:inactive}(Currently {C:white,X:mult}X#2#{C:inactive} Mult){}"
                 }
             },
-            j_phanta_stampedjoker               = {
+            j_phanta_stampedjoker           = {
                 name = "Stamped Joker",
                 text = {
                     "All cards in {C:attention}Standard{}",
@@ -1906,7 +1913,7 @@ return {
                     "{C:attention}number{} cards"
                 }
             },
-            j_phanta_robojoker            = {
+            j_phanta_robojoker              = {
                 name = "Robo-joker",
                 text = {
                     "Played cards under",

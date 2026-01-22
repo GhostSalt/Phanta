@@ -1259,6 +1259,26 @@ G.Phanta.centers["flagsignal"] = {
   -- Pronouns are random
 }
 
+G.Phanta.centers["signofthehorns"] = {
+  config = { extra = { mult = 13 } },
+  rarity = 1,
+  atlas = "Phanta2",
+  pos = { x = 1, y = 6 },
+  cost = 5,
+  loc_vars = function(self, info_queue, card)
+    return { vars = { card.ability.extra.mult } }
+  end,
+  blueprint_compat = true,
+  eternal_compat = true,
+  perishable_compat = true,
+  calculate = function(self, card, context)
+    if context.individual and not context.end_of_round and context.cardarea == G.hand and context.other_card:get_id() == 3 then
+      return { mult = card.ability.extra.mult }
+    end
+  end,
+  pronouns = "they_them"
+}
+
 G.Phanta.centers["jackolantern"] = {
   config = { extra = { xmult = 1.5 } },
   rarity = 3,

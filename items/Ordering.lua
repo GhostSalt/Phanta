@@ -71,6 +71,7 @@ local joker_order = {
     "shackles",
     "html",
     "flagsignal",
+    "signofthehorns",
     "knowledgeofthecollege",
     "theapparition",
     "willothewisp",
