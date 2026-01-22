@@ -123,6 +123,7 @@ local joker_order = {
     "purplejoker",
     "manga",
     "monetjoker",
+    "haringjoker",
     "charcoaljoker",
     "goldenfiddle",
     "reverie",

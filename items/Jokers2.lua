@@ -2668,6 +2668,26 @@ G.Phanta.centers["manga"] = {
   pronouns = "she_they"
 }
 
+G.Phanta.centers["haringjoker"] = {
+  config = { extra = { xmult = 1.2 } },
+  loc_vars = function(self, info_queue, card)
+    return { vars = { card.ability.extra.xmult } }
+  end,
+  rarity = 1,
+  atlas = 'Phanta2',
+  pos = { x = 2, y = 6 },
+  cost = 5,
+  blueprint_compat = true,
+  eternal_compat = true,
+  perishable_compat = true,
+  calculate = function(self, card, context)
+    if context.other_joker and card ~= context.other_joker and context.other_joker:is_rarity("Common") then
+      return { xmult = card.ability.extra.xmult, message_card = context.other_joker }
+    end
+  end,
+  pronouns = "he_they"
+}
+
 G.Phanta.centers["metalhead"] = {
   loc_vars = function(self, info_queue, card)
     info_queue[#info_queue + 1] = G.P_CENTERS.m_steel

@@ -323,6 +323,43 @@ SMODS.Back {
 }
 
 SMODS.Back {
+  config = { extra = { chosen_rank = 2, xmult = 1.5 } },
+  key = 'perplexing',
+  atlas = 'Decks',
+  pos = { x = 3, y = 4 },
+  loc_vars = function(self, info_queue, card)
+    return { vars = { self.config.extra.xmult } }
+  end,
+  apply = function(self, back)
+    G.E_MANAGER:add_event(Event({
+      func = function()
+        local valid_cards = {}
+        for i, j in ipairs(G.playing_cards) do
+          if not SMODS.has_no_rank(j) then
+            valid_cards[#valid_cards + 1] = j
+          end
+        end
+
+        if next(valid_cards) then self.config.extra.chosen_rank = pseudorandom_element(valid_cards, pseudoseed("perplexing")):get_id() end
+
+        for i = 1, #G.playing_cards do
+          if G.playing_cards[i]:get_id() == self.config.extra.chosen_rank then
+            G.playing_cards[i]:become_unknown("perplexingdeck")
+            G.playing_cards[i].ability.phanta_perplexed = true
+          end
+        end
+        return true
+      end,
+    }))
+  end,
+  calculate = function(self, back, context)
+    if context.individual and context.cardarea == G.play and context.other_card.ability.phanta_perplexed then
+      return { xmult = self.config.extra.xmult, message_card = context.other_card }
+    end
+  end
+}
+
+SMODS.Back {
   key = 'retired',
   atlas = 'Decks',
   pos = { x = 1, y = 4 },

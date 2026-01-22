@@ -142,6 +142,15 @@ return {
                     "{C:inactive}(Must have room){}"
                 }
             },
+            b_phanta_perplexing = {
+                name = 'Perplexing Deck',
+                text = {
+                    "All cards of a random",
+                    "{C:attention}rank{} start with {C:attention}unknown{}",
+                    "{C:attention}suits{}, these cards give",
+                    "{C:white,X:mult}X#1#{} Mult when scored"
+                }
+            },
             b_phanta_retired = {
                 name = 'Retired Deck',
                 text = {
@@ -1176,6 +1185,13 @@ return {
                     "if {C:attention}discard{} has",
                     "only {C:attention}1{} card",
                     "{C:inactive}(Must have room){}"
+                }
+            },
+            j_phanta_haringjoker             = {
+                name = 'Haring Joker',
+                text = {
+                    "Other {C:blue}Common{} Jokers",
+                    "give {C:white,X:mult}X#1#{} Mult"
                 }
             },
             j_phanta_charcoaljoker          = {
