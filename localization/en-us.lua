@@ -4145,6 +4145,7 @@ return {
             phanta_disable_custom_music = "Disable Custom Music",
             phanta_custom_title_screen = "Custom Title Screen",
             phanta_copper_grate_expanded = "Expand Copper Grate Tooltips",
+            phanta_dougdimmadome_disable_hat = "Doug Dimmadome: Disable Big Hat",
 
 
 
