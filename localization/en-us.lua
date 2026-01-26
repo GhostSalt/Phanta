@@ -1639,7 +1639,7 @@ return {
                     "After {C:attention}#1#{} rounds, sell",
                     "this card to create",
                     "a free {C:attention}Polychrome Tag{}",
-                    "{C:inactive}(Currently {C:attention}#2#{C:inactive}/#1#)"
+                    "{C:inactive}(Currently {C:attention}#2#{C:inactive}/#1#){}"
                 }
             },
             j_phanta_fanta                  = {
