@@ -87,18 +87,35 @@ G.Phanta.centers["trainstation"] = {
 }
 
 G.Phanta.centers["hintcoin"] = {
-  config = { extra = { money = 5 } },
+  config = { extra = { money = 5, given = false } },
   rarity = 1,
   atlas = 'PhantaLaytonAnims',
-  pos = { x = 8, y = 1 }, --[[
-  phanta_anim = {
-    { x = 0, y = 7, t = 4 },
-    { x = 1, y = 7, t = 0.15 },
-    { x = 2, y = 7, t = 0.15 },
-    { x = 3, y = 7, t = 1 },
-    { x = 2, y = 7, t = 0.15 },
-    { x = 1, y = 7, t = 0.15 },
-},]] --
+  pos = { x = 8, y = 1 },
+  phanta_anim_states = {
+    ["normal"] = {
+      anim = {
+        { x = 8,                             y = 1, t = 3 },
+        { xrange = { first = 9, last = 11 }, y = 1, t = 0.075 }
+      },
+      loop = true
+    },
+    ["collect"] = {
+      anim = {
+        { xrange = { first = 6, last = 11 }, y = 2, t = 0.05 },
+        { xrange = { first = 3, last = 7 },  y = 3, t = 0.05 },
+        { x = 5,                             y = 2, t = 1 }
+      },
+      loop = false
+    },
+    ["reappear"] = {
+      anim = {
+        { xrange = { first = 8, last = 9 }, y = 3, t = 0.05 }
+      },
+      loop = false,
+      continuation = "normal"
+    }
+  },
+  phanta_anim_current_state = "normal",
   cost = 5,
   blueprint_compat = true,
   eternal_compat = true,
@@ -108,7 +125,22 @@ G.Phanta.centers["hintcoin"] = {
   end,
   calculate = function(self, card, context)
     if context.before and G.GAME.current_round.hands_played == 1 then
+      G.E_MANAGER:add_event(Event({
+        func = function()
+          if not context.blueprint then
+            play_sound("phanta_hintcoin", 1, 0.9)
+            card:phanta_set_anim_state("collect")
+          end
+          return true
+        end
+      }))
+      card.ability.extra.given = true
       return { dollars = card.ability.extra.money }
+    end
+
+    if context.end_of_round and not context.individual and not context.repetition and not context.blueprint and card.ability.extra.given then
+      card.ability.extra.given = false
+      card:phanta_set_anim_state("reappear")
     end
   end,
   pronouns = "it_its"

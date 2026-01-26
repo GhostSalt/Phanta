@@ -1022,6 +1022,58 @@ SMODS.DrawStep {
   conditions = { vortex = false, facing = 'front' }
 }
 
+SMODS.DrawStep {
+  key = 'extra2',
+  order = 21.1,
+  func = function(self, layer)
+    if not self.phanta_extra2 and self.config.center.pos_extra2 then
+      local atlas = G.ASSET_ATLAS[self.config.center.atlas_extra2 or self.config.center.atlas]
+      self.phanta_extra2 = Sprite(0, 0, atlas.px, atlas.py,
+        atlas, self.config.center.pos_extra2)
+    end
+    if self.phanta_extra2 then
+      if self.config.center.discovered or (self.params and self.params.bypass_discovery_center) then
+        self.phanta_extra2:set_sprite_pos(self.config.center.pos_extra2)
+        self.phanta_extra2.role.draw_major = self
+        if (self.edition and self.edition.negative and (not self.delay_edition or self.delay_edition.negative)) or (self.ability.name == 'Antimatter' and (self.config.center.discovered or self.bypass_discovery_center)) then
+          self.phanta_extra2:draw_shader('negative', nil, self.ARGS.send_to_shader, nil, self.children.center)
+        elseif not self:should_draw_base_shader() then
+        elseif not self.greyed then
+          self.phanta_extra2:draw_shader('dissolve', nil, nil, nil, self.children.center)
+        end
+
+        if self.ability.name == 'Invisible Joker' and (self.config.center.discovered or self.bypass_discovery_center) then
+          if self:should_draw_base_shader() then
+            self.phanta_extra2:draw_shader('voucher', nil, self.ARGS.send_to_shader, nil, self.children.center)
+          end
+        end
+
+        local center = self.config.center
+        if center.draw_extra2 and type(center.draw_extra) == 'function' then
+          self.phanta_extra2:draw_extra2(self, layer)
+        end
+
+        local edition = self.delay_edition or self.edition
+        if edition then
+          for k, v in pairs(G.P_CENTER_POOLS.Edition) do
+            if edition[v.key:sub(3)] and v.shader then
+              if type(v.draw) == 'function' then
+                v:draw(self, layer)
+              else
+                self.phanta_extra2:draw_shader(v.shader, nil, self.ARGS.send_to_shader, nil, self.children.center)
+              end
+            end
+          end
+        end
+        if (edition and edition.negative) or (self.ability.name == 'Antimatter' and (self.config.center.discovered or self.bypass_discovery_center)) then
+          self.phanta_extra2:draw_shader('negative_shine', nil, self.ARGS.send_to_shader, nil, self.children.center)
+        end
+      end
+    end
+  end,
+  conditions = { vortex = false, facing = 'front' }
+}
+
 
 SMODS.DrawStep:take_ownership("back", {
   func = function(self)
@@ -1113,19 +1165,23 @@ function Game:update(dt)
     for k, v in pairs(G.P_CENTERS) do
       if not v.default_pos then v.default_pos = v.pos end
       if not v.default_pos_extra then v.default_pos_extra = v.pos_extra end
+      if not v.default_pos_extra2 then v.default_pos_extra2 = v.pos_extra2 end
 
       if v.set == 'phanta_Zodiac' or v.set == 'phanta_Birthstone' then v:phanta_update_zodiac_level_anim() end
       if v.set == 'Planet' then phanta_update_planet_level_anim(v) end
 
       handle_phanta_anim(v, dt)
       handle_phanta_anim_extra(v, dt)
+      handle_phanta_anim_extra2(v, dt)
     end
   else
     for k, v in pairs(G.P_CENTERS) do
       if not v.default_pos then v.default_pos = v.pos end
       if not v.default_pos_extra then v.default_pos_extra = v.pos_extra end
+      if not v.default_pos_extra2 then v.default_pos_extra2 = v.pos_extra2 end
       v.pos = v.default_pos
       v.pos_extra = v.default_pos_extra
+      v.pos_extra2 = v.default_pos_extra2
     end
   end
 
@@ -1152,7 +1208,15 @@ function handle_phanta_anim(v, dt)
       end
       v.phanta_anim_t = v.phanta_anim_t + dt
       if not loop and v.phanta_anim_t >= v.phanta_anim.length then
-        v.phanta_anim_t = v.phanta_anim.length
+        local continuation = v.phanta_anim_states[v.phanta_anim_current_state].continuation
+        if continuation then
+          v.phanta_anim_current_state = continuation
+          v.phanta_anim_t = 0
+          handle_phanta_anim(v, dt)
+          return
+        else
+          v.phanta_anim_t = v.phanta_anim.length
+        end
       elseif loop then
         v.phanta_anim_t = v.phanta_anim_t % v.phanta_anim.length
       end
@@ -1191,7 +1255,14 @@ function handle_phanta_anim_extra(v, dt)
       end
       v.phanta_anim_extra_t = v.phanta_anim_extra_t + dt
       if not loop and v.phanta_anim_extra_t >= v.phanta_anim_extra.length then
-        v.phanta_anim_extra_t = v.phanta_anim_extra.length
+        local continuation = v.phanta_anim_extra_states[v.phanta_anim_extra_current_state].continuation
+        if continuation then
+          v.phanta_anim_extra_current_state = continuation
+          v.phanta_anim_extra_t = 0
+          handle_phanta_anim_extra(v, dt)
+        else
+          v.phanta_anim_extra_t = v.phanta_anim_extra.length
+        end
       elseif loop then
         v.phanta_anim_extra_t = v.phanta_anim_extra_t % v.phanta_anim_extra.length
       end
@@ -1205,6 +1276,53 @@ function handle_phanta_anim_extra(v, dt)
       if not v.pos_extra then v.pos_extra = {} end
       v.pos_extra.x = v.phanta_anim_extra[ix].x
       v.pos_extra.y = v.phanta_anim_extra[ix].y
+    end
+  end
+end
+
+function handle_phanta_anim_extra2(v, dt)
+  if (v.phanta_anim_extra2_states or v.phanta_anim_extra2) and (not v.phanta_requires_aura or aura_enabled) then
+    v.phanta_anim_extra2 = format_phanta_anim(v.phanta_anim_extra2_states and v.phanta_anim_extra2_current_state and
+      v.phanta_anim_extra2_states[v.phanta_anim_extra2_current_state] and
+      v.phanta_anim_extra2_states[v.phanta_anim_extra2_current_state].anim or
+      v.phanta_anim_extra2)
+    if v.phanta_anim_extra2 == nil then
+      v.pos_extra2 = v.default_pos_extra2
+    else
+      local loop = v.phanta_anim_extra2_states and v.phanta_anim_extra2_current_state and
+          v.phanta_anim_extra2_states[v.phanta_anim_extra2_current_state] and
+          v.phanta_anim_extra2_states[v.phanta_anim_extra2_current_state].loop
+      if loop == nil then loop = true end
+      if not v.phanta_anim_extra2_t then v.phanta_anim_extra2_t = 0 end
+      if not v.phanta_anim_extra2.length then
+        v.phanta_anim_extra2.length = 0
+        for _, frame in ipairs(v.phanta_anim_extra2) do
+          v.phanta_anim_extra2.length = v.phanta_anim_extra2.length + (frame.t or 0)
+        end
+      end
+      v.phanta_anim_extra2_t = v.phanta_anim_extra2_t + dt
+      if not loop and v.phanta_anim_extra2_t >= v.phanta_anim_extra2.length then
+        local continuation = v.phanta_anim_extra2_states[v.phanta_anim_extra2_current_state].continuation
+        if continuation then
+          v.phanta_anim_extra2_current_state = continuation
+          v.phanta_anim_extra2_t = 0
+          handle_phanta_anim_extra2(v, dt)
+        else
+          v.phanta_anim_extra2_t = v.phanta_anim_extra2.length
+        end
+      elseif loop then
+        v.phanta_anim_extra2_t = v.phanta_anim_extra2_t % v.phanta_anim_extra2.length
+      end
+      local ix = 0
+      local t_tally = 0
+      for _, frame in ipairs(v.phanta_anim_extra2) do
+        ix = ix + 1
+        t_tally = t_tally + frame.t
+        if t_tally > v.phanta_anim_extra2_t then break end
+      end
+      if not v.pos_extra2 then v.pos_extra2 = {} end
+      v.pos_extra2.x = v.phanta_anim_extra2[ix].x
+      v.pos_extra2.y = v.phanta_anim_extra2[ix].y
     end
   end
 end

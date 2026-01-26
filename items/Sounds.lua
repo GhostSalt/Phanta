@@ -47,6 +47,12 @@ SMODS.Sound({
 })
 
 SMODS.Sound({
+  key = "hintcoin",
+  path = "phanta_hintcoin.ogg",
+  replace = true
+})
+
+SMODS.Sound({
   vol = 1,
   pitch = 1,
   key = "polargeist_music",

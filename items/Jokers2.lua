@@ -4,8 +4,48 @@ G.Phanta.centers["normalface"] = {
     return { vars = { card.ability.extra.mult } }
   end,
   rarity = 1,
-  atlas = 'Phanta2',
-  pos = { x = 0, y = 0 },
+  atlas = 'PhantaMiscAnims6',
+  pos = { x = 4, y = 10 },
+  phanta_anim_states = {
+    ["normal"] = {
+      anim = {
+        { x = 4, y = 10, t = 1.4 },
+
+        { x = 5, y = 10, t = 0.05 }, { x = 6, y = 10, t = 0.2 },
+        { x = 5, y = 10, t = 0.05 }, { x = 4, y = 10, t = 0.05 },
+        { x = 7, y = 10, t = 0.05 }, { x = 8, y = 10, t = 0.2 },
+        { x = 7, y = 10, t = 0.05 }, { x = 4, y = 10, t = 0.05 },
+
+        { x = 5, y = 10, t = 0.05 }, { x = 6, y = 10, t = 0.2 },
+        { x = 5, y = 10, t = 0.05 }, { x = 4, y = 10, t = 0.05 },
+        { x = 7, y = 10, t = 0.05 }, { x = 8, y = 10, t = 0.2 },
+        { x = 7, y = 10, t = 0.05 }, { x = 4, y = 10, t = 0.05 },
+
+        { x = 5, y = 10, t = 0.05 }, { x = 6, y = 10, t = 0.2 },
+        { x = 5, y = 10, t = 0.05 }, { x = 4, y = 10, t = 0.05 },
+        { x = 7, y = 10, t = 0.05 }, { x = 8, y = 10, t = 0.2 },
+        { x = 7, y = 10, t = 0.05 }, { x = 4, y = 10, t = 0.05 },
+
+        { x = 5, y = 10, t = 0.05 }, { x = 6, y = 10, t = 0.2 },
+        { x = 5, y = 10, t = 0.05 }, { x = 4, y = 10, t = 0.05 },
+        { x = 7, y = 10, t = 0.05 }, { x = 8, y = 10, t = 0.2 },
+        { x = 7, y = 10, t = 0.05 }, { x = 4, y = 10, t = 0.05 },
+
+        { x = 9, y = 10, t = 0.05 }, { x = 10, y = 10, t = 1 },
+
+        { x = 11, y = 10, t = 0.05 }, { x = 0, y = 11, t = 0.2 },
+        { x = 1,  y = 11, t = 0.05 }, { x = 2, y = 11, t = 0.05 },
+      },
+      loop = true
+    },
+    ["angry"] = {
+      anim = {
+        { xrange = { first = 3, last = 11 }, y = 11, t = 0.1 }
+      },
+      loop = true
+    }
+  },
+  phanta_anim_current_state = "normal",
   cost = 4,
   blueprint_compat = true,
   eternal_compat = true,
@@ -37,7 +77,7 @@ G.Phanta.centers["normalface"] = {
 
     if context.selling_self or (context.joker_type_destroyed and context.joker_type_destroyed == card) and not context.blueprint then
       card.ability.extra.amazing_grace = true
-      card.children.center:set_sprite_pos({ x = 0, y = 4 })
+      card:phanta_set_anim_state("angry")
       play_sound("phanta_lobotomy_die", 1, 0.5)
       card_eval_status_text(card, 'extra', nil, nil, nil, { message = ">:(", colour = G.C.RED })
       delay(4.5)
@@ -587,7 +627,7 @@ G.Phanta.centers["venndiagram"] = {
   eternal_compat = true,
   perishable_compat = false,
   calculate = function(self, card, context)
-    if context.joker_main then return { chips = card.ability.extra.current_chips } end
+    if context.joker_main and card.ability.extra.current_chips > 0 then return { chips = card.ability.extra.current_chips } end
 
     if context.before and not context.blueprint then
       local wilds = 0
@@ -606,6 +646,46 @@ G.Phanta.centers["venndiagram"] = {
 
       if triggered then
         card.ability.extra.current_chips = card.ability.extra.current_chips + card.ability.extra.added_chips
+        return { message = localize("k_upgrade_ex"), colour = G.C.FILTER }
+      end
+    end
+  end,
+  pronouns = "it_its"
+}
+
+G.Phanta.centers["visionary"] = {
+  config = { extra = { added_xmult = 0.1, current_xmult = 1, required_scored = 4 } },
+  loc_vars = function(self, info_queue, card)
+    return { vars = { card.ability.extra.added_xmult, card.ability.extra.required_scored, card.ability.extra.current_xmult } }
+  end,
+  rarity = 2,
+  atlas = 'PhantaMiscAnims6',
+  pos = { x = 6, y = 8 },
+  phanta_anim = {
+    { x = 6,  y = 8, t = 0.05 },
+    { x = 7,  y = 8, t = 0.1 },
+    { x = 8,  y = 8, t = 0.25 },
+    { x = 7,  y = 8, t = 0.1 },
+    { x = 6,  y = 8, t = 0.05 },
+    { x = 9,  y = 8, t = 0.1 },
+    { x = 10, y = 8, t = 0.25 },
+    { x = 9,  y = 8, t = 0.1 }
+  },
+  pos = { x = 11, y = 8 },
+  phanta_anim_extra = {
+    { x = 11,                           y = 8, t = 0.15 },
+    { xrange = { first = 0, last = 1 }, y = 9, t = 0.15 }
+  },
+  cost = 7,
+  blueprint_compat = true,
+  eternal_compat = true,
+  perishable_compat = false,
+  calculate = function(self, card, context)
+    if context.joker_main then return { xmult = card.ability.extra.current_xmult } end
+
+    if context.before and not context.blueprint then
+      if #context.scoring_hand >= card.ability.extra.required_scored then
+        card.ability.extra.current_xmult = card.ability.extra.current_xmult + card.ability.extra.added_xmult
         return { message = localize("k_upgrade_ex"), colour = G.C.FILTER }
       end
     end
@@ -1191,7 +1271,7 @@ G.Phanta.centers["testpage"] = {
 }
 
 G.Phanta.centers["flagsignal"] = {
-  config = { extra = { added_mult = 1, current_mult = 0 } },
+  config = { extra = { added_mult = 2, current_mult = 0 } },
   rarity = 1,
   atlas = 'PhantaMiscAnims5',
   pos = { x = 10, y = 2 },
@@ -1428,6 +1508,68 @@ G.Phanta.centers["distance"] = {
   pronouns = "she_her"
 }
 
+G.Phanta.centers["thefall"] = {
+  config = { extra = { added_xmult = 0.2, current_xmult = 1 } },
+  rarity = 3,
+  atlas = 'PhantaMiscAnims6',
+  pos = { x = 8, y = 6 },
+  phanta_anim = {
+    { xrange = { first = 8, last = 11 }, y = 6, t = 0.03 },
+    { xrange = { first = 0, last = 2 },  y = 7, t = 0.03 },
+  },
+  pos_extra = { x = 3, y = 7 },
+  phanta_anim_extra = {
+    { x = 3,  y = 7, t = 0.2 },
+    { x = 4,  y = 7, t = 0.25 },
+    { x = 5,  y = 7, t = 0.3 },
+    { x = 6,  y = 7, t = 0.35 },
+    { x = 7,  y = 7, t = 0.45 },
+    { x = 8,  y = 7, t = 0.6 },
+    { x = 7,  y = 7, t = 0.45 },
+    { x = 6,  y = 7, t = 0.35 },
+    { x = 5,  y = 7, t = 0.3 },
+    { x = 4,  y = 7, t = 0.25 },
+    { x = 3,  y = 7, t = 0.2 },
+    { x = 9,  y = 7, t = 0.25 },
+    { x = 10, y = 7, t = 0.3 },
+    { x = 11, y = 7, t = 0.35 },
+    { x = 0,  y = 8, t = 0.45 },
+    { x = 1,  y = 8, t = 0.6 },
+    { x = 0,  y = 8, t = 0.45 },
+    { x = 11, y = 7, t = 0.35 },
+    { x = 10, y = 7, t = 0.3 },
+    { x = 9,  y = 7, t = 0.25 },
+  },
+  pos_extra2 = { x = 2, y = 8 },
+  phanta_anim_extra2 = {
+    { xrange = { first = 2, last = 5 }, y = 8, t = 0.15 }
+  },
+  cost = 9,
+  loc_vars = function(self, info_queue, card)
+    return {
+      vars = { card.ability.extra.added_xmult, card.ability.extra.current_xmult,
+        (G.GAME and G.GAME.current_round and G.GAME.current_round.hands_played ~= 0 and G.GAME.last_hand_played) and localize(G.GAME.last_hand_played, 'poker_hands') or localize('phanta_unknown') }
+    }
+  end,
+  blueprint_compat = true,
+  eternal_compat = true,
+  perishable_compat = false,
+  calculate = function(self, card, context)
+    if context.joker_main and card.ability.extra.current_xmult > 1 then return { xmult = card.ability.extra.current_xmult } end
+
+    if context.before then
+      local prev_hand = (G.GAME and G.GAME.current_round and G.GAME.current_round.hands_played ~= 0 and G.GAME.last_hand_played) and G.GAME.last_hand_played
+
+      if prev_hand and G.GAME.hands[prev_hand] and context.scoring_name and G.GAME.hands[context.scoring_name]
+          and G.GAME.hands[prev_hand].order < G.GAME.hands[context.scoring_name].order then
+        card.ability.extra.current_xmult = card.ability.extra.current_xmult + card.ability.extra.added_xmult
+        return { message = localize("k_upgrade_ex") }
+      end
+    end
+  end,
+  pronouns = "she_her"
+}
+
 G.Phanta.centers["donpaolo"] = {
   config = { extra = { levels = 2 } },
   rarity = 2,
@@ -1644,8 +1786,18 @@ G.Phanta.centers["inspectorchelmey"] = {
 G.Phanta.centers["theblackraven"] = {
   config = { extra = { no_of_cards = 2 } },
   rarity = 2,
-  atlas = 'Phanta2',
+  atlas = 'PhantaLaytonAnims',
   pos = { x = 3, y = 3 },
+  phanta_anim = {
+    { x = 0, y = 7, t = 5 },
+    { x = 1, y = 7, t = 0.3 },
+    { x = 2, y = 7, t = 0.1 }, { x = 3, y = 7, t = 0.3 },
+    { xrange = { first = 2, last = 1 }, y = 7, t = 0.1 },
+    { x = 2, y = 7, t = 0.1 }, { x = 3, y = 7, t = 0.3 },
+    { xrange = { first = 2, last = 1 }, y = 7, t = 0.1 },
+    { x = 2, y = 7, t = 0.1 }, { x = 3, y = 7, t = 0.3 },
+    { x = 2, y = 7, t = 0.1 }, { x = 1, y = 7, t = 0.6 }
+  },
   cost = 6,
   blueprint_compat = false,
   eternal_compat = true,
@@ -2165,9 +2317,9 @@ G.Phanta.centers["stampedjoker"] = {
 
 SMODS.Booster:take_ownership_by_kind('Standard', {
   create_card = function(self, card, i)
-    local _edition = poll_edition('standard_edition'..G.GAME.round_resets.ante, 2, true)
-    local _seal = SMODS.poll_seal({mod = 10, guaranteed = next(SMODS.find_card("j_phanta_stampedjoker")) and true})
-    return {set = (pseudorandom(pseudoseed('stdset'..G.GAME.round_resets.ante)) > 0.6) and "Enhanced" or "Base", edition = _edition, seal = _seal, area = G.pack_cards, skip_materialize = true, soulable = true, key_append = "sta"}
+    local _edition = poll_edition('standard_edition' .. G.GAME.round_resets.ante, 2, true)
+    local _seal = SMODS.poll_seal({ mod = 10, guaranteed = next(SMODS.find_card("j_phanta_stampedjoker")) and true })
+    return { set = (pseudorandom(pseudoseed('stdset' .. G.GAME.round_resets.ante)) > 0.6) and "Enhanced" or "Base", edition = _edition, seal = _seal, area = G.pack_cards, skip_materialize = true, soulable = true, key_append = "sta" }
   end,
   loc_vars = pack_loc_vars,
 })
@@ -2219,8 +2371,60 @@ G.Phanta.centers["doublingcube"] = {
 G.Phanta.centers["robojoker"] = {
   config = { extra = { odds = 10 } },
   rarity = 1,
-  atlas = "Phanta2",
-  pos = { x = 0, y = 6 },
+  atlas = "PhantaMiscAnims6",
+  pos = { x = 5, y = 4 },
+  phanta_anim = {
+    { x = 5,                             y = 4, t = 1.5 },
+    { xrange = { first = 6, last = 10 }, y = 4, t = 0.1 },
+    { x = 11,                            y = 4, t = 0.3 },
+    { xrange = { first = 0, last = 3 },  y = 5, t = 0.1 },
+    { xrange = { first = 1, last = 0 },  y = 5, t = 0.2 },
+    { xrange = { first = 0, last = 3 },  y = 5, t = 0.1 },
+    { xrange = { first = 1, last = 0 },  y = 5, t = 0.2 },
+    { xrange = { first = 0, last = 3 },  y = 5, t = 0.1 },
+    { xrange = { first = 1, last = 0 },  y = 5, t = 0.2 },
+    { xrange = { first = 10, last = 5 }, y = 4, t = 0.1 },
+    { xrange = { first = 4, last = 5 },  y = 5, t = 0.1 },
+    { x = 6,                             y = 5, t = 0.5 },
+    { xrange = { first = 7, last = 11 }, y = 5, t = 0.1 },
+    { xrange = { first = 0, last = 3 },  y = 6, t = 0.1 },
+    { x = 6,                             y = 5, t = 0.5 },
+
+    { x = 4,                             y = 6, t = 0.3 },
+    { x = 6,                             y = 5, t = 0.2 },
+    { x = 5,                             y = 6, t = 0.3 },
+    { x = 6,                             y = 5, t = 0.2 },
+
+    { x = 4,                             y = 6, t = 0.3 },
+    { x = 6,                             y = 5, t = 0.2 },
+    { x = 5,                             y = 6, t = 0.3 },
+    { x = 6,                             y = 5, t = 0.2 },
+
+    { x = 4,                             y = 6, t = 0.3 },
+    { x = 6,                             y = 5, t = 0.2 },
+    { x = 5,                             y = 6, t = 0.3 },
+    { x = 6,                             y = 5, t = 0.2 },
+
+    { x = 4,                             y = 6, t = 0.3 },
+    { x = 6,                             y = 5, t = 0.2 },
+    { x = 5,                             y = 6, t = 0.3 },
+    { x = 6,                             y = 5, t = 0.2 },
+
+    { x = 4,                             y = 6, t = 0.3 },
+    { x = 6,                             y = 5, t = 0.2 },
+    { x = 5,                             y = 6, t = 0.3 },
+    { x = 6,                             y = 5, t = 0.2 },
+
+    { x = 4,                             y = 6, t = 0.3 },
+    { x = 6,                             y = 5, t = 0.2 },
+    { x = 5,                             y = 6, t = 0.3 },
+    { x = 6,                             y = 5, t = 0.2 },
+
+
+    { xrange = { first = 6, last = 7 },  y = 6, t = 0.1 },
+    { xrange = { first = 6, last = 7 },  y = 6, t = 0.15 },
+    { xrange = { first = 5, last = 4 },  y = 5, t = 0.1 },
+  },
   cost = 5,
   blueprint_compat = true,
   eternal_compat = true,
@@ -2722,6 +2926,34 @@ G.Phanta.centers["metalhead"] = {
   pronouns = "he_they"
 }
 
+G.Phanta.centers["maskofthephantom"] = {
+  loc_vars = function(self, info_queue, card)
+    info_queue[#info_queue + 1] = G.P_CENTERS.m_phanta_ghostcard
+    return {}
+  end,
+  rarity = 2,
+  atlas = 'Phanta2',
+  pos = { x = 3, y = 6 },
+  cost = 6,
+  blueprint_compat = false,
+  eternal_compat = true,
+  perishable_compat = true,
+  calculate = function(self, card, context)
+    if context.individual and context.cardarea == "unscored" and context.other_card:is_face() and not SMODS.has_enhancement(context.other_card, "m_phanta_ghostcard") and not context.blueprint then
+      local _card = context.other_card
+      G.E_MANAGER:add_event(Event({
+        func = function()
+          _card:set_ability("m_phanta_ghostcard")
+          _card:juice_up()
+          return true
+        end
+      }))
+      return { message = localize { key = "m_phanta_ghostcard", type = "name_text", set = "Enhanced" }, message_card = card }
+    end
+  end,
+  pronouns = "it_its"
+}
+
 G.Phanta.centers["plugsocket"] = {
   config = { extra = { xmult = 0.25 } },
   loc_vars = function(self, info_queue, card)
@@ -3049,8 +3281,24 @@ G.Phanta.centers["mello"] = {
     }
   end,
   rarity = 2,
-  atlas = 'Phanta2',
-  pos = { x = 2, y = 4 },
+  atlas = 'PhantaMiscAnims6',
+  pos = { x = 2, y = 9 },
+  phanta_anim = {
+    { x = 2, y = 9, t = 1.1 }, { x = 3, y = 9, t = 0.1 },
+    { x = 2, y = 9, t = 0.5 }, { x = 3, y = 9, t = 0.1 },
+    { x = 2, y = 9, t = 2.1 }, { x = 3, y = 9, t = 0.1 },
+    { x = 2, y = 9, t = 1.4 }, { x = 3, y = 9, t = 0.1 },
+    { x = 2, y = 9, t = 1.8 }, { x = 3, y = 9, t = 0.1 },
+    { x = 4, y = 9, t = 0.1 }, { x = 5, y = 9, t = 0.15 }, { x = 6, y = 9, t = 0.2 },
+    { x = 7, y = 9, t = 0.6 }, { x = 8, y = 9, t = 0.2 },
+    { x = 9, y = 9, t = 0.2 }, { x = 10, y = 9, t = 0.15 }, { x = 11, y = 9, t = 0.05 }, { x = 0, y = 10, t = 0.05 },
+    { x = 2,                            y = 10, t = 0.2 },
+    { xrange = { first = 1, last = 2 }, y = 10, t = 0.2 },
+    { xrange = { first = 1, last = 2 }, y = 10, t = 0.2 },
+    { xrange = { first = 1, last = 2 }, y = 10, t = 0.2 },
+    { xrange = { first = 1, last = 2 }, y = 10, t = 0.2 },
+    { x = 1,                            y = 10, t = 0.1 }, { x = 3, y = 10, t = 0.2 }
+  },
   cost = 6,
   blueprint_compat = true,
   eternal_compat = true,

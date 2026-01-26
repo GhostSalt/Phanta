@@ -855,6 +855,14 @@ return {
                     "{C:attention}Aces{} give {C:white,X:mult}X#1#{} Mult"
                 }
             },
+            j_phanta_maskofthephantom             = {
+                name = 'Mask of the Phantom',
+                text = {
+                    "Played and {C:attention}unscored face{}",
+                    "cards become {C:attention}Ghost{} cards",
+                    "{C:inactive,s:0.9}(Cannot replace existing Ghost cards){}"
+                }
+            },
             j_phanta_theapparition          = {
                 name = 'The Apparition',
                 text = {
@@ -1711,6 +1719,16 @@ return {
                     "in the shop"
                 }
             },
+            j_phanta_thefall               = {
+                name = 'The Fall',
+                text = {
+                    "Gains {C:white,X:mult}X#1#{} Mult if",
+                    "played hand ranks",
+                    "below {C:attention}previous{} hand",
+                    "{C:inactive}(Currently {C:white,X:mult}X#2#{C:inactive} Mult){}",
+                    "{C:inactive}(Previous hand: {C:attention}#3#{C:inactive}){}"
+                }
+            },
             j_phanta_donpaolo               = {
                 name = 'Don Paolo',
                 text = {
@@ -1848,6 +1866,15 @@ return {
                     "played hand contains",
                     "{C:attention}#2#{} of the same {C:attention}suit{}",
                     "{C:inactive}(Currently {C:chips}+#3#{C:inactive} Chips){}"
+                }
+            },
+            j_phanta_visionary            = {
+                name = 'Visionary',
+                text = {
+                    "Gains {C:white,X:mult}X#1#{} Mult if",
+                    "played hand contains {C:attention}#2#{}",
+                    "or more {C:attention}scoring{} cards",
+                    "{C:inactive}(Currently {C:white,X:mult}X#3#{C:inactive} Mult){}"
                 }
             },
             j_phanta_88888888               = {

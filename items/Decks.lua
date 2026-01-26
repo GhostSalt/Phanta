@@ -323,8 +323,8 @@ SMODS.Back {
 }
 
 SMODS.Back {
-  config = { extra = { chosen_rank = 2, xmult = 1.5 } },
   key = 'perplexing',
+  config = { extra = { chosen_rank = 2, xmult = 1.5 } },
   atlas = 'Decks',
   pos = { x = 3, y = 4 },
   loc_vars = function(self, info_queue, card)
