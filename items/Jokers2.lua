@@ -304,7 +304,7 @@ G.Phanta.centers["peekaboo"] = {
             local colour = card.ability.extra.chosen_ability.tarot and G.C.PURPLE or
                 card.ability.extra.chosen_ability.planet and G.C.BLUE or
                 card.ability.extra.chosen_ability.spectral and G.C.SECONDARY_SET.Spectral
-            card_eval_status_text(cardcard, 'extra', nil, nil, nil,
+            card_eval_status_text(card, 'extra', nil, nil, nil,
               { message = localize(loc), colour = colour })
             return true
           end)
