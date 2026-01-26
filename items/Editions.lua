@@ -56,7 +56,7 @@ SMODS.Edition {
   config = { extra = { chips = 30, mult = 4 } },
   loc_vars = function(self, info_queue, card)
     key = self.key
-    if card.config.center.set == "Edition" then
+    if card.fake_card or card.config.center.set == "Edition" then
       key = key .. "_showcase"
       return { key = key, vars = { self.config.extra.chips, self.config.extra.mult } }
     end

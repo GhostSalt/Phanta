@@ -4018,7 +4018,7 @@ return {
                 text = {
                     "Contains:",
                     "3 {C:attention}Ghost{} cards",
-                    "1 random {C:attention}Ace{}"
+                    "1 {C:attention}random{} Ace"
                 }
             },
             c_phanta_potmakerpack = {
