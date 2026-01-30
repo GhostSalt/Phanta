@@ -1548,7 +1548,7 @@ G.Phanta.centers["thefall"] = {
   loc_vars = function(self, info_queue, card)
     return {
       vars = { card.ability.extra.added_xmult, card.ability.extra.current_xmult,
-        (G.GAME and G.GAME.current_round and G.GAME.current_round.hands_played ~= 0 and G.GAME.last_hand_played) and localize(G.GAME.last_hand_played, 'poker_hands') or localize('phanta_unknown') }
+        (G.GAME and G.GAME.current_round and G.GAME.last_hand_played) and localize(G.GAME.last_hand_played, 'poker_hands') or localize('phanta_unknown') }
     }
   end,
   blueprint_compat = true,
@@ -1557,9 +1557,12 @@ G.Phanta.centers["thefall"] = {
   calculate = function(self, card, context)
     if context.joker_main and card.ability.extra.current_xmult > 1 then return { xmult = card.ability.extra.current_xmult } end
 
-    if context.before then
-      local prev_hand = (G.GAME and G.GAME.current_round and G.GAME.current_round.hands_played ~= 0 and G.GAME.last_hand_played) and G.GAME.last_hand_played
+    if context.after then
+      card.ability.extra.prev_hand = G.GAME.last_hand_played
+    end
 
+    if context.before then
+      local prev_hand = card.ability.extra.prev_hand
       if prev_hand and G.GAME.hands[prev_hand] and context.scoring_name and G.GAME.hands[context.scoring_name]
           and G.GAME.hands[prev_hand].order < G.GAME.hands[context.scoring_name].order then
         card.ability.extra.current_xmult = card.ability.extra.current_xmult + card.ability.extra.added_xmult
