@@ -59,6 +59,18 @@ function loc_colour(_c, default)
   return loc_colour_ref(_c, default)
 end
 
+function phanta_poll_pool(type, append)
+  local _pool, _pool_key = get_current_pool(type, nil, nil, append)
+  local center = pseudorandom_element(_pool, pseudoseed(_pool_key))
+  local it = 1
+  while center == "UNAVAILABLE" do
+    it = it + 1
+    center = pseudorandom_element(_pool, pseudoseed(_pool_key .. "_resample" .. it))
+  end
+
+  return G.P_CENTERS[center]
+end
+
 function count_tarots()
   local tarot_counter = 0
   if G.consumeables then
@@ -147,7 +159,7 @@ function count_common_jokers()
 end
 
 function count_consumables(args)
-  if SMODS.find_mod('GSCatan') and args and args.ignore_catan then
+  if next(SMODS.find_mod('GSCatan')) and args and args.ignore_catan then
     local count = 0
     for _, v in ipairs(G.consumeables.cards) do
       if v.config.center.set ~= "catan_Resource"
@@ -350,21 +362,21 @@ function set_phanta_new2dsxl_streetpass(card, removed)
   end
   if count < 1 + (removed and 1 or 0) then
     for _, v in ipairs(found) do
-      if v.config and v.config.center and v.config.center.phanta_anim_current_state == "streetpass" then
-        v:phanta_set_anim_state("streetpass off")
+      if v.flipbook_anim_current_state == "streetpass" then
+        v:flipbook_set_anim_state("streetpass_off")
       end
     end
-    if card and card.config and card.config.center and card.config.center.phanta_anim_current_state == "streetpass" then
-      card:phanta_set_anim_state("streetpass off")
+    if card.flipbook_anim_current_state == "streetpass" then
+      card:flipbook_set_anim_state("streetpass_off")
     end
   else
     for _, v in ipairs(found) do
-      if v.config and v.config.center and v.config.center.phanta_anim_current_state ~= "streetpass" then
-        v:phanta_set_anim_state("streetpass")
+      if v.flipbook_anim_current_state ~= "streetpass" then
+        v:flipbook_set_anim_state("streetpass")
       end
     end
-    if card and card.config and card.config.center and card.config.center.phanta_anim_current_state ~= "streetpass" then
-      card:phanta_set_anim_state("streetpass")
+    if card.flipbook_anim_current_state ~= "streetpass" then
+      card:flipbook_set_anim_state("streetpass")
     end
   end
 end
@@ -412,6 +424,8 @@ function Card:start_dissolve()
     return ref1(self)
   end
 end
+
+--if not next(SMODS.find_mod('GSFlipbook')) then assert(SMODS.load_file("items/FlipbookFailsafe.lua"))() end
 
 local allFolders = { "none", "items" }
 
@@ -491,7 +505,7 @@ assert(SMODS.load_file("items/Ordering.lua"))()
 
 
 function SMODS.Consumable:phanta_update_zodiac_level_anim()
-  if not self.discovered and not (self.params and self.params.bypass_discovery_center) then
+  if (not self.discovered and not (self.params and self.params.bypass_discovery_center)) or not self.flipbook_anim_extra_states then
     return
   end
   local progs = count_prognosticators(self)
@@ -501,13 +515,16 @@ function SMODS.Consumable:phanta_update_zodiac_level_anim()
   if progs == 3 then state = "3" end
   if progs >= 4 then state = "4+" end
 
-  if state ~= self.phanta_anim_extra_current_state then
-    self:phanta_set_anim_extra_state(state)
+  if not self.phanta_prev_prog_count then self.phanta_prev_prog_count = "silly" end
+
+  if state ~= self.phanta_prev_prog_count then
+    self.phanta_prev_prog_count = state
+    self:flipbook_set_anim_extra_state(state, "extra", true, true)
   end
 end
 
 function phanta_update_planet_level_anim(center)
-  if not center.discovered and not (center.params and center.params.bypass_discovery_center) then
+  if (not center.discovered and not (center.params and center.params.bypass_discovery_center)) or not center.flipbook_anim_extra_states then
     return
   end
   local tricks = count_tricks(center)
@@ -517,8 +534,11 @@ function phanta_update_planet_level_anim(center)
   if tricks == 3 then state = "3" end
   if tricks >= 4 then state = "4+" end
 
-  if state ~= center.phanta_anim_extra_current_state then
-    phanta_set_anim_extra_state(center, state)
+  if not center.phanta_prev_trick_count then center.phanta_prev_trick_count = "silly" end
+
+  if state ~= center.phanta_prev_trick_count then
+    center.phanta_prev_trick_count = state
+    center:flipbook_set_anim_extra_state(state, "extra", true, true)
   end
 end
 
@@ -654,7 +674,7 @@ Game.main_menu = function(change_context)
       13 * SC_scale,
       13 * SC_scale *
       (G.ASSET_ATLAS["phanta_PhantaTitleScreenGhost"].py / G.ASSET_ATLAS["phanta_PhantaTitleScreenGhost"].px),
-      G.ASSET_ATLAS["phanta_PhantaTitleScreenGhost"], { x = 0, y = 0 }
+      G.ASSET_ATLAS["phanta_PhantaTitleScreenGhost"], { x = math.random(0, 2), y = math.random(0, 1) }
     )
     G.SPLASH_LOGO_PHANTA_GHOST:set_alignment({
       major = G.title_top,
@@ -689,58 +709,63 @@ Game.main_menu = function(change_context)
       { name = 'time',       ref_table = G.TIMERS,  ref_value = 'REAL_SHADER' },
       { name = 'vort_speed', val = 0.4 },
       { name = 'colour_1',   ref_table = G.C.PHANTA.MISC_COLOURS, ref_value = 'PHANTA_MAIN_MENU_PRIMARY' },
-      { name = 'colour_2',   ref_table = G.C.PHANTA.MISC_COLOURS, ref_value = 'PHANTA_MAIN_MENU_SECONDARY' },
+      { name = 'colour_2',   ref_table = G.C.PHANTA.MISC_COLOURS, ref_value = 'PHANTA_MAIN_MENU_SECONDARY' },flipbook_set_anim_extra_state
+       
     }
   } })]] --
 
   for k, v in pairs(G.P_CENTERS) do
     if v.set == "phanta_Zodiac" or v.set == "phanta_Birthstone" or v.set == "Planet" then
-      if not v.atlas_extra then
+      if not v.flipbook_pos_extra then v.flipbook_pos_extra = { extra = { x = 0, y = 0 } } end
+      if not v.flipbook_pos_extra.extra.atlas then
         if v.set == "phanta_Zodiac" then
-          v.atlas_extra = "phanta_PhantaZodiacUpgrades"
+          v.flipbook_pos_extra.extra.atlas = "phanta_PhantaZodiacUpgrades"
         elseif v.set == "phanta_Birthstone" then
-          v.atlas_extra = "phanta_PhantaBirthstoneUpgrades"
+          v.flipbook_pos_extra.extra.atlas = "phanta_PhantaBirthstoneUpgrades"
         elseif v.set == "Planet" then
-          v.atlas_extra = "phanta_PhantaPlanetUpgrades"
+          v.flipbook_pos_extra.extra.atlas = "phanta_PhantaPlanetUpgrades"
         end
       end
-      v.phanta_anim_extra_states = {
-        ["0"] = {
-          anim = {
-            { x = 0, y = 0, t = 1 } }
-        },
-        ["1"] = {
-          anim = {
-            { xrange = { first = 0, last = 3 }, y = 1, t = 0.1 },
-            { xrange = { first = 2, last = 1 }, y = 1, t = 0.1 }
-          }
-        },
-        ["2"] = {
-          anim = {
-            { xrange = { first = 0, last = 3 }, y = 2, t = 0.1 },
-            { xrange = { first = 2, last = 1 }, y = 2, t = 0.1 }
-          }
-        },
-        ["3"] = {
-          anim = {
-            { xrange = { first = 0, last = 3 }, y = 3, t = 0.1 },
-            { xrange = { first = 2, last = 1 }, y = 3, t = 0.1 }
-          }
-        },
-        ["4+"] = {
-          anim = {
-            { xrange = { first = 0, last = 3 }, y = 4, t = 0.1 },
-            { xrange = { first = 2, last = 1 }, y = 4, t = 0.1 }
+      v.flipbook_anim_extra_states = {
+        extra = {
+          ["0"] = {
+            anim = {
+              { x = 0, y = 0, t = 1 } }
+          },
+          ["1"] = {
+            anim = {
+              { xrange = { first = 0, last = 3 }, y = 1, t = 0.1 },
+              { xrange = { first = 2, last = 1 }, y = 1, t = 0.1 }
+            }
+          },
+          ["2"] = {
+            anim = {
+              { xrange = { first = 0, last = 3 }, y = 2, t = 0.1 },
+              { xrange = { first = 2, last = 1 }, y = 2, t = 0.1 }
+            }
+          },
+          ["3"] = {
+            anim = {
+              { xrange = { first = 0, last = 3 }, y = 3, t = 0.1 },
+              { xrange = { first = 2, last = 1 }, y = 3, t = 0.1 }
+            }
+          },
+          ["4+"] = {
+            anim = {
+              { xrange = { first = 0, last = 3 }, y = 4, t = 0.1 },
+              { xrange = { first = 2, last = 1 }, y = 4, t = 0.1 }
+            }
           }
         }
       }
-      v.phanta_anim_extra_current_state = "0"
+      v.flipbook_anim_extra_current_states = { extra = "0" }
     end
   end
 
   return ret
 end
 
+--[[
 function Card:phanta_set_anim_state(state)
   self.config.center.phanta_anim_current_state = state
   self.config.center.phanta_anim_t = 0
@@ -769,7 +794,7 @@ end
 function phanta_set_anim_extra_state(center, state)
   center.phanta_anim_extra_current_state = state
   center.phanta_anim_extra_t = 0
-end
+end]] --
 
 function SMODS.current_mod.reset_game_globals(run_start)
   G.GAME.current_round.fainfol_card = G.GAME.current_round.fainfol_card or 'Clubs'
@@ -946,7 +971,7 @@ end
 
 
 
--- This DrawStep is courtesy of notmario.
+-- This DrawStep is courtesy of notmario. (Fix editions with this at some point, I know how to do that.)
 SMODS.DrawStep {
   key = "doug_hat",
   order = -9,
@@ -970,7 +995,7 @@ SMODS.DrawStep {
   conditions = { vortex = false, facing = "front" },
 }
 
-SMODS.DrawStep {
+--[[SMODS.DrawStep {
   key = 'extra',
   order = 21,
   func = function(self, layer)
@@ -998,7 +1023,7 @@ SMODS.DrawStep {
 
         local center = self.config.center
         if center.draw_extra and type(center.draw_extra) == 'function' then
-          self.phanta_extra:draw_extra(self, layer)
+          center:draw_extra(self, layer)
         end
 
         local edition = self.delay_edition or self.edition
@@ -1072,7 +1097,7 @@ SMODS.DrawStep {
     end
   end,
   conditions = { vortex = false, facing = 'front' }
-}
+}]] --
 
 
 SMODS.DrawStep:take_ownership("back", {
@@ -1161,14 +1186,16 @@ function Game:update(dt)
     G.GAME.phanta_birthstone_rate = 0
   end
 
+  for k, v in pairs(G.P_CENTERS) do
+    if v.set == 'phanta_Zodiac' or v.set == 'phanta_Birthstone' then v:phanta_update_zodiac_level_anim() end
+    if v.set == 'Planet' then phanta_update_planet_level_anim(v) end
+  end
+  --[[
   if not Phanta.config["animations_disabled"] then
     for k, v in pairs(G.P_CENTERS) do
       if not v.default_pos then v.default_pos = v.pos end
       if not v.default_pos_extra then v.default_pos_extra = v.pos_extra end
       if not v.default_pos_extra2 then v.default_pos_extra2 = v.pos_extra2 end
-
-      if v.set == 'phanta_Zodiac' or v.set == 'phanta_Birthstone' then v:phanta_update_zodiac_level_anim() end
-      if v.set == 'Planet' then phanta_update_planet_level_anim(v) end
 
       handle_phanta_anim(v, dt)
       handle_phanta_anim_extra(v, dt)
@@ -1183,11 +1210,12 @@ function Game:update(dt)
       v.pos_extra = v.default_pos_extra
       v.pos_extra2 = v.default_pos_extra2
     end
-  end
+  end]] --
 
   return update_ref(self, dt)
 end
 
+--[[
 function handle_phanta_anim(v, dt)
   if (v.phanta_anim_states or v.phanta_anim) and (not v.phanta_requires_aura or aura_enabled) then
     v.phanta_anim = format_phanta_anim(v.phanta_anim_states and v.phanta_anim_current_state and
@@ -1345,7 +1373,7 @@ function format_phanta_anim(anim)
   end
   new_anim.t = anim.t
   return new_anim
-end
+end]] --
 
 SMODS.current_mod.extra_tabs = function()
   return {

@@ -365,21 +365,6 @@ jd_def["j_phanta_bluekeycards"] = {
   end
 }
 
-jd_def["j_phanta_kylehyde"] = {
-  extra = {
-    {
-      { text = "(" },
-      { ref_table = "card.joker_display_values", ref_value = "odds" },
-      { text = ")" }
-    }
-  },
-  extra_config = { colour = G.C.GREEN, scale = 0.3 },
-  calc_function = function(card)
-    local numerator, denominator = SMODS.get_probability_vars(card, 1, card.ability.extra.odds, "kylehyde")
-    card.joker_display_values.odds = localize { type = 'variable', key = "jdis_odds", vars = { numerator, denominator } }
-  end
-}
-
 jd_def["j_phanta_inception"] = {
   text = {
     { text = "+" },
@@ -687,11 +672,28 @@ jd_def["j_phanta_willothewisp"] = {
 }
 
 jd_def["j_phanta_stickercollection"] = {
-  retrigger_function = function(playing_card, scoring_hand, held_in_hand, joker_card)
-    if held_in_hand or not SMODS.in_scoring(playing_card, scoring_hand) then return 0 end
-    local text, disp_text = G.FUNCS.get_poker_hand_info(G.hand.highlighted)
-    return text == "phanta_junk" and get_lowest(scoring_hand)[1][1]:get_id() == playing_card:get_id() and
-        3 * JokerDisplay.calculate_joker_triggers(joker_card) or 0
+  text = {
+    { text = "+$" },
+    { ref_table = "card.joker_display_values", ref_value = "dollars", retrigger_type = "mult" },
+  },
+  text_config = { colour = G.C.GOLD },
+  reminder_text = {
+    { text = "(" },
+    { ref_table = "card.joker_display_values", ref_value = "localized_text", colour = G.C.FILTER },
+    { text = ")" }
+  },
+  calc_function = function(card)
+    local dollars = 0
+    local text, _, scoring_hand = JokerDisplay.evaluate_hand()
+    if text ~= 'Unknown' then
+      for _, v in pairs(next(G.play.cards) and G.play.cards or G.hand.highlighted) do
+        if not SMODS.in_scoring(v, scoring_hand) then
+          dollars = dollars + card.ability.extra.money * JokerDisplay.calculate_card_triggers(v, scoring_hand)
+        end
+      end
+    end
+    card.joker_display_values.dollars = dollars
+    card.joker_display_values.localized_text = localize("k_phanta_unscored")
   end
 }
 
@@ -961,7 +963,7 @@ jd_def["j_phanta_tricolour"] = {
         end
       end
     end
-    card.joker_display_values.mult = (#counted_suits <= 3 and #counted_suits + wilds >= 3) and card.ability.extra.mult or 0
+    card.joker_display_values.mult = (#counted_suits + wilds >= 3) and card.ability.extra.mult or 0
     card.joker_display_values.localised_text = localize("k_phanta_exactly_three_suits")
   end
 }

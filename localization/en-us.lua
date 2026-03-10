@@ -472,6 +472,25 @@ return {
                     "{C:attention}even{} rounds"
                 }
             },
+            j_phanta_goldenghost            = {
+                name = 'Golden Ghost',
+                text =
+                {
+                    "Earn {C:money}$#1#{} at end of round,",
+                    "gains {C:money}$#2#{} when playing",
+                    "{C:attention}final{} hand of round"
+                }
+            },
+            j_phanta_ghostinabucket         = {
+                name = "Ghost in a Bucket",
+                text =
+                {
+                    "{C:attention}Aces{} held in hand each",
+                    "have a {C:green}#1# in #2#{} chance to",
+                    "create a {C:tarot}Tarot{} card",
+                    "{C:inactive}(Must have room){}"
+                }
+            },
             j_phanta_purplegoldenjoker      = {
                 name = 'Purple Golden Joker',
                 text = {
@@ -495,7 +514,7 @@ return {
                 text = {
                     "Gives {C:money}$#1#{} when a card",
                     "with {C:diamonds}Diamonds{} suit is",
-                    "{C:red}destroyed{}, and increases",
+                    "{C:red}destroyed{} and increases",
                     "reward by {C:money}$#2#{}"
                 }
             },
@@ -532,6 +551,15 @@ return {
                     "Gains {C:white,X:mult}X#1#{} Mult for each",
                     "card {C:attention}discarded{} this round",
                     "{C:inactive}(Currently {C:white,X:mult}X#2#{C:inactive} Mult){}"
+                }
+            },
+            j_phanta_bountyhunter           = {
+                name = "Bounty Hunter",
+                text =
+                {
+                    "When {C:attention}Blind{} is selected,",
+                    "{C:red}destroy{} Joker to the",
+                    "right and earn {C:money}$#1#{}"
                 }
             },
             j_phanta_oracle                 = {
@@ -651,10 +679,10 @@ return {
             j_phanta_kylehyde               = {
                 name = 'Kyle Hyde',
                 text = {
-                    "Played cards with {C:hearts}Hearts{}",
-                    "or {C:diamonds}Diamonds{} suit have a",
-                    "{C:green}#1# in #2#{} chance to become",
-                    "{C:attention}Stone{} cards when scored"
+                    "When {C:attention}Boss Blind{} is defeated,",
+                    "a random base edition",
+                    "{C:attention}Joker{} becomes {C:dark_edition}Drilled{}",
+                    "{C:inactive}(Except this Joker){}"
                 }
             },
             j_phanta_inception              = {
@@ -699,6 +727,13 @@ return {
                     "{C:attention}third{} hand of round",
                     "{C:inactive}(Currently {C:white,X:mult}X#2#{C:inactive} Mult){}"
                 }
+            },
+            j_phanta_giveway                = {
+                name = "Give Way",
+                text = {
+                    "{C:white,X:mult}X#1#{} Mult",
+                    "before scoring",
+                },
             },
             j_phanta_animalinstinct         = {
                 name = "Animal Instinct",
@@ -855,7 +890,7 @@ return {
                     "{C:attention}Aces{} give {C:white,X:mult}X#1#{} Mult"
                 }
             },
-            j_phanta_maskofthephantom             = {
+            j_phanta_maskofthephantom       = {
                 name = 'Mask of the Phantom',
                 text = {
                     "Played and {C:attention}unscored face{}",
@@ -881,9 +916,9 @@ return {
             j_phanta_stickercollection      = {
                 name = 'Sticker Collection',
                 text = {
-                    "Retriggers the {C:attention}lowest{} played",
-                    "and scored card {C:attention}#1#{} times",
-                    "if played hand is a {C:attention}Junk{}"
+                    "Played and unscored",
+                    "cards earn {C:money}$#1#{} if",
+                    "they are {C:attention}enhanced{}"
                 },
                 unlock = {
                     "Beat a Boss Blind",
@@ -907,6 +942,15 @@ return {
                     "owned {C:blue}Common{} Joker",
                     "{C:inactive}(Will give {C:mult}+#2#{C:inactive} Mult){}"
                 }
+            },
+            j_phanta_ghostimage             = {
+                name = "Ghost Image",
+                text = {
+                    "Upgrades a random",
+                    "poker hand by {C:attention}#1#{}",
+                    "level when using",
+                    "a {C:planet}Planet{} card",
+                },
             },
             j_phanta_prognosticator         = {
                 name = 'Prognosticator',
@@ -960,10 +1004,9 @@ return {
             j_phanta_jeandescole            = {
                 name = 'Jean Descole',
                 text = {
-                    "Upon discarding a {C:attention}Stone{}",
-                    "card, {C:red}destroys{} it and",
-                    "creates a copy of {C:tarot}The Devil{}",
-                    "{C:inactive}(Must have room){}"
+                    "On final {C:red}discard{} of",
+                    "round, an {C:attention}unenhanced{} card",
+                    "in hand becomes {C:attention}Gold{}"
                 }
             },
             j_phanta_engineer               = {
@@ -985,7 +1028,7 @@ return {
                 text = {
                     "Creates a copy of {C:tarot}Death{} if",
                     "{C:attention}first hand{} of round contains",
-                    "{C:attention}5{} cards with {C:hearts}Hearts{} suit",
+                    "{C:attention}#1#{} cards with {C:hearts}Hearts{} suit",
                     "{C:inactive}(Must have room){}"
                 },
                 unlock = {
@@ -1028,6 +1071,13 @@ return {
                     "they are played and scored",
                 }
             },
+            j_phanta_astro                  = {
+                name = "Astro",
+                text = {
+                    "Held {C:planet}Planet{} cards",
+                    "give {C:chips}+#1#{} Chips"
+                }
+            },
             j_phanta_honeydew               = {
                 name = 'Honeydew',
                 text = {
@@ -1054,6 +1104,22 @@ return {
                     "round, adds a",
                     "{C:blue}Blue{} seal to the",
                     "{C:attention}first{} scored card"
+                }
+            },
+            j_phanta_liam                   = {
+                name = "Liam",
+                text = {
+                    "{C:white,X:mult}X#1#{} Mult if",
+                    "{C:attention}Joker{} to the",
+                    "right is {C:red}Rare{}"
+                }
+            },
+            j_phanta_bryce                  = {
+                name = "Bryce",
+                text = {
+                    "When hand is",
+                    "played, gain",
+                    "{C:red}+#1#{} discard"
                 }
             },
             j_phanta_web                    = {
@@ -1111,9 +1177,9 @@ return {
             j_phanta_identity               = {
                 name = 'Identity',
                 text = {
-                    "Creates #1# {C:dark_edition}Negative{}",
-                    "{C:spectral}Spectral{} cards at",
-                    "the end of the {C:attention}shop",
+                    "Creates {C:attention}#1#{} random",
+                    "{C:spectral}Spectral{} card at",
+                    "the end of the {C:attention}shop{}",
                     "{C:red,E:2}self destructs{}"
                 }
             },
@@ -1121,8 +1187,8 @@ return {
                 name = 'Tricolour',
                 text = {
                     "{C:mult}+#1#{} Mult if played",
-                    "hand contains exactly",
-                    "{C:attention}3{} unique scoring {C:attention}suits{}"
+                    "hand contains {C:attention}3{}",
+                    "unique scoring {C:attention}suits{}"
                 }
             },
             j_phanta_beadnecklace           = {
@@ -1164,9 +1230,18 @@ return {
             j_phanta_ransomnote             = {
                 name = 'Ransom Note',
                 text = {
-                    "Gain {C:money}$#1#{} when",
+                    "Earn {C:money}$#1#{} when",
                     "selling Jokers"
                 }
+            },
+            j_phanta_tipoftheiceberg        = {
+                name = "Tip of the Iceberg",
+                text = {
+                    "Gains {C:chips}+#1#{} Chips for each",
+                    "card {C:attention}purchased{} from the",
+                    "shop before {C:green}rerolling{}",
+                    "{C:inactive}(Currently {C:chips}+#2#{C:inactive} Chips){}",
+                },
             },
             j_phanta_purplejoker            = {
                 name = 'Purple Joker',
@@ -1180,10 +1255,10 @@ return {
             j_phanta_manga                  = {
                 name = 'Manga',
                 text = {
-                    "Creates a {C:phanta_hanafuda}Hanafuda{} card",
-                    "when {C:red}discarding{} a {C:attention}7{} and",
-                    "{C:attention}8{} at the same time",
-                    "{C:inactive}(Must have room){}"
+                    "At the end of",
+                    "the {C:money}shop{}, all held",
+                    "{C:tarot}Tarot{} cards become",
+                    "{C:phanta_hanafuda}Hanafuda Chaff{} cards"
                 }
             },
             j_phanta_monetjoker             = {
@@ -1195,7 +1270,7 @@ return {
                     "{C:inactive}(Must have room){}"
                 }
             },
-            j_phanta_haringjoker             = {
+            j_phanta_haringjoker            = {
                 name = 'Haring Joker',
                 text = {
                     "Other {C:blue}Common{} Jokers",
@@ -1348,23 +1423,24 @@ return {
                 text = {
                     "Once {C:attention}A-9{} {C:inactive}[#1#]{} have",
                     "each been played and scored,",
-                    "upgrades {C:attention}Straight{} by {C:attention}#2#{} levels"
+                    "creates up to {C:attention}#2#{} {C:tarot}Tarot{} cards",
+                    "{C:inactive}(Must have room){}"
                 }
             },
             j_phanta_ceaseanddesist         = {
                 name = 'Cease & Desist',
                 text = {
-                    "Upgrades {C:attention}Straight{} by",
-                    "{C:attention}#1#{} level when any",
-                    "{C:attention}Booster Pack{} is skipped"
+                    "Earn {C:money}$#1#{} when skipping",
+                    "any {C:attention}Booster Pack{}"
                 }
             },
             j_phanta_thepolicemun           = {
                 name = 'The Policemun',
                 text = {
-                    "When any {C:attention}Blind{}",
-                    "is skipped, upgrades",
-                    "{C:attention}Straight{} by {C:attention}#1#{} levels"
+                    "Gains {C:white,X:mult}X#1#{} Mult at the",
+                    "end of the round for",
+                    "each remaining {C:red}discard{}",
+                    "{C:inactive}(Currently {C:white,X:mult}X#2#{C:inactive} Mult){}"
                 }
             },
             j_phanta_nojoke                 = {
@@ -1578,6 +1654,15 @@ return {
                     "second ability"
                 }
             },
+            j_phanta_topsyturvy             = {
+                name = "Topsy Turvy",
+                text = {
+                    "Played {C:attention}3s{} give {C:chips}+#1#{}",
+                    "Chips when scored,",
+                    "played {C:attention}2s{} give {C:chips}+#2#{}",
+                    "Chips when scored",
+                },
+            },
             j_phanta_deckjoker              = {
                 name = 'Deck Joker',
                 text = {
@@ -1593,11 +1678,20 @@ return {
                     "{s:0.8}rank changes at end of round{}"
                 }
             },
+            j_phanta_luckynumber            = {
+                name = "Lucky Number",
+                text = {
+                    "Played {C:attention}3s{}, {C:attention}4s{} and",
+                    "{C:attention}9s{} have a {C:green}#1# in #2#{}",
+                    "chance to earn",
+                    "{C:money}$#3#{} when scored"
+                }
+            },
             j_phanta_absentjoker            = {
                 name = 'Absent Joker',
                 text = {
                     "{C:mult}+#1#{} Mult if",
-                    "exactly {C:attention}1{} Joker",
+                    "at least {C:attention}1{} Joker",
                     "slot is {C:attention}empty{}"
                 }
             },
@@ -1690,6 +1784,7 @@ return {
                 name = "Jack-'o-lantern",
                 text = {
                     "Played {C:attention}face{} cards",
+                    "with enhancements",
                     "give {C:white,X:mult}X#1#{} Mult",
                     "when {C:attention}scored{}"
                 }
@@ -1719,7 +1814,7 @@ return {
                     "in the shop"
                 }
             },
-            j_phanta_thefall               = {
+            j_phanta_thefall                = {
                 name = 'The Fall',
                 text = {
                     "Gains {C:white,X:mult}X#1#{} Mult if",
@@ -1732,18 +1827,15 @@ return {
             j_phanta_donpaolo               = {
                 name = 'Don Paolo',
                 text = {
-                    "Upgrades a {C:attention}random{}",
-                    "{C:attention}hand{} by {C:attention}#1#{} levels when",
-                    "selling a {C:tarot}Tarot{} card"
+                    "Earn {C:money}$#1#{} when using",
+                    "{C:tarot}Tarot{} cards"
                 }
             },
             j_phanta_futureluke             = {
                 name = 'Future Luke',
                 text = {
-                    "If up to {C:attention}2{} cards are",
-                    "selected, sell a {C:planet}Planet{}",
-                    "card to give them",
-                    "{C:attention}random enhancements{}"
+                    "Earn {C:money}$#1#{} when using",
+                    "{C:planet}Planet{} cards"
                 }
             },
             j_phanta_barton                 = {
@@ -1765,6 +1857,21 @@ return {
                     "{C:inactive}({C:attention}#3#/#2#{C:inactive}, #4#){}",
                     "{C:inactive,s:0.65}(Active if with Barton){}"
                 }
+            },
+            j_phanta_stachenscarfen         = {
+                name = "Stachenscarfen",
+                text = {
+                    "All spawned {C:attention}Jokers{}",
+                    "are {C:green}Uncommon{}",
+                },
+            },
+            j_phanta_aldus                  = {
+                name = "Aldus",
+                text = {
+                    "{C:tarot}Tarot{} cards that",
+                    "add {C:attention}enhancements{}",
+                    "{C:red}cannot appear{}",
+                },
             },
             j_phanta_theblackraven          = {
                 name = 'The Black Raven',
@@ -1847,9 +1954,10 @@ return {
             j_phanta_glassjoe               = {
                 name = "Glass Joe",
                 text = {
-                    "Played {C:attention}face{} cards",
-                    "with {C:diamonds}Diamonds{} suit",
-                    "become {C:attention}Glass{} when scored"
+                    "{C:white,X:mult}X#1#{} Mult,",
+                    "{C:green}#2# in #3#{} chance this",
+                    "card is {C:red}destroyed{}",
+                    "at end of round"
                 }
             },
             j_phanta_pottedpeashooter       = {
@@ -1868,7 +1976,7 @@ return {
                     "{C:inactive}(Currently {C:chips}+#3#{C:inactive} Chips){}"
                 }
             },
-            j_phanta_visionary            = {
+            j_phanta_visionary              = {
                 name = 'Visionary',
                 text = {
                     "Gains {C:white,X:mult}X#1#{} Mult if",
@@ -1913,10 +2021,18 @@ return {
                     "{C:inactive}(Must have room){}"
                 }
             },
+            j_phanta_thumper                = {
+                name = "Thumper",
+                text = {
+                    "Played {C:attention}face{} cards have",
+                    "a {C:green}#1# in #2#{} chance to",
+                    "give {C:money}$#3#{} when {C:attention}unscored{}"
+                }
+            },
             j_phanta_theriddler             = {
                 name = "The Riddler",
                 text = {
-                    "{C:chips}+#1#{} Chips,",
+                    "{C:white,X:mult}X#1#{} Mult,",
                     "all cards in your deck",
                     "have {C:attention}unknown{} suits"
                 }
@@ -1989,6 +2105,24 @@ return {
                     "by {C:money}$#2#{} when used"
                 }
             },
+            j_phanta_thescream              = {
+                name = "The Scream",
+                text = {
+                    "At the end of the",
+                    "round, {C:attention}duplicates{} a",
+                    "random held {C:attention}consumable{}",
+                    "{C:inactive}(Must have room){}",
+                },
+            },
+            j_phanta_alecwatson             = {
+                name = "Alec Watson",
+                text = {
+                    "When a {C:tarot}Tarot{} or {C:planet}Planet{}",
+                    "card is purchased, creates",
+                    "a {C:attention}second copy{} of it",
+                    "{C:inactive}(Must have room){}"
+                },
+            },
             j_phanta_clapperboard           = {
                 name = "Clapperboard",
                 text = {
@@ -2040,6 +2174,32 @@ return {
                     "becomes a {C:attention}Steel{} card"
                 }
             },
+            j_phanta_occultbanner           = {
+                name = "Occult Banner",
+                text = {
+                    "Next shop is {C:green}guaranteed{}",
+                    "to have a {C:spectral}Spectral Pack{}",
+                    "if {C:attention}Blind{} was defeated",
+                    "with {C:red}0{} discards used"
+                }
+            },
+            j_phanta_ontherun               = {
+                name = "On the Run",
+                text = {
+                    "Gains {C:mult}+#1#{} Mult for each",
+                    "{C:attention}consecutive{} hand played",
+                    "with {C:red}0{} discards remaining",
+                    "{C:inactive}(Currently {C:mult}+#2#{C:inactive} Mult){}"
+                }
+            },
+            j_phanta_longtail               = {
+                name = "Long Tail",
+                text = {
+                    "Earn {C:money}$#1#{} when playing",
+                    "{C:attention}Straights{} without",
+                    "{C:attention}face{} cards"
+                }
+            },
             j_phanta_mrbigmoneybags         = {
                 name = 'Mr. Big Moneybags',
                 text = {
@@ -2079,6 +2239,15 @@ return {
                     "{C:spectral}Ethereal{} Tags from this",
                     "Joker's {C:red}MORE{} menu,",
                     "Tags cost {C:money}$20{} each"
+                }
+            },
+            j_phanta_sailthestyx            = {
+                name = 'Sail the Styx',
+                text =
+                {
+                    "Gives {C:attention}+#1#{} Joker slots",
+                    "after {C:attention}#2#{} {C:inactive}[#3#]{} Jokers {C:money}sold{}",
+                    "{C:inactive}(Currently #4#){}"
                 }
             },
             j_phanta_l                      = {
@@ -2147,7 +2316,7 @@ return {
                 name = 'Dimere',
                 text = {
                     "When {C:attention}Boss Blind{} is defeated,",
-                    "1 random {C:attention}Joker{} becomes",
+                    "a random {C:attention}Joker{} becomes",
                     "{C:negative}Negative{} {C:inactive}(except Dimeres{}",
                     "{C:inactive}or Jokers with editions){}"
                 },
@@ -3099,17 +3268,11 @@ return {
         Spectral = {
             c_phanta_jinn = {
                 name = "Jinn",
-                text = {
-                    {
-                        "Add a {C:attention}Ghost Seal{}",
-                        "to {C:attention}#1#{} selected",
-                        "card held in hand"
-                    },
-                    {
-                        "Once used, this card",
-                        "will not appear",
-                        "again this run"
-                    }
+                text =
+                {
+                    "Add a {C:attention}Ghost Seal{}",
+                    "to {C:attention}#1#{} selected",
+                    "card held in hand"
                 }
             },
             c_phanta_shard = {
@@ -4100,6 +4263,7 @@ return {
             b_phanta_starterpack_cards = "Starter Packs",
             k_phanta_starterpack = "Starter Pack",
             plus_standard_tag = '+Standard Tag',
+            k_phanta_success_ex = "Success!",
             plus_rare_tag = '+Rare Tag',
             plus_consumable_slot = '+1 Consumable Slot',
             minus_consumable_slot = '-1 Consumable Slot',
@@ -4118,10 +4282,16 @@ return {
             phanta_sleepy_awake = "Awake",
             b_phanta_more = "MORE",
             phanta_set = "SET",
+            phanta_clear = "CLEAR",
+            phanta_jokers = "JOKERS",
+            phanta_consumables = "CONSUMABLES",
             phanta_profile_more_tooltip = {
                 "Charm, Meteor and Ethereal Tags",
                 "cost $20 each"
             },
+
+            phanta_deathnote_recent_names = "Recent Names",
+            phanta_none = "None",
             phanta_deathnote_more_tooltip = {
                 "Enter the name of a card.",
                 "(Some sets, like playing cards",
@@ -4130,6 +4300,10 @@ return {
             phanta_deathnote_more_text = "enter card name...",
             phanta_deathnote_name_present = "Chosen name: ",
             phanta_deathnote_no_name = "No name chosen",
+
+            k_phanta_deathnote_tab1 = "Type Name",
+            k_phanta_deathnote_tab2 = "Collection",
+            k_phanta_deathnote_tab3 = "Recent Names",
 
             phanta_theblackraven_blackmarket = "THE BLACK MARKET",
 
@@ -4156,9 +4330,11 @@ return {
             k_phanta_exactly_three_suits = "Exactly 3 suits",
             k_phanta_ace_of_spades = "Ace of Spades",
             k_phanta_king_and_queen = "King and Queen",
-            k_phanta_face_cards = "Face cards",
+            k_phanta_enhanced_faces = "Enhanced faces",
             k_phanta_stone_cards = "Stone cards",
             k_phanta_gold_cards = "Gold cards",
+            k_phanta_before_scoring = "Before scoring",
+
             k_phanta_twos = "2s",
             k_phanta_threes = "3s",
             k_phanta_fives = "5s",
@@ -4179,7 +4355,25 @@ return {
 
             phanta_credit_1 = "Mod by GhostSalt",
             phanta_credit_2 = "Ability brainstorming: BakersDozenBagels",
-            phanta_credit_3 = "and help from the Balatro Discord server"
+            phanta_credit_3 = "and help from the Balatro Discord server",
+
+
+
+
+
+
+
+
+
+
+
+
+            flipbook_dontshowagain = "Don't show me this again",
+            flipbook_disabled_headsup_1 = "It is recommended that",
+            flipbook_disabled_headsup_2 = "you install/enable Flipbook",
+            flipbook_disabled_headsup_3 = "to allow this mod to display",
+            flipbook_disabled_headsup_4 = "its custom animations.",
+            flipbook_disabled_headsup_5 = "https://github.com/GhostSalt/Flipbook",
         },
         labels = {
             phanta_ghostcard = "Ghost Card",

@@ -91,15 +91,15 @@ G.Phanta.centers["hintcoin"] = {
   rarity = 1,
   atlas = 'PhantaLaytonAnims',
   pos = { x = 8, y = 1 },
-  phanta_anim_states = {
-    ["normal"] = {
+  flipbook_anim_states = {
+    normal = {
       anim = {
         { x = 8,                             y = 1, t = 3 },
         { xrange = { first = 9, last = 11 }, y = 1, t = 0.075 }
       },
       loop = true
     },
-    ["collect"] = {
+    collect = {
       anim = {
         { xrange = { first = 6, last = 11 }, y = 2, t = 0.05 },
         { xrange = { first = 3, last = 7 },  y = 3, t = 0.05 },
@@ -107,7 +107,7 @@ G.Phanta.centers["hintcoin"] = {
       },
       loop = false
     },
-    ["reappear"] = {
+    reappear = {
       anim = {
         { xrange = { first = 8, last = 9 }, y = 3, t = 0.05 }
       },
@@ -115,8 +115,8 @@ G.Phanta.centers["hintcoin"] = {
       continuation = "normal"
     }
   },
-  phanta_anim_current_state = "normal",
-  cost = 5,
+  flipbook_anim_initial_state = "normal",
+  cost = 6,
   blueprint_compat = true,
   eternal_compat = true,
   perishable_compat = true,
@@ -125,22 +125,22 @@ G.Phanta.centers["hintcoin"] = {
   end,
   calculate = function(self, card, context)
     if context.before and G.GAME.current_round.hands_played == 1 then
-      G.E_MANAGER:add_event(Event({
-        func = function()
-          if not context.blueprint then
+      if not context.blueprint then
+        G.E_MANAGER:add_event(Event({
+          func = function()
             play_sound("phanta_hintcoin", 1, 0.9)
-            card:phanta_set_anim_state("collect")
+            card:flipbook_set_anim_state("collect")
+            return true
           end
-          return true
-        end
-      }))
-      card.ability.extra.given = true
+        }))
+        card.ability.extra.given = true
+      end
       return { dollars = card.ability.extra.money }
     end
 
     if context.end_of_round and not context.individual and not context.repetition and not context.blueprint and card.ability.extra.given then
       card.ability.extra.given = false
-      card:phanta_set_anim_state("reappear")
+      card:flipbook_set_anim_state("reappear")
     end
   end,
   pronouns = "it_its"
@@ -264,11 +264,11 @@ G.Phanta.centers["shootingstar"] = {
 }
 
 G.Phanta.centers["puzzle"] = {
-  config = { extra = { given_money = 3 } },
+  config = { extra = { given_money = 2 } },
   rarity = 1,
   atlas = 'PhantaLaytonAnims',
   pos = { x = 0, y = 8 },
-  phanta_anim = {
+  flipbook_anim = {
     { xrange = { first = 11, last = 10 }, y = 0, t = 0.05 },
     { xrange = { first = 5, last = 9 },   y = 0, t = 0.05 },
     { xrange = { first = 8, last = 6 },   y = 0, t = 0.05 },
@@ -395,7 +395,7 @@ G.Phanta.centers["oracle"] = {
   rarity = 1,
   atlas = 'PhantaMiscAnims1',
   pos = { x = 4, y = 11 },
-  phanta_anim = {
+  flipbook_anim = {
     { xrange = { first = 4, last = 11 }, y = 11, t = 0.2 }
   },
   cost = 4,
@@ -425,7 +425,7 @@ G.Phanta.centers["thief"] = {
   rarity = 1,
   atlas = 'PhantaMiscAnims2',
   pos = { x = 10, y = 10 },
-  phanta_anim = {
+  flipbook_anim = {
     { xrange = { first = 10, last = 11 }, y = 10, t = 0.05 },
     { xrange = { first = 0, last = 8 },   y = 11, t = 0.05 },
     { x = 9,                              y = 11, t = 0.5 },
@@ -452,7 +452,7 @@ G.Phanta.centers["detective"] = {
   rarity = 2,
   atlas = 'PhantaMiscAnims3',
   pos = { x = 0, y = 1 },
-  phanta_anim = {
+  flipbook_anim = {
     { x = 0, y = 2, t = 0.9 },
     { x = 1, y = 2, t = 0.3 }, { x = 0, y = 2, t = 0.6 },
     { x = 2, y = 2, t = 0.3 }, { x = 0, y = 2, t = 0.9 },
@@ -595,15 +595,15 @@ G.Phanta.centers["new2dsxl"] = {
   rarity = 3,
   atlas = 'PhantaMiscAnims5',
   pos = { x = 0, y = 0 },
-  phanta_anim_states = {
-    ["normal"] = {
+  flipbook_anim_states = {
+    normal = {
       anim = {
         { x = 0, y = 0, t = 1 }
       },
       loop = false
     },
 
-    ["streetpass"] = {
+    streetpass = {
       anim = {
         { x = 0,                            y = 0, t = 0.1 },
         { xrange = { first = 2, last = 3 }, y = 0, t = 0.1 },
@@ -612,7 +612,7 @@ G.Phanta.centers["new2dsxl"] = {
       loop = false
     },
 
-    ["streetpass off"] = {
+    streetpass_off = {
       anim = {
         { x = 4,                            y = 0, t = 0.1 },
         { xrange = { first = 2, last = 3 }, y = 0, t = 0.1 },
@@ -621,7 +621,7 @@ G.Phanta.centers["new2dsxl"] = {
       loop = false
     },
 
-    ["low battery"] = {
+    low_battery = {
       anim = {
         { x = 1, y = 0, t = 0.125 },
         { x = 0, y = 0, t = 0.125 }
@@ -629,6 +629,7 @@ G.Phanta.centers["new2dsxl"] = {
       loop = true
     },
   },
+  flipbook_anim_initial_state = "normal",
   cost = 8,
   blueprint_compat = true,
   eternal_compat = true,
@@ -659,13 +660,13 @@ G.Phanta.centers["new2dsxl"] = {
       }
     end
 
-    if not context.blueprint and card.config.center.phanta_anim_current_state ~= "streetpass" then
-      if context.after and G.GAME.current_round.hands_left == 1 and not context.blueprint and card.config.center.phanta_anim_current_state ~= "low battery" then
-        card:phanta_set_anim_state("low battery")
+    if not context.blueprint and card.flipbook_anim_current_state ~= "streetpass" then
+      if context.after and G.GAME.current_round.hands_left == 1 and not context.blueprint and card.flipbook_anim_current_state ~= "low_battery" then
+        card:flipbook_set_anim_state("low_battery")
       end
 
       if context.end_of_round and not context.individual and not context.repetition and not context.blueprint then
-        card:phanta_set_anim_state("normal")
+        card:flipbook_set_anim_state("normal")
       end
     end
   end,
@@ -885,35 +886,47 @@ G.Phanta.centers["bluekeycards"] = {
   pronouns = "they_them"
 }
 
+SMODS.Sound({
+  key = "kylehyde",
+  path = "phanta_kylehyde.ogg",
+  replace = true
+})
+
 G.Phanta.centers["kylehyde"] = {
-  config = { extra = { odds = 4 } },
   loc_vars = function(self, info_queue, card)
-    info_queue[#info_queue + 1] = G.P_CENTERS.m_stone
-    local num, denom = SMODS.get_probability_vars(card, 1, card.ability.extra.odds, "kylehyde")
-    return { vars = { num, denom } }
+    info_queue[#info_queue + 1] = G.P_CENTERS.e_phanta_drilled
+    return {}
   end,
   rarity = 2,
   atlas = 'Phanta',
   pos = { x = 7, y = 6 },
-  cost = 5,
+  cost = 6,
   blueprint_compat = true,
   eternal_compat = true,
   perishable_compat = true,
   calculate = function(self, card, context)
-    if context.individual and context.cardarea == G.play and (context.other_card:is_suit("Hearts") or context.other_card:is_suit("Diamonds")) and SMODS.pseudorandom_probability(card, "kylehyde", 1, card.ability.extra.odds) then
-      local card_temp = context.other_card
-      card_temp:set_ability(G.P_CENTERS.m_stone, nil, true)
+    if context.end_of_round and not context.individual and not context.repetition and G.GAME.blind.boss then
+      local candidates = {}
+      for i = 1, #G.jokers.cards do
+        if G.jokers.cards[i] ~= card and G.jokers.cards[i].ability.set == "Joker" and not G.jokers.cards[i].edition and not G.jokers.cards[i].phanta_kylehyde_shot then
+          candidates[#candidates + 1] = G.jokers.cards[i]
+        end
+      end
+
+      if not next(candidates) then return end
+      local _card = pseudorandom_element(candidates, pseudoseed("kylehyde"))
+      _card.phanta_kylehyde_shot = true
+
       G.E_MANAGER:add_event(Event({
         func = function()
-          card_temp:juice_up()
+          _card:set_edition("e_phanta_drilled", true, true)
+          _card.phanta_kylehyde_shot = nil
+          _card:juice_up()
+          play_sound("phanta_kylehyde", 1, 0.6)
           return true
         end
       }))
-      return {
-        message = "Stone",
-        colour = G.C.RED,
-        card = card
-      }
+      return { message = localize({ key = "e_phanta_drilled", type = "name_text", set = "Edition" }) }
     end
   end,
   pronouns = "he_him"
@@ -924,7 +937,7 @@ G.Phanta.centers["inception"] = {
   rarity = 1,
   atlas = 'PhantaMiscAnims4',
   pos = { x = 10, y = 4 },
-  phanta_anim = {
+  flipbook_anim = {
     { x = 10, y = 4, t = 0.6 },
     { x = 11, y = 4, t = 0.08 },
     { x = 10, y = 5, t = 0.08 },
@@ -1032,7 +1045,7 @@ G.Phanta.centers["badhairday"] = {
   rarity = 2,
   atlas = 'PhantaMiscAnims5',
   pos = { x = 3, y = 2 },
-  phanta_anim = {
+  flipbook_anim = {
     { x = 3, y = 2, t = 1.5 }, { x = 4, y = 2, t = 0.1 },
     { x = 3, y = 2, t = 0.1 }, { x = 4, y = 2, t = 0.1 },
     { x = 3, y = 2, t = 1.8 }, { x = 4, y = 2, t = 0.1 },
@@ -1136,24 +1149,12 @@ G.Phanta.centers["target"] = {
   rarity = 2,
   atlas = 'PhantaMiscAnims1',
   pos = { x = 0, y = 0 },
-  phanta_anim = {
-    { x = 0, y = 0, t = 2 },
-    { x = 1, y = 0, t = 0.1 },
-    { x = 2, y = 0, t = 0.1 },
-    { x = 3, y = 0, t = 0.1 },
-    { x = 4, y = 0, t = 0.1 },
-    { x = 5, y = 0, t = 0.1 },
-    { x = 6, y = 0, t = 1 },
-    { x = 7, y = 0, t = 0.1 }, { x = 8, y = 0, t = 0.1 },
-    { x = 9, y = 0, t = 0.1 }, { x = 10, y = 0, t = 0.1 }, { x = 11, y = 0, t = 0.1 },
-    { x = 0, y = 1, t = 0.1 }, { x = 1, y = 1, t = 0.1 }, { x = 2, y = 1, t = 0.1 },
-    { x = 3, y = 1, t = 0.1 }, { x = 4, y = 1, t = 0.1 }, { x = 5, y = 1, t = 0.1 },
-    { x = 6, y = 1, t = 0.1 }, { x = 7, y = 1, t = 0.1 }, { x = 8, y = 1, t = 0.1 },
-    { x = 9, y = 1, t = 0.1 }, { x = 10, y = 1, t = 0.1 }, { x = 11, y = 1, t = 0.1 },
-    { x = 0, y = 2, t = 0.1 }, { x = 1, y = 2, t = 0.1 }, { x = 2, y = 2, t = 0.1 },
-    { x = 3, y = 2, t = 0.1 }, { x = 4, y = 2, t = 0.1 }, { x = 5, y = 2, t = 0.1 },
-    { x = 6, y = 2, t = 0.1 }, { x = 7, y = 2, t = 0.1 }, { x = 8, y = 2, t = 0.1 },
-    { x = 9, y = 2, t = 0.1 }, { x = 10, y = 2, t = 0.1 }, { x = 11, y = 2, t = 0.1 },
+  flipbook_anim = {
+    { x = 0,                             y = 0,                            t = 2 },
+    { xrange = { first = 1, last = 5 },  y = 0,                            t = 0.1 },
+    { x = 6,                             y = 0,                            t = 1 },
+    { xrange = { first = 7, last = 11 }, y = 0,                            t = 0.1 },
+    { xrange = { first = 0, last = 11 }, yrange = { first = 1, last = 2 }, t = 0.1 }
   },
   cost = 6,
   blueprint_compat = true,
@@ -1292,27 +1293,24 @@ G.Phanta.centers["task"] = {
   rarity = 1,
   atlas = 'PhantaMiscAnims1',
   pos = { x = 0, y = 3 },
-  phanta_anim = {
-    { x = 0,                            y = 3, t = 4 },
-    { x = 1,                            y = 3, t = 0.1 },
-    { x = 2,                            y = 3, t = 0.075 },
-    { x = 3,                            y = 3, t = 0.075 },
-    { x = 4,                            y = 3, t = 0.15 },
-    { x = 5,                            y = 3, t = 0.075 },
-    { x = 6,                            y = 3, t = 0.075 },
-    { x = 7,                            y = 3, t = 0.5 },
-    { x = 8,                            y = 3, t = 0.1 },
-    { x = 9,                            y = 3, t = 0.1 },
-    { x = 10,                           y = 3, t = 0.1 },
-    { x = 11,                           y = 3, t = 0.1 },
-    { x = 0,                            y = 4, t = 0.1 },
-    { x = 1,                            y = 4, t = 0.9 },
-    { xrange = { first = 2, last = 6 }, y = 4, t = 0.075 },
-    { x = 7,                            y = 4, t = 0.8 },
-    { x = 8,                            y = 4, t = 0.3 },
-    { x = 9,                            y = 4, t = 0.5 },
-    { x = 10,                           y = 4, t = 1 },
-    { x = 11,                           y = 4, t = 0.1 }
+  flipbook_anim = {
+    { x = 0,                             y = 3, t = 4 },
+    { x = 1,                             y = 3, t = 0.1 },
+    { x = 2,                             y = 3, t = 0.075 },
+    { x = 3,                             y = 3, t = 0.075 },
+    { x = 4,                             y = 3, t = 0.15 },
+    { x = 5,                             y = 3, t = 0.075 },
+    { x = 6,                             y = 3, t = 0.075 },
+    { x = 7,                             y = 3, t = 0.5 },
+    { xrange = { first = 8, last = 11 }, y = 3, t = 0.1 },
+    { x = 0,                             y = 4, t = 0.1 },
+    { x = 1,                             y = 4, t = 0.9 },
+    { xrange = { first = 2, last = 6 },  y = 4, t = 0.075 },
+    { x = 7,                             y = 4, t = 0.8 },
+    { x = 8,                             y = 4, t = 0.3 },
+    { x = 9,                             y = 4, t = 0.5 },
+    { x = 10,                            y = 4, t = 1 },
+    { x = 11,                            y = 4, t = 0.1 }
   },
   cost = 5,
   blueprint_compat = true,
@@ -1341,11 +1339,11 @@ G.Phanta.centers["saltcircle"] = {
   rarity = 1,
   atlas = 'PhantaMiscAnims4',
   pos = { x = 8, y = 1 },
-  pos_extra = { x = 11, y = 1 },
-  phanta_anim = {
+  flipbook_pos_extra = { x = 11, y = 1 },
+  flipbook_anim = {
     { xrange = { first = 8, last = 10 }, y = 1, t = 0.15 },
   },
-  phanta_anim_extra = {
+  flipbook_anim_extra = {
     { x = 11,                           y = 1, t = 3 },
     { xrange = { first = 0, last = 6 }, y = 2, t = 0.1 },
     { xrange = { first = 5, last = 0 }, y = 2, t = 0.1 }
@@ -1503,7 +1501,7 @@ G.Phanta.centers["knowledgeofthecollege"] = {
   rarity = 2,
   atlas = 'PhantaKnowledgeOfTheCollegeAnim',
   pos = { x = 0, y = 0 },
-  phanta_anim = {
+  flipbook_anim = {
     { xrange = { first = 0, last = 11 }, yrange = { first = 0, last = 4 }, t = 0.15 },
     { xrange = { first = 0, last = 10 }, y = 5,                            t = 0.15 }
   },
@@ -1567,24 +1565,21 @@ G.Phanta.centers["stickercollection"] = {
     return args.type == "round_win" and G.GAME.last_hand_played == self.unlock_condition.extra and
         G.GAME.blind:get_type() == "Boss"
   end,
-  config = { extra = { retriggers = 3 } },
+  config = { extra = { money = 2 } },
   rarity = 2,
   atlas = 'Phanta',
   pos = { x = 2, y = 10 },
-  cost = 5,
+  cost = 6,
   loc_vars = function(self, info_queue, card)
-    return { vars = { card.ability.extra.retriggers } }
+    return { vars = { card.ability.extra.money } }
   end,
   blueprint_compat = true,
   eternal_compat = true,
   perishable_compat = true,
   calculate = function(self, card, context)
-    if context.repetition and context.scoring_name == "phanta_junk" and get_lowest(context.scoring_hand)[1][1]:get_id() == context.other_card:get_id() and context.cardarea == G.play then
-      return { repetitions = card.ability.extra.retriggers }
+    if context.individual and context.cardarea == "unscored" and next(SMODS.get_enhancements(context.other_card)) then
+      return { dollars = card.ability.extra.money }
     end
-  end,
-  in_pool = function()
-    return G.GAME.hands["phanta_junk"].visible and Phanta.config["junk_enabled"]
   end,
   pronouns = "they_them"
 }
@@ -1728,18 +1723,20 @@ G.Phanta.centers["grimreaper"] = {
 }
 
 G.Phanta.centers["professorlayton"] = {
-  config = { extra = { out_of_odds = 4, added_mult = 30 } },
+  config = { extra = { out_of_odds = 2, added_mult = 30 } },
   rarity = 2,
   atlas = 'PhantaLaytonAnims',
   pos = { x = 0, y = 0 },
-  phanta_anim = {
+  flipbook_anim = {
     { x = 0, y = 0, t = 1.6 }, { x = 1, y = 0, t = 0.1 },
     { x = 0, y = 0, t = 0.1 }, { x = 1, y = 0, t = 0.1 },
     { x = 0, y = 0, t = 2.4 }, { x = 1, y = 0, t = 0.1 },
     { x = 0, y = 0, t = 2.1 }, { x = 1, y = 0, t = 0.1 },
     { x = 0, y = 0, t = 1.2 }, { x = 1, y = 0, t = 0.1 }, { x = 0, y = 0, t = 0.3 },
     { x = 2, y = 0, t = 0.15 }, { x = 3, y = 0, t = 0.25 },
-    { x = 4, y = 0, t = 0.25 }, { x = 3, y = 0, t = 0.25 }, { x = 4, y = 0, t = 0.2 }, { x = 3, y = 0, t = 0.35 }, { x = 2, y = 0, t = 0.15 }, { x = 1, y = 0, t = 0.1 }
+    { x = 4, y = 0, t = 0.25 }, { x = 3, y = 0, t = 0.25 },
+    { x = 4, y = 0, t = 0.2 }, { x = 3, y = 0, t = 0.35 },
+    { x = 2, y = 0, t = 0.15 }, { x = 1, y = 0, t = 0.1 }
   },
   cost = 6,
   blueprint_compat = true,
@@ -1762,11 +1759,11 @@ G.Phanta.centers["professorlayton"] = {
 }
 
 G.Phanta.centers["luketriton"] = {
-  config = { extra = { out_of_odds = 4, xmult = 3 } },
+  config = { extra = { out_of_odds = 2, xmult = 3 } },
   rarity = 2,
   atlas = 'PhantaLaytonAnims',
   pos = { x = 0, y = 1 },
-  phanta_anim = {
+  flipbook_anim = {
     { x = 0, y = 1, t = 1.4 }, { x = 1, y = 1, t = 0.1 },
     { x = 0, y = 1, t = 1.9 }, { x = 1, y = 1, t = 0.1 },
     { x = 0, y = 1, t = 0.1 }, { x = 1, y = 1, t = 0.1 },
@@ -1807,7 +1804,7 @@ G.Phanta.centers["jeandescole"] = {
   rarity = 2,
   atlas = 'PhantaLaytonAnims',
   pos = { x = 0, y = 6 },
-  phanta_anim = {
+  flipbook_anim = {
     { x = 0, y = 6, t = 3 },
     { x = 1, y = 6, t = 0.15 },
     { x = 2, y = 6, t = 0.15 },
@@ -1826,37 +1823,60 @@ G.Phanta.centers["jeandescole"] = {
   eternal_compat = true,
   perishable_compat = true,
   loc_vars = function(self, info_queue, card)
-    info_queue[#info_queue + 1] = G.P_CENTERS.m_stone
-    info_queue[#info_queue + 1] = G.P_CENTERS.c_devil
+    info_queue[#info_queue + 1] = G.P_CENTERS.m_gold
     return {}
   end,
   calculate = function(self, card, context)
-    if context.discard and context.other_card and SMODS.has_enhancement(context.other_card, "m_stone") then
-      if count_consumables() < G.consumeables.config.card_limit then
-        G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
+    if context.pre_discard and G.GAME.current_round.discards_left <= 1 then
+      local candidates = {}
+      for i = 1, #G.hand.cards do
+        if not next(SMODS.get_enhancements(G.hand.cards[i])) then
+          candidates[#candidates + 1] = G.hand.cards[i]
+        end
+      end
+      if #candidates > 0 then
+        local _card = pseudorandom_element(candidates, pseudoseed("descolecard"))
+
         G.E_MANAGER:add_event(Event({
+          trigger = 'after',
+          delay = 0.4,
           func = function()
-            G.E_MANAGER:add_event(Event({
-              func = function()
-                local new_card = create_card("Tarot", G.consumables, nil, nil, nil, nil, 'c_devil', 'descole')
-                new_card:add_to_deck()
-                G.consumeables:emplace(new_card)
-                G.GAME.consumeable_buffer = 0
-                new_card:juice_up(0.3, 0.5)
-                return true
-              end
-            }))
-            card_eval_status_text(card, 'extra', nil, nil, nil, { message = '+1 Devil', colour = G.C.PURPLE })
+            play_sound('tarot1')
+            card:juice_up()
             return true
           end
         }))
-      end
-      if not context.blueprint then
-        return { remove = true }
+
+        G.E_MANAGER:add_event(Event({
+          trigger = 'after',
+          delay = 0.15,
+          func = function()
+            _card:flip(); play_sound('card1'); _card:juice_up(0.3, 0.3); return true
+          end
+        }))
+
+        delay(0.2)
+
+        G.E_MANAGER:add_event(Event({
+          trigger = 'after',
+          delay = 0.1,
+          func = function()
+            _card:set_ability("m_gold"); return true
+          end
+        }))
+
+        G.E_MANAGER:add_event(Event({
+          trigger = 'after',
+          delay = 0.15,
+          func = function()
+            _card:flip(); play_sound('tarot2', 1, 0.6); _card:juice_up(0.3, 0.3); return true
+          end
+        }))
+
+        return { message = localize { key = "m_gold", type = "name_text", set = "Enhanced" }, message_card = card }
       end
     end
   end,
-  enhancement_gate = "m_stone",
   pronouns = "he_him"
 }
 
@@ -1899,6 +1919,7 @@ G.Phanta.centers["engineer"] = {
 }
 
 G.Phanta.centers["medic"] = {
+  config = { extra = { cards = 3 } },
   unlocked = false,
   check_for_unlock = function(self, args)
     return args.type == "phanta_double_sun"
@@ -1909,7 +1930,7 @@ G.Phanta.centers["medic"] = {
   cost = 6,
   loc_vars = function(self, info_queue, card)
     info_queue[#info_queue + 1] = G.P_CENTERS.c_death
-    return {}
+    return { vars = { card.ability.extra.cards } }
   end,
   blueprint_compat = true,
   eternal_compat = true,
@@ -1927,7 +1948,7 @@ G.Phanta.centers["medic"] = {
           counted_hearts = counted_hearts + 1
         end
       end
-      if counted_hearts >= 5 then
+      if counted_hearts >= card.ability.extra.cards then
         G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
         G.E_MANAGER:add_event(Event({
           func = function()
@@ -1951,10 +1972,10 @@ G.Phanta.centers["psychelock"] = {
   rarity = 3,
   atlas = 'PhantaMiscAnims1',
   pos = { x = 0, y = 5 },
-  phanta_anim = {
-    { x = 0, y = 5, t = 0.13 }, { x = 1, y = 5, t = 0.13 }, { x = 2, y = 5, t = 0.13 }, { x = 3, y = 5, t = 0.13 }, { x = 4, y = 5, t = 0.13 },
-    { x = 0, y = 5, t = 0.13 }, { x = 1, y = 5, t = 0.13 }, { x = 2, y = 5, t = 0.13 }, { x = 3, y = 5, t = 0.13 }, { x = 4, y = 5, t = 0.13 },
-    { x = 0, y = 5, t = 0.13 }, { x = 1, y = 5, t = 0.06 }, { x = 5, y = 5, t = 0.06 }, { x = 6, y = 5, t = 0.06 }, { x = 7, y = 5, t = 0.06 }, { x = 3, y = 5, t = 0.13 }, { x = 4, y = 5, t = 0.13 },
+  flipbook_anim = {
+    { xrange = { first = 0, last = 4 }, y = 5, t = 0.13 },
+    { xrange = { first = 0, last = 4 }, y = 5, t = 0.13 },
+    { x = 0,                            y = 5, t = 0.13 }, { x = 1, y = 5, t = 0.06 }, { x = 5, y = 5, t = 0.06 }, { x = 6, y = 5, t = 0.06 }, { x = 7, y = 5, t = 0.06 }, { x = 3, y = 5, t = 0.13 }, { x = 4, y = 5, t = 0.13 },
     { x = 0, y = 5, t = 0.13 }, { x = 1, y = 5, t = 0.13 }, { x = 2, y = 5, t = 0.13 }, { x = 3, y = 5, t = 0.13 }, { x = 4, y = 5, t = 0.13 },
 
     { x = 0, y = 5, t = 0.13 }, { x = 8, y = 5, t = 0.13 }, { x = 9, y = 5, t = 0.13 }, { x = 10, y = 5, t = 0.13 }, { x = 11, y = 5, t = 0.13 }, { x = 0, y = 6, t = 0.13 },
@@ -2012,12 +2033,12 @@ G.Phanta.centers["apollosbracelet"] = {
   rarity = 3,
   atlas = 'PhantaMiscAnims3',
   pos = { x = 7, y = 2 },
-  pos_extra = { x = 11, y = 3 },
-  phanta_anim = {
+  flipbook_pos_extra = { x = 11, y = 3 },
+  flipbook_anim = {
     { xrange = { first = 7, last = 11 }, y = 2, t = 0.125 },
     { xrange = { first = 0, last = 10 }, y = 3, t = 0.125 },
   },
-  phanta_anim_extra = {
+  flipbook_anim_extra = {
     { x = 11,                           y = 3, t = 0.15 },
     { xrange = { first = 0, last = 4 }, y = 4, t = 0.15 },
   },
@@ -2074,12 +2095,12 @@ G.Phanta.centers["honeydew"] = {
   rarity = 2,
   atlas = 'PhantaMiscAnims3',
   pos = { x = 0, y = 0 },
-  pos_extra = { x = 9, y = 0 },
-  phanta_anim = {
+  flipbook_pos_extra = { x = 6, y = 1 },
+  flipbook_anim = {
     { xrange = { first = 0, last = 11 }, y = 0, t = 0.125 },
     { xrange = { first = 0, last = 5 },  y = 1, t = 0.125 },
   },
-  phanta_anim_extra = {
+  flipbook_anim_extra = {
     { x = 6, y = 1, t = 0.9 }, { x = 7, y = 1, t = 0.1 },
     { x = 6, y = 1, t = 0.3 }, { x = 7, y = 1, t = 0.1 },
     { x = 6, y = 1, t = 1.6 }, { x = 7, y = 1, t = 0.1 },
@@ -2129,11 +2150,11 @@ G.Phanta.centers["candle"] = {
   rarity = 2,
   atlas = 'PhantaMiscAnims3',
   pos = { x = 7, y = 7 },
-  pos_extra = { x = 11, y = 7 },
-  phanta_anim = {
+  flipbook_pos_extra = { x = 11, y = 7 },
+  flipbook_anim = {
     { xrange = { first = 7, last = 10 }, y = 7, t = 0.1 }
   },
-  phanta_anim_extra = { -- The timing here is weird, so that the background and foreground don't synchronise.
+  flipbook_anim_extra = { -- The timing here is weird, so that the background and foreground don't synchronise.
     { x = 11, y = 7, t = 0.098765321 },
     { x = 3,  y = 8, t = 0.098765321 },
     { x = 7,  y = 8, t = 0.098765321 },
@@ -2245,14 +2266,14 @@ G.Phanta.centers["goo"] = {
   rarity = 2,
   atlas = 'PhantaMiscAnims3',
   pos = { x = 2, y = 9 },
-  pos_extra = { x = 1, y = 10 },
-  phanta_anim = {
+  flipbook_pos_extra = { x = 1, y = 10 },
+  flipbook_anim = {
     { x = 2,                             y = 9,  t = 3 },
     { xrange = { first = 3, last = 11 }, y = 9,  t = 0.1 },
     { x = 0,                             y = 10, t = 3 },
     { xrange = { first = 11, last = 3 }, y = 9,  t = 0.1 },
   },
-  phanta_anim_extra = {
+  flipbook_anim_extra = {
     { x = 1, y = 10, t = 1.6 }, { x = 2, y = 10, t = 0.1 },
     { x = 1, y = 10, t = 2.3 }, { x = 2, y = 10, t = 0.1 }, { x = 1, y = 10, t = 0.1 }, { x = 2, y = 10, t = 0.1 },
     { x = 1, y = 10, t = 2.6 }, { x = 2, y = 10, t = 0.1 },
@@ -2409,7 +2430,7 @@ G.Phanta.centers["tnetennba"] = {
   rarity = 1,
   atlas = 'PhantaMiscAnims2',
   pos = { x = 3, y = 12 },
-  phanta_anim = {
+  flipbook_anim = {
     { x = 3, y = 12, t = 1.1 }, { x = 4, y = 12, t = 0.1 },
     { x = 3, y = 12, t = 0.6 }, { x = 4, y = 12, t = 0.1 },
     { x = 5, y = 12, t = 1.6 }, { x = 4, y = 12, t = 0.05 }, { x = 7, y = 12, t = 0.05 },
@@ -2469,7 +2490,7 @@ G.Phanta.centers["technicolourjoker"] = {
 }
 
 G.Phanta.centers["identity"] = {
-  config = { extra = { no_of_cards = 2 } },
+  config = { extra = { no_of_cards = 1 } },
   rarity = 2,
   atlas = 'Phanta',
   pos = { x = 1, y = 0 },
@@ -2488,43 +2509,24 @@ G.Phanta.centers["identity"] = {
   phanta_shatters = true,
   calculate = function(self, card, context)
     if context.ending_shop and not context.repetition and not context.blueprint then
-      local _card = card
+      local creation_event = Event({
+        func = function()
+          local new_card = create_card("Spectral", G.consumables, nil, nil, nil, nil)
+          --new_card:set_edition({ negative = true })
+          new_card:add_to_deck()
+          G.consumeables:emplace(new_card)
+          return true
+        end
+      })
       G.E_MANAGER:add_event(Event({
         func = function()
           play_sound('timpani')
-          local creation_event = Event({
-            delay = 0.3,
-            blockable = false,
-            func = function()
-              local new_card = create_card("Spectral", G.consumables, nil, nil, nil, nil)
-              new_card:set_edition({ negative = true })
-              new_card:add_to_deck()
-              G.consumeables:emplace(new_card)
-              return true
-            end
-          })
-          for i = 1, card.ability.extra.no_of_cards, 1 do G.E_MANAGER:add_event(creation_event) end
-
-          card.T.r = -0.2
-          card:juice_up(0.3, 0.4)
-          card.states.drag.is = true
-          card.children.center.pinch.x = true
-          G.E_MANAGER:add_event(Event({
-            trigger = 'after',
-            delay = 0.3,
-            blockable = false,
-            func = function()
-              G.jokers:remove_card(card)
-              card:remove()
-              card = nil
-              return true
-            end
-          }))
+          card:shatter()
           return true
         end
       }))
-      card_eval_status_text(_card, 'extra', nil, nil, nil, { message = "Shattered!", card = _card })
-      return true
+      for i = 1, card.ability.extra.no_of_cards, 1 do G.E_MANAGER:add_event(creation_event) end
+      return { message = "Shattered!", colour = G.C.RED }
     end
   end,
   pronouns = "it_its"
@@ -2535,7 +2537,7 @@ G.Phanta.centers["tricolour"] = {
   rarity = 1,
   atlas = 'PhantaMiscAnims2',
   pos = { x = 2, y = 8 },
-  phanta_anim = {
+  flipbook_anim = {
     { xrange = { first = 2, last = 11 }, y = 8,  t = 0.05 },
     { xrange = { first = 0, last = 11 }, y = 9,  t = 0.05 },
     { xrange = { first = 0, last = 9 },  y = 10, t = 0.05 },
@@ -2563,7 +2565,7 @@ G.Phanta.centers["tricolour"] = {
         end
       end
 
-      if #counted_suits <= 3 and #counted_suits + wilds >= 3 then
+      if #counted_suits + wilds >= 3 then
         return { mult = card.ability.extra.mult }
       end
     end
@@ -2809,7 +2811,7 @@ G.Phanta.centers["monetjoker"] = {
 }
 
 G.Phanta.centers["charcoaljoker"] = {
-  config = { extra = { added_chips = 15, current_chips = 0 } },
+  config = { extra = { added_chips = 10, current_chips = 0 } },
   rarity = 2,
   atlas = 'Phanta',
   pos = { x = 4, y = 5 },
@@ -2888,7 +2890,7 @@ G.Phanta.centers["reverie"] = {
   rarity = 2,
   atlas = 'PhantaMiscAnims1',
   pos = { x = 6, y = 6 },
-  phanta_anim = {
+  flipbook_anim = {
     { xrange = { first = 6, last = 9 }, y = 6, t = 0.1 }
   },
   cost = 6,
@@ -3146,7 +3148,7 @@ G.Phanta.centers["blindjoker"] = {
   rarity = 2,
   atlas = 'PhantaMiscAnims4',
   pos = { x = 4, y = 3 },
-  phanta_anim = {
+  flipbook_anim = {
     { x = 4,  y = 3, t = 3 },
     { x = 5,  y = 3, t = 0.1 },
     { x = 6,  y = 3, t = 0.05 },
@@ -3204,31 +3206,17 @@ G.Phanta.centers["spaceinvader"] = {
   rarity = 2,
   atlas = 'PhantaMiscAnims3',
   pos = { x = 6, y = 2 },
-  phanta_anim = {
+  flipbook_anim = {
     { xrange = { first = 5, last = 5 }, y = 4, t = 1 }
   },
-  pos_extra = { x = 0, y = 5 },
-  phanta_anim_extra_states = {
-    ["crab"] = {
-      anim = {
-        { xrange = { first = 0, last = 1 }, y = 5, t = 0.5 }
-      },
-      loop = true
-    },
-    ["squid"] = {
-      anim = {
-        { xrange = { first = 2, last = 3 }, y = 5, t = 0.5 }
-      },
-      loop = true
-    },
-    ["octopus"] = {
-      anim = {
-        { xrange = { first = 4, last = 5 }, y = 5, t = 0.5 }
-      },
-      loop = true
-    },
+  flipbook_pos_extra = { x = 0, y = 5 },
+  flipbook_anim_extra_states = {
+    random = { anim = { { x = 0, y = 5, t = 1 } } },
+    crab = { anim = { { xrange = { first = 0, last = 1 }, y = 5, t = 0.5 } } },
+    squid = { anim = { { xrange = { first = 2, last = 3 }, y = 5, t = 0.5 } } },
+    octopus = { anim = { { xrange = { first = 4, last = 5 }, y = 5, t = 0.5 } } },
   },
-  phanta_anim_extra_current_state = nil,
+  flipbook_anim_extra_initial_state = "random",
   cost = 6,
   loc_vars = function(self, info_queue, card)
     return { vars = { card.ability.extra.no_of_planets } }
@@ -3266,9 +3254,9 @@ G.Phanta.centers["spaceinvader"] = {
     end
     local c = card or {}
     local choices = { "crab", "squid", "octopus" }
-    if not c.phanta_anim_extra_current_state then
+    if c.flipbook_anim_extra_current_state == "random" then
       local choice = pseudorandom_element(choices, pseudoseed("spaceinvaderchoice"))
-      card:phanta_set_anim_extra_state(choice)
+      card:flipbook_set_anim_extra_state(choice)
     end
   end,
   pronouns = "any_all"
@@ -3278,7 +3266,7 @@ G.Phanta.centers["witchsmark"] = {
   rarity = 3,
   atlas = 'PhantaMiscAnims3', -- This should've gone in the Layton sheet, but mehhhhh too late
   pos = { x = 2, y = 11 },
-  phanta_anim = {
+  flipbook_anim = {
     { x = 2,                              y = 11, t = 3 },
     { xrange = { first = 3, last = 5 },   y = 11, t = 0.075 },
     { x = 6,                              y = 11, t = 0.5 },
@@ -3456,7 +3444,7 @@ G.Phanta.centers["slidingpuzzle"] = {
   rarity = 2,
   atlas = 'PhantaMiscAnims4',
   pos = { x = 10, y = 6 },
-  phanta_anim = {
+  flipbook_anim = {
     { x = 10, y = 6, t = 3 }, { x = 11, y = 6, t = 0.1 },
     { x = 0,  y = 7, t = 0.25 }, { x = 1, y = 7, t = 0.1 },
     { x = 2, y = 7, t = 0.25 }, { x = 3, y = 7, t = 0.1 },
@@ -3507,7 +3495,7 @@ G.Phanta.centers["slidingpuzzle"] = {
 
 -- This code is so jank, sorry :sob:
 G.Phanta.centers["sudoku"] = {
-  config = { extra = { ranks = { ["2"] = 0, ["3"] = 0, ["4"] = 0, ["5"] = 0, ["6"] = 0, ["7"] = 0, ["8"] = 0, ["9"] = 0, ["14"] = 0 }, no_of_upgrades = 2 } },
+  config = { extra = { ranks = { ["2"] = 0, ["3"] = 0, ["4"] = 0, ["5"] = 0, ["6"] = 0, ["7"] = 0, ["8"] = 0, ["9"] = 0, ["14"] = 0 }, no_of_tarots = 2 } },
   rarity = 2,
   atlas = 'Phanta',
   pos = { x = 9, y = 2 },
@@ -3528,7 +3516,7 @@ G.Phanta.centers["sudoku"] = {
           if card.ability.extra.ranks["9"] == 0 then rank_list = rank_list .. "9" end
           return rank_list
         end)(),
-        card.ability.extra.no_of_upgrades
+        card.ability.extra.no_of_tarots
       }
     }
   end,
@@ -3575,23 +3563,30 @@ G.Phanta.centers["sudoku"] = {
               ["9"] = 0,
               ["14"] = 0
             }
-            card_eval_status_text(card, 'extra', nil, nil, nil,
-              { message = localize('k_upgrade_ex') })
-            update_hand_text({ sound = 'button', volume = 0.7, pitch = 0.8, delay = 0.3 },
-              {
-                handname = "Straight",
-                chips = G.GAME.hands["Straight"].chips,
-                mult = G.GAME.hands["Straight"].mult,
-                level = G.GAME.hands["Straight"].level
-              })
-            level_up_hand(card, "Straight", nil, card.ability.extra.no_of_upgrades)
-            update_hand_text({ sound = 'button', volume = 0.7, pitch = 0.8, delay = 0.3 },
-              {
-                handname = context.scoring_name,
-                chips = G.GAME.hands[context.scoring_name].chips,
-                mult = G.GAME.hands[context.scoring_name].mult,
-                level = G.GAME.hands[context.scoring_name].level
-              })
+
+            local tarots = math.min(card.ability.extra.no_of_tarots, G.consumeables.config.card_limit - count_consumables())
+
+            return {
+              extra = {
+                focus = card,
+                message = localize { type = 'variable', key = "a_tarot" .. (tarots == 1 and "" or "s"), vars = { tarots } },
+                func = function()
+                  for i = 1, tarots do
+                    G.E_MANAGER:add_event(Event({
+                      trigger = 'after',
+                      delay = 0.4,
+                      func = function()
+                        play_sound("timpani")
+                        SMODS.add_card({ set = "Tarot", "sudoku" })
+                        return true
+                      end
+                    }))
+                  end
+                end,
+                colour = G.C.SECONDARY_SET.Tarot,
+                card = card
+              }
+            }
           end
         end
       end
@@ -3601,47 +3596,31 @@ G.Phanta.centers["sudoku"] = {
 }
 
 G.Phanta.centers["ceaseanddesist"] = {
-  config = { extra = { no_of_upgrades = 1 } },
+  config = { extra = { money = 6 } },
   rarity = 1,
   atlas = 'Phanta',
   pos = { x = 5, y = 9 },
-  cost = 4,
+  cost = 5,
   loc_vars = function(self, info_queue, card)
-    return { vars = { card.ability.extra.no_of_upgrades } }
+    return { vars = { card.ability.extra.money } }
   end,
   blueprint_compat = true,
   eternal_compat = true,
   perishable_compat = true,
   calculate = function(self, card, context)
     if context.skipping_booster then
-      G.E_MANAGER:add_event(Event({
-        func = function()
-          card_eval_status_text(card, 'extra', nil, nil, nil,
-            { message = localize('k_upgrade_ex') })
-          update_hand_text({ sound = 'button', volume = 0.7, pitch = 0.8, delay = 0.3 },
-            {
-              handname = "Straight",
-              chips = G.GAME.hands["Straight"].chips,
-              mult = G.GAME.hands["Straight"].mult,
-              level = G.GAME.hands["Straight"].level
-            })
-          level_up_hand(card, "Straight", nil, card.ability.extra.no_of_upgrades)
-          update_hand_text({ sound = 'button', volume = 0.7, pitch = 0.8, delay = 0.3 },
-            { mult = 0, chips = 0, handname = '', level = '' })
-          return true
-        end
-      }))
+      return { dollars = card.ability.extra.money }
     end
   end,
   pronouns = "it_its"
 }
 
 G.Phanta.centers["thepolicemun"] = {
-  config = { extra = { no_of_upgrades = 3 } },
+  config = { extra = { added_xmult = 0.1, current_xmult = 1 } },
   rarity = 2,
   atlas = 'PhantaMiscAnims2',
   pos = { x = 0, y = 0 },
-  phanta_anim = {
+  flipbook_anim = {
     { x = 0, y = 0, t = 0.125 }, { x = 1, y = 0, t = 0.125 }, { x = 2, y = 0, t = 0.125 },
     { x = 0, y = 0, t = 0.125 }, { x = 1, y = 0, t = 0.125 }, { x = 2, y = 0, t = 0.125 },
     { x = 0, y = 0, t = 0.125 }, { x = 1, y = 0, t = 0.125 }, { x = 2, y = 0, t = 0.125 },
@@ -3658,41 +3637,28 @@ G.Phanta.centers["thepolicemun"] = {
   },
   cost = 6,
   loc_vars = function(self, info_queue, card)
-    return { vars = { card.ability.extra.no_of_upgrades } }
+    return { vars = { card.ability.extra.added_xmult, card.ability.extra.current_xmult } }
   end,
   blueprint_compat = true,
   eternal_compat = true,
-  perishable_compat = true,
+  perishable_compat = false,
   calculate = function(self, card, context)
-    if context.skip_blind then
-      G.E_MANAGER:add_event(Event({
-        func = function()
-          card_eval_status_text(card, 'extra', nil, nil, nil,
-            { message = localize('k_upgrade_ex') })
-          update_hand_text({ sound = 'button', volume = 0.7, pitch = 0.8, delay = 0.3 },
-            {
-              handname = "Straight",
-              chips = G.GAME.hands["Straight"].chips,
-              mult = G.GAME.hands["Straight"].mult,
-              level = G.GAME.hands["Straight"].level
-            })
-          level_up_hand(card, "Straight", nil, card.ability.extra.no_of_upgrades)
-          update_hand_text({ sound = 'button', volume = 0.7, pitch = 0.8, delay = 0.3 },
-            { mult = 0, chips = 0, handname = '', level = '' })
-          return true
-        end
-      }))
+    if context.joker_main and card.ability.extra.current_xmult > 1 then return { xmult = card.ability.extra.current_xmult } end
+
+    if context.end_of_round and not context.individual and not context.repetition and not context.blueprint and G.GAME.current_round.discards_left > 0 then
+      card.ability.extra.current_xmult = card.ability.extra.current_xmult + (card.ability.extra.added_xmult * G.GAME.current_round.discards_left)
+      return { message = localize("k_upgrade_ex") }
     end
   end,
   pronouns = "he_him"
 }
 
 G.Phanta.centers["nojoke"] = {
-  config = { extra = { mult_per_straight = 3 } },
+  config = { extra = { mult_per_straight = 4 } },
   rarity = 1,
   atlas = 'PhantaMiscAnims4',
   pos = { x = 7, y = 2 },
-  phanta_anim = {
+  flipbook_anim = {
     { x = 7, y = 2, t = 1.4 }, { x = 8, y = 2, t = 0.1 },
     { x = 7, y = 2, t = 0.1 }, { x = 8, y = 2, t = 0.1 },
     { x = 7, y = 2, t = 2.2 }, { x = 8, y = 2, t = 0.1 },
@@ -3766,8 +3732,8 @@ G.Phanta.centers["dottodot"] = {
   rarity = 2,
   atlas = 'PhantaMiscAnims2',
   pos = { x = 4, y = 0 },
-  phanta_anim_states = {
-    ["drawing"] = {
+  flipbook_anim_states = {
+    drawing = {
       anim = {
         { xrange = { first = 5, last = 11 }, y = 0, t = 0.025 }, { xrange = { first = 0, last = 4 }, y = 1, t = 0.025 }, { x = 4, y = 1, t = 0.2 },
         { xrange = { first = 5, last = 11 }, y = 1, t = 0.025 }, { xrange = { first = 0, last = 6 }, y = 2, t = 0.025 }, { x = 6, y = 2, t = 0.2 },
@@ -3779,14 +3745,14 @@ G.Phanta.centers["dottodot"] = {
       },
       loop = false
     },
-    ["fading"] = {
+    fading = {
       anim = {
         { xrange = { first = 10, last = 11 }, y = 7, t = 0.025 }, { xrange = { first = 0, last = 1 }, y = 8, t = 0.025 }, { x = 4, y = 0, t = 1 }
       },
       loop = false
     }
   },
-  phanta_anim_current_state = nil,
+  flipbook_anim_initial_state = "fading",
   cost = 6,
   loc_vars = function(self, info_queue, card)
     return { vars = { card.ability.extra.xmult, (G.GAME and G.GAME.current_round and G.GAME.current_round.hands_played ~= 0 and G.GAME.last_hand_played) and localize(G.GAME.last_hand_played, 'poker_hands') or localize('phanta_unknown') } }
@@ -3802,9 +3768,9 @@ G.Phanta.centers["dottodot"] = {
     if context.after and not context.blueprint then
       local was_straight = next(context.poker_hands['Straight'])
       if card.ability.extra.active and not was_straight then
-        card:phanta_set_anim_state("fading")
+        card:flipbook_set_anim_state("fading")
       elseif not card.ability.extra.active and was_straight then
-        card:phanta_set_anim_state("drawing")
+        card:flipbook_set_anim_state("drawing")
       end
       card.ability.extra.active = was_straight
     end

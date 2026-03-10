@@ -7,7 +7,8 @@
     "main_file": "main.lua",
     "badge_colour": "4d1575",
     "dependencies": [
-        "Steamodded (>=1.0.0~BETA-0711a)"
+        "Steamodded (>=1.0.0~BETA-0711a)",
+        "Flipbook (>=1.0.0)"
     ],
     "version": "4.0.0",
     "priority": 4

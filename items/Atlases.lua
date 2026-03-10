@@ -89,6 +89,13 @@ SMODS.Atlas {
 }
 
 SMODS.Atlas {
+  key = "PhantaMiscAnims7",
+  path = "PhantaMiscAnims7.png",
+  px = 71,
+  py = 95
+}
+
+SMODS.Atlas {
   key = "PhantaKnowledgeOfTheCollegeAnim",
   path = "PhantaKnowledgeOfTheCollegeAnim.png",
   px = 71,

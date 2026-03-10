@@ -429,17 +429,20 @@ SMODS.Booster {
 
 
 function phanta_create_for_hanafuda_pack(key, i, size)
+  local type = "phanta_chaff"
   if i == 1 then
-    return phanta_create_hanafuda_chaff(key, true)
+    type = "phanta_chaff"
   elseif i == math.floor(size) then
-    return phanta_create_hanafuda_bright(key, true)
+    type = "phanta_bright"
   elseif size == 3 then
     return phanta_create_hanafuda_ribbon_animal(key, true)
   elseif i == math.floor(size) - 1 then
-    return phanta_create_hanafuda_animal(key, true)
+    type = "phanta_animal"
   elseif i == math.floor(size) - 2 then
-    return phanta_create_hanafuda_ribbon(key, true)
+    type = "phanta_ribbon"
   else
-    return phanta_create_hanafuda_chaff(key, true)
+    type = "phanta_chaff"
   end
+
+  return SMODS.create_card({set = type, key_append = key, skip_materialize = true})
 end
