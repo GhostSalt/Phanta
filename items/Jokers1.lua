@@ -1118,7 +1118,7 @@ G.Phanta.centers["scratchart"] = {
 }
 
 G.Phanta.centers["animalinstinct"] = {
-  config = { extra = { added_xmult = 0.1, current_xmult = 1 } },
+  config = { extra = { added_xmult = 0.25, current_xmult = 1 } },
   loc_vars = function(self, info_queue, card)
     return { vars = { card.ability.extra.added_xmult, card.ability.extra.current_xmult } }
   end,

@@ -8,7 +8,7 @@
     "badge_colour": "4d1575",
     "dependencies": [
         "Steamodded (>=1.0.0~BETA-0711a)",
-        "Flipbook (>=1.0.0)"
+        "Flipbook (>=1.2.0~BETA)"
     ],
     "version": "4.0.0",
     "priority": 4

@@ -627,13 +627,13 @@ G.Phanta.centers["tipoftheiceberg"] = {
   loc_vars = function(self, info_queue, card)
     return { vars = { card.ability.extra.added_chips, card.ability.extra.current_chips } }
   end,
-  rarity = 1,
+  rarity = 2,
   atlas = "PhantaMiscAnims7",
   pos = { x = 3, y = 0 },
   flipbook_anim = {
     { xrange = { first = 3, last = 5 }, y = 0, t = 0.3 },
   },
-  cost = 5,
+  cost = 6,
   blueprint_compat = true,
   eternal_compat = true,
   perishable_compat = false,
@@ -650,7 +650,7 @@ G.Phanta.centers["tipoftheiceberg"] = {
       card.ability.extra.counted_rerolls = 0
     end
 
-    if context.buying_card and not context.blueprint and card.ability.extra.counted_rerolls == 0 then
+    if context.buying_card and context.card ~= card and context.card.config.center.set ~= "Voucher" and not context.blueprint and card.ability.extra.counted_rerolls == 0 then
       card.ability.extra.current_chips = card.ability.extra.current_chips + card.ability.extra.added_chips
       return { message = localize("k_upgrade_ex"), colour = G.C.FILTER }
     end
@@ -1055,21 +1055,23 @@ G.Phanta.centers["datacube"] = {
     ["paperback_Apostle"] = { anim = { { x = 11, y = 3, t = 1 } }, loop = false },
   },
   flipbook_anim_extra_states = {
-    ["unknown"] = { anim = { { x = 1, y = 3, t = 1 } }, loop = false },
-    ["2"] = { anim = { { x = 2, y = 3, t = 1 } }, loop = false },
-    ["3"] = { anim = { { x = 3, y = 3, t = 1 } }, loop = false },
-    ["4"] = { anim = { { x = 4, y = 3, t = 1 } }, loop = false },
-    ["5"] = { anim = { { x = 5, y = 3, t = 1 } }, loop = false },
-    ["6"] = { anim = { { x = 6, y = 3, t = 1 } }, loop = false },
-    ["7"] = { anim = { { x = 7, y = 3, t = 1 } }, loop = false },
-    ["8"] = { anim = { { x = 8, y = 3, t = 1 } }, loop = false },
-    ["9"] = { anim = { { x = 9, y = 3, t = 1 } }, loop = false },
-    ["10"] = { anim = { { x = 10, y = 3, t = 1 } }, loop = false },
-    ["Jack"] = { anim = { { x = 0, y = 4, t = 1 } }, loop = false },
-    ["Queen"] = { anim = { { x = 1, y = 4, t = 1 } }, loop = false },
-    ["King"] = { anim = { { x = 2, y = 4, t = 1 } }, loop = false },
-    ["Ace"] = { anim = { { x = 3, y = 4, t = 1 } }, loop = false },
-    ["paperback_Apostle"] = { anim = { { x = 3, y = 4, t = 1 } }, loop = false }
+    extra = {
+      ["unknown"] = { anim = { { x = 1, y = 3, t = 1 } }, loop = false },
+      ["2"] = { anim = { { x = 2, y = 3, t = 1 } }, loop = false },
+      ["3"] = { anim = { { x = 3, y = 3, t = 1 } }, loop = false },
+      ["4"] = { anim = { { x = 4, y = 3, t = 1 } }, loop = false },
+      ["5"] = { anim = { { x = 5, y = 3, t = 1 } }, loop = false },
+      ["6"] = { anim = { { x = 6, y = 3, t = 1 } }, loop = false },
+      ["7"] = { anim = { { x = 7, y = 3, t = 1 } }, loop = false },
+      ["8"] = { anim = { { x = 8, y = 3, t = 1 } }, loop = false },
+      ["9"] = { anim = { { x = 9, y = 3, t = 1 } }, loop = false },
+      ["10"] = { anim = { { x = 10, y = 3, t = 1 } }, loop = false },
+      ["Jack"] = { anim = { { x = 0, y = 4, t = 1 } }, loop = false },
+      ["Queen"] = { anim = { { x = 1, y = 4, t = 1 } }, loop = false },
+      ["King"] = { anim = { { x = 2, y = 4, t = 1 } }, loop = false },
+      ["Ace"] = { anim = { { x = 3, y = 4, t = 1 } }, loop = false },
+      ["paperback_Apostle"] = { anim = { { x = 3, y = 4, t = 1 } }, loop = false }
+    }
   },
   flipbook_anim_initial_state = "unknown",
   flipbook_anim_extra_initial_state = "unknown",
@@ -3236,13 +3238,14 @@ G.Phanta.centers["magiceggcup"] = {
       }
       local displayed_suit = supported_suits[chosen_suit] or "unknown"
 
+      local first_local = card.ability.extra.is_first
+      card.ability.extra.is_first = false
       G.E_MANAGER:add_event(Event({
         func = function()
           play_sound('tarot1')
           card:juice_up()
           card:flipbook_set_anim_state(displayed_suit)
-          card:flipbook_set_anim_extra_state(card.ability.extra.is_first and "lifting first" or "lifting middle")
-          card.ability.extra.is_first = false
+          card:flipbook_set_anim_extra_state(first_local and "lifting first" or "lifting middle")
           return true
         end
       }))
@@ -3280,6 +3283,7 @@ G.Phanta.centers["magiceggcup"] = {
 
     if context.after and not card.ability.extra.is_first and not context.blueprint then
       G.E_MANAGER:add_event(Event({
+        blocking = false,
         func = function()
           card.ability.extra.is_first = true
           card:flipbook_set_anim_state("unknown")
