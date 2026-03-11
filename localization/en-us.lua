@@ -1765,10 +1765,9 @@ return {
             j_phanta_flagsignal             = {
                 name = 'Flag Signal',
                 text = {
-                    "Gains {C:mult}+#1#{} Mult for",
-                    "each played and",
-                    "unscored {C:attention}Lucky{} card",
-                    "{C:inactive}(Currently {C:mult}+#2#{C:inactive} Mult){}"
+                    "{C:white,X:mult}X#1#{} Mult if {C:attention}2{} or more",
+                    "cards held in hand",
+                    "have the same {C:attention}rank{}"
                 }
             },
             j_phanta_signofthehorns         = {

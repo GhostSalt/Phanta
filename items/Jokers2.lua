@@ -1886,8 +1886,8 @@ G.Phanta.centers["testpage"] = {
 }
 
 G.Phanta.centers["flagsignal"] = {
-  config = { extra = { added_mult = 2, current_mult = 0 } },
-  rarity = 1,
+  config = { extra = { xmult = 2 } },
+  rarity = 2,
   atlas = 'PhantaMiscAnims5',
   pos = { x = 10, y = 2 },
   flipbook_anim = {
@@ -1933,24 +1933,22 @@ G.Phanta.centers["flagsignal"] = {
 
     { x = 3, y = 3, t = 0.1 },
   },
-  cost = 5,
+  cost = 6,
   loc_vars = function(self, info_queue, card)
-    info_queue[#info_queue + 1] = G.P_CENTERS.m_lucky
-    return { vars = { card.ability.extra.added_mult, card.ability.extra.current_mult } }
+    return { vars = { card.ability.extra.xmult } }
   end,
   blueprint_compat = true,
   eternal_compat = true,
-  perishable_compat = false,
+  perishable_compat = true,
   calculate = function(self, card, context)
-    if context.joker_main and card.ability.extra.current_mult > 0 then
-      return { mult = card.ability.extra.current_mult }
+    if context.joker_main and next(G.hand.cards) then
+      local ranks = {}
+      for _, v in ipairs(G.hand.cards) do
+        if ranks[v:get_id()] then return { xmult = card.ability.extra.xmult } end
+        ranks[v:get_id()] = true
+      end
     end
-    if context.individual and context.cardarea == "unscored" and SMODS.has_enhancement(context.other_card, "m_lucky") and not context.blueprint then
-      card.ability.extra.current_mult = card.ability.extra.current_mult + card.ability.extra.added_mult
-      return { message = localize("k_upgrade_ex"), colour = G.C.FILTER, card = card }
-    end
-  end,
-  enhancement_gate = "m_lucky"
+  end
   -- Pronouns are random
 }
 
@@ -3386,7 +3384,7 @@ G.Phanta.centers["clapperboard"] = {
 }
 
 G.Phanta.centers["birthdaycard"] = {
-  config = { extra = { added_xmult = 0.25, current_xmult = 1 } },
+  config = { extra = { added_xmult = 0.75, current_xmult = 1 } },
   loc_vars = function(self, info_queue, card)
     info_queue[#info_queue + 1] = G.P_CENTERS.e_phanta_waxed
     return { vars = { card.ability.extra.added_xmult, card.ability.extra.current_xmult } }
