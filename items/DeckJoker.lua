@@ -597,9 +597,7 @@ local deck_joker_azran = {
                 blockable = false,
                 func = function()
                     play_sound('timpani')
-                    local new_card = create_card("Spectral", G.consumables, nil, nil, nil, nil, "c_phanta_shard",
-                        'deckjokerazran')
-                    new_card:set_edition({ negative = true })
+                    local new_card = create_card("Spectral", G.consumables, nil, nil, nil, nil, "c_phanta_shard", 'deckjokerazran')
                     new_card:add_to_deck()
                     G.consumeables:emplace(new_card)
 

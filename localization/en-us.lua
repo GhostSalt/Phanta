@@ -2149,10 +2149,8 @@ return {
             j_phanta_leprechaun             = {
                 name = 'Leprechaun',
                 text = {
-                    "{C:mult}+#1#{} Mult when",
-                    "hand is played if",
-                    "{C:attention}rightmost{} card held",
-                    "in hand is a {C:attention}7{}"
+                    "{C:mult}+#1#{} Mult if a {C:attention}7{}",
+                    "is held in hand"
                 }
             },
             j_phanta_shamrock               = {
@@ -2206,10 +2204,9 @@ return {
             j_phanta_neonjoker              = {
                 name = 'Neon Joker',
                 text = {
-                    "{C:white,X:mult}X#1#{} Mult if hand",
-                    "is played with at",
-                    "least {C:attention}4 distinct{}",
-                    "{C:attention}suits{} held in hand"
+                    "{C:white,X:mult}X#1#{} Mult if at least",
+                    "{C:attention}3 distinct suits{}",
+                    "are held in hand"
                 }
             },
             j_phanta_technojoker            = {
@@ -2541,9 +2538,9 @@ return {
             j_phanta_deckjoker_azran = {
                 name = "Deck Joker (Azran)",
                 text = {
-                    "Creates a {C:dark_edition}Negative{}",
-                    "copy of {C:spectral}Shard{} at",
-                    "the end of the {C:attention}shop",
+                    "Creates a copy",
+                    "of {C:spectral}Shard{} at the",
+                    "end of the {C:attention}shop",
                     "{C:red,E:2}self destructs{}"
                 }
             },

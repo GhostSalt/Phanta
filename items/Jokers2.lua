@@ -954,6 +954,7 @@ function phanta_assign_deck_joker()
   if deck then
     G.P_CENTERS["j_phanta_deckjoker"].config = deck.config or {}
     G.P_CENTERS["j_phanta_deckjoker"].loc_vars = function(self, info_queue, card)
+      print(inspect(deck.info_queue))
       for _, v in ipairs(deck.info_queue or {}) do
         info_queue[#info_queue + 1] = v
       end
@@ -3435,8 +3436,10 @@ G.Phanta.centers["leprechaun"] = {
   eternal_compat = true,
   perishable_compat = true,
   calculate = function(self, card, context)
-    if context.joker_main and G.hand.cards[#G.hand.cards]:get_id() == 7 then
-      return { mult = card.ability.extra.mult }
+    if context.joker_main then
+      for _, v in ipairs(G.hand.cards) do
+        if v:get_id() == 7 then return { mult = card.ability.extra.mult } end
+      end
     end
   end,
   pronouns = "he_him"
@@ -3669,7 +3672,7 @@ G.Phanta.centers["maskofthephantom"] = {
 }
 
 G.Phanta.centers["plugsocket"] = {
-  config = { extra = { xmult = 0.25 } },
+  config = { extra = { xmult = 0.4 } },
   loc_vars = function(self, info_queue, card)
     info_queue[#info_queue + 1] = G.P_CENTERS.m_phanta_coppergratefresh
     return { vars = { card.ability.extra.xmult, 1 + (#count_base_copper_grates() * card.ability.extra.xmult) } }
@@ -3769,7 +3772,7 @@ G.Phanta.centers["neonjoker"] = {
         end
       end
 
-      if #counted_suits + wilds >= 4 then
+      if #counted_suits + wilds >= 3 then
         return { xmult = card.ability.extra.xmult }
       end
     end
