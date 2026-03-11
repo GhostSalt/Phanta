@@ -222,8 +222,9 @@ local joker_order = {
     "lightyagami",
 }
 
+local cbean_found = next(SMODS.find_mod("ColdBeans"))
 for i = 1, #joker_order do
-    if G.Phanta.centers[joker_order[i]] then
+    if G.Phanta.centers[joker_order[i]] and not (cbean_found and G.Phanta.centers[joker_order[i]].phanta_yield_to_cbean) then
         G.Phanta.centers[joker_order[i]].key = joker_order[i]
         SMODS.Joker(G.Phanta.centers[joker_order[i]])
     end
