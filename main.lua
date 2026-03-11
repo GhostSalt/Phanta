@@ -710,55 +710,68 @@ Game.main_menu = function(change_context)
       { name = 'vort_speed', val = 0.4 },
       { name = 'colour_1',   ref_table = G.C.PHANTA.MISC_COLOURS, ref_value = 'PHANTA_MAIN_MENU_PRIMARY' },
       { name = 'colour_2',   ref_table = G.C.PHANTA.MISC_COLOURS, ref_value = 'PHANTA_MAIN_MENU_SECONDARY' },flipbook_set_anim_extra_state
-       
+
     }
   } })]] --
 
   for k, v in pairs(G.P_CENTERS) do
     if v.set == "phanta_Zodiac" or v.set == "phanta_Birthstone" or v.set == "Planet" then
-      if not v.flipbook_pos_extra then v.flipbook_pos_extra = { extra = { x = 0, y = 0 } } end
-      if not v.flipbook_pos_extra.extra.atlas then
-        if v.set == "phanta_Zodiac" then
-          v.flipbook_pos_extra.extra.atlas = "phanta_PhantaZodiacUpgrades"
-        elseif v.set == "phanta_Birthstone" then
-          v.flipbook_pos_extra.extra.atlas = "phanta_PhantaBirthstoneUpgrades"
-        elseif v.set == "Planet" then
-          v.flipbook_pos_extra.extra.atlas = "phanta_PhantaPlanetUpgrades"
+      local valid = true
+      if v.set == "Planet" then
+        valid = false
+        for _, vv in ipairs(G.Phanta.thetrick_supported_planets) do
+          if vv == v.key then
+            valid = true
+            break
+          end
         end
       end
-      v.flipbook_anim_extra_states = {
-        extra = {
-          ["0"] = {
-            anim = {
-              { x = 0, y = 0, t = 1 } }
-          },
-          ["1"] = {
-            anim = {
-              { xrange = { first = 0, last = 3 }, y = 1, t = 0.1 },
-              { xrange = { first = 2, last = 1 }, y = 1, t = 0.1 }
-            }
-          },
-          ["2"] = {
-            anim = {
-              { xrange = { first = 0, last = 3 }, y = 2, t = 0.1 },
-              { xrange = { first = 2, last = 1 }, y = 2, t = 0.1 }
-            }
-          },
-          ["3"] = {
-            anim = {
-              { xrange = { first = 0, last = 3 }, y = 3, t = 0.1 },
-              { xrange = { first = 2, last = 1 }, y = 3, t = 0.1 }
-            }
-          },
-          ["4+"] = {
-            anim = {
-              { xrange = { first = 0, last = 3 }, y = 4, t = 0.1 },
-              { xrange = { first = 2, last = 1 }, y = 4, t = 0.1 }
+
+      if valid then
+        if not v.flipbook_pos_extra then v.flipbook_pos_extra = { extra = { x = 0, y = 0 } } end
+        if not v.flipbook_pos_extra.extra.atlas then
+          if v.set == "phanta_Zodiac" then
+            v.flipbook_pos_extra.extra.atlas = "phanta_PhantaZodiacUpgrades"
+          elseif v.set == "phanta_Birthstone" then
+            v.flipbook_pos_extra.extra.atlas = "phanta_PhantaBirthstoneUpgrades"
+          elseif v.set == "Planet" then
+            v.flipbook_pos_extra.extra.atlas = "phanta_PhantaPlanetUpgrades"
+          end
+        end
+        v.flipbook_anim_extra_states = {
+          extra = {
+            ["0"] = {
+              anim = {
+                { x = 0, y = 0, t = 1 } }
+            },
+            ["1"] = {
+              anim = {
+                { xrange = { first = 0, last = 3 }, y = 1, t = 0.1 },
+                { xrange = { first = 2, last = 1 }, y = 1, t = 0.1 }
+              }
+            },
+            ["2"] = {
+              anim = {
+                { xrange = { first = 0, last = 3 }, y = 2, t = 0.1 },
+                { xrange = { first = 2, last = 1 }, y = 2, t = 0.1 }
+              }
+            },
+            ["3"] = {
+              anim = {
+                { xrange = { first = 0, last = 3 }, y = 3, t = 0.1 },
+                { xrange = { first = 2, last = 1 }, y = 3, t = 0.1 }
+              }
+            },
+            ["4+"] = {
+              anim = {
+                { xrange = { first = 0, last = 3 }, y = 4, t = 0.1 },
+                { xrange = { first = 2, last = 1 }, y = 4, t = 0.1 }
+              }
             }
           }
         }
-      }
-      v.flipbook_anim_extra_current_states = { extra = "0" }
+        v.flipbook_anim_extra_current_states = { extra = "0" }
+      end
     end
   end
 
