@@ -1050,14 +1050,11 @@ G.Phanta.centers["nonuniformday"] = {
 }
 
 G.Phanta.centers["badhairday"] = {
-  config = { extra = { odds = 2 } },
+  config = { extra = { chips = 15 } },
   loc_vars = function(self, info_queue, card)
-    info_queue[#info_queue + 1] = G.P_CENTERS.m_wild
-    info_queue[#info_queue + 1] = G.P_CENTERS.c_lovers
-    local num, denom = SMODS.get_probability_vars(card, 1, card.ability.extra.odds, "badhairday")
-    return { vars = { num, denom } }
+    return { vars = { card.ability.extra.chips } }
   end,
-  rarity = 2,
+  rarity = 1,
   atlas = 'PhantaMiscAnims5',
   pos = { x = 3, y = 2 },
   flipbook_anim = {
@@ -1077,35 +1074,15 @@ G.Phanta.centers["badhairday"] = {
 
     { x = 9, y = 2, t = 0.15 },
   },
-  cost = 6,
+  cost = 4,
   blueprint_compat = true,
   eternal_compat = true,
   perishable_compat = true,
   calculate = function(self, card, context)
-    if context.destroy_card and context.cardarea == G.hand and SMODS.has_enhancement(context.destroy_card, "m_wild") and SMODS.pseudorandom_probability(card, "badhairday", 1, card.ability.extra.odds) then
-      if count_consumables() < G.consumeables.config.card_limit then
-        G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
-        G.E_MANAGER:add_event(Event({
-          func = function()
-            G.E_MANAGER:add_event(Event({
-              func = function()
-                local new_card = create_card("Tarot", G.consumables, nil, nil, nil, nil, "c_lovers", 'badhairday')
-                new_card:add_to_deck()
-                G.consumeables:emplace(new_card)
-                G.GAME.consumeable_buffer = 0
-                new_card:juice_up(0.3, 0.5)
-                return true
-              end
-            }))
-            card_eval_status_text(card, 'extra', nil, nil, nil, { message = "+1 Lovers", colour = G.C.PURPLE })
-            return true
-          end
-        }))
-      end
-      return { remove = true }
+    if context.individual and context.cardarea == G.hand and context.other_card:is_face() then
+      return { chips = card.ability.extra.chips }
     end
   end,
-  enhancement_gate = "m_wild",
   pronouns = "any_all"
 }
 

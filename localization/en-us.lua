@@ -714,10 +714,8 @@ return {
             j_phanta_badhairday             = {
                 name = "Bad Hair Day",
                 text = {
-                    "{C:green}#1# in #2#{} chance for each",
-                    "{C:attention}Wild{} card held in hand",
-                    "to create a copy of",
-                    "{C:tarot}The Lovers{} and be {C:red}destroyed{}"
+                    "Face cards held in",
+                    "hand give {C:chips}+#1#{} Chips"
                 }
             },
             j_phanta_scratchart             = {

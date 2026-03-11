@@ -59,7 +59,7 @@ local joker_order = {
     "inception",
     "a1z26",
     "nonuniformday",
-    --"badhairday",         -- Removed for now. Will be back when I have a better ability for it.
+    "badhairday",
     "scratchart",
     "giveway",
     "animalinstinct",
