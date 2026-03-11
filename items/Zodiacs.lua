@@ -321,16 +321,16 @@ SMODS.Consumable {
   atlas = "PhantaZodiacs",
   atlas_extra = "phanta_PhantaZodiacUpgradesDarkHour",
   loc_vars = function(self, info_queue, card)
-    return { vars = { card.ability.extra.xmult + (count_prognosticators(card) * 2) } }
+    return { vars = { card.ability.extra.xmult + count_prognosticators(card) } }
   end,
   calculate = function(self, card, context)
     if context.individual and context.cardarea == "unscored" and context.other_card:is_suit("Clubs") then
-      return { xmult = card.ability.extra.xmult + (count_prognosticators(card) * 2) } -- Prog adds X2 Mult.
+      return { xmult = card.ability.extra.xmult + count_prognosticators(card) } -- Prog adds X2 Mult.
     end
   end,
 
   hidden = true,
-  soul_set = false,
+  soul_set = "phanta_Zodiac",
   soul_rate = 0.005,
   can_repeat_soul = false
 }

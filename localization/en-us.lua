@@ -3275,6 +3275,15 @@ return {
                     "card held in hand"
                 }
             },
+            c_phanta_partisan = {
+                name = "Partisan",
+                text =
+                {
+                    "Creates up to {C:attention}#1#{} random",
+                    "{C:phanta_hanafuda}Bright Hanafuda{} cards",
+                    "{C:inactive}(Must have room){}"
+                }
+            },
             c_phanta_shard = {
                 name = "Shard",
                 text = {

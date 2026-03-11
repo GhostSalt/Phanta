@@ -444,5 +444,8 @@ function phanta_create_for_hanafuda_pack(key, i, size)
     type = "phanta_chaff"
   end
 
-  return SMODS.create_card({set = type, key_append = key, skip_materialize = true})
+  G.P_CENTERS.c_phanta_partisan.soul_set = type
+  local ret = SMODS.create_card({set = type, key_append = key, skip_materialize = true, soulable = true})
+  G.P_CENTERS.c_phanta_partisan.soul_set = "phanta_Hanafuda"
+  return ret
 end

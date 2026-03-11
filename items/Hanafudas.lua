@@ -2192,7 +2192,7 @@ end
 local ref = Game.main_menu
 function Game:main_menu(change_context)
   for k, v in pairs(G.P_CENTERS) do
-    if v.pools and type(v.pools) == "table" then
+    if v.pools and type(v.pools) == "table" and v.set == "phanta_Hanafuda" then
       if v.pools.phanta_chaff then
         v.set_badges = function(self, card, badges)
           badges[#badges + 1] = create_badge(localize('phanta_chaff_badge'), G.C.PHANTA.HanafudaAlt, G.C.WHITE, 1)
@@ -2220,3 +2220,45 @@ function Game:main_menu(change_context)
   end
   ref(self, change_context)
 end
+
+
+
+
+SMODS.Consumable {
+  set = "Spectral",
+  key = "partisan",
+  pos = { x = 1, y = 4 },
+  atlas = hanafuda_atlas,
+  config = { extra = { hanafudas = 2 } },
+  loc_vars = function(self, info_queue, card)
+    return { vars = { card.ability.extra.hanafudas } }
+  end,
+  can_use = function(self, card)
+    return count_consumables() < G.consumeables.config.card_limit or card.area == G.consumeables
+  end,
+  cost = 6,
+  use = function(self, card, area, copier)
+    for i = 1, math.min(card.ability.extra.hanafudas, G.consumeables.config.card_limit - count_consumables()) do
+      G.E_MANAGER:add_event(Event({
+        trigger = 'after',
+        delay = 0.4,
+        func = function()
+          if count_consumables() < G.consumeables.config.card_limit then
+            play_sound('timpani')
+            local new_card = SMODS.create_card({ set = "phanta_bright", key_append = "partisan" })
+            new_card:add_to_deck()
+            G.consumeables:emplace(new_card)
+            card:juice_up(0.3, 0.5)
+          end
+          return true
+        end
+      }))
+    end
+    delay(0.6)
+  end,
+
+  hidden = true,
+  soul_set = "phanta_Hanafuda",
+  soul_rate = 0.006,
+  can_repeat_soul = false
+}

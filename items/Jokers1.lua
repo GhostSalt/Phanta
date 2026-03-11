@@ -743,7 +743,12 @@ G.Phanta.centers["carlos"] = {
   eternal_compat = true,
   perishable_compat = true,
   calculate = function(self, card, context)
-    if context.joker_main and card.ability.extra.current_chips > 0 then return { chips = card.ability.extra.current_chips } end
+    if context.joker_main and card.ability.extra.current_chips > 0 then
+      return {
+        chips = card.ability.extra
+            .current_chips
+      }
+    end
 
     if context.before and G.GAME.current_round.discards_left > 0 and not context.blueprint then
       card.ability.extra.current_chips = card.ability.extra.current_chips + card.ability.extra.added_chips
@@ -841,7 +846,12 @@ G.Phanta.centers["redkeycards"] = {
   eternal_compat = true,
   perishable_compat = true,
   calculate = function(self, card, context)
-    if context.joker_main and card.ability.extra.current_xmult > 1 then return { xmult = card.ability.extra.current_xmult } end
+    if context.joker_main and card.ability.extra.current_xmult > 1 then
+      return {
+        xmult = card.ability.extra
+            .current_xmult
+      }
+    end
 
     if context.before and not context.blueprint then
       local upgrades = false
@@ -870,7 +880,12 @@ G.Phanta.centers["bluekeycards"] = {
   eternal_compat = true,
   perishable_compat = true,
   calculate = function(self, card, context)
-    if context.joker_main and card.ability.extra.current_chips > 0 then return { chips = card.ability.extra.current_chips } end
+    if context.joker_main and card.ability.extra.current_chips > 0 then
+      return {
+        chips = card.ability.extra
+            .current_chips
+      }
+    end
 
     if context.before and not context.blueprint then
       local upgrades = false
@@ -1107,7 +1122,12 @@ G.Phanta.centers["scratchart"] = {
   eternal_compat = true,
   perishable_compat = false,
   calculate = function(self, card, context)
-    if context.joker_main and card.ability.extra.current_xmult > 1 then return { xmult = card.ability.extra.current_xmult } end
+    if context.joker_main and card.ability.extra.current_xmult > 1 then
+      return {
+        xmult = card.ability.extra
+            .current_xmult
+      }
+    end
 
     if context.before and G.GAME.current_round.hands_played == 2 and not context.blueprint then
       card.ability.extra.current_xmult = card.ability.extra.current_xmult + card.ability.extra.added_xmult
@@ -1130,7 +1150,12 @@ G.Phanta.centers["animalinstinct"] = {
   eternal_compat = true,
   perishable_compat = false,
   calculate = function(self, card, context)
-    if context.joker_main and card.ability.extra.current_xmult > 1 then return { xmult = card.ability.extra.current_xmult } end
+    if context.joker_main and card.ability.extra.current_xmult > 1 then
+      return {
+        xmult = card.ability.extra
+            .current_xmult
+      }
+    end
 
     if context.remove_playing_cards and not context.blueprint then
       card.ability.extra.current_xmult = card.ability.extra.current_xmult +
@@ -2235,7 +2260,8 @@ G.Phanta.centers["candle"] = {
           destructable_tarot[#destructable_tarot + 1] = G.consumeables.cards[i]
         end
       end
-      local tarot_to_destroy = #destructable_tarot > 0 and pseudorandom_element(destructable_tarot, pseudoseed("candle")) or nil
+      local tarot_to_destroy = #destructable_tarot > 0 and pseudorandom_element(destructable_tarot, pseudoseed("candle")) or
+          nil
 
       if tarot_to_destroy then
         tarot_to_destroy.getting_sliced = true
@@ -2559,7 +2585,10 @@ G.Phanta.centers["tricolour"] = {
           for j = 1, #counted_suits do
             if context.scoring_hand[i].ability.phanta_actual_suit or context.scoring_hand[i].base.suit == counted_suits[j] then is_new = false end
           end
-          if is_new then counted_suits[#counted_suits + 1] = context.scoring_hand[i].ability.phanta_actual_suit or context.scoring_hand[i].base.suit end
+          if is_new then
+            counted_suits[#counted_suits + 1] = context.scoring_hand[i].ability.phanta_actual_suit or
+                context.scoring_hand[i].base.suit
+          end
         else
           wilds = wilds + 1
         end
@@ -2679,23 +2708,25 @@ G.Phanta.centers["crescent"] = {
   eternal_compat = true,
   perishable_compat = true,
   calculate = function(self, card, context)
-    if context.selling_card and context.card.config.center.set == "Planet" and count_consumables() <= G.consumeables.config.card_limit then
+    if context.selling_card and context.card.config.center.set == "Planet" and
+        (count_consumables() < G.consumeables.config.card_limit or (count_consumables() == G.consumeables.config.card_limit and
+        not (context.card.edition and (context.card.edition.negative or context.card.edition.phanta_drilled or context.card.edition.smsn_brownglaze)))) then
       G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
-      G.E_MANAGER:add_event(Event({
-        delay = 0.3,
-        blockable = false,
-        func = function()
-          if count_consumables() < G.consumeables.config.card_limit then
+      return {
+        extra = {
+          focus = card,
+          message = localize { type = 'variable', key = "a_tarot", vars = { 1 } },
+          func = function()
             play_sound("timpani")
-            local new_card = create_card("Tarot", G.consumables, nil, nil, nil, nil)
-            new_card:add_to_deck()
-            G.consumeables:emplace(new_card)
-            new_card:juice_up(0.3, 0.5)
+            local card = SMODS.create_card({ set = "Tarot", "crescent" })
+            card:add_to_deck()
+            G.consumeables:emplace(card)
             G.GAME.consumeable_buffer = 0
-          end
-          return true
-        end
-      }))
+          end,
+          colour = G.C.SECONDARY_SET.Tarot,
+          card = card
+        }
+      }
     end
   end,
   pronouns = "it_its"
@@ -2823,7 +2854,12 @@ G.Phanta.centers["charcoaljoker"] = {
   eternal_compat = true,
   perishable_compat = false,
   calculate = function(self, card, context)
-    if context.joker_main and card.ability.extra.current_chips > 0 then return { chips = card.ability.extra.current_chips } end
+    if context.joker_main and card.ability.extra.current_chips > 0 then
+      return {
+        chips = card.ability.extra
+            .current_chips
+      }
+    end
 
     if context.discard and context.other_card == context.full_hand[#context.full_hand] and not context.blueprint then
       local non_spades_present = false
@@ -3564,7 +3600,8 @@ G.Phanta.centers["sudoku"] = {
               ["14"] = 0
             }
 
-            local tarots = math.min(card.ability.extra.no_of_tarots, G.consumeables.config.card_limit - count_consumables())
+            local tarots = math.min(card.ability.extra.no_of_tarots,
+              G.consumeables.config.card_limit - count_consumables())
 
             return {
               extra = {
@@ -3643,10 +3680,16 @@ G.Phanta.centers["thepolicemun"] = {
   eternal_compat = true,
   perishable_compat = false,
   calculate = function(self, card, context)
-    if context.joker_main and card.ability.extra.current_xmult > 1 then return { xmult = card.ability.extra.current_xmult } end
+    if context.joker_main and card.ability.extra.current_xmult > 1 then
+      return {
+        xmult = card.ability.extra
+            .current_xmult
+      }
+    end
 
     if context.end_of_round and not context.individual and not context.repetition and not context.blueprint and G.GAME.current_round.discards_left > 0 then
-      card.ability.extra.current_xmult = card.ability.extra.current_xmult + (card.ability.extra.added_xmult * G.GAME.current_round.discards_left)
+      card.ability.extra.current_xmult = card.ability.extra.current_xmult +
+          (card.ability.extra.added_xmult * G.GAME.current_round.discards_left)
       return { message = localize("k_upgrade_ex") }
     end
   end,
