@@ -267,7 +267,7 @@ G.Phanta.centers["puzzle"] = {
   config = { extra = { given_money = 2 } },
   rarity = 1,
   atlas = 'PhantaLaytonAnims',
-  pos = { x = 0, y = 8 },
+  pos = { x = 11, y = 0 },
   flipbook_anim = {
     { xrange = { first = 11, last = 10 }, y = 0, t = 0.05 },
     { xrange = { first = 5, last = 9 },   y = 0, t = 0.05 },
@@ -2819,7 +2819,7 @@ G.Phanta.centers["monetjoker"] = {
 }
 
 G.Phanta.centers["charcoaljoker"] = {
-  config = { extra = { added_chips = 10, current_chips = 0 } },
+  config = { extra = { added_chips = 8, current_chips = 0 } },
   rarity = 2,
   atlas = 'Phanta',
   pos = { x = 4, y = 5 },

@@ -1928,7 +1928,7 @@ return {
                 text = {
                     "Hands containing",
                     "{C:attention}2 Aces{} count as",
-                    "{C:attention}Full Houses{}"
+                    "{C:attention}Four of a Kinds{}"
                 }
             },
             j_phanta_yatagarasucard         = {
