@@ -453,7 +453,7 @@ SMODS.Consumable {
         func = function()
           if G.consumeables.config.card_limit > count_consumables() then
             play_sound('timpani')
-            local new_card = phanta_create_hanafuda_bright("halo")
+            local new_card = SMODS.create_card({ set = "phanta_bright", key_append = "halo" })
             new_card:add_to_deck()
             G.consumeables:emplace(new_card)
             card:juice_up(0.3, 0.5)

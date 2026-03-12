@@ -2256,6 +2256,9 @@ SMODS.Consumable {
     end
     delay(0.6)
   end,
+  in_pool = function()
+    return Phanta.config["hanafuda_enabled"]
+  end,
 
   hidden = true,
   soul_set = "phanta_Hanafuda",
