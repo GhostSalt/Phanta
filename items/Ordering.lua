@@ -136,6 +136,7 @@ local joker_order = {
     "shamrock",
     "beadnecklace",
     "p5joker",
+    "cataclysm",
     "crescent",
     "shoppinglist",
     "ransomnote",

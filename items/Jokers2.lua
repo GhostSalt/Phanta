@@ -3721,7 +3721,7 @@ G.Phanta.centers["mrbigmoneybags"] = {
     if context.joker_main then return { xmult = card.ability.extra.xmult } end
   end,
   in_pool = function(self, args)
-    return args.source ~= "buf" and args.source ~= "jud" and args.source ~= "iris_ribbon"
+    return not (args and (args.source ~= "buf" or args.source ~= "jud" or args.source ~= "iris_ribbon"))
   end,
   pronouns = "he_him"
 }
@@ -4074,6 +4074,125 @@ G.Phanta.centers["deathnote"] = {
   eternal_compat = true,
   perishable_compat = true,
   pronouns = "it_its"
+}
+
+G.Phanta.centers["cataclysm"] = {
+  loc_vars = function(self, info_queue, card)
+    local card1 = card.ability and card.ability.extra and card.ability.extra.card1 and
+        card.ability.extra.card1 ~= "" and card.ability.extra.card1
+    local card2 = card.ability and card.ability.extra and card.ability.extra.card2 and
+        card.ability.extra.card2 ~= "" and card.ability.extra.card2
+    return { vars = { ((card1 or card2) and (card1 and localize { set = "Planet", type = "name_text", key = card1 } or localize("phanta_none")) .. ", " .. (card2 and localize { set = "Planet", type = "name_text", key = card2 } or localize("phanta_none"))) or localize("phanta_cataclysm_no_planet") } }
+  end,
+  rarity = 2,
+  atlas = 'PhantaMiscAnims7',
+  pos = { x = 3, y = 7 },
+  flipbook_pos_extra = {
+    chunka = { x = 3, y = 6 }, -- bg
+    chunkb = { x = 6, y = 6 },
+    chunkc = { x = 9, y = 6 },
+    chunkd = { x = 0, y = 7 },
+
+    chunke = { x = 9, y = 5 }, -- mg
+    chunkf = { x = 0, y = 6 },
+
+    chunkg = { x = 0, y = 5 }, -- fg
+    chunkh = { x = 3, y = 5 },
+    chunki = { x = 6, y = 5 },
+
+    console = { x = 6, y = 7 },
+
+    buttona = { x = 0, y = 4 },
+    buttonb = { x = 2, y = 4 },
+    buttonc = { x = 4, y = 4 },
+    buttond = { x = 6, y = 4 },
+    buttone = { x = 8, y = 4 },
+    buttonf = { x = 10, y = 4 },
+
+    screena = { x = 5, y = 2 },
+    screenb = { x = 0, y = 3 },
+
+    shock = { x = 2, y = 2 }
+  },
+  flipbook_pos_extra_order = {
+    "chunka", "chunkb", "chunkc", "chunkd",
+    "chunke", "chunkf",
+    "chunkg", "chunkh", "chunki",
+
+    "console",
+    "buttona", "buttonb", "buttonc", "buttond", "buttone", "buttonf",
+    "screena", "screenb",
+    "shock"
+  },
+  flipbook_anim = {
+    { xrange = { first = 3, last = 5 }, y = 7, trandomrange = { first = 0.5, last = 1 } }
+  },
+  flipbook_anim_extra = {
+    shock = { { xrange = { first = 2, last = 4 }, y = 2, t = 0.15 } },
+
+    screena = {
+      { x = 5,                             y = 2, t = 0.3 },
+      { x = 6,                             y = 2, t = 0.1 },
+      { x = 5,                             y = 2, t = 1.2 },
+      { x = 6,                             y = 2, t = 0.1 },
+      { x = 5,                             y = 2, t = 0.2 },
+      { x = 6,                             y = 2, t = 0.1 },
+      { x = 5,                             y = 2, t = 0.5 },
+      { xrange = { first = 7, last = 10 }, y = 2, t = 0.1 },
+      { x = 11,                            y = 2, t = 5 },
+    },
+
+    screenb = {
+      { x = 0,                             y = 3, t = 0.5 },
+      { x = 1,                             y = 3, t = 0.1 },
+      { x = 0,                             y = 3, t = 1.8 },
+      { x = 2,                             y = 3, t = 0.1 },
+      { x = 0,                             y = 3, t = 3.3 },
+      { x = 2,                             y = 3, t = 0.1 },
+      { x = 0,                             y = 3, t = 0.4 },
+      { x = 1,                             y = 3, t = 0.1 },
+      { x = 0,                             y = 3, t = 0.1 },
+      { x = 2,                             y = 3, t = 0.1 },
+      { x = 0,                             y = 3, t = 1.6 },
+      { xrange = { first = 3, last = 4 },  y = 3, t = 0.1 },
+      { x = 5,                             y = 3, t = 3 },
+      { xrange = { first = 6, last = 10 }, y = 3, t = 0.1 },
+      { x = 11,                            y = 3, t = 3 },
+    },
+
+
+
+    buttona = { { xrange = { first = 0, last = 1 }, y = 4, trandomrange = { first = 0.5, last = 0.8 } } },
+    buttonb = { { xrange = { first = 2, last = 3 }, y = 4, trandomrange = { first = 0.5, last = 0.8 } } },
+    buttonc = { { xrange = { first = 4, last = 5 }, y = 4, trandomrange = { first = 0.5, last = 0.8 } } },
+    buttond = { { xrange = { first = 6, last = 7 }, y = 4, trandomrange = { first = 0.5, last = 0.8 } } },
+    buttone = { { xrange = { first = 8, last = 9 }, y = 4, trandomrange = { first = 0.5, last = 0.8 } } },
+    buttonf = { { xrange = { first = 10, last = 11 }, y = 4, trandomrange = { first = 0.5, last = 0.8 } } },
+
+    console = {
+      { x = 6,                              y = 7, t = 0.2 },
+      { xrange = { first = 7, last = 8 },   y = 7, t = 0.05 },
+      { x = 9,                              y = 7, t = 0.2 },
+      { xrange = { first = 10, last = 11 }, y = 7, t = 0.05 }
+    },
+
+
+
+    chunka = { { xrange = { first = 3, last = 5 }, y = 6, trandomrange = { first = 5, last = 20 } } },
+    chunkb = { { xrange = { first = 6, last = 8 }, y = 6, trandomrange = { first = 5, last = 20 } } },
+    chunkc = { { xrange = { first = 9, last = 11 }, y = 6, trandomrange = { first = 5, last = 20 } } },
+    chunkd = { { xrange = { first = 0, last = 2 }, y = 7, trandomrange = { first = 5, last = 20 } } },
+    chunke = { { xrange = { first = 9, last = 11 }, y = 5, trandomrange = { first = 5, last = 20 } } },
+    chunkf = { { xrange = { first = 0, last = 2 }, y = 6, trandomrange = { first = 5, last = 20 } } },
+    chunkg = { { xrange = { first = 0, last = 2 }, y = 5, trandomrange = { first = 5, last = 20 } } },
+    chunkh = { { xrange = { first = 3, last = 5 }, y = 5, trandomrange = { first = 5, last = 20 } } },
+    chunki = { { xrange = { first = 6, last = 8 }, y = 5, trandomrange = { first = 5, last = 20 } } }
+  },
+  cost = 7,
+  blueprint_compat = false,
+  eternal_compat = true,
+  perishable_compat = true,
+  pronouns = "any_all"
 }
 
 G.Phanta.centers["doodah"] = {

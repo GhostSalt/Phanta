@@ -1209,6 +1209,15 @@ return {
                     "{C:inactive}(Currently {C:mult}+#2#{C:inactive} Mult){}"
                 }
             },
+            j_phanta_cataclysm              = {
+                name = "Cataclysm",
+                text = {
+                    "Press {C:red}MORE{} to select",
+                    "up to {C:attention}2{} {C:planet}Planet{} cards,",
+                    "they {C:red}cannot appear{}",
+                    "{C:inactive}(#1#){}"
+                }
+            },
             j_phanta_crescent               = {
                 name = 'Crescent',
                 text = {
@@ -4307,6 +4316,15 @@ return {
             k_phanta_deathnote_tab1 = "Type Name",
             k_phanta_deathnote_tab2 = "Collection",
             k_phanta_deathnote_tab3 = "Recent Names",
+
+            phanta_cataclysm_more_tooltip = {
+                "Select the two Planet",
+                "cards you wish to block."
+            },
+
+            phanta_cataclysm_no_planet = "No Planets selected",
+            k_phanta_cataclysm_tab1 = "Planet 1",
+            k_phanta_cataclysm_tab2 = "Planet 2",
 
             phanta_theblackraven_blackmarket = "THE BLACK MARKET",
 

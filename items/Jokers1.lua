@@ -2687,7 +2687,7 @@ G.Phanta.centers["crescent"] = {
   calculate = function(self, card, context)
     if context.selling_card and context.card.config.center.set == "Planet" and
         (count_consumables() < G.consumeables.config.card_limit or (count_consumables() == G.consumeables.config.card_limit and
-        not (context.card.edition and (context.card.edition.negative or context.card.edition.phanta_drilled or context.card.edition.smsn_brownglaze)))) then
+          not (context.card.edition and (context.card.edition.negative or context.card.edition.phanta_drilled or context.card.edition.smsn_brownglaze)))) then
       G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
       return {
         extra = {
@@ -3261,16 +3261,10 @@ G.Phanta.centers["spaceinvader"] = {
       }))
     end
   end,
-  set_sprites = function(self, card, front)
-    if not self.discovered and not card.params.bypass_discovery_center then
-      return
-    end
-    local c = card or {}
+  set_ability = function(self, card, initial, delay_sprites)
     local choices = { "crab", "squid", "octopus" }
-    if c.flipbook_anim_extra_current_state == "random" then
-      local choice = pseudorandom_element(choices, pseudoseed("spaceinvaderchoice"))
-      card:flipbook_set_anim_extra_state(choice)
-    end
+    local choice = pseudorandom_element(choices, pseudoseed("spaceinvaderchoice"))
+    card:flipbook_set_anim_extra_state(choice)
   end,
   pronouns = "any_all"
 }
