@@ -513,7 +513,11 @@ phanta_create_uibox_deathnote_jokers_collection = function(e)
     for j = 1, #G.your_collection do
       local center = G.P_CENTER_POOLS["Joker"][i + (j - 1) * 5]
       if not center then break end
-      local card = Card(G.your_collection[j].T.x + G.your_collection[j].T.w / 2, G.your_collection[j].T.y, G.CARD_W, G.CARD_H, nil, center)
+      
+      local old_used_jokers = G.GAME.used_jokers[center.key]
+      local card = Card(G.your_collection[j].T.x + G.your_collection[j].T.w / 2, G.your_collection[j].T.y, G.CARD_W, G.CARD_H, G.P_CARDS.empty, center)
+      G.GAME.used_jokers[center.key] = old_used_jokers
+
       card.sticker = get_joker_win_sticker(center)
       G.your_collection[j]:emplace(card)
     end
@@ -560,7 +564,10 @@ G.FUNCS.phanta_your_deathnote_jokers_collection = function(args)
     for j = 1, #G.your_collection do
       local center = G.P_CENTER_POOLS["Joker"][i + (j - 1) * 5 + (5 * #G.your_collection * (args.cycle_config.current_option - 1))]
       if not center then break end
+      
+      local old_used_jokers = G.GAME.used_jokers[center.key]
       local card = Card(G.your_collection[j].T.x + G.your_collection[j].T.w / 2, G.your_collection[j].T.y, G.CARD_W, G.CARD_H, G.P_CARDS.empty, center)
+      G.GAME.used_jokers[center.key] = old_used_jokers
 
       G.your_collection[j]:emplace(card)
     end
@@ -710,7 +717,6 @@ end
 
 phanta_deathnote_your_collection_consumable_type = function(e)
   local deck_tables = {}
-
   G.your_collection = {}
   for j = 1, 3 do
     G.your_collection[j] = CardArea(
@@ -740,8 +746,10 @@ phanta_deathnote_your_collection_consumable_type = function(e)
     for j = 1, #G.your_collection do
       local center = G.P_CENTER_POOLS[set][i + (j - 1) * 5]
       if not center then break end
+      local old_used_jokers = G.GAME.used_jokers[center.key]
       local card = Card(G.your_collection[j].T.x + G.your_collection[j].T.w / 2, G.your_collection[j].T.y, G.CARD_W, G.CARD_H, nil, center)
       G.your_collection[j]:emplace(card)
+      G.GAME.used_jokers[center.key] = old_used_jokers
     end
   end
 
@@ -794,7 +802,11 @@ G.FUNCS.phanta_deathnote_your_collection_consumable_type_thing = function(args)
     for j = 1, #G.your_collection do
       local center = G.P_CENTER_POOLS[args.cycle_config.phanta_deathnote_set][i + (j - 1) * 5 + (5 * #G.your_collection * (args.cycle_config.current_option - 1))]
       if not center then break end
+
+      local old_used_jokers = G.GAME.used_jokers[center.key]
       local card = Card(G.your_collection[j].T.x + G.your_collection[j].T.w / 2, G.your_collection[j].T.y, G.CARD_W, G.CARD_H, nil, center)
+      G.GAME.used_jokers[center.key] = old_used_jokers
+
       G.your_collection[j]:emplace(card)
     end
   end
