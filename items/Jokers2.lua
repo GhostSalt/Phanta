@@ -2803,7 +2803,7 @@ G.Phanta.centers["glassjoe"] = {
     if context.joker_main then return { xmult = card.ability.extra.xmult } end
     if context.end_of_round and context.game_over == false and context.main_eval and not context.blueprint then
       if SMODS.pseudorandom_probability(card, "glassjoe", 1, card.ability.extra.odds) then
-        G.GAME.phanta_glassjoe_odds = G.GAME.phanta_glassjoe_odds + 1
+        G.GAME.phanta_glassjoe_odds = G.GAME.phanta_glassjoe_odds + 2
         card:shatter()
       else
         return { message = localize("k_safe_ex") }

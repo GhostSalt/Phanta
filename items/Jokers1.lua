@@ -2141,7 +2141,7 @@ G.Phanta.centers["honeydew"] = {
     end
   end,
   set_badges = function(self, card, badges)
-    badges[#badges + 1] = create_badge(localize('credit_goat3730'), G.C.PHANTA.MISC_COLOURS.PHANTA, G.C.WHITE, 1)
+    badges[#badges + 1] = create_badge(localize('credit_probablytart'), G.C.PHANTA.MISC_COLOURS.PHANTA, G.C.WHITE, 1)
   end,
   hpot_unbreedable = true,
   pronouns = "he_him"
@@ -2497,7 +2497,7 @@ G.Phanta.centers["identity"] = {
   rarity = 2,
   atlas = 'Phanta',
   pos = { x = 1, y = 0 },
-  cost = 8,
+  cost = 6,
   loc_vars = function(self, info_queue, card)
     return { vars = { card.ability.extra.no_of_cards } }
   end,

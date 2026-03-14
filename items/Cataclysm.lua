@@ -97,19 +97,20 @@ G.FUNCS.phanta_create_cataclysm_your_collection = function(page)
   end
 
   local set = "Planet"
+  local pool = SMODS.get_clean_pool("Planet")
   local consumable_options = {}
-  for i = 1, math.ceil(#G.P_CENTER_POOLS[set] / (6 * #G.your_collection)) do
-    table.insert(consumable_options, localize('k_page') .. ' ' .. tostring(i) .. '/' .. tostring(math.ceil(#G.P_CENTER_POOLS[set] / (6 * #G.your_collection))))
+  for i = 1, math.ceil(#pool / (6 * #G.your_collection)) do
+    table.insert(consumable_options, localize('k_page') .. ' ' .. tostring(i) .. '/' .. tostring(math.ceil(#pool / (6 * #G.your_collection))))
   end
 
   for i = 1, 6 do
     for j = 1, #G.your_collection do
-      local center = G.P_CENTER_POOLS[set][i + (j - 1) * 6]
+      local center = pool[i + (j - 1) * 6]
       if not center then break end
-      local old_used_jokers = G.GAME.used_jokers[center.key]
-      local card = Card(G.your_collection[j].T.x + G.your_collection[j].T.w / 2, G.your_collection[j].T.y, G.CARD_W * 0.9, G.CARD_H * 0.9, nil, center)
+      local old_used_jokers = G.GAME.used_jokers[center]
+      local card = Card(G.your_collection[j].T.x + G.your_collection[j].T.w / 2, G.your_collection[j].T.y, G.CARD_W * 0.9, G.CARD_H * 0.9, nil, G.P_CENTERS[center])
       G.your_collection[j]:emplace(card)
-      G.GAME.used_jokers[center.key] = old_used_jokers
+      G.GAME.used_jokers[center] = old_used_jokers
     end
   end
 
@@ -177,12 +178,12 @@ G.FUNCS.phanta_cataclysm_update_collection = function(args)
 
   for i = 1, 6 do
     for j = 1, #G.your_collection do
-      local center = G.P_CENTER_POOLS["Planet"][i + (j - 1) * 6 + (6 * #G.your_collection * (args.cycle_config.current_option - 1))]
+      local center = SMODS.get_clean_pool("Planet")[i + (j - 1) * 6 + (6 * #G.your_collection * (args.cycle_config.current_option - 1))]
       if not center then break end
 
-      local old_used_jokers = G.GAME.used_jokers[center.key]
-      local card = Card(G.your_collection[j].T.x + G.your_collection[j].T.w / 2, G.your_collection[j].T.y, G.CARD_W * 0.9, G.CARD_H * 0.9, nil, center)
-      G.GAME.used_jokers[center.key] = old_used_jokers
+      local old_used_jokers = G.GAME.used_jokers[center]
+      local card = Card(G.your_collection[j].T.x + G.your_collection[j].T.w / 2, G.your_collection[j].T.y, G.CARD_W * 0.9, G.CARD_H * 0.9, nil, G.P_CENTERS[center])
+      G.GAME.used_jokers[center] = old_used_jokers
 
       G.your_collection[j]:emplace(card)
     end

@@ -4328,7 +4328,7 @@ return {
 
             phanta_theblackraven_blackmarket = "THE BLACK MARKET",
 
-            credit_goat3730 = "OC by goat3730",
+            credit_probablytart = "OC by ProbablyTart",
             credit_bobisnotaperson = "bobisnotaperson's Truesona",
 
             phanta_requires_restart = "(Requires restart)",
