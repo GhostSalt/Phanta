@@ -4330,6 +4330,7 @@ return {
 
             credit_probablytart = "OC by ProbablyTart",
             credit_bobisnotaperson = "bobisnotaperson's Truesona",
+            credit_astro = "OC by Astro",
 
             phanta_requires_restart = "(Requires restart)",
             phanta_junk_enabled = "Enable Junk (Poker Hand)",

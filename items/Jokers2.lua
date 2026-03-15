@@ -2873,6 +2873,9 @@ G.Phanta.centers["astro"] = {
   blueprint_compat = true,
   eternal_compat = true,
   perishable_compat = true,
+  set_badges = function(self, card, badges)
+    badges[#badges + 1] = create_badge(localize('credit_astro'), G.C.PHANTA.MISC_COLOURS.PHANTA, G.C.WHITE, 1)
+  end,
   calculate = function(self, card, context)
     if context.other_consumeable and context.other_consumeable.ability.set == "Planet" then
       return { chips = card.ability.extra.chips, message_card = context.other_consumeable }
