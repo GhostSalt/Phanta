@@ -2321,28 +2321,20 @@ G.Phanta.centers["goo"] = {
 }
 
 G.Phanta.centers["web"] = {
-  config = { extra = { given_mult = 15, counted_spades = 0, required_spades = 2 } },
+  config = { extra = { given_mult = 7 } },
   rarity = 1,
   atlas = 'Phanta',
   pos = { x = 4, y = 11 },
   cost = 4,
   loc_vars = function(self, info_queue, card)
-    return { vars = { card.ability.extra.given_mult, card.ability.extra.required_spades } }
+    return { vars = { card.ability.extra.given_mult } }
   end,
   blueprint_compat = true,
   eternal_compat = true,
   perishable_compat = true,
   calculate = function(self, card, context)
-    if context.joker_main and card.ability.extra.counted_spades >= card.ability.extra.required_spades then
-      return { mult = card.ability.extra.given_mult }
-    end
-
-    if context.cardarea == G.jokers and context.before and not context.blueprint then
-      card.ability.extra.counted_spades = 0
-    end
-
-    if context.cardarea == G.hand and not context.blueprint and context.other_card and context.other_card:is_suit("Spades") and not context.repetition then -- Logic here is weird, replace with iteration over hand.
-      card.ability.extra.counted_spades = card.ability.extra.counted_spades + 1
+    if context.individual and context.cardarea == G.hand and context.other_card and context.other_card:is_suit("Spades") then
+      return { mult = card.ability.extra.mult }
     end
   end,
   pronouns = "it_its"

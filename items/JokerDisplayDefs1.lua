@@ -861,26 +861,20 @@ jd_def["j_phanta_candle"] = {
 jd_def["j_phanta_web"] = {
   text = {
     { text = "+" },
-    { ref_table = "card.joker_display_values", ref_value = "mult", retrigger_type = "mult" }
+    { ref_table = "card.joker_display_values", ref_value = "mult", retrigger_type = "mult" },
   },
   text_config = { colour = G.C.MULT },
-  reminder_text = {
-    { text = "(2 " },
-    { ref_table = "card.joker_display_values", ref_value = "localised_text" },
-    { text = ")" }
-  },
   calc_function = function(card)
-    local spades = 0
-    local text, _, scoring_hand = JokerDisplay.evaluate_hand()
-    if text ~= 'Unknown' then
-      for _, v in pairs(G.hand.cards) do
-        if not SMODS.in_scoring(v, G.hand.highlighted) and v:is_suit("Spades") then
-          spades = spades + 1
+    local playing_hand = next(G.play.cards)
+    local mult = 0
+    for _, playing_card in ipairs(G.hand.cards) do
+      if playing_hand or not playing_card.highlighted then
+        if playing_card.facing and not (playing_card.facing == 'back') and not playing_card.debuff and playing_card:is_suit("Spades") then
+          mult = mult + card.ability.extra.mult * JokerDisplay.calculate_card_triggers(playing_card, nil, true)
         end
       end
     end
-    card.joker_display_values.mult = (spades > card.ability.extra.required_spades) and card.ability.extra.given_mult or 0
-    card.joker_display_values.localised_text = localize("Spades", "suits_plural")
+    card.joker_display_values.mult = mult
   end
 }
 
@@ -1271,7 +1265,7 @@ jd_def["j_phanta_tribouletssoul"] = {
     { text = ")" }
   },
   calc_function = function(card)
-    card.joker_display_values.localised_text = localize("k_phanta_king_and_queen")
+    card.joker_display_values.localised_text = localize("k_phanta_king_or_queen")
   end
 }
 

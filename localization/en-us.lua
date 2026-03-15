@@ -1121,12 +1121,11 @@ return {
                 }
             },
             j_phanta_web                    = {
-                name = 'Web',
+                name = "Web",
                 text = {
-                    "{C:mult}+#1#{} Mult if {C:attention}#2#{}",
-                    "or more cards",
-                    "held in hand",
-                    "have {C:spades}Spades{} suit"
+                    "Cards with {C:spades}Spades{}",
+                    "suit give {C:mult}+#1#{} Mult",
+                    "when held in hand"
                 }
             },
             j_phanta_cutcorners             = {
@@ -4351,7 +4350,7 @@ return {
             k_phanta_wild_cards = "Wild Cards",
             k_phanta_exactly_three_suits = "Exactly 3 suits",
             k_phanta_ace_of_spades = "Ace of Spades",
-            k_phanta_king_and_queen = "King and Queen",
+            k_phanta_king_or_queen = "King or Queen",
             k_phanta_enhanced_faces = "Enhanced faces",
             k_phanta_stone_cards = "Stone cards",
             k_phanta_gold_cards = "Gold cards",

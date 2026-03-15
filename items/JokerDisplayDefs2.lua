@@ -878,7 +878,7 @@ jd_def["j_phanta_neonjoker"] = {
       end
     end
 
-    card.joker_display_values.xmult = #counted_suits + wilds >= 4 and card.ability.extra.xmult or 1
+    card.joker_display_values.xmult = #counted_suits + wilds >= 3 and card.ability.extra.xmult or 1
   end
 }
 
