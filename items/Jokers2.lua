@@ -1860,7 +1860,7 @@ G.Phanta.centers["testpage"] = {
       return args.type == "hand_contents" and text == self.unlock_condition.extra
     end
   end,
-  config = { extra = { added_chips = 12, current_chips = 0 } },
+  config = { extra = { added_chips = 10, current_chips = 0 } },
   rarity = 1,
   atlas = 'Phanta2',
   pos = { x = 1, y = 3 },

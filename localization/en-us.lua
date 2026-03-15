@@ -714,7 +714,7 @@ return {
             j_phanta_badhairday             = {
                 name = "Bad Hair Day",
                 text = {
-                    "Face cards held in",
+                    "{C:attention}Face{} cards held in",
                     "hand give {C:chips}+#1#{} Chips"
                 }
             },
@@ -1589,7 +1589,7 @@ return {
                     "{C:white,X:mult}X#1#{} Mult for {C:attention}#2#{} hand#3#,",
                     "gains {C:attention}+#4#{} hands if played",
                     "hand contains a scoring",
-                    "{C:attention}King{} and {C:attention}Queen{}"
+                    "{C:attention}King{} or {C:attention}Queen{}"
                 }
             },
             j_phanta_chicotssoul            = {

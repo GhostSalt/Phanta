@@ -2227,8 +2227,8 @@ end
 SMODS.Consumable {
   set = "Spectral",
   key = "partisan",
-  pos = { x = 1, y = 4 },
-  atlas = hanafuda_atlas,
+  pos = { x = 1, y = 2 },
+  atlas = "PhantaSpectrals",
   config = { extra = { hanafudas = 2 } },
   loc_vars = function(self, info_queue, card)
     return { vars = { card.ability.extra.hanafudas } }

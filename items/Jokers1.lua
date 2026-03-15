@@ -741,7 +741,7 @@ G.Phanta.centers["carlos"] = {
   cost = 5,
   blueprint_compat = true,
   eternal_compat = true,
-  perishable_compat = true,
+  perishable_compat = false,
   calculate = function(self, card, context)
     if context.joker_main and card.ability.extra.current_chips > 0 then
       return {
@@ -4316,7 +4316,7 @@ G.Phanta.centers["tribouletssoul"] = {
         if context.scoring_hand[i]:get_id() == 12 then queens = true end
         if context.scoring_hand[i]:get_id() == 13 then kings = true end
       end
-      if kings and queens then
+      if kings or queens then
         card.ability.extra.remaining_hands = card.ability.extra.remaining_hands + card.ability.extra.added_hands
         return {
           message = "+" .. card.ability.extra.added_hands .. " Hands",

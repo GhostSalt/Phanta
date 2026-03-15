@@ -114,12 +114,47 @@ SMODS.Atlas {
   py = 95
 }
 
+
+
 SMODS.Atlas {
   key = "PhantaTarots",
   path = "PhantaTarots.png",
   px = 71,
   py = 95
 }
+
+SMODS.Atlas {
+  key = "PhantaPlanets",
+  path = "PhantaPlanets.png",
+  px = 71,
+  py = 95
+}
+
+if next(SMODS.find_mod("LeSpectrals")) then
+  SMODS.Atlas {
+    key = "PhantaSpectrals",
+    path = "PhantaLesbianSpectrals.png",
+    px = 71,
+    py = 95
+  }
+elseif next(SMODS.find_mod("TSpectrals")) then
+  SMODS.Atlas {
+    key = "PhantaSpectrals",
+    path = "PhantaTransSpectrals.png",
+    px = 71,
+    py = 95
+  }
+else
+  SMODS.Atlas {
+    key = "PhantaSpectrals",
+    path = "PhantaSpectrals.png",
+    px = 71,
+    py = 95
+  }
+end
+
+
+
 
 SMODS.Atlas {
   key = "PhantaTags",
