@@ -1283,7 +1283,7 @@ G.Phanta.centers["exitsign"] = {
     return { vars = { card.ability.extra.money_given } }
   end,
   calculate = function(self, card, context)
-    if context.joker_main and G.GAME.current_round.hands_left == 0 and G.GAME.current_round.discards_left == 0 then
+    if context.before and G.GAME.current_round.hands_left == 0 and G.GAME.current_round.discards_left == 0 then
       return { dollars = card.ability.extra.money_given }
     end
   end,
@@ -2503,13 +2503,14 @@ G.Phanta.centers["identity"] = {
   perishable_compat = false,
   phanta_shatters = true,
   calculate = function(self, card, context)
-    if context.ending_shop and not context.repetition and not context.blueprint then
+    if context.ending_shop and not context.repetition and not context.blueprint and count_consumables() < G.consumeables.config.card_limit then
       local creation_event = Event({
         func = function()
-          local new_card = create_card("Spectral", G.consumables, nil, nil, nil, nil)
-          --new_card:set_edition({ negative = true })
-          new_card:add_to_deck()
-          G.consumeables:emplace(new_card)
+          SMODS.add_card {
+            set = "Spectral",
+            key_append = "identity"
+          }
+          G.GAME.consumeable_buffer = 0
           return true
         end
       })
@@ -2520,8 +2521,11 @@ G.Phanta.centers["identity"] = {
           return true
         end
       }))
-      for i = 1, card.ability.extra.no_of_cards, 1 do G.E_MANAGER:add_event(creation_event) end
-      return { message = "Shattered!", colour = G.C.RED }
+      for i = 1, math.min(card.ability.extra.no_of_cards, G.consumeables.config.card_limit - count_consumables()), 1 do
+        G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
+        G.E_MANAGER:add_event(creation_event)
+      end
+      return { message = localize("k_phanta_shattered_ex"), colour = G.C.RED }
     end
   end,
   pronouns = "it_its"

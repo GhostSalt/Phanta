@@ -3426,6 +3426,58 @@ G.Phanta.centers["birthdaycard"] = {
   -- ADD EDITION GATE!!!!!!!!!! :triumph:
 }
 
+G.Phanta.centers["tartanjoker"] = {
+  config = { extra = { current_tarots = 0, target_tarots = 7 } },
+  loc_vars = function(self, info_queue, card)
+    return { vars = { card.ability.extra.target_tarots, card.ability.extra.target_tarots - card.ability.extra.current_tarots } }
+  end,
+  rarity = 2,
+  atlas = 'Phanta2',
+  pos = { x = 7, y = 8 },
+  cost = 6,
+  blueprint_compat = true,
+  eternal_compat = true,
+  perishable_compat = false,
+  calculate = function(self, card, context)
+    if context.selling_card and context.card.config.center.set == "Tarot" then
+      card.ability.extra.current_tarots = card.ability.extra.current_tarots + 1
+      if card.ability.extra.current_tarots >= card.ability.extra.target_tarots then
+        card.ability.extra.current_tarots = 0
+        if count_consumables() < G.consumeables.config.card_limit or
+            (count_consumables() == G.consumeables.config.card_limit and not (context.card.edition and (context.card.edition.negative or context.card.edition.phanta_drilled or context.card.edition.smsn_brownglaze))) then
+          G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
+          return {
+            extra = {
+              focus = card,
+              message = localize { type = 'variable', key = "a_spectral", vars = { 1 } },
+              func = function()
+                play_sound("timpani")
+                SMODS.add_card {
+                  set = "Spectral",
+                  key_append = "tartanjoker"
+                }
+                G.GAME.consumeable_buffer = 0
+                return true
+              end,
+              colour = G.C.SECONDARY_SET.Spectral,
+              card = card
+            }
+          }
+        else
+          return {
+            message = localize("k_no_room_ex"),
+            colour = G.C.SECONDARY_SET.Spectral,
+            card = card
+          }
+        end
+      else
+        return { message = card.ability.extra.current_tarots .. "/" .. card.ability.extra.target_tarots }
+      end
+    end
+  end,
+  pronouns = "he_him"
+}
+
 G.Phanta.centers["leprechaun"] = {
   config = { extra = { mult = 17 } },
   loc_vars = function(self, info_queue, card)
@@ -3610,6 +3662,26 @@ G.Phanta.centers["ontherun"] = {
     end
   end,
   pronouns = "she_they"
+}
+
+G.Phanta.centers["balancingact"] = {
+  config = { extra = { money = 3 } },
+  loc_vars = function(self, info_queue, card)
+    return { vars = { card.ability.extra.money } }
+  end,
+  rarity = 1,
+  atlas = 'Phanta2',
+  pos = { x = 6, y = 8 },
+  cost = 5,
+  blueprint_compat = true,
+  eternal_compat = true,
+  perishable_compat = true,
+  calculate = function(self, card, context)
+    if context.before and G.GAME.current_round.hands_left == G.GAME.current_round.discards_left then
+      return { dollars = card.ability.extra.money }
+    end
+  end,
+  pronouns = "he_they"
 }
 
 G.Phanta.centers["metalhead"] = {

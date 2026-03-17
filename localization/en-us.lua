@@ -804,6 +804,15 @@ return {
                     "and {C:red}0{} discards remain"
                 }
             },
+            j_phanta_balancingact               = {
+                name = "Balancing Act",
+                text = {
+                    "Earn {C:money}$#1#{} when hand is",
+                    "played if remaining",
+                    "{C:blue}hands{} and {C:red}discards{}",
+                    "are {C:attention}equal{}"
+                }
+            },
             j_phanta_task                   = {
                 name = 'Task',
                 text = {
@@ -1174,10 +1183,19 @@ return {
             j_phanta_identity               = {
                 name = 'Identity',
                 text = {
-                    "Creates {C:attention}#1#{} random",
-                    "{C:spectral}Spectral{} card at",
-                    "the end of the {C:attention}shop{}",
-                    "{C:red,E:2}self destructs{}"
+                    "Creates {C:attention}#1#{} random {C:spectral}Spectral{}",
+                    "card at the end of the",
+                    "{C:attention}shop{}, {C:red,E:2}self destructs{}",
+                    "{C:inactive}(Must have room){}"
+                }
+            },
+            j_phanta_tartanjoker               = {
+                name = "Tartan Joker",
+                text = {
+                    "Creates a {C:spectral}Spectral{}",
+                    "card after selling",
+                    "{C:attention}#1#{} {C:inactive}[#2#]{} {C:tarot}Tarot{} cards",
+                    "{C:inactive}(Must have room){}"
                 }
             },
             j_phanta_tricolour              = {
@@ -4324,6 +4342,8 @@ return {
             phanta_cataclysm_no_planet = "No Planets selected",
             k_phanta_cataclysm_tab1 = "Planet 1",
             k_phanta_cataclysm_tab2 = "Planet 2",
+
+            k_phanta_shattered_ex = "Shattered!",
 
             phanta_theblackraven_blackmarket = "THE BLACK MARKET",
 
