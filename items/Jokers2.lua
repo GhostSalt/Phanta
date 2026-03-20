@@ -2186,6 +2186,27 @@ G.Phanta.centers["thefall"] = {
   pronouns = "she_her"
 }
 
+G.Phanta.centers["emmyaltava"] = {
+  config = { extra = { levels = 1 } },
+  rarity = 2,
+  atlas = "Phanta2",
+  pos = { x = 8, y = 8 },
+  cost = 6,
+  loc_vars = function(self, info_queue, card)
+    return { vars = { card.ability.extra.levels } }
+  end,
+  blueprint_compat = true,
+  eternal_compat = true,
+  perishable_compat = true,
+
+  calculate = function(self, card, context)
+    if context.before and G.GAME.current_round.hands_played == 2 and not context.blueprint then
+      return { level_up = true, message = localize("k_level_up_ex") }
+    end
+  end,
+  pronouns = "she_her"
+}
+
 G.Phanta.centers["donpaolo"] = {
   config = { extra = { money = 2 } },
   rarity = 2,

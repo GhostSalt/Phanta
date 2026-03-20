@@ -1101,8 +1101,7 @@ G.Phanta.centers["scratchart"] = {
   calculate = function(self, card, context)
     if context.joker_main and card.ability.extra.current_xmult > 1 then
       return {
-        xmult = card.ability.extra
-            .current_xmult
+        xmult = card.ability.extra.current_xmult
       }
     end
 
@@ -4120,7 +4119,7 @@ G.Phanta.centers["lily"] = {
       return tally >= 5
     end
   end,
-  config = { extra = { given_chips = 250 } },
+  config = { extra = { given_chips = 200 } },
   rarity = 3,
   atlas = 'Phanta',
   pos = { x = 0, y = 9 },
@@ -4139,7 +4138,7 @@ G.Phanta.centers["lily"] = {
           diamond_cards[#diamond_cards + 1] = v
         end
       end
-      if #diamond_cards == 1 then return { chips = card.ability.extra.given_chips } end
+      if #diamond_cards >= 1 then return { chips = card.ability.extra.given_chips } end
     end
   end,
   pronouns = "she_her"

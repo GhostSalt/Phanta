@@ -804,7 +804,7 @@ return {
                     "and {C:red}0{} discards remain"
                 }
             },
-            j_phanta_balancingact               = {
+            j_phanta_balancingact           = {
                 name = "Balancing Act",
                 text = {
                     "Earn {C:money}$#1#{} when hand is",
@@ -1008,6 +1008,13 @@ return {
                     "{C:inactive,s:0.65}(Guaranteed if with Professor Layton){}"
                 }
             },
+            j_phanta_emmyaltava             = {
+                name = "Emmy Altava",
+                text = {
+                    "Upgrades {C:attention}third{} hand",
+                    "of round by {C:attention}#1#{} level"
+                }
+            },
             j_phanta_jeandescole            = {
                 name = 'Jean Descole',
                 text = {
@@ -1189,7 +1196,7 @@ return {
                     "{C:inactive}(Must have room){}"
                 }
             },
-            j_phanta_tartanjoker               = {
+            j_phanta_tartanjoker            = {
                 name = "Tartan Joker",
                 text = {
                     "Creates a {C:spectral}Spectral{}",
@@ -1572,7 +1579,7 @@ return {
                 name = 'Lily',
                 text = {
                     "{C:chips}+#1#{} Chips if played",
-                    "hand contains exactly {C:attention}1{}",
+                    "hand contains at least {C:attention}1{}",
                     "card with {C:diamonds}Diamonds{} suit"
                 },
                 unlock = {

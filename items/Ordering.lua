@@ -97,6 +97,7 @@ local joker_order = {
     "calendar",
     "professorlayton",
     "luketriton",
+    "emmyaltava",
     "donpaolo",
     "futureluke",
     "barton",
