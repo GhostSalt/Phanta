@@ -671,12 +671,15 @@ Game.main_menu = function(change_context)
   local ret = main_menu_ref(change_context)
 
   if Phanta.config["custom_title_screen"] then
+    math.randomseed(os.time())
+    local rand_x = math.random(0, 2)
+    local rand_y = math.random(0, 1)
     local SC_scale = 1.1 * (G.debug_splash_size_toggle and 0.8 or 1)
     G.SPLASH_LOGO_PHANTA_GHOST = Sprite(0, 0,
       13 * SC_scale,
       13 * SC_scale *
       (G.ASSET_ATLAS["phanta_PhantaTitleScreenGhost"].py / G.ASSET_ATLAS["phanta_PhantaTitleScreenGhost"].px),
-      G.ASSET_ATLAS["phanta_PhantaTitleScreenGhost"], { x = math.random(0, 2), y = math.random(0, 1) }
+      G.ASSET_ATLAS["phanta_PhantaTitleScreenGhost"], { x = rand_x, y = rand_y }
     )
     G.SPLASH_LOGO_PHANTA_GHOST:set_alignment({
       major = G.title_top,

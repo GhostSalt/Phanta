@@ -2540,7 +2540,8 @@ return {
             j_phanta_deckjoker_erratic = {
                 name = "Deck Joker (Erratic)",
                 text = {
-                    ""
+                    "Played cards change {C:attention}rank{}",
+                    "and {C:attention}suit{} if {C:attention}unscored{}"
                 }
             },
 
@@ -2554,9 +2555,8 @@ return {
             j_phanta_deckjoker_stormcaught = {
                 name = "Deck Joker (Stormcaught)",
                 text = {
-                    "Creates a {C:green}Foil{} Tag",
-                    "when selling an",
-                    "{C:green}Uncommon{} Joker"
+                    "Creates a {C:green}Foil{} Tag when",
+                    "selling an {C:green}Uncommon{} Joker"
                 }
             },
             j_phanta_deckjoker_blurple = {
@@ -2580,7 +2580,7 @@ return {
             j_phanta_deckjoker_badd = {
                 name = "Deck Joker (Badd)",
                 text = {
-                    "Gives {C:money}$#1#{} when a",
+                    "Earn {C:money}$#1#{} when a",
                     "playing card is {C:red}destroyed{}"
                 }
             },

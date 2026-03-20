@@ -755,8 +755,7 @@ G.Phanta.centers["carlos"] = {
   calculate = function(self, card, context)
     if context.joker_main and card.ability.extra.current_chips > 0 then
       return {
-        chips = card.ability.extra
-            .current_chips
+        chips = card.ability.extra.current_chips
       }
     end
 
