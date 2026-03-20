@@ -493,7 +493,7 @@ phanta_add_deck_joker_deck(deck_joker_plasma)
 
 
 
-local deck_joker_stormcaught = {
+--[[local deck_joker_stormcaught = {    -- I'm temporarily removing this one, as Stormcaught Deck looks different now, and this Joker hasn't been updated.
     key = "b_phanta_stormcaught",
     loc_key = "stormcaught",
 
@@ -533,7 +533,7 @@ local deck_joker_stormcaught = {
         end
     end
 }
-phanta_add_deck_joker_deck(deck_joker_stormcaught)
+phanta_add_deck_joker_deck(deck_joker_stormcaught)]]--
 
 local deck_joker_blurple = {
     key = "b_phanta_blurple",

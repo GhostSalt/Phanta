@@ -37,17 +37,21 @@ G.Phanta.centers["dropdownlist"] = {
   eternal_compat = false,
   perishable_compat = true,
   calculate = function(self, card, context)
-    if context.selling_self and #G.jokers.cards <= G.jokers.config.card_limit then
-      G.E_MANAGER:add_event(Event({
-        func = function()
-          play_sound('timpani')
-          local new_card = create_card('Joker', G.jokers, nil, nil, nil, nil, nil, 'dropdownlist')
-          new_card:add_to_deck()
-          G.jokers:emplace(new_card)
-          new_card:juice_up(0.3, 0.5)
-          return true
-        end
-      }))
+    if context.selling_self then
+      if #G.jokers.cards <= G.jokers.config.card_limit then
+        G.E_MANAGER:add_event(Event({
+          func = function()
+            play_sound("timpani")
+            SMODS.add_card {
+              set = "Joker",
+              key_append = "dropdownlist"
+            }
+            return true
+          end
+        }))
+      else
+        return { message = localize("k_no_room_ex"), colour = G.C.RED }
+      end
     end
   end,
   pronouns = "any_all"
@@ -143,6 +147,9 @@ G.Phanta.centers["hintcoin"] = {
       card:flipbook_set_anim_state("reappear")
     end
   end,
+  set_ability = function(self, card, initial, delay_sprites)
+    card.ability.extra.given = false
+  end,
   pronouns = "it_its"
 }
 
@@ -223,14 +230,14 @@ G.Phanta.centers["holeinthejoker"] = {
   loc_vars = function(self, info_queue, card)
     return {
       vars = { card.ability.extra.money,
-        (G.jokers and G.jokers.cards and G.jokers.config and G.jokers.config.card_limit and (G.jokers.config.card_limit - (#G.jokers.cards - #SMODS.find_card("j_phanta_holeinthejoker"))) * card.ability.extra.money)
+        (G.jokers and G.jokers.cards and G.jokers.config and G.jokers.config.card_limit and (G.jokers.config.card_limit - (#G.jokers.cards - #SMODS.find_card("j_phanta_holeinthejoker", true))) * card.ability.extra.money)
         or card.ability.extra.money * 5 }
     }
   end,
   calc_dollar_bonus = function(self, card)
-    if G.jokers.config.card_limit - (#G.jokers.cards - #SMODS.find_card("j_phanta_holeinthejoker")) > 0 then
-      return (G.jokers.config.card_limit - (#G.jokers.cards - #SMODS.find_card("j_phanta_holeinthejoker"))) *
-          card.ability.extra.money
+    local bonus = G.jokers.config.card_limit - (#G.jokers.cards - #SMODS.find_card("j_phanta_holeinthejoker"))
+    if bonus > 0 then
+      return bonus * card.ability.extra.money
     end
   end,
   pronouns = "any_all"
@@ -242,19 +249,19 @@ G.Phanta.centers["shootingstar"] = {
   atlas = 'Phanta',
   pos = { x = 10, y = 4 },
   cost = 5,
-  blueprint_compat = false,
+  blueprint_compat = true,
   eternal_compat = true,
   perishable_compat = false,
   loc_vars = function(self, info_queue, card)
     return { vars = { card.ability.extra.money, card.ability.extra.added_money } }
   end,
   calculate = function(self, card, context)
-    if context.remove_playing_cards and not context.blueprint then -- Allow Blueprint compat later.
+    if context.remove_playing_cards then -- Allow Blueprint compat later.
       local reward = 0
       for k, v in ipairs(context.removed) do
         if v:is_suit("Diamonds") then
           reward = reward + card.ability.extra.money
-          card.ability.extra.money = card.ability.extra.money + card.ability.extra.added_money
+          if not context.blueprint then card.ability.extra.money = card.ability.extra.money + card.ability.extra.added_money end
         end
       end
       if reward > 0 then return { dollars = reward } end
@@ -276,7 +283,7 @@ G.Phanta.centers["puzzle"] = {
     { xrange = { first = 6, last = 7 },   y = 1, t = 0.05 },
     { x = 5,                              y = 2, t = 0.5 },
   },
-  cost = 4,
+  cost = 5,
   loc_vars = function(self, info_queue, card)
     return { vars = { card.ability.extra.given_money } }
   end,
@@ -338,13 +345,19 @@ G.Phanta.centers["onemanstrash"] = {
   eternal_compat = false, -- I wanna make sure Another Man's Treasure is able to be spawned.
   perishable_compat = true,
   calculate = function(self, card, context)
-    if context.joker_main then
+    if context.joker_main and card.ability.extra.current_mult > 0 then
       return { mult = card.ability.extra.current_mult }
     end
+
+    if context.pre_discard and #context.full_hand > 0 and not context.blueprint then
+      return { message = localize("k_upgrade_ex") }
+    end
+
     if context.discard and not context.blueprint then
       card.ability.extra.current_mult = card.ability.extra.current_mult + card.ability.extra.added_mult
     end
-    if context.end_of_round and context.individual and not context.blueprint and card.ability.extra.current_mult ~= 0 then
+
+    if context.end_of_round and not context.individual and not context.repetition and not context.blueprint and card.ability.extra.current_mult ~= 0 then
       card.ability.extra.current_mult = 0
       return {
         message = localize('k_reset'),
@@ -352,6 +365,7 @@ G.Phanta.centers["onemanstrash"] = {
         card = card
       }
     end
+
     if context.selling_self and not context.blueprint then
       G.GAME.pool_flags.one_mans_trash_sold = true
     end
@@ -373,13 +387,19 @@ G.Phanta.centers["anothermanstreasure"] = {
   eternal_compat = true,
   perishable_compat = true,
   calculate = function(self, card, context)
-    if context.joker_main then
+    if context.joker_main and card.ability.extra.current_xmult > 1 then
       return { xmult = card.ability.extra.current_xmult }
     end
+
+    if context.pre_discard and #context.full_hand > 0 and not context.blueprint then
+      return { message = localize("k_upgrade_ex") }
+    end
+
     if context.discard and not context.blueprint then
       card.ability.extra.current_xmult = card.ability.extra.current_xmult + card.ability.extra.added_xmult
     end
-    if context.end_of_round and context.individual and not context.blueprint and card.ability.extra.current_xmult ~= 1 then
+
+    if context.end_of_round and not context.individual and not context.repetition and not context.blueprint and card.ability.extra.current_xmult ~= 1 then
       card.ability.extra.current_xmult = 1
       return {
         message = localize('k_reset'),
@@ -403,20 +423,10 @@ G.Phanta.centers["oracle"] = {
   eternal_compat = true,
   perishable_compat = true,
   add_to_deck = function(self, card, from_debuff)
-    G.E_MANAGER:add_event(Event({
-      func = function()
-        G.consumeables.config.card_limit = G.consumeables.config.card_limit + 1
-        return true
-      end
-    }))
+    G.consumeables.config.card_limit = G.consumeables.config.card_limit + 1
   end,
   remove_from_deck = function(self, card, from_debuff)
-    G.E_MANAGER:add_event(Event({
-      func = function()
-        G.consumeables.config.card_limit = G.consumeables.config.card_limit - 1
-        return true
-      end
-    }))
+    G.consumeables.config.card_limit = G.consumeables.config.card_limit - 1
   end,
   pronouns = "he_him"
 }

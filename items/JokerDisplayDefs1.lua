@@ -187,15 +187,15 @@ jd_def["j_phanta_timetable"] = {
     if is_blind_small() then
       card.joker_display_values.bonus = localize { type = 'variable', key = 'a_discard', vars = { card.ability.extra.discards } }
       card.joker_display_values.next_bonus = localize { type = 'variable', key = 'a_hand', vars = { card.ability.extra.hands } }
-    end
-    if is_blind_big() then
+    elseif is_blind_big() then
       card.joker_display_values.bonus = localize { type = 'variable', key = 'a_hand', vars = { card.ability.extra.hands } }
       card.joker_display_values.next_bonus = localize { type = 'variable', key = 'a_handsize', vars = { card.ability.extra.hand_size } }
-    end
-    if is_blind_boss() then
+    elseif is_blind_boss() then
       card.joker_display_values.bonus = localize { type = 'variable', key = 'a_handsize', vars = { card.ability.extra.hand_size } }
       card.joker_display_values.next_bonus = localize { type = 'variable', key = 'a_discard', vars = { card.ability.extra.discards } }
     end
+    card.joker_display_values.bonus = card.joker_display_values.bonus or "?"
+    card.joker_display_values.next_bonus = card.joker_display_values.next_bonus or "?"
   end,
   style_function = function(card, text, reminder_text, extra)
     if text and text.children[1] and reminder_text and reminder_text.children[3] then
@@ -1235,7 +1235,7 @@ jd_def["j_phanta_selfportrait"] = {
   },
   calc_function = function(card)
     card.joker_display_values.active = card.ability.extra.current_rounds >= card.ability.extra.rounds_required and localize("k_active")
-    or (card.ability.extra.current_rounds .. "/" .. card.ability.extra.rounds_required)
+        or (card.ability.extra.current_rounds .. "/" .. card.ability.extra.rounds_required)
   end
 }
 

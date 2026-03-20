@@ -426,7 +426,10 @@ G.Phanta.centers["stachenscarfen"] = {
 local create_card_ref = create_card
 function create_card(_type, area, legendary, _rarity, skip_materialize, soulable, forced_key, key_append)
   local staches = SMODS.find_card("j_phanta_stachenscarfen")
-  if next(staches) and not (forced_key and G.P_CENTERS[forced_key] and G.P_CENTERS[forced_key].rarity == 2) then
+  if next(staches)
+      and (_type == "Joker"
+        or (forced_key and G.P_CENTERS[forced_key] and G.P_CENTERS[forced_key].set == "Joker" and G.P_CENTERS[forced_key].rarity ~= 2)) then
+    _type = "Joker"
     legendary = nil
     _rarity = 0.71
     forced_key = nil
@@ -437,15 +440,15 @@ end
 local smods_create_card_ref = SMODS.create_card
 function SMODS:create_card(t)
   local staches = SMODS.find_card("j_phanta_stachenscarfen")
-  if next(staches)
-      and not (t and t.forced_key and G.P_CENTERS[t.forced_key] and G.P_CENTERS[t.forced_key].rarity == 2)
+  if
+      next(staches) and t
+      and (t.set == "Joker"
+        or (t.key and G.P_CENTERS[t.key] and G.P_CENTERS[t.key].set == "Joker" and G.P_CENTERS[t.key].rarity ~= 2))
   then
-    if not t then
-      t = {}
-    end
+    t.set = "Joker"
     t.legendary = nil
     t.rarity = 0.71
-    t.forced_key = nil
+    t.key = nil
   end
   return smods_create_card_ref(self, t)
 end
@@ -954,7 +957,6 @@ function phanta_assign_deck_joker()
   if deck then
     G.P_CENTERS["j_phanta_deckjoker"].config = deck.config or {}
     G.P_CENTERS["j_phanta_deckjoker"].loc_vars = function(self, info_queue, card)
-      print(inspect(deck.info_queue))
       for _, v in ipairs(deck.info_queue or {}) do
         info_queue[#info_queue + 1] = v
       end

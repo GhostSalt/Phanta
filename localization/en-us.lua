@@ -512,16 +512,16 @@ return {
             j_phanta_shootingstar           = {
                 name = 'Shooting Star',
                 text = {
-                    "Gives {C:money}$#1#{} when a card",
+                    "Earn {C:money}$#1#{} when a card",
                     "with {C:diamonds}Diamonds{} suit is",
-                    "{C:red}destroyed{} and increases",
+                    "{C:red}destroyed{} and increase",
                     "reward by {C:money}$#2#{}"
                 }
             },
             j_phanta_puzzle                 = {
                 name = 'Puzzle',
                 text = {
-                    "Each played {C:attention}?{} gives",
+                    "Each played {C:attention}?{} earns",
                     "{C:money}$#1#{} when scored, {C:attention}?{} is",
                     "a {C:attention}secret{} rank which",
                     "changes each {C:attention}Ante{}"
@@ -530,7 +530,7 @@ return {
             j_phanta_binman                 = {
                 name = 'Binman',
                 text = {
-                    "Gives {C:money}$#1#{} for each",
+                    "Earn {C:money}$#1#{} for each",
                     "{C:red}discarded{} {C:attention}Junk{}"
                 },
                 unlock = {
@@ -541,7 +541,7 @@ return {
                 name = "One Man's Trash",
                 text = {
                     "Gains {C:mult}+#1#{} Mult for each",
-                    "card {C:attention}discarded{} this round",
+                    "card {C:red}discarded{} this round",
                     "{C:inactive}(Currently {C:mult}+#2#{C:inactive} Mult){}"
                 }
             },
@@ -549,7 +549,7 @@ return {
                 name = "Another Man's Treasure",
                 text = {
                     "Gains {C:white,X:mult}X#1#{} Mult for each",
-                    "card {C:attention}discarded{} this round",
+                    "card {C:red}discarded{} this round",
                     "{C:inactive}(Currently {C:white,X:mult}X#2#{C:inactive} Mult){}"
                 }
             },
