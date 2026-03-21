@@ -870,7 +870,7 @@ jd_def["j_phanta_web"] = {
     for _, playing_card in ipairs(G.hand.cards) do
       if playing_hand or not playing_card.highlighted then
         if playing_card.facing and not (playing_card.facing == 'back') and not playing_card.debuff and playing_card:is_suit("Spades") then
-          mult = mult + card.ability.extra.mult * JokerDisplay.calculate_card_triggers(playing_card, nil, true)
+          mult = mult + (card.ability.extra.mult * JokerDisplay.calculate_card_triggers(playing_card, nil, true))
         end
       end
     end

@@ -1345,7 +1345,7 @@ G.Phanta.centers["task"] = {
 }
 
 G.Phanta.centers["saltcircle"] = {
-  config = { extra = { chips = 177 } },
+  config = { extra = { chips = 150 } },
   rarity = 1,
   atlas = 'PhantaMiscAnims4',
   pos = { x = 8, y = 1 },
@@ -1903,7 +1903,7 @@ G.Phanta.centers["engineer"] = {
   eternal_compat = true,
   perishable_compat = true,
   calculate = function(self, card, context)
-    if context.joker_main then
+    if context.before then
       if context.scoring_name == "phanta_junk" and count_consumables() < G.consumeables.config.card_limit then
         G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
         G.E_MANAGER:add_event(Event({
@@ -2329,19 +2329,19 @@ G.Phanta.centers["goo"] = {
 }
 
 G.Phanta.centers["web"] = {
-  config = { extra = { given_mult = 7 } },
+  config = { extra = { mult = 6 } },
   rarity = 1,
   atlas = 'Phanta',
   pos = { x = 4, y = 11 },
   cost = 4,
   loc_vars = function(self, info_queue, card)
-    return { vars = { card.ability.extra.given_mult } }
+    return { vars = { card.ability.extra.mult } }
   end,
   blueprint_compat = true,
   eternal_compat = true,
   perishable_compat = true,
   calculate = function(self, card, context)
-    if context.individual and context.cardarea == G.hand and context.other_card and context.other_card:is_suit("Spades") then
+    if context.individual and context.cardarea == G.hand and context.other_card and context.other_card:is_suit("Spades") and not context.end_of_round then
       return { mult = card.ability.extra.mult }
     end
   end,
@@ -2742,7 +2742,7 @@ G.Phanta.centers["shoppinglist"] = {
 }
 
 G.Phanta.centers["ransomnote"] = {
-  config = { extra = { money = 5 } },
+  config = { extra = { money = 4 } },
   rarity = 1,
   atlas = 'Phanta',
   pos = { x = 3, y = 10 },
@@ -4559,7 +4559,7 @@ G.Phanta.centers["spectretile"] = {
     return { vars = { num, denom } }
   end,
   calculate = function(self, card, context)
-    if context.buying_card and context.card.config.center.set == "Joker" and context.card ~= card and SMODS.pseudorandom_probability(card, "spectretile", 1, card.ability.extra.odds) and count_consumables() < G.consumeables.config.card_limit then
+    if context.buying_card and context.card.config.center.set == "Joker" and not context.buying_self and SMODS.pseudorandom_probability(card, "spectretile", 1, card.ability.extra.odds) and count_consumables() < G.consumeables.config.card_limit then
       G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
       play_sound('timpani')
       G.E_MANAGER:add_event(Event({
@@ -4569,6 +4569,7 @@ G.Phanta.centers["spectretile"] = {
           local new_card = create_card("Spectral", G.consumables, nil, nil, nil, nil)
           new_card:add_to_deck()
           G.consumeables:emplace(new_card)
+          G.GAME.consumeable_buffer = 0
           return true
         end
       }))

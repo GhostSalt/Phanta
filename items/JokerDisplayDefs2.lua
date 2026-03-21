@@ -453,10 +453,27 @@ jd_def["j_phanta_testpage"] = {
 
 jd_def["j_phanta_flagsignal"] = {
   text = {
-    { text = "+" },
-    { ref_table = "card.ability.extra", ref_value = "current_mult", retrigger_type = "mult" }
+    {
+      border_nodes = {
+        { text = "X" },
+        { ref_table = "card.joker_display_values", ref_value = "xmult", retrigger_type = "exp" }
+      }
+    }
   },
-  text_config = { colour = G.C.MULT }
+  calc_function = function(card)
+    local playing_hand = next(G.play.cards)
+    local triggered = false
+    local ranks = {}
+    for _, playing_card in ipairs(G.hand.cards) do
+      if playing_hand or not playing_card.highlighted then
+        if playing_card.facing and not (playing_card.facing == 'back') and not playing_card.debuff then
+          if ranks[playing_card:get_id()] then triggered = true break end
+          ranks[playing_card:get_id()] = true
+        end
+      end
+    end
+    card.joker_display_values.xmult = triggered and card.ability.extra.xmult or 1
+  end
 }
 
 jd_def["j_phanta_signofthehorns"] = {
@@ -788,7 +805,16 @@ jd_def["j_phanta_leprechaun"] = {
   },
   text_config = { colour = G.C.MULT },
   calc_function = function(card)
-    card.joker_display_values.mult = G.hand and next(G.hand.cards) and G.hand.cards[#G.hand.cards]:get_id() == 7 and card.ability.extra.given_mult or 0
+    local playing_hand = next(G.play.cards)
+    local triggered = false
+    for _, playing_card in ipairs(G.hand.cards) do
+      if playing_hand or not playing_card.highlighted then
+        if playing_card.facing and not (playing_card.facing == 'back') and not playing_card.debuff and playing_card:get_id() == 7 then
+          triggered = true break
+        end
+      end
+    end
+    card.joker_display_values.mult = triggered and card.ability.extra.mult or 0
   end
 }
 
