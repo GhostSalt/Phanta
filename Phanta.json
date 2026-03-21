@@ -10,6 +10,6 @@
         "Steamodded (>=1.0.0~BETA-0711a)",
         "Flipbook (>=1.2.0~BETA)"
     ],
-    "version": "5.0.0",
+    "version": "5.0.1",
     "priority": 4
 }
