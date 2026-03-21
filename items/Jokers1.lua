@@ -741,7 +741,7 @@ G.Phanta.centers["sigma"] = {
 }
 
 G.Phanta.centers["carlos"] = {
-  config = { extra = { added_chips = 4, current_chips = 0 } },
+  config = { extra = { added_chips = 5, current_chips = 0 } },
   loc_vars = function(self, info_queue, card)
     return { vars = { card.ability.extra.added_chips, card.ability.extra.current_chips } }
   end,
@@ -754,9 +754,7 @@ G.Phanta.centers["carlos"] = {
   perishable_compat = false,
   calculate = function(self, card, context)
     if context.joker_main and card.ability.extra.current_chips > 0 then
-      return {
-        chips = card.ability.extra.current_chips
-      }
+      return { chips = card.ability.extra.current_chips }
     end
 
     if context.before and G.GAME.current_round.discards_left > 0 and not context.blueprint then
@@ -765,23 +763,6 @@ G.Phanta.centers["carlos"] = {
     end
   end,
   pronouns = "he_him"
-  --[[calculate = function(self, card, context)
-    if context.selling_card and context.card.ability.consumeable then
-      card.ability.extra.current_hands = card.ability.extra.current_hands + card.ability.extra.added_hands
-      return { message = localize("k_upgrade_ex"), colour = G.C.FILTER }
-    end
-
-    if context.setting_blind and card.ability.extra.current_hands > 0 then
-      ease_hands_played(card.ability.extra.current_hands)
-      local temp_hands = card.ability.extra.current_hands
-      if not context.blueprint then card.ability.extra.current_hands = 0 end
-      return {
-        message = card.ability.extra.current_hands == 1 and localize("a_hand") or
-            localize { type = 'variable', key = 'a_hands', vars = { temp_hands } },
-        colour = G.C.BLUE
-      }
-    end
-  end]] --
 }
 
 G.Phanta.centers["q"] = {
@@ -801,7 +782,7 @@ G.Phanta.centers["q"] = {
       card.ability.extra.queens = {}
       for k, v in ipairs(context.scoring_hand) do
         if #card.ability.extra.queens < 2 then
-          if v:get_id() == 12 then card.ability.extra.queens[#card.ability.extra.queens + 1] = v end
+          if v:get_id() == 12 and not v.debuff then card.ability.extra.queens[#card.ability.extra.queens + 1] = v end
         end
       end
       if #card.ability.extra.queens < 2 then card.ability.extra.queens = {} end

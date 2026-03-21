@@ -122,6 +122,14 @@ SMODS.Sound({
 })
 
 SMODS.Sound({
+  vol = 1,
+  key = "title_music",
+  path = "phanta_title.ogg",
+  sync = true,
+  select_music_track = function() return Phanta.config["custom_title_screen"] and G.STAGE == G.STAGES.MAIN_MENU end
+})
+
+SMODS.Sound({
   key = "tally_deck",
   path = "phanta_tally_deck.ogg",
   replace = true

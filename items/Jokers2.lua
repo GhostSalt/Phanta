@@ -1828,26 +1828,36 @@ G.Phanta.centers["sprinkles"] = {
   perishable_compat = true,
   calculate = function(self, card, context)
     if context.selling_self and G.consumeables then
-      G.E_MANAGER:add_event(Event({
-        func = function()
-          play_sound('tarot1')
-          card:juice_up(0.3, 0.5)
-          return true
+      local should_do_something = false
+      for _, v in ipairs(G.consumeables.cards) do
+        if not v.edition then
+          should_do_something = true
+          break
         end
-      }))
+      end
 
-      G.E_MANAGER:add_event(Event({
-        trigger = 'after',
-        delay = 0.1,
-        func = function()
-          for _, v in ipairs(G.consumeables.cards) do
-            if not v.edition then
-              v:set_edition(poll_edition("sprinklesed", nil, true, true))
-            end
+      if should_do_something then
+        G.E_MANAGER:add_event(Event({
+          func = function()
+            play_sound('tarot1')
+            card:juice_up(0.3, 0.5)
+            return true
           end
-          return true
-        end
-      }))
+        }))
+
+        G.E_MANAGER:add_event(Event({
+          trigger = 'after',
+          delay = 0.1,
+          func = function()
+            for _, v in ipairs(G.consumeables.cards) do
+              if not v.edition then
+                v:set_edition(poll_edition("sprinklesed", nil, true, true))
+              end
+            end
+            return true
+          end
+        }))
+      end
     end
   end,
   pronouns = "it_its"

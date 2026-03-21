@@ -76,11 +76,11 @@ SMODS.Edition {
 
 local atdref = Card.add_to_deck
 function Card:add_to_deck(from_debuff)
+  atdref(self, from_debuff)
   if self and self.edition and self.edition.key == "e_phanta_drilled" and self.config and self.config.center and self.added_to_deck and not (self.config.center.set == "Default" or self.config.center.set == "Enhanced")
       and G.consumeables and G.consumeables.config and G.consumeables.config.card_limit then
     handle_drilled_added_to_card(self)
   end
-  atdref(self, from_debuff)
 end
 
 local set_edition_ref = Card.set_edition
