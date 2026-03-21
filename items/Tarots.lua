@@ -1,6 +1,6 @@
 SMODS.Tarot {
   key = "gatherer",
-  pos = { x = 0, y = 3 },
+  pos = { x = 0, y = 1 },
   config = {
     extra = { money = 11 },
   },
@@ -50,7 +50,7 @@ SMODS.Tarot {
 
 SMODS.Tarot {
   key = "brazier",
-  pos = { x = 0, y = 2 },
+  pos = { x = 2, y = 0 },
   config = {
     mod_conv = "m_phanta_coppergratefresh",
     max_highlighted = 1
@@ -64,7 +64,7 @@ SMODS.Tarot {
 
 SMODS.Tarot {
   key = "sculptor",
-  pos = { x = 1, y = 2 },
+  pos = { x = 3, y = 0 },
   config = {
     mod_conv = "m_phanta_marblecard",
     max_highlighted = 1
@@ -78,7 +78,7 @@ SMODS.Tarot {
 
 SMODS.Tarot {
   key = "beekeeper",
-  pos = { x = 3, y = 0 },
+  pos = { x = 1, y = 0 },
   config = {
     extra = { conv = "e_phanta_waxed" },
     max_highlighted = 2

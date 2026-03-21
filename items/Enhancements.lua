@@ -9,7 +9,7 @@ SMODS.Enhancement {
   calculate = function(self, card, context)
     if context.cardarea == "unscored" and context.main_scoring then
       card.ability.h_x_mult = card.ability.h_x_mult + card.ability.extra.added_xmult
-      card_eval_status_text(card, 'extra', nil, nil, nil, { message = localize('k_upgrade_ex') })
+      return { message = localize('k_upgrade_ex') }
     end
   end
 }

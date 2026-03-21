@@ -187,15 +187,15 @@ jd_def["j_phanta_timetable"] = {
     if is_blind_small() then
       card.joker_display_values.bonus = localize { type = 'variable', key = 'a_discard', vars = { card.ability.extra.discards } }
       card.joker_display_values.next_bonus = localize { type = 'variable', key = 'a_hand', vars = { card.ability.extra.hands } }
-    end
-    if is_blind_big() then
+    elseif is_blind_big() then
       card.joker_display_values.bonus = localize { type = 'variable', key = 'a_hand', vars = { card.ability.extra.hands } }
       card.joker_display_values.next_bonus = localize { type = 'variable', key = 'a_handsize', vars = { card.ability.extra.hand_size } }
-    end
-    if is_blind_boss() then
+    elseif is_blind_boss() then
       card.joker_display_values.bonus = localize { type = 'variable', key = 'a_handsize', vars = { card.ability.extra.hand_size } }
       card.joker_display_values.next_bonus = localize { type = 'variable', key = 'a_discard', vars = { card.ability.extra.discards } }
     end
+    card.joker_display_values.bonus = card.joker_display_values.bonus or "?"
+    card.joker_display_values.next_bonus = card.joker_display_values.next_bonus or "?"
   end,
   style_function = function(card, text, reminder_text, extra)
     if text and text.children[1] and reminder_text and reminder_text.children[3] then
@@ -362,21 +362,6 @@ jd_def["j_phanta_bluekeycards"] = {
     card.joker_display_values.localised_text_a = localize("k_phanta_sixes")
     card.joker_display_values.localised_text_b = localize("k_phanta_sevens")
     card.joker_display_values.localised_text_c = localize("k_phanta_eights")
-  end
-}
-
-jd_def["j_phanta_kylehyde"] = {
-  extra = {
-    {
-      { text = "(" },
-      { ref_table = "card.joker_display_values", ref_value = "odds" },
-      { text = ")" }
-    }
-  },
-  extra_config = { colour = G.C.GREEN, scale = 0.3 },
-  calc_function = function(card)
-    local numerator, denominator = SMODS.get_probability_vars(card, 1, card.ability.extra.odds, "kylehyde")
-    card.joker_display_values.odds = localize { type = 'variable', key = "jdis_odds", vars = { numerator, denominator } }
   end
 }
 
@@ -687,11 +672,28 @@ jd_def["j_phanta_willothewisp"] = {
 }
 
 jd_def["j_phanta_stickercollection"] = {
-  retrigger_function = function(playing_card, scoring_hand, held_in_hand, joker_card)
-    if held_in_hand or not SMODS.in_scoring(playing_card, scoring_hand) then return 0 end
-    local text, disp_text = G.FUNCS.get_poker_hand_info(G.hand.highlighted)
-    return text == "phanta_junk" and get_lowest(scoring_hand)[1][1]:get_id() == playing_card:get_id() and
-        3 * JokerDisplay.calculate_joker_triggers(joker_card) or 0
+  text = {
+    { text = "+$" },
+    { ref_table = "card.joker_display_values", ref_value = "dollars", retrigger_type = "mult" },
+  },
+  text_config = { colour = G.C.GOLD },
+  reminder_text = {
+    { text = "(" },
+    { ref_table = "card.joker_display_values", ref_value = "localized_text", colour = G.C.FILTER },
+    { text = ")" }
+  },
+  calc_function = function(card)
+    local dollars = 0
+    local text, _, scoring_hand = JokerDisplay.evaluate_hand()
+    if text ~= 'Unknown' then
+      for _, v in pairs(next(G.play.cards) and G.play.cards or G.hand.highlighted) do
+        if not SMODS.in_scoring(v, scoring_hand) then
+          dollars = dollars + card.ability.extra.money * JokerDisplay.calculate_card_triggers(v, scoring_hand)
+        end
+      end
+    end
+    card.joker_display_values.dollars = dollars
+    card.joker_display_values.localized_text = localize("k_phanta_unscored")
   end
 }
 
@@ -859,26 +861,20 @@ jd_def["j_phanta_candle"] = {
 jd_def["j_phanta_web"] = {
   text = {
     { text = "+" },
-    { ref_table = "card.joker_display_values", ref_value = "mult", retrigger_type = "mult" }
+    { ref_table = "card.joker_display_values", ref_value = "mult", retrigger_type = "mult" },
   },
   text_config = { colour = G.C.MULT },
-  reminder_text = {
-    { text = "(2 " },
-    { ref_table = "card.joker_display_values", ref_value = "localised_text" },
-    { text = ")" }
-  },
   calc_function = function(card)
-    local spades = 0
-    local text, _, scoring_hand = JokerDisplay.evaluate_hand()
-    if text ~= 'Unknown' then
-      for _, v in pairs(G.hand.cards) do
-        if not SMODS.in_scoring(v, G.hand.highlighted) and v:is_suit("Spades") then
-          spades = spades + 1
+    local playing_hand = next(G.play.cards)
+    local mult = 0
+    for _, playing_card in ipairs(G.hand.cards) do
+      if playing_hand or not playing_card.highlighted then
+        if playing_card.facing and not (playing_card.facing == 'back') and not playing_card.debuff and playing_card:is_suit("Spades") then
+          mult = mult + card.ability.extra.mult * JokerDisplay.calculate_card_triggers(playing_card, nil, true)
         end
       end
     end
-    card.joker_display_values.mult = (spades > card.ability.extra.required_spades) and card.ability.extra.given_mult or 0
-    card.joker_display_values.localised_text = localize("Spades", "suits_plural")
+    card.joker_display_values.mult = mult
   end
 }
 
@@ -961,7 +957,7 @@ jd_def["j_phanta_tricolour"] = {
         end
       end
     end
-    card.joker_display_values.mult = (#counted_suits <= 3 and #counted_suits + wilds >= 3) and card.ability.extra.mult or 0
+    card.joker_display_values.mult = (#counted_suits + wilds >= 3) and card.ability.extra.mult or 0
     card.joker_display_values.localised_text = localize("k_phanta_exactly_three_suits")
   end
 }
@@ -1239,7 +1235,7 @@ jd_def["j_phanta_selfportrait"] = {
   },
   calc_function = function(card)
     card.joker_display_values.active = card.ability.extra.current_rounds >= card.ability.extra.rounds_required and localize("k_active")
-    or (card.ability.extra.current_rounds .. "/" .. card.ability.extra.rounds_required)
+        or (card.ability.extra.current_rounds .. "/" .. card.ability.extra.rounds_required)
   end
 }
 
@@ -1269,7 +1265,7 @@ jd_def["j_phanta_tribouletssoul"] = {
     { text = ")" }
   },
   calc_function = function(card)
-    card.joker_display_values.localised_text = localize("k_phanta_king_and_queen")
+    card.joker_display_values.localised_text = localize("k_phanta_king_or_queen")
   end
 }
 

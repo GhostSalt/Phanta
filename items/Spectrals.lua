@@ -1,18 +1,17 @@
 SMODS.Consumable {
   set = "Spectral",
   key = "jinn",
-  pos = { x = 1, y = 0 },
+  pos = { x = 0, y = 0 },
   config = {
     mod_conv = "phanta_ghostseal_seal",
     max_highlighted = 1
   },
-  atlas = "PhantaTarots",
+  atlas = "PhantaSpectrals",
   loc_vars = function(self, info_queue, card)
-    info_queue[#info_queue + 1] = { set = "Other", key = "phanta_ghostseal_seal" }
+    info_queue[#info_queue + 1] = G.P_SEALS.phanta_ghostseal
     return { vars = { card.ability.max_highlighted } }
   end,
   use = function(self, card, area, copier)
-    G.GAME.phanta_jinn_used = true
     local conv_card = G.hand.highlighted[1]
     G.E_MANAGER:add_event(Event({
       func = function()
@@ -40,17 +39,14 @@ SMODS.Consumable {
         return true
       end
     }))
-  end,
-  in_pool = function()
-    return not (G.GAME and G.GAME.phanta_jinn_used)
   end
 }
 
 SMODS.Consumable {
   set = "Spectral",
   key = "shard",
-  pos = { x = 2, y = 0 },
-  atlas = "PhantaTarots",
+  pos = { x = 1, y = 0 },
+  atlas = "PhantaSpectrals",
   loc_vars = function(self, info_queue, card)
     local shard_card = G.GAME.last_spectral and G.P_CENTERS[G.GAME.last_spectral] or nil
     return {
@@ -103,9 +99,9 @@ SMODS.Consumable {
 SMODS.Consumable {
   set = "Spectral",
   key = "orbit",
-  pos = { x = 4, y = 0 },
+  pos = { x = 2, y = 0 },
   config = { extra = { no_of_upgrades = 3 } },
-  atlas = "PhantaTarots",
+  atlas = "PhantaSpectrals",
   loc_vars = function(self, info_queue, card)
     return { vars = { card.ability.extra.no_of_upgrades } }
   end,
@@ -153,9 +149,9 @@ SMODS.Consumable {
 SMODS.Consumable {
   set = "Spectral",
   key = "norwellwall",
-  pos = { x = 0, y = 1 },
+  pos = { x = 3, y = 0 },
   config = { extra = { added_hand_size = 1 } },
-  atlas = "PhantaTarots",
+  atlas = "PhantaSpectrals",
   loc_vars = function(self, info_queue, card)
     return { vars = { card.ability.extra.added_hand_size } }
   end,
@@ -187,9 +183,9 @@ SMODS.Consumable {
   object_type = "Consumable",
   set = "Spectral",
   key = "follower",
-  pos = { x = 1, y = 1 },
+  pos = { x = 4, y = 0 },
   config = { extra = { added_shop_slots = 1 } },
-  atlas = "PhantaTarots",
+  atlas = "PhantaSpectrals",
   loc_vars = function(self, info_queue, card)
     return { vars = { card.ability.extra.added_shop_slots } }
   end,
@@ -221,9 +217,9 @@ SMODS.Consumable {
   object_type = "Consumable",
   set = "Spectral",
   key = "timeline",
-  pos = { x = 2, y = 1 },
+  pos = { x = 0, y = 1 },
   config = { extra = { minus_antes = 1 } },
-  atlas = "PhantaTarots",
+  atlas = "PhantaSpectrals",
   loc_vars = function(self, info_queue, card)
     return { vars = { card.ability.extra.minus_antes, G.GAME.phanta_timeline_minus_hand_size or 1 } }
   end,
@@ -258,8 +254,8 @@ SMODS.Consumable {
   object_type = "Consumable",
   set = "Spectral",
   key = "bazaar",
-  pos = { x = 4, y = 1 },
-  atlas = "PhantaTarots",
+  pos = { x = 1, y = 1 },
+  atlas = "PhantaSpectrals",
   loc_vars = function(self, info_queue, card)
     info_queue[#info_queue + 1] = G.P_TAGS.tag_voucher
     return {}
@@ -293,9 +289,9 @@ SMODS.Consumable {
   object_type = "Consumable",
   set = "Spectral",
   key = "handprint",
-  pos = { x = 2, y = 2 },
+  pos = { x = 2, y = 1 },
   config = { extra = { added_hands = 1 } },
-  atlas = "PhantaTarots",
+  atlas = "PhantaSpectrals",
   loc_vars = function(self, info_queue, card)
     return { vars = { card.ability.extra.added_hands } }
   end,
@@ -328,9 +324,9 @@ SMODS.Consumable {
   object_type = "Consumable",
   set = "Spectral",
   key = "exile",
-  pos = { x = 3, y = 2 },
+  pos = { x = 3, y = 1 },
   config = { extra = { added_discards = 1 } },
-  atlas = "PhantaTarots",
+  atlas = "PhantaSpectrals",
   loc_vars = function(self, info_queue, card)
     return { vars = { card.ability.extra.added_discards } }
   end,
@@ -363,11 +359,11 @@ SMODS.Consumable {
   object_type = "Consumable",
   set = "Spectral",
   key = "genius",
-  pos = { x = 4, y = 2 },
+  pos = { x = 4, y = 1 },
   config = {
     max_highlighted = 3
   },
-  atlas = "PhantaTarots",
+  atlas = "PhantaSpectrals",
   loc_vars = function(self, info_queue, card)
     return { vars = { card.ability.max_highlighted } }
   end,
@@ -440,9 +436,9 @@ SMODS.Consumable {
 SMODS.Consumable {
   set = "Spectral",
   key = "halo",
-  pos = { x = 1, y = 3 },
+  pos = { x = 0, y = 2 },
   config = { extra = { brights = 2 } },
-  atlas = "PhantaTarots",
+  atlas = "PhantaSpectrals",
   loc_vars = function(self, info_queue, card)
     return { vars = { card.ability.extra.brights } }
   end,
@@ -457,7 +453,7 @@ SMODS.Consumable {
         func = function()
           if G.consumeables.config.card_limit > count_consumables() then
             play_sound('timpani')
-            local new_card = phanta_create_hanafuda_bright("halo")
+            local new_card = SMODS.create_card({ set = "phanta_bright", key_append = "halo" })
             new_card:add_to_deck()
             G.consumeables:emplace(new_card)
             card:juice_up(0.3, 0.5)

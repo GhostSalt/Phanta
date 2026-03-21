@@ -475,6 +475,86 @@ local deck_joker_plasma = {
 deck_joker_plasma.loc_vars = { deck_joker_plasma.config.extra.chips, deck_joker_plasma.config.extra.threshold }
 phanta_add_deck_joker_deck(deck_joker_plasma)
 
+local deck_joker_erratic = {
+    key = "b_erratic",
+    loc_key = "erratic",
+
+    pos = {
+        x = 2,
+        y = 1
+    },
+    atlas = "phanta_PhantaDeckJoker",
+
+    rarity = 2,
+    cost = 5,
+
+    blueprint_compat = false,
+    eternal_compat = true,
+    perishable_compat = true,
+
+    calculate = function(self, card, context)
+        if context.individual and context.cardarea == "unscored" and not context.blueprint then
+            local _card = context.other_card
+            local selectable_suits = {}
+            for k, v in pairs(SMODS.Suits) do
+                if k ~= _card.base.suit then
+                    selectable_suits[k] = v
+                end
+            end
+            selectable_suits[_card.base.suit] = nil
+            local chosen_suit = (pseudorandom_element(selectable_suits, pseudoseed("deckjokererraticsuit")) or { key = "Spades" }).key
+
+            local selectable_ranks = {}
+            for k, v in pairs(SMODS.Ranks) do
+                if k ~= _card.base.id then
+                    selectable_ranks[k] = v
+                end
+            end
+            selectable_ranks[_card.base.id] = nil
+            local chosen_rank = (pseudorandom_element(selectable_ranks, pseudoseed("deckjokererraticrank")) or { key = "2" }).key
+
+            G.E_MANAGER:add_event(Event({
+                func = function()
+                    play_sound('tarot1')
+                    card:juice_up()
+                    return true
+                end
+            }))
+            G.E_MANAGER:add_event(Event({
+                trigger = 'after',
+                delay = 0.15,
+                func = function()
+                    _card:flip()
+                    play_sound('card1', 1)
+                    _card:juice_up(0.3, 0.3)
+                    delay(0.2)
+                    return true
+                end
+            }))
+            G.E_MANAGER:add_event(Event({
+                trigger = 'after',
+                delay = 0.1,
+                func = function()
+                    SMODS.change_base(_card, chosen_suit, chosen_rank)
+                    return true
+                end
+            }))
+            G.E_MANAGER:add_event(Event({
+                delay = 0.1,
+                func = function()
+                    _card:flip()
+                    play_sound('tarot2', 1)
+                    _card:juice_up(0.3, 0.3)
+                    return true
+                end
+            }))
+            delay(0.2)
+            return { message = localize(chosen_rank, "ranks") .. " of " .. localize(chosen_suit, "suits_plural"), colour = G.C.SUITS[chosen_suit] }
+        end
+    end
+}
+phanta_add_deck_joker_deck(deck_joker_erratic)
+
 
 
 
@@ -591,34 +671,20 @@ local deck_joker_azran = {
     perishable_compat = true,
 
     calculate = function(self, card, context)
-        if context.ending_shop and not context.repetition then
+        if context.ending_shop and not context.repetition and count_consumables() < G.consumeables.config.card_limit then
+            G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
             G.E_MANAGER:add_event(Event({
-                delay = 0.3,
-                blockable = false,
                 func = function()
                     play_sound('timpani')
-                    local new_card = create_card("Spectral", G.consumables, nil, nil, nil, nil, "c_phanta_shard",
-                        'deckjokerazran')
-                    new_card:set_edition({ negative = true })
-                    new_card:add_to_deck()
-                    G.consumeables:emplace(new_card)
-
-                    card.T.r = -0.2
-                    card:juice_up(0.3, 0.4)
-                    card.states.drag.is = true
-                    card.children.center.pinch.x = true
-                    G.E_MANAGER:add_event(Event({
-                        trigger = 'after',
-                        delay = 0.3,
-                        blockable = false,
-                        func = function()
-                            play_sound("phanta_tally_deck", 1, 0.5)
-                            G.jokers:remove_card(card)
-                            card:remove()
-                            card = nil
-                            return true
-                        end
-                    }))
+                    play_sound("phanta_tally_deck", 1, 0.5)
+                    SMODS.destroy_cards({ card }, true, true, true)
+                    return true
+                end
+            }))
+            G.E_MANAGER:add_event(Event({
+                func = function()
+                    SMODS.add_card { key = "c_phanta_shard" }
+                    G.GAME.consumeable_buffer = 0
                     return true
                 end
             }))

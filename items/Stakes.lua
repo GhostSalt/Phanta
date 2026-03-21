@@ -177,11 +177,11 @@ local smods_context_ref = SMODS.calculate_context
 function SMODS.calculate_context(context, return_table, no_resolve)
     local ret = smods_context_ref(context, return_table, no_resolve)
     if context.check_eternal and G.GAME.modifiers.enable_eternal_consumables and context.other_card.ability and context.other_card.ability.eternal then
-        if not ret then ret = {} end
+        ret = ret or {}
         ret["phanta_black_stake"] = { phanta_black_stake_eternal = { no_destroy = { override_compat = true } } }
-        if return_table then return_table["phanta_black_stake"] = ret["phanta_black_stake"] end
+        (return_table or {})["phanta_black_stake"] = ret["phanta_black_stake"]
     end
-    if not return_table then return ret end
+    return return_table or ret
 end
 
 local set_perishable_ref = Card.set_perishable

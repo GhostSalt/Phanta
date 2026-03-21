@@ -208,7 +208,7 @@ match_indent = true
 target = 'functions/UI_definitions.lua'
 pattern = '''{n=G.UIT.T, config={text = string.rep(localize("$"), blind_choice.config.dollars)..'+', scale = 0.35, colour = disabled and G.C.UI.TEXT_INACTIVE or G.C.MONEY, shadow = not disabled}}'''
 position = 'at'
-payload = '''{n=G.UIT.T, config={text = string.rep(localize("$"), blind_choice.dollars)..'+', scale = 0.35, colour = disabled and G.C.UI.TEXT_INACTIVE or G.C.MONEY, shadow = not disabled}}'''
+payload = '''{n=G.UIT.T, config={text = string.rep(localize("$"), blind_choice.dollars or blind_choice.config.dollars)..'+', scale = 0.35, colour = disabled and G.C.UI.TEXT_INACTIVE or G.C.MONEY, shadow = not disabled}}'''
 match_indent = true
 
 [[patches]]
@@ -347,4 +347,26 @@ target = "card.lua"
 pattern = '''card:set_seal(SMODS.poll_seal({mod = 10}), true, true)'''
 position = "at"
 payload = '''card:set_seal(SMODS.poll_seal({mod = 10, guaranteed = next(SMODS.find_card("j_phanta_stampedjoker")) and true}), true, true) print("kjdfngdf")'''
+match_indent = true
+
+
+
+# Occult Banner
+[[patches]]
+[patches.pattern]
+target = 'game.lua'
+pattern = '''G.GAME.current_round.used_packs[i] = get_pack('shop_pack').key'''
+position = 'before'
+payload = '''if G.GAME.current_round.phanta_next_shop_spectral then
+    G.GAME.current_round.phanta_next_shop_spectral = false
+    G.GAME.current_round.used_packs[i] = "p_spectral_normal_"..(math.random(1, 2))
+else'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = 'game.lua'
+pattern = '''G.GAME.current_round.used_packs[i] = get_pack('shop_pack').key'''
+position = 'after'
+payload = '''end'''
 match_indent = true

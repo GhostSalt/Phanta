@@ -2,13 +2,14 @@
     "id": "GSPhanta",
     "name": "Phanta",
     "author": ["GhostSalt"],
-    "description": "A mod pack, containing lots of miscellaneous Jokers, and some decks, enhancements and more! I've tried to keep this pack balanced, so no Cryptidesque shenanigans.",
+    "description": "A mod pack containing lots of miscellaneous Jokers, plus some decks, enhancements and more! I've tried to keep this pack vanilla-balanced, so no Cryptidesque shenanigans.",
     "prefix": "phanta",
     "main_file": "main.lua",
     "badge_colour": "4d1575",
     "dependencies": [
-        "Steamodded (>=1.0.0~BETA-0711a)"
+        "Steamodded (>=1.0.0~BETA-0711a)",
+        "Flipbook (>=1.2.0~BETA)"
     ],
-    "version": "4.0.0",
+    "version": "5.0.0",
     "priority": 4
 }

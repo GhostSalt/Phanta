@@ -72,7 +72,7 @@ G.Phanta.centers["dimere"] = {
 
 G.Phanta.centers["goldor"] = {
   unlocked = false,
-  config = { extra = { money = 3, xmult = 3 } },
+  config = { extra = { money = 3, xmult = 2 } },
   rarity = 4,
   atlas = 'Phanta',
   pos = { x = 4, y = 1 },

@@ -3,8 +3,42 @@ SMODS.current_mod.optional_features = { cardareas = { unscored = true } }
 local sell_use_ref = G.UIDEF.use_and_sell_buttons
 
 function G.UIDEF.use_and_sell_buttons(card)
+  if G.SETTINGS.paused then
+    if G.OVERLAY_PHANTA_DEATHNOTECOLLECTION then
+      return {
+        n = G.UIT.ROOT,
+        config = { padding = 0, colour = G.C.CLEAR },
+        nodes = {
+          {
+            n = G.UIT.R,
+            config = { ref_table = card, r = 0.08, padding = 0.1, align = "bm", minw = 0.5 * card.T.w - 0.15, maxw = 0.9 * card.T.w - 0.15, minh = 0.3 * card.T.h, hover = true, shadow = true, colour = G.C.RED, one_press = true, button = 'phanta_select_deathnote_card', func = 'phanta_can_select_deathnote_card' },
+            nodes = {
+              { n = G.UIT.T, config = { text = localize('b_select'), colour = G.C.UI.TEXT_LIGHT, scale = 0.45, shadow = true } }
+            }
+          },
+        }
+      }
+    end
+
+    if G.OVERLAY_PHANTA_CATACLYSMCOLLECTION then
+      return {
+        n = G.UIT.ROOT,
+        config = { padding = 0, colour = G.C.CLEAR },
+        nodes = {
+          {
+            n = G.UIT.R,
+            config = { ref_table = card.config.center.key, r = 0.08, padding = 0.1, align = "bm", minw = 0.5 * card.T.w - 0.15, maxw = 0.9 * card.T.w - 0.15, minh = 0.3 * card.T.h, hover = true, shadow = true, colour = G.C.RED, one_press = true, button = 'phanta_select_cataclysm_card', func = 'phanta_can_select_cataclysm_card' },
+            nodes = {
+              { n = G.UIT.T, config = { text = localize('b_select'), colour = G.C.UI.TEXT_LIGHT, scale = 0.45, shadow = true } }
+            }
+          },
+        }
+      }
+    end
+  end
+
   if not card or ((not card.config or not card.config.center
-          or (card.config.center.key ~= "j_phanta_profile" and card.config.center.key ~= "j_phanta_modping" and card.config.center.key ~= "j_phanta_deathnote"))
+          or (card.config.center.key ~= "j_phanta_profile" and card.config.center.key ~= "j_phanta_modping" and card.config.center.key ~= "j_phanta_deathnote" and card.config.center.key ~= "j_phanta_cataclysm"))
         and not (card.ability and (card.ability.set == "phanta_Zodiac" or card.ability.set == "phanta_Birthstone"))
         and not (card.ability and card.ability.perishable and card.ability.perish_tally == 0)) then
     return sell_use_ref(card)
@@ -93,6 +127,22 @@ function G.UIDEF.use_and_sell_buttons(card)
     }
   }
 
+  local cataclysm_more =
+  {
+    n = G.UIT.C,
+    config = { align = "cr" },
+    nodes = {
+      {
+        n = G.UIT.C,
+        config = { ref_table = card, align = "cr", maxw = 1.25, padding = 0.1, r = 0.08, minw = 1.25, minh = (card.area and card.area.config.type == 'joker') and 0 or 1, hover = true, shadow = true, colour = G.C.RED, button = 'run_cataclysm_menu', func = 'phanta_can_cataclysm_more' },
+        nodes = {
+          { n = G.UIT.B, config = { w = 0.1, h = 0.6 } },
+          { n = G.UIT.T, config = { text = localize('b_phanta_more'), colour = G.C.UI.TEXT_LIGHT, scale = 0.55, shadow = true } }
+        }
+      }
+    }
+  }
+
   if card.config and card.config.center and card.config.center.key == "j_phanta_profile" then
     return {
       n = G.UIT.ROOT,
@@ -161,6 +211,31 @@ function G.UIDEF.use_and_sell_buttons(card)
               n = G.UIT.R,
               config = { align = 'cl' },
               nodes = { deathnote_more }
+            }
+          }
+        }
+      }
+    }
+  end
+
+  if card.config and card.config.center and card.config.center.key == "j_phanta_cataclysm" then
+    return {
+      n = G.UIT.ROOT,
+      config = { padding = 0, colour = G.C.CLEAR },
+      nodes = {
+        {
+          n = G.UIT.C,
+          config = { padding = 0.15, align = 'cl' },
+          nodes = {
+            {
+              n = G.UIT.R,
+              config = { align = 'cl' },
+              nodes = { sell }
+            },
+            {
+              n = G.UIT.R,
+              config = { align = 'cl' },
+              nodes = { cataclysm_more }
             }
           }
         }

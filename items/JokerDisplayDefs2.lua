@@ -16,6 +16,200 @@ jd_def["j_phanta_peekaboo"] = {
   text_config = { colour = G.C.MULT }
 }
 
+jd_def["j_phanta_topsyturvy"] = {
+  text = {
+    { text = "+",                              colour = G.C.CHIPS },
+    { ref_table = "card.joker_display_values", ref_value = "chips", colour = G.C.CHIPS, retrigger_type = "mult" }
+  },
+  reminder_text = {
+    { ref_table = "card.joker_display_values", ref_value = "localised_text" }
+  },
+  calc_function = function(card)
+    local chips = 0
+    local text, _, scoring_hand = JokerDisplay.evaluate_hand()
+    if text ~= 'Unknown' then
+      for _, v in pairs(scoring_hand) do
+        if v:get_id() and v:get_id() == 2 then
+          local retriggers = JokerDisplay.calculate_card_triggers(v, scoring_hand)
+          chips = chips + card.ability.extra.two_given_chips * retriggers
+        elseif v:get_id() and v:get_id() == 3 then
+          local retriggers = JokerDisplay.calculate_card_triggers(v, scoring_hand)
+          chips = chips + card.ability.extra.three_given_chips * retriggers
+        end
+      end
+    end
+    card.joker_display_values.chips = chips
+    card.joker_display_values.localised_text = "(" .. localize("k_phanta_twos") .. ", " .. localize("k_phanta_threes") .. ")"
+  end
+}
+
+jd_def["j_phanta_giveway"] = {
+  text = {
+    {
+      border_nodes = {
+        { text = "X" },
+        { ref_table = "card.ability.extra", ref_value = "xmult", retrigger_type = "exp" }
+      }
+    }
+  },
+  reminder_text = {
+    { text = "(" },
+    { ref_table = "card.joker_display_values", ref_value = "localised_text", colour = G.C.FILTER },
+    { text = ")" }
+  },
+  calc_function = function(card)
+    card.joker_display_values.localised_text = localize("k_phanta_before_scoring")
+  end
+}
+
+jd_def["j_phanta_tipoftheiceberg"] = {
+  text = {
+    { text = "+" },
+    { ref_table = "card.ability.extra", ref_value = "current_chips", retrigger_type = "mult" }
+  },
+  text_config = { colour = G.C.CHIPS }
+}
+
+jd_def["j_phanta_sailthestyx"] = {
+  text = {
+    { ref_table = "card.joker_display_values", ref_value = "active" }
+  },
+  calc_function = function(card)
+    card.joker_display_values.active = card.ability.extra.slots_given and localize("k_active")
+        or (card.ability.extra.current_sold .. "/" .. card.ability.extra.target_sold)
+  end
+}
+
+jd_def["j_phanta_goldenghost"] = {
+  text = {
+    { text = "+$" },
+    { ref_table = "card.joker_display_values", ref_value = "money" }
+  },
+  text_config = { colour = G.C.GOLD },
+  reminder_text = {
+    { ref_table = "card.joker_display_values", ref_value = "localised_text" }
+  },
+  calc_function = function(card)
+    card.joker_display_values.money = card.ability.extra.current_money
+    card.joker_display_values.localised_text = "(" .. localize("k_round") .. ")"
+  end
+}
+
+jd_def["j_phanta_liam"] = {
+  text = {
+    {
+      border_nodes = {
+        { text = "X" },
+        { ref_table = "card.joker_display_values", ref_value = "xmult", retrigger_type = "exp" }
+      }
+    }
+  },
+  calc_function = function(card)
+    local gives = false
+    local me = nil
+    for i = 1, #G.jokers.cards do
+      if G.jokers.cards[i] == card then
+        me = i; break
+      end
+    end
+
+    if me and me >= 1 and me <= #G.jokers.cards and G.jokers.cards[me + 1] and G.jokers.cards[me + 1]:is_rarity("Rare") then
+      gives = true
+    end
+
+    card.joker_display_values.xmult = gives and card.ability.extra.xmult or 1
+  end
+}
+
+jd_def["j_phanta_datacube"] = {
+  text = {
+    { text = "+$" },
+    { ref_table = "card.joker_display_values", ref_value = "dollars", retrigger_type = "mult" }
+  },
+  text_config = { colour = G.C.GOLD },
+  reminder_text = {
+    { text = "(" },
+    { ref_table = "card.joker_display_values", ref_value = "datacube_card_rank", colour = G.C.FILTER },
+    { text = ")" }
+  },
+  calc_function = function(card)
+    card.joker_display_values.datacube_card_rank = localize((G.GAME.current_round.datacube_card.value or 2) .. "", 'ranks')
+
+    local dollars = 0
+    local text, _, scoring_hand = JokerDisplay.evaluate_hand()
+    if text ~= 'Unknown' then
+      for _, v in pairs(scoring_hand) do
+        if v:get_id() and v:get_id() == G.GAME.current_round.datacube_card.id then
+          dollars = card.ability.extra.money; break
+        end
+      end
+    end
+    card.joker_display_values.dollars = dollars
+  end
+}
+
+jd_def["j_phanta_longtail"] = {
+  text = {
+    { text = "+$" },
+    { ref_table = "card.joker_display_values", ref_value = "money", retrigger_type = "mult" }
+  },
+  text_config = { colour = G.C.GOLD },
+  reminder_text = {
+    { text = "(" },
+    { ref_table = "card.joker_display_values", ref_value = "localised_text" },
+    { text = ")" }
+  },
+  calc_function = function(card)
+    local text, disp_text = G.FUNCS.get_poker_hand_info(G.hand.highlighted)
+    local _text, _, scoring_hand = JokerDisplay.evaluate_hand()
+    local is_valid = true
+    if _text ~= 'Unknown' then
+      for _, scoring_card in pairs(scoring_hand) do
+        if scoring_card:is_face() then
+          is_valid = false
+          break
+        end
+      end
+    end
+
+    card.joker_display_values.money = text == "Straight" and is_valid and card.ability.extra.money or 0
+    card.joker_display_values.localised_text = localize("Straight", "poker_hands")
+  end
+}
+
+jd_def["j_phanta_luckynumber"] = {
+  text = {
+    { ref_table = "card.joker_display_values", ref_value = "count", retrigger_type = "mult" },
+    { text = "x",                              scale = 0.35 },
+    { text = "$",                              colour = G.C.GOLD },
+    { ref_table = "card.joker_display_values", ref_value = "money", retrigger_type = "mult", colour = G.C.GOLD },
+  },
+  extra = {
+    {
+      { text = "(" },
+      { ref_table = "card.joker_display_values", ref_value = "odds" },
+      { text = ")" },
+    }
+  },
+  extra_config = { colour = G.C.GREEN, scale = 0.3 },
+  calc_function = function(card)
+    local count = 0
+    local text, _, scoring_hand = JokerDisplay.evaluate_hand()
+    if text ~= 'Unknown' then
+      for _, scoring_card in pairs(scoring_hand) do
+        if scoring_card:get_id() == 3 or scoring_card:get_id() == 4 or scoring_card:get_id() == 9 then
+          count = count + JokerDisplay.calculate_card_triggers(scoring_card, scoring_hand)
+        end
+      end
+    end
+    card.joker_display_values.count = count
+    card.joker_display_values.money = card.ability.extra.money
+    local numerator, denominator = 1, card.ability.extra.odds
+    if SMODS then numerator, denominator = SMODS.get_probability_vars(card, numerator, denominator, "luckynumber") end
+    card.joker_display_values.odds = localize { type = 'variable', key = "jdis_odds", vars = { numerator, denominator } }
+  end
+}
+
 jd_def["j_phanta_absentjoker"] = {
   text = {
     { text = "+" },
@@ -23,7 +217,7 @@ jd_def["j_phanta_absentjoker"] = {
   },
   text_config = { colour = G.C.MULT },
   calc_function = function(card)
-    card.joker_display_values.mult = G.jokers.config.card_limit - #G.jokers.cards == 1 and card.ability.extra.mult or 0
+    card.joker_display_values.mult = G.jokers.config.card_limit - #G.jokers.cards >= 1 and card.ability.extra.mult or 0
   end
 }
 
@@ -46,11 +240,22 @@ jd_def["j_phanta_venndiagram"] = {
   text_config = { colour = G.C.CHIPS }
 }
 
+jd_def["j_phanta_visionary"] = {
+  text = {
+    {
+      border_nodes = {
+        { text = "X" },
+        { ref_table = "card.ability.extra", ref_value = "current_xmult", retrigger_type = "exp" }
+      }
+    }
+  }
+}
+
 jd_def["j_phanta_88888888"] = {
   text = {
     { text = "+",                              colour = G.C.CHIPS },
     { ref_table = "card.joker_display_values", ref_value = "chips", colour = G.C.CHIPS, retrigger_type = "mult" },
-    { text = " +",                              colour = G.C.MULT },
+    { text = " +",                             colour = G.C.MULT },
     { ref_table = "card.joker_display_values", ref_value = "mult",  colour = G.C.MULT,  retrigger_type = "mult" }
   },
   reminder_text = {
@@ -81,6 +286,47 @@ jd_def["j_phanta_flushed"] = {
     { ref_table = "card.ability.extra", ref_value = "current_mult", retrigger_type = "mult" }
   },
   text_config = { colour = G.C.MULT }
+}
+
+jd_def["j_phanta_thumper"] = {
+  text = {
+    { ref_table = "card.joker_display_values", ref_value = "count", retrigger_type = "mult" },
+    { text = "x",                              scale = 0.35 },
+    { text = "$",                              colour = G.C.GOLD },
+    { ref_table = "card.joker_display_values", ref_value = "money", retrigger_type = "mult", colour = G.C.GOLD },
+  },
+  extra = {
+    {
+      { text = "(" },
+      { ref_table = "card.joker_display_values", ref_value = "odds" },
+      { text = ")" },
+    }
+  },
+  extra_config = { colour = G.C.GREEN, scale = 0.3 },
+  calc_function = function(card)
+    local count = 0
+    local text, _, scoring_hand = JokerDisplay.evaluate_hand()
+    if text ~= 'Unknown' then
+      for _, v in pairs(next(G.play.cards) and G.play.cards or G.hand.highlighted) do
+        if not SMODS.in_scoring(v, scoring_hand) and v:is_face() then
+          count = count + JokerDisplay.calculate_card_triggers(v, scoring_hand)
+        end
+      end
+    end
+    card.joker_display_values.count = count
+    card.joker_display_values.money = card.ability.extra.money
+    local numerator, denominator = 1, card.ability.extra.odds
+    if SMODS then numerator, denominator = SMODS.get_probability_vars(card, numerator, denominator, "thumper") end
+    card.joker_display_values.odds = localize { type = 'variable', key = "jdis_odds", vars = { numerator, denominator } }
+  end
+}
+
+jd_def["j_phanta_coldjoker"] = {
+  text = {
+    { text = "+" },
+    { ref_table = "card.ability.extra", ref_value = "current_chips", retrigger_type = "mult" }
+  },
+  text_config = { colour = G.C.CHIPS }
 }
 
 jd_def["j_phanta_patientjoker"] = {
@@ -187,6 +433,16 @@ jd_def["j_phanta_temperedjoker"] = {
   end
 }
 
+jd_def["j_phanta_returnticket"] = {
+  text = {
+    { ref_table = "card.joker_display_values", ref_value = "active" }
+  },
+  calc_function = function(card)
+    card.joker_display_values.active = card.ability.extra.current_rounds >= card.ability.extra.rounds_required and localize("k_active")
+        or (card.ability.extra.current_rounds .. "/" .. card.ability.extra.rounds_required)
+  end
+}
+
 jd_def["j_phanta_testpage"] = {
   text = {
     { text = "+" },
@@ -201,6 +457,26 @@ jd_def["j_phanta_flagsignal"] = {
     { ref_table = "card.ability.extra", ref_value = "current_mult", retrigger_type = "mult" }
   },
   text_config = { colour = G.C.MULT }
+}
+
+jd_def["j_phanta_signofthehorns"] = {
+  text = {
+    { text = "+" },
+    { ref_table = "card.joker_display_values", ref_value = "mult", retrigger_type = "mult" },
+  },
+  text_config = { colour = G.C.MULT },
+  calc_function = function(card)
+    local playing_hand = next(G.play.cards)
+    local mult = 0
+    for _, playing_card in ipairs(G.hand.cards) do
+      if playing_hand or not playing_card.highlighted then
+        if playing_card.facing and not (playing_card.facing == 'back') and not playing_card.debuff and playing_card:get_id() == 3 then
+          mult = mult + card.ability.extra.mult * JokerDisplay.calculate_card_triggers(playing_card, nil, true)
+        end
+      end
+    end
+    card.joker_display_values.mult = mult
+  end
 }
 
 jd_def["j_phanta_jackolantern"] = {
@@ -222,13 +498,13 @@ jd_def["j_phanta_jackolantern"] = {
     local text, _, scoring_hand = JokerDisplay.evaluate_hand()
     if text ~= 'Unknown' then
       for _, v in pairs(next(G.play.cards) and G.play.cards or G.hand.highlighted) do
-        if SMODS.in_scoring(v, scoring_hand) and v:is_face() then
+        if SMODS.in_scoring(v, scoring_hand) and v:is_face() and next(SMODS.get_enhancements(v)) then
           xmult = xmult * (card.ability.extra.xmult ^ JokerDisplay.calculate_card_triggers(v, scoring_hand))
         end
       end
     end
     card.joker_display_values.xmult = xmult
-    card.joker_display_values.localised_text = localize("k_phanta_face_cards")
+    card.joker_display_values.localised_text = localize("k_phanta_enhanced_faces")
   end
 }
 
@@ -298,6 +574,17 @@ jd_def["j_phanta_distance"] = {
   text_config = { colour = G.C.CHIPS },
 }
 
+jd_def["j_phanta_thefall"] = {
+  text = {
+    {
+      border_nodes = {
+        { text = "X" },
+        { ref_table = "card.ability.extra", ref_value = "current_xmult", retrigger_type = "exp" }
+      }
+    }
+  }
+}
+
 jd_def["j_phanta_barton"] = {
   text = {
     { text = "+" },
@@ -352,10 +639,13 @@ jd_def["j_phanta_zeroii"] = {
 
 jd_def["j_phanta_theriddler"] = {
   text = {
-    { text = "+" },
-    { ref_table = "card.ability.extra", ref_value = "chips", retrigger_type = "mult" }
+    {
+      border_nodes = {
+        { text = "X" },
+        { ref_table = "card.ability.extra", ref_value = "xmult", retrigger_type = "exp" }
+      }
+    }
   },
-  text_config = { colour = G.C.CHIPS },
 }
 
 jd_def["j_phanta_yatagarasucard"] = {
@@ -374,7 +664,7 @@ jd_def["j_phanta_yatagarasucard"] = {
     local text, _, scoring_hand = JokerDisplay.evaluate_hand()
     if text ~= 'Unknown' then
       for _, v in pairs(scoring_hand) do
-        if not SMODS.in_scoring(v, G.hand.highlighted) and v:get_id() == 3 then
+        if v:get_id() and v:get_id() == 3 then
           dollars = dollars + card.ability.extra.money * JokerDisplay.calculate_card_triggers(v, scoring_hand)
         end
       end
@@ -406,6 +696,17 @@ jd_def["j_phanta_widget"] = {
       reminder_text.children[2].config.colour = lighten(G.C.SUITS[G.GAME.current_round.phanta_widget_suit], 0.35)
     end
     return false
+  end
+}
+
+jd_def["j_phanta_astro"] = {
+  text = {
+    { text = "+" },
+    { ref_table = "card.joker_display_values", ref_value = "chips", retrigger_type = "mult" }
+  },
+  text_config = { colour = G.C.CHIPS },
+  calc_function = function(card)
+    card.joker_display_values.chips = card.ability.extra.chips * count_planets()
   end
 }
 
@@ -446,6 +747,21 @@ jd_def["j_phanta_doublingcube"] = {
   end
 }
 
+jd_def["j_phanta_robojoker"] = {
+  extra = {
+    {
+      { text = "(" },
+      { ref_table = "card.joker_display_values", ref_value = "odds" },
+      { text = ")" }
+    }
+  },
+  extra_config = { colour = G.C.GREEN, scale = 0.3 },
+  calc_function = function(card)
+    local numerator, denominator = SMODS.get_probability_vars(card, 1, card.ability.extra.odds, "robojoker")
+    card.joker_display_values.odds = localize { type = 'variable', key = "jdis_odds", vars = { numerator, denominator } }
+  end
+}
+
 jd_def["j_phanta_modping"] = {
   text = {
     { text = "$" },
@@ -476,21 +792,37 @@ jd_def["j_phanta_leprechaun"] = {
   end
 }
 
-jd_def["j_phanta_manga"] = {
+jd_def["j_phanta_haringjoker"] = {
+  reminder_text = {
+    { text = "(" },
+    { ref_table = "card.joker_display_values", ref_value = "count",          colour = G.C.ORANGE },
+    { text = "x" },
+    { ref_table = "card.joker_display_values", ref_value = "localized_text", colour = G.C.BLUE },
+    { text = ")" }
+  },
+  calc_function = function(card)
+    local count = 0
+    if G.jokers then
+      for _, joker_card in ipairs(G.jokers.cards) do
+        if joker_card ~= card and joker_card.config.center.rarity and joker_card:is_rarity("Common") then
+          count = count + 1
+        end
+      end
+    end
+    card.joker_display_values.count = count
+    card.joker_display_values.localized_text = localize("k_common")
+  end,
+  mod_function = function(card, mod_joker)
+    return { xmult = (card:is_rarity("Common") and mod_joker ~= card and mod_joker.ability.extra.xmult ^ JokerDisplay.calculate_joker_triggers(mod_joker) or nil) }
+  end
+}
+
+jd_def["j_phanta_ontherun"] = {
   text = {
     { text = "+" },
-    { ref_table = "card.joker_display_values", ref_value = "hanafudas", retrigger_type = "mult" },
+    { ref_table = "card.ability.extra", ref_value = "current_mult", retrigger_type = "mult" }
   },
-  text_config = { colour = G.C.SECONDARY_SET.phanta_Hanafuda },
-  calc_function = function(card)
-    local is_seven = false
-    local is_eight = false
-    for _, v in pairs(G.hand.highlighted) do
-      if v:get_id() == 7 then is_seven = true end
-      if v:get_id() == 8 then is_eight = true end
-    end
-    card.joker_display_values.hanafudas = G.GAME.current_round.discards_left > 0 and is_seven and is_eight and count_consumables() < G.consumeables.config.card_limit and 1 or 0
-  end
+  text_config = { colour = G.C.MULT }
 }
 
 jd_def["j_phanta_plugsocket"] = {
@@ -546,7 +878,7 @@ jd_def["j_phanta_neonjoker"] = {
       end
     end
 
-    card.joker_display_values.xmult = #counted_suits + wilds >= 4 and card.ability.extra.xmult or 1
+    card.joker_display_values.xmult = #counted_suits + wilds >= 3 and card.ability.extra.xmult or 1
   end
 }
 
@@ -649,11 +981,11 @@ jd_def["j_phanta_near"] = {
 jd_def["j_phanta_deathnote"] = {
   text = {
     { ref_table = "card.joker_display_values", ref_value = "localised_text" },
-    { ref_table = "card.joker_display_values", ref_value = "joker_name", colour = G.C.FILTER }
+    { ref_table = "card.joker_display_values", ref_value = "card_name",     colour = G.C.FILTER }
   },
   calc_function = function(card)
     local name = card.ability and card.ability.extra and card.ability.extra.card_name and card.ability.extra.card_name ~= "" and card.ability.extra.card_name
-    card.joker_display_values.localised_text = name and localize("phanta_deathnote_name_present") or localize("phanta_deathnote_no_name")
-    card.joker_display_values.joker_name = name and name or ""
+    card.joker_display_values.localised_text = name and "" or localize("phanta_deathnote_no_name")
+    card.joker_display_values.card_name = name and name or ""
   end
 }

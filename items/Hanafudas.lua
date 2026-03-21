@@ -1,6 +1,25 @@
 local hanafuda_atlas = "PhantaHanafudas"
 if next(SMODS.find_mod('HotPotato')) then hanafuda_atlas = "PhantaHanafudasWithHotPot" end
 
+-- Thanks, Berries and Honey!
+local pools = {
+  phanta_chaff  = { default = "c_pine_chaff_a" },
+  phanta_ribbon = { default = "c_pine_ribbon" },
+  phanta_animal = { default = "c_plum_blossom_ribbon" },
+  phanta_bright = { default = "c_pine_crane" },
+}
+
+for rkey, pool in pairs(pools) do
+  if not G.P_CENTER_POOLS[rkey] then
+    local reg = pool
+    reg.key = rkey
+    reg.cards = {}
+    SMODS.ObjectType(pool)
+  end
+end
+
+
+
 SMODS.ConsumableType {
   key = "phanta_Hanafuda",
   primary_colour = HEX("FB8536"),
@@ -36,7 +55,8 @@ SMODS.Consumable {
   key = "pine_chaff_a",
   pos = { x = 0, y = 2 },
   atlas = hanafuda_atlas,
-  config = { phanta_chaff = true, extra = { tarots = 2 } },
+  config = { extra = { tarots = 2 } },
+  pools = { phanta_chaff = true },
   loc_vars = function(self, info_queue, card)
     return { vars = { card.ability.extra.tarots } }
   end,
@@ -69,7 +89,8 @@ SMODS.Consumable {
   key = "pine_chaff_b",
   pos = { x = 0, y = 3 },
   atlas = hanafuda_atlas,
-  config = { phanta_chaff = true, extra = { tarots = 2 } },
+  config = { extra = { tarots = 2 } },
+  pools = { phanta_chaff = true },
   loc_vars = function(self, info_queue, card)
     return { vars = { card.ability.extra.tarots } }
   end,
@@ -102,7 +123,8 @@ SMODS.Consumable {
   key = "pine_ribbon",
   pos = { x = 0, y = 1 },
   atlas = hanafuda_atlas,
-  config = { phanta_ribbon = true, extra = { tarots = 1 } },
+  config = { extra = { tarots = 1 } },
+  pools = { phanta_ribbon = true },
   loc_vars = function(self, info_queue, card)
     info_queue[#info_queue + 1] = G.P_CENTERS.e_negative
     return { vars = { card.ability.extra.tarots } }
@@ -136,7 +158,8 @@ SMODS.Consumable {
   key = "pine_crane",
   pos = { x = 0, y = 0 },
   atlas = hanafuda_atlas,
-  config = { phanta_bright = true, extra = { tarots = 2 } },
+  config = { extra = { tarots = 2 } },
+  pools = { phanta_bright = true },
   loc_vars = function(self, info_queue, card)
     info_queue[#info_queue + 1] = G.P_CENTERS.e_negative
     return { vars = { card.ability.extra.tarots } }
@@ -172,7 +195,8 @@ SMODS.Consumable {
   key = "plum_blossom_chaff_a",
   pos = { x = 1, y = 2 },
   atlas = hanafuda_atlas,
-  config = { phanta_chaff = true, max_highlighted = 1, extra = { copies = 1 } },
+  config = { max_highlighted = 1, extra = { copies = 1 } },
+  pools = { phanta_chaff = true },
   loc_vars = function(self, info_queue, card)
     return { vars = { card.ability.extra.copies } }
   end,
@@ -204,7 +228,8 @@ SMODS.Consumable {
   key = "plum_blossom_chaff_b",
   pos = { x = 1, y = 3 },
   atlas = hanafuda_atlas,
-  config = { phanta_chaff = true, max_highlighted = 1, extra = { copies = 1 } },
+  config = { max_highlighted = 1, extra = { copies = 1 } },
+  pools = { phanta_chaff = true },
   loc_vars = function(self, info_queue, card)
     return { vars = { card.ability.extra.copies } }
   end,
@@ -236,7 +261,8 @@ SMODS.Consumable {
   key = "plum_blossom_ribbon",
   pos = { x = 1, y = 1 },
   atlas = hanafuda_atlas,
-  config = { phanta_ribbon = true, max_highlighted = 2, min_highlighted = 2, extra = { copies = 1 } },
+  config = { max_highlighted = 2, min_highlighted = 2, extra = { copies = 1 } },
+  pools = { phanta_ribbon = true },
   loc_vars = function(self, info_queue, card)
     return { vars = { card.ability.max_highlighted, card.ability.extra.copies } }
   end,
@@ -270,7 +296,8 @@ SMODS.Consumable {
   key = "plum_blossom_bush_warbler",
   pos = { x = 1, y = 0 },
   atlas = hanafuda_atlas,
-  config = { phanta_animal = true, max_highlighted = 1, extra = { copies = 2 } },
+  config = { max_highlighted = 1, extra = { copies = 2 } },
+  pools = { phanta_animal = true },
   loc_vars = function(self, info_queue, card)
     return { vars = { card.ability.extra.copies } }
   end,
@@ -304,7 +331,8 @@ SMODS.Consumable {
   key = "cherry_blossom_chaff_a",
   pos = { x = 2, y = 2 },
   atlas = hanafuda_atlas,
-  config = { phanta_chaff = true, extra = { hanafudas = 2 } },
+  config = { extra = { hanafudas = 2 } },
+  pools = { phanta_chaff = true },
   loc_vars = function(self, info_queue, card)
     return { vars = { card.ability.extra.hanafudas } }
   end,
@@ -319,7 +347,7 @@ SMODS.Consumable {
         func = function()
           if count_consumables() < G.consumeables.config.card_limit then
             play_sound('timpani')
-            local new_card = phanta_create_hanafuda_chaff("cherry_blossom_chaff_a")
+            local new_card = SMODS.create_card({ set = "phanta_chaff", key_append = "cherry_blossom_chaff_a" })
             new_card:add_to_deck()
             G.consumeables:emplace(new_card)
             card:juice_up(0.3, 0.5)
@@ -337,7 +365,8 @@ SMODS.Consumable {
   key = "cherry_blossom_chaff_b",
   pos = { x = 2, y = 3 },
   atlas = hanafuda_atlas,
-  config = { phanta_chaff = true, extra = { hanafudas = 2 } },
+  config = { extra = { hanafudas = 2 } },
+  pools = { phanta_chaff = true },
   loc_vars = function(self, info_queue, card)
     return { vars = { card.ability.extra.hanafudas } }
   end,
@@ -352,7 +381,7 @@ SMODS.Consumable {
         func = function()
           if count_consumables() < G.consumeables.config.card_limit then
             play_sound('timpani')
-            local new_card = phanta_create_hanafuda_chaff("cherry_blossom_chaff_b")
+            local new_card = SMODS.create_card({ set = "phanta_chaff", key_append = "cherry_blossom_chaff_b" })
             new_card:add_to_deck()
             G.consumeables:emplace(new_card)
             card:juice_up(0.3, 0.5)
@@ -370,7 +399,8 @@ SMODS.Consumable {
   key = "cherry_blossom_ribbon",
   pos = { x = 2, y = 1 },
   atlas = hanafuda_atlas,
-  config = { phanta_ribbon = true, extra = { hanafudas = 2 } },
+  config = { extra = { hanafudas = 2 } },
+  pools = { phanta_ribbon = true },
   loc_vars = function(self, info_queue, card)
     return { vars = { card.ability.extra.hanafudas } }
   end,
@@ -386,7 +416,7 @@ SMODS.Consumable {
         func = function()
           if count_consumables() < G.consumeables.config.card_limit then
             play_sound('timpani')
-            local new_card = phanta_create_hanafuda_ribbon("cherry_blossom_ribbon")
+            local new_card = SMODS.create_card({ set = "phanta_ribbon", key_append = "cherry_blossom_ribbon" })
             new_card:add_to_deck()
             G.consumeables:emplace(new_card)
             card:juice_up(0.3, 0.5)
@@ -404,7 +434,8 @@ SMODS.Consumable {
   key = "cherry_blossom_flower_viewing_curtain",
   pos = { x = 2, y = 0 },
   atlas = hanafuda_atlas,
-  config = { phanta_bright = true, extra = { hanafudas = 2 } },
+  config = { extra = { hanafudas = 2 } },
+  pools = { phanta_bright = true },
   loc_vars = function(self, info_queue, card)
     return { vars = { card.ability.extra.hanafudas } }
   end,
@@ -420,7 +451,7 @@ SMODS.Consumable {
         func = function()
           if count_consumables() < G.consumeables.config.card_limit then
             play_sound('timpani')
-            local new_card = phanta_create_hanafuda_animal("cherry_blossom_flower_viewing_curtain")
+            local new_card = SMODS.create_card({ set = "phanta_animal", key_append = "cherry_blossom_flower_viewing_curtain" })
             new_card:add_to_deck()
             G.consumeables:emplace(new_card)
             card:juice_up(0.3, 0.5)
@@ -440,7 +471,8 @@ SMODS.Consumable {
   key = "wisteria_chaff_a",
   pos = { x = 3, y = 2 },
   atlas = hanafuda_atlas,
-  config = { phanta_chaff = true, max_highlighted = 2 },
+  config = { max_highlighted = 2 },
+  pools = { phanta_chaff = true },
   loc_vars = function(self, info_queue, card)
     return { vars = { card.ability.max_highlighted } }
   end,
@@ -483,7 +515,8 @@ SMODS.Consumable {
   key = "wisteria_chaff_b",
   pos = { x = 3, y = 3 },
   atlas = hanafuda_atlas,
-  config = { phanta_chaff = true, max_highlighted = 2 },
+  config = { max_highlighted = 2 },
+  pools = { phanta_chaff = true },
   loc_vars = function(self, info_queue, card)
     return { vars = { card.ability.max_highlighted } }
   end,
@@ -526,7 +559,8 @@ SMODS.Consumable {
   key = "wisteria_ribbon",
   pos = { x = 3, y = 1 },
   atlas = hanafuda_atlas,
-  config = { phanta_ribbon = true, max_highlighted = 3 },
+  config = { max_highlighted = 3 },
+  pools = { phanta_ribbon = true },
   loc_vars = function(self, info_queue, card)
     return { vars = { card.ability.max_highlighted } }
   end,
@@ -570,7 +604,8 @@ SMODS.Consumable {
   key = "wisteria_cuckoo",
   pos = { x = 3, y = 0 },
   atlas = hanafuda_atlas,
-  config = { phanta_animal = true, max_highlighted = 4 },
+  config = { max_highlighted = 4 },
+  pools = { phanta_animal = true },
   loc_vars = function(self, info_queue, card)
     return { vars = { card.ability.max_highlighted } }
   end,
@@ -616,7 +651,7 @@ SMODS.Consumable {
   key = "iris_chaff_a",
   pos = { x = 4, y = 2 },
   atlas = hanafuda_atlas,
-  config = { phanta_chaff = true },
+  pools = { phanta_chaff = true },
   can_use = function(self, card)
     return #G.jokers.cards < G.jokers.config.card_limit or card.area == G.jokers
   end,
@@ -642,7 +677,7 @@ SMODS.Consumable {
   key = "iris_chaff_b",
   pos = { x = 4, y = 3 },
   atlas = hanafuda_atlas,
-  config = { phanta_chaff = true },
+  pools = { phanta_chaff = true },
   can_use = function(self, card)
     return #G.jokers.cards < G.jokers.config.card_limit or card.area == G.jokers
   end,
@@ -668,7 +703,8 @@ SMODS.Consumable {
   key = "iris_ribbon",
   pos = { x = 4, y = 1 },
   atlas = hanafuda_atlas,
-  config = { phanta_ribbon = true, extra = { lost_money = 5 } },
+  config = { extra = { lost_money = 5 } },
+  pools = { phanta_ribbon = true },
   loc_vars = function(self, info_queue, card)
     return { vars = { card.ability.extra.lost_money } }
   end,
@@ -700,7 +736,8 @@ SMODS.Consumable {
   key = "iris_eight_plank_bridge",
   pos = { x = 4, y = 0 },
   atlas = hanafuda_atlas,
-  config = { phanta_animal = true, extra = { lost_money = 10 } },
+  config = { extra = { lost_money = 10 } },
+  pools = { phanta_animal = true },
   loc_vars = function(self, info_queue, card)
     return { vars = { card.ability.extra.lost_money } }
   end,
@@ -734,7 +771,7 @@ SMODS.Consumable {
   key = "peony_chaff_a",
   pos = { x = 5, y = 2 },
   atlas = hanafuda_atlas,
-  config = { phanta_chaff = true },
+  pools = { phanta_chaff = true },
   can_use = function(self, card)
     return G.hand and G.hand.cards and next(G.hand.cards)
   end,
@@ -768,7 +805,7 @@ SMODS.Consumable {
   key = "peony_chaff_b",
   pos = { x = 5, y = 3 },
   atlas = hanafuda_atlas,
-  config = { phanta_chaff = true },
+  pools = { phanta_chaff = true },
   can_use = function(self, card)
     return G.hand and G.hand.cards and next(G.hand.cards)
   end,
@@ -802,7 +839,8 @@ SMODS.Consumable {
   key = "peony_ribbon",
   pos = { x = 5, y = 1 },
   atlas = hanafuda_atlas,
-  config = { phanta_ribbon = true, max_highlighted = 1 },
+  config = { max_highlighted = 1 },
+  pools = { phanta_ribbon = true },
   loc_vars = function(self, info_queue, card)
     return { vars = { card.ability.max_highlighted } }
   end,
@@ -842,7 +880,8 @@ SMODS.Consumable {
   key = "peony_butterflies",
   pos = { x = 5, y = 0 },
   atlas = hanafuda_atlas,
-  config = { phanta_animal = true, max_highlighted = 2 },
+  config = { max_highlighted = 2 },
+  pools = { phanta_animal = true },
   loc_vars = function(self, info_queue, card)
     return { vars = { card.ability.max_highlighted } }
   end,
@@ -885,7 +924,8 @@ SMODS.Consumable {
   key = "bush_clover_chaff_a",
   pos = { x = 6, y = 2 },
   atlas = hanafuda_atlas,
-  config = { phanta_chaff = true, max_highlighted = 1, extra = { rank_increase = 2 } },
+  config = { max_highlighted = 1, extra = { rank_increase = 2 } },
+  pools = { phanta_chaff = true },
   loc_vars = function(self, info_queue, card)
     return { vars = { card.ability.max_highlighted, card.ability.extra.rank_increase } }
   end,
@@ -946,7 +986,8 @@ SMODS.Consumable {
   key = "bush_clover_chaff_b",
   pos = { x = 6, y = 3 },
   atlas = hanafuda_atlas,
-  config = { phanta_chaff = true, max_highlighted = 1, extra = { rank_increase = 2 } },
+  config = { max_highlighted = 1, extra = { rank_increase = 2 } },
+  pools = { phanta_chaff = true },
   loc_vars = function(self, info_queue, card)
     return { vars = { card.ability.max_highlighted, card.ability.extra.rank_increase } }
   end,
@@ -1007,7 +1048,8 @@ SMODS.Consumable {
   key = "bush_clover_ribbon",
   pos = { x = 6, y = 1 },
   atlas = hanafuda_atlas,
-  config = { phanta_ribbon = true, max_highlighted = 2, extra = { rank_increase = 3 } },
+  config = { max_highlighted = 2, extra = { rank_increase = 3 } },
+  pools = { phanta_ribbon = true },
   loc_vars = function(self, info_queue, card)
     return { vars = { card.ability.max_highlighted, card.ability.extra.rank_increase } }
   end,
@@ -1069,7 +1111,8 @@ SMODS.Consumable {
   key = "bush_clover_boar",
   pos = { x = 6, y = 0 },
   atlas = hanafuda_atlas,
-  config = { phanta_animal = true, max_highlighted = 3, extra = { rank_increase = 5 } },
+  config = { max_highlighted = 3, extra = { rank_increase = 5 } },
+  pools = { phanta_animal = true },
   loc_vars = function(self, info_queue, card)
     return { vars = { card.ability.max_highlighted, card.ability.extra.rank_increase } }
   end,
@@ -1134,7 +1177,8 @@ SMODS.Consumable {
   key = "suzuki_grass_chaff_a",
   pos = { x = 7, y = 2 },
   atlas = hanafuda_atlas,
-  config = { phanta_chaff = true, extra = { odds = 4 } },
+  config = { extra = { odds = 4 } },
+  pools = { phanta_chaff = true },
   loc_vars = function(self, info_queue, card)
     local num, denom = SMODS.get_probability_vars(card, 1, card.ability.extra.odds, "suzuki_grass_chaff_a")
     return { vars = { num, denom } }
@@ -1194,7 +1238,8 @@ SMODS.Consumable {
   key = "suzuki_grass_chaff_b",
   pos = { x = 7, y = 3 },
   atlas = hanafuda_atlas,
-  config = { phanta_chaff = true, extra = { odds = 4 } },
+  config = { extra = { odds = 4 } },
+  pools = { phanta_chaff = true },
   loc_vars = function(self, info_queue, card)
     local num, denom = SMODS.get_probability_vars(card, 1, card.ability.extra.odds, "suzuki_grass_chaff_b")
     return { vars = { num, denom } }
@@ -1254,7 +1299,8 @@ SMODS.Consumable {
   key = "suzuki_grass_geese",
   pos = { x = 7, y = 1 },
   atlas = hanafuda_atlas,
-  config = { phanta_animal = true, extra = { odds = 2 } },
+  config = { extra = { odds = 2 } },
+  pools = { phanta_animal = true },
   loc_vars = function(self, info_queue, card)
     local num, denom = SMODS.get_probability_vars(card, 1, card.ability.extra.odds, "suzuki_grass_geese")
     return { vars = { num, denom } }
@@ -1315,7 +1361,8 @@ SMODS.Consumable {
   key = "suzuki_grass_full_moon",
   pos = { x = 7, y = 0 },
   atlas = hanafuda_atlas,
-  config = { phanta_bright = true, extra = { odds = 2 } },
+  config = { extra = { odds = 2 } },
+  pools = { phanta_bright = true },
   can_use = function(self, card)
     return G.jokers and G.jokers.cards and G.jokers.cards[1] and not G.jokers.cards[1].edition
   end,
@@ -1343,7 +1390,8 @@ SMODS.Consumable {
   key = "chrysanthemum_chaff_a",
   pos = { x = 8, y = 2 },
   atlas = hanafuda_atlas,
-  config = { phanta_chaff = true, max_highlighted = 2 },
+  config = { max_highlighted = 2 },
+  pools = { phanta_chaff = true },
   loc_vars = function(self, info_queue, card)
     return { vars = { card.ability.max_highlighted } }
   end,
@@ -1404,7 +1452,8 @@ SMODS.Consumable {
   key = "chrysanthemum_chaff_b",
   pos = { x = 8, y = 3 },
   atlas = hanafuda_atlas,
-  config = { phanta_chaff = true, max_highlighted = 2 },
+  config = { max_highlighted = 2 },
+  pools = { phanta_chaff = true },
   loc_vars = function(self, info_queue, card)
     return { vars = { card.ability.max_highlighted } }
   end,
@@ -1465,7 +1514,8 @@ SMODS.Consumable {
   key = "chrysanthemum_ribbon",
   pos = { x = 8, y = 1 },
   atlas = hanafuda_atlas,
-  config = { phanta_ribbon = true, max_highlighted = 3 },
+  config = { max_highlighted = 3 },
+  pools = { phanta_ribbon = true },
   loc_vars = function(self, info_queue, card)
     return { vars = { card.ability.max_highlighted } }
   end,
@@ -1535,7 +1585,8 @@ SMODS.Consumable {
   key = "chrysanthemum_sake_cup",
   pos = { x = 8, y = 0 },
   atlas = hanafuda_atlas,
-  config = { phanta_animal = true, max_highlighted = 5 },
+  config = { max_highlighted = 5 },
+  pools = { phanta_animal = true },
   loc_vars = function(self, info_queue, card)
     return { vars = { card.ability.max_highlighted } }
   end,
@@ -1607,7 +1658,8 @@ SMODS.Consumable {
   key = "maple_chaff_a",
   pos = { x = 9, y = 2 },
   atlas = hanafuda_atlas,
-  config = { phanta_chaff = true, extra = { money_cap = 20 } },
+  config = { extra = { money_cap = 20 } },
+  pools = { phanta_chaff = true },
   loc_vars = function(self, info_queue, card)
     return { vars = { card.ability.extra.money_cap } }
   end,
@@ -1634,7 +1686,8 @@ SMODS.Consumable {
   key = "maple_chaff_b",
   pos = { x = 9, y = 3 },
   atlas = hanafuda_atlas,
-  config = { phanta_chaff = true, extra = { money_cap = 20 } },
+  config = { extra = { money_cap = 20 } },
+  pools = { phanta_chaff = true },
   loc_vars = function(self, info_queue, card)
     return { vars = { card.ability.extra.money_cap } }
   end,
@@ -1661,7 +1714,8 @@ SMODS.Consumable {
   key = "maple_ribbon",
   pos = { x = 9, y = 1 },
   atlas = hanafuda_atlas,
-  config = { phanta_ribbon = true, extra = { money_cap = 30 } },
+  config = { extra = { money_cap = 30 } },
+  pools = { phanta_ribbon = true },
   loc_vars = function(self, info_queue, card)
     return { vars = { card.ability.extra.money_cap } }
   end,
@@ -1689,7 +1743,8 @@ SMODS.Consumable {
   key = "maple_deer",
   pos = { x = 9, y = 0 },
   atlas = hanafuda_atlas,
-  config = { phanta_animal = true, extra = { money_cap = 60 } },
+  config = { extra = { money_cap = 60 } },
+  pools = { phanta_animal = true },
   loc_vars = function(self, info_queue, card)
     return { vars = { card.ability.extra.money_cap } }
   end,
@@ -1719,7 +1774,8 @@ SMODS.Consumable {
   key = "willow_chaff",
   pos = { x = 10, y = 3 },
   atlas = hanafuda_atlas,
-  config = { phanta_chaff = true, mod_conv = "m_wild", max_highlighted = 1 },
+  config = { mod_conv = "m_wild", max_highlighted = 1 },
+  pools = { phanta_chaff = true },
   loc_vars = function(self, info_queue, card)
     info_queue[#info_queue + 1] = G.P_CENTERS.m_wild
     return { vars = { card.ability.max_highlighted } }
@@ -1731,7 +1787,8 @@ SMODS.Consumable {
   key = "willow_ribbon",
   pos = { x = 10, y = 2 },
   atlas = hanafuda_atlas,
-  config = { phanta_ribbon = true, max_highlighted = 4 },
+  config = { max_highlighted = 4 },
+  pools = { phanta_ribbon = true },
   loc_vars = function(self, info_queue, card)
     return { vars = { card.ability.max_highlighted } }
   end,
@@ -1795,7 +1852,8 @@ SMODS.Consumable {
   key = "willow_swallow",
   pos = { x = 10, y = 1 },
   atlas = hanafuda_atlas,
-  config = { phanta_animal = true, max_highlighted = 4 },
+  config = { max_highlighted = 4 },
+  pools = { phanta_animal = true },
   loc_vars = function(self, info_queue, card)
     return { vars = { card.ability.max_highlighted } }
   end,
@@ -1859,7 +1917,8 @@ SMODS.Consumable {
   key = "willow_rain_man",
   pos = { x = 10, y = 0 },
   atlas = hanafuda_atlas,
-  config = { phanta_bright = true, max_highlighted = 5 },
+  config = { max_highlighted = 5 },
+  pools = { phanta_bright = true },
   loc_vars = function(self, info_queue, card)
     return { vars = { card.ability.max_highlighted } }
   end,
@@ -1925,7 +1984,8 @@ SMODS.Consumable {
   key = "paulownia_chaff_a",
   pos = { x = 11, y = 2 },
   atlas = hanafuda_atlas,
-  config = { phanta_chaff = true, extra = { sell_value = 1 } },
+  config = { extra = { sell_value = 1 } },
+  pools = { phanta_chaff = true },
   loc_vars = function(self, info_queue, card)
     return { vars = { card.ability.extra.sell_value } }
   end,
@@ -1967,7 +2027,8 @@ SMODS.Consumable {
   key = "paulownia_chaff_b",
   pos = { x = 11, y = 3 },
   atlas = hanafuda_atlas,
-  config = { phanta_chaff = true, extra = { sell_value = 1 } },
+  config = { extra = { sell_value = 1 } },
+  pools = { phanta_chaff = true },
   loc_vars = function(self, info_queue, card)
     return { vars = { card.ability.extra.sell_value } }
   end,
@@ -2009,7 +2070,8 @@ SMODS.Consumable {
   key = "paulownia_chaff_yellow",
   pos = { x = 11, y = 1 },
   atlas = hanafuda_atlas,
-  config = { phanta_chaff = true, extra = { sell_value = 2 } },
+  config = { extra = { sell_value = 2 } },
+  pools = { phanta_chaff = true },
   loc_vars = function(self, info_queue, card)
     return { vars = { card.ability.extra.sell_value } }
   end,
@@ -2052,7 +2114,8 @@ SMODS.Consumable {
   key = "paulownia_phoenix",
   pos = { x = 11, y = 0 },
   atlas = hanafuda_atlas,
-  config = { phanta_bright = true, extra = { sell_value = 4 } },
+  config = { extra = { sell_value = 4 } },
+  pools = { phanta_bright = true },
   loc_vars = function(self, info_queue, card)
     return { vars = { card.ability.extra.sell_value } }
   end,
@@ -2097,7 +2160,7 @@ SMODS.Consumable {
 
 
 
-
+--[[
 function check_for_created_hanafuda_validity(v, type)
   if v.set == "phanta_Hanafuda" and v.config and v.config[type] then
     local add = true
@@ -2116,79 +2179,39 @@ function check_for_created_hanafuda_validity(v, type)
 
     return add
   end
-end
-
-function phanta_create_hanafuda_chaff(key, skip_materialise)
-  local chaffs = {}
-  for k, v in pairs(G.P_CENTERS) do
-    if check_for_created_hanafuda_validity(v, "phanta_chaff") then chaffs[#chaffs + 1] = k end
-  end
-
-  return create_card('phanta_Hanafuda', G.consumeables, nil, nil, skip_materialise, nil,
-    #chaffs > 0 and pseudorandom_element(chaffs, pseudoseed(key)) or "c_phanta_pine_chaff_a", key)
-end
-
-function phanta_create_hanafuda_ribbon(key, skip_materialise)
-  local ribbons = {}
-  for k, v in pairs(G.P_CENTERS) do
-    if check_for_created_hanafuda_validity(v, "phanta_ribbon") then ribbons[#ribbons + 1] = k end
-  end
-
-  return create_card('phanta_Hanafuda', G.consumeables, nil, nil, skip_materialise, nil,
-    #ribbons > 0 and pseudorandom_element(ribbons, pseudoseed(key)) or "c_phanta_pine_ribbon", key)
-end
-
-function phanta_create_hanafuda_animal(key, skip_materialise)
-  local animals = {}
-  for k, v in pairs(G.P_CENTERS) do
-    if check_for_created_hanafuda_validity(v, "phanta_animal") then animals[#animals + 1] = k end
-  end
-
-  return create_card('phanta_Hanafuda', G.consumeables, nil, nil, skip_materialise, nil,
-    #animals > 0 and pseudorandom_element(animals, pseudoseed(key)) or "c_phanta_plum_blossom_bush_warbler", key)
-end
+end]] --
 
 function phanta_create_hanafuda_ribbon_animal(key, skip_materialise)
   if pseudorandom(key) >= 0.5 then
-    return phanta_create_hanafuda_ribbon(key, skip_materialise)
+    return SMODS.create_card({ set = "phanta_ribbon", key_append = key, skip_materialize = skip_materialise })
   else
-    return phanta_create_hanafuda_animal(key, skip_materialise)
+    return SMODS.create_card({ set = "phanta_animal", key_append = key, skip_materialize = skip_materialise })
   end
-end
-
-function phanta_create_hanafuda_bright(key, skip_materialise)
-  local brights = {}
-  for k, v in pairs(G.P_CENTERS) do
-    if check_for_created_hanafuda_validity(v, "phanta_bright") then brights[#brights + 1] = k end
-  end
-
-  return create_card('phanta_Hanafuda', G.consumeables, nil, nil, skip_materialise, nil,
-    #brights > 0 and pseudorandom_element(brights, pseudoseed(key)) or "c_phanta_pine_crane", key)
 end
 
 local ref = Game.main_menu
 function Game:main_menu(change_context)
   for k, v in pairs(G.P_CENTERS) do
-    if v.config and type(v.config) == "table" then
-      if v.config.phanta_chaff then
+    if v.pools and type(v.pools) == "table" and v.set == "phanta_Hanafuda" then
+      if v.pools.phanta_chaff then
         v.set_badges = function(self, card, badges)
           badges[#badges + 1] = create_badge(localize('phanta_chaff_badge'), G.C.PHANTA.HanafudaAlt, G.C.WHITE, 1)
         end
       end
 
-      if v.config.phanta_ribbon then
+      if v.pools.phanta_ribbon then
         v.set_badges = function(self, card, badges)
           badges[#badges + 1] = create_badge(localize('phanta_ribbon_badge'), G.C.PHANTA.HanafudaAlt, G.C.WHITE, 1)
         end
       end
 
-      if v.config.phanta_animal then
+      if v.pools.phanta_animal then
         v.set_badges = function(self, card, badges)
           badges[#badges + 1] = create_badge(localize('phanta_animal_badge'), G.C.PHANTA.HanafudaAlt, G.C.WHITE, 1)
         end
       end
 
-      if v.config.phanta_bright then
+      if v.pools.phanta_bright then
         v.set_badges = function(self, card, badges)
           badges[#badges + 1] = create_badge(localize('phanta_bright_badge'), G.C.PHANTA.HanafudaAlt, G.C.WHITE, 1)
         end
@@ -2197,3 +2220,48 @@ function Game:main_menu(change_context)
   end
   ref(self, change_context)
 end
+
+
+
+
+SMODS.Consumable {
+  set = "Spectral",
+  key = "partisan",
+  pos = { x = 1, y = 2 },
+  atlas = "PhantaSpectrals",
+  config = { extra = { hanafudas = 2 } },
+  loc_vars = function(self, info_queue, card)
+    return { vars = { card.ability.extra.hanafudas } }
+  end,
+  can_use = function(self, card)
+    return count_consumables() < G.consumeables.config.card_limit or card.area == G.consumeables
+  end,
+  cost = 6,
+  use = function(self, card, area, copier)
+    for i = 1, math.min(card.ability.extra.hanafudas, G.consumeables.config.card_limit - count_consumables()) do
+      G.E_MANAGER:add_event(Event({
+        trigger = 'after',
+        delay = 0.4,
+        func = function()
+          if count_consumables() < G.consumeables.config.card_limit then
+            play_sound('timpani')
+            local new_card = SMODS.create_card({ set = "phanta_bright", key_append = "partisan" })
+            new_card:add_to_deck()
+            G.consumeables:emplace(new_card)
+            card:juice_up(0.3, 0.5)
+          end
+          return true
+        end
+      }))
+    end
+    delay(0.6)
+  end,
+  in_pool = function()
+    return Phanta.config["hanafuda_enabled"]
+  end,
+
+  hidden = true,
+  soul_set = "phanta_Hanafuda",
+  soul_rate = 0.006,
+  can_repeat_soul = false
+}

@@ -1,12 +1,12 @@
 SMODS.Consumable {
   set = "Planet",
   key = "rubbish",
-  pos = { x = 3, y = 1 },
+  pos = { x = 0, y = 0 },
   config = {
     hand_type = "phanta_junk",
     softlock = true
   },
-  atlas = "PhantaTarots",
+  atlas = "PhantaPlanets",
   loc_vars = function(self, info_queue, card)
     return {
       vars = {
