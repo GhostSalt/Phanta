@@ -86,7 +86,7 @@ SMODS.Sound({
   key = "zodiac_pack_music",
   path = "phanta_zodiac_pack.ogg",
   select_music_track = function()
-    if G.booster_pack and SMODS.OPENED_BOOSTER and
+    if G.booster_pack and SMODS.OPENED_BOOSTER and not Phanta.config["custom_music_disabled"] and
         (SMODS.OPENED_BOOSTER.config.center.key == 'p_phanta_zodiac_normal1'
           or SMODS.OPENED_BOOSTER.config.center.key == 'p_phanta_zodiac_normal2'
           or SMODS.OPENED_BOOSTER.config.center.key == 'p_phanta_zodiac_normal3'
@@ -106,7 +106,7 @@ SMODS.Sound({
   key = "hanafuda_pack_music",
   path = "phanta_hanafuda_pack.ogg",
   select_music_track = function()
-    if G.booster_pack and SMODS.OPENED_BOOSTER and
+    if G.booster_pack and SMODS.OPENED_BOOSTER and not Phanta.config["custom_music_disabled"] and
         (SMODS.OPENED_BOOSTER.config.center.key == 'p_phanta_hanafuda_normal1'
           or SMODS.OPENED_BOOSTER.config.center.key == 'p_phanta_hanafuda_normal2'
           or SMODS.OPENED_BOOSTER.config.center.key == 'p_phanta_hanafuda_normal3'
@@ -126,7 +126,7 @@ SMODS.Sound({
   key = "title_music",
   path = "phanta_title.ogg",
   sync = true,
-  select_music_track = function() return Phanta.config["custom_title_screen"] and G.STAGE == G.STAGES.MAIN_MENU end
+  select_music_track = function() return not Phanta.config["custom_music_disabled"] and G.STAGE == G.STAGES.MAIN_MENU end
 })
 
 SMODS.Sound({
