@@ -852,7 +852,7 @@ G.Phanta.centers["ghostinabucket"] = {
   perishable_compat = true,
 
   calculate = function(self, card, context)
-    if context.individual and context.cardarea == G.hand and context.other_card:get_id() == 14 and SMODS.pseudorandom_probability(card, "ghostinabucket", 1, card.ability.extra.odds)
+    if context.individual and context.cardarea == G.hand and not context.end_of_round and context.other_card:get_id() == 14 and SMODS.pseudorandom_probability(card, "ghostinabucket", 1, card.ability.extra.odds)
         and count_consumables() < G.consumeables.config.card_limit then
       G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
       local juice_card = context.other_card
