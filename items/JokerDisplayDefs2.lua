@@ -446,9 +446,19 @@ jd_def["j_phanta_returnticket"] = {
 jd_def["j_phanta_testpage"] = {
   text = {
     { text = "+" },
-    { ref_table = "card.ability.extra", ref_value = "current_chips", retrigger_type = "mult" }
+    { ref_table = "card.joker_display_values", ref_value = "chips", retrigger_type = "mult" }
   },
-  text_config = { colour = G.C.CHIPS }
+  text_config = { colour = G.C.CHIPS },
+  reminder_text = {
+    { text = "(" },
+    { ref_table = "card.joker_display_values", ref_value = "localised_text" },
+    { text = ")" }
+  },
+  calc_function = function(card)
+    local text, disp_text = G.FUNCS.get_poker_hand_info(G.hand.highlighted)
+    card.joker_display_values.chips = text == "phanta_junk" and card.ability.extra.chips or 0
+    card.joker_display_values.localised_text = localize("phanta_junk", "poker_hands")
+  end
 }
 
 jd_def["j_phanta_flagsignal"] = {

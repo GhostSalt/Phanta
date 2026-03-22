@@ -1872,24 +1872,20 @@ G.Phanta.centers["testpage"] = {
       return args.type == "hand_contents" and text == self.unlock_condition.extra
     end
   end,
-  config = { extra = { added_chips = 10, current_chips = 0 } },
+  config = { extra = { chips = 101 } },
   rarity = 1,
   atlas = 'Phanta2',
   pos = { x = 1, y = 3 },
   cost = 4,
   loc_vars = function(self, info_queue, card)
-    return { vars = { card.ability.extra.added_chips, card.ability.extra.current_chips } }
+    return { vars = { card.ability.extra.chips } }
   end,
   blueprint_compat = true,
   eternal_compat = true,
-  perishable_compat = false,
+  perishable_compat = true,
   calculate = function(self, card, context)
-    if context.joker_main and card.ability.extra.current_chips > 0 then
-      return { chips = card.ability.extra.current_chips }
-    end
-    if context.before and context.scoring_name == "phanta_junk" and not context.blueprint then
-      card.ability.extra.current_chips = card.ability.extra.current_chips + card.ability.extra.added_chips
-      return { message = localize("k_upgrade_ex"), colour = G.C.FILTER }
+    if context.joker_main and context.scoring_name == "phanta_junk" then
+      return { chips = card.ability.extra.chips }
     end
   end,
   in_pool = function()
@@ -2291,7 +2287,7 @@ G.Phanta.centers["futureluke"] = {
 }
 
 G.Phanta.centers["barton"] = {
-  config = { extra = { mult = 30, requirement = 12 } },
+  config = { extra = { mult = 30, requirement = 8 } },
   rarity = 2,
   atlas = 'PhantaLaytonAnims',
   pos = { x = 0, y = 4 },

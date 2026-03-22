@@ -1787,9 +1787,8 @@ return {
             j_phanta_testpage               = {
                 name = 'Test Page',
                 text = {
-                    "Gains {C:chips}+#1#{} Chips if",
-                    "played hand is a {C:attention}Junk{}",
-                    "{C:inactive}(Currently {C:chips}+#2#{C:inactive} Chips){}"
+                    "{C:chips}+#1#{} Chips if played",
+                    "hand is a {C:attention}Junk{}"
                 },
                 unlock = {
                     "Play a {E:1,C:attention}Junk{}",
