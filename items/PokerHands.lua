@@ -2,7 +2,7 @@ SMODS.PokerHand {
   key = "junk",
   chips = 5,
   mult = 2,
-  l_chips = 20,
+  l_chips = 15,
   l_mult = 1,
   visible = false,
   above_hand = "High Card",
