@@ -775,7 +775,7 @@ Game.main_menu = function(change_context)
             }
           }
         }
-        v.flipbook_anim_extra_current_states = { extra = "0" }
+        v.flipbook_anim_extra_initial_state = "0"
       end
     end
   end
