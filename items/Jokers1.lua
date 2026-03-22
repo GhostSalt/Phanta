@@ -1069,7 +1069,7 @@ G.Phanta.centers["badhairday"] = {
   eternal_compat = true,
   perishable_compat = true,
   calculate = function(self, card, context)
-    if context.individual and context.cardarea == G.hand and context.other_card:is_face() then
+    if context.individual and context.cardarea == G.hand and not context.end_of_round and context.other_card:is_face() then
       return { chips = card.ability.extra.chips }
     end
   end,
