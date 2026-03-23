@@ -938,7 +938,7 @@ G.Phanta.centers["kylehyde"] = {
 }
 
 G.Phanta.centers["inception"] = {
-  config = { extra = { current_mult = 0, added_mult = 4 } },
+  config = { extra = { current_mult = 0, added_mult = 5 } },
   rarity = 1,
   atlas = 'PhantaMiscAnims4',
   pos = { x = 10, y = 4 },
