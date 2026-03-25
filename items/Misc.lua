@@ -38,7 +38,8 @@ function G.UIDEF.use_and_sell_buttons(card)
   end
 
   if not card or ((not card.config or not card.config.center
-          or (card.config.center.key ~= "j_phanta_profile" and card.config.center.key ~= "j_phanta_modping" and card.config.center.key ~= "j_phanta_deathnote" and card.config.center.key ~= "j_phanta_cataclysm"))
+          or (card.config.center.key ~= "j_phanta_profile" and card.config.center.key ~= "j_phanta_modping" and card.config.center.key ~= "j_phanta_deathnote" and card.config.center.key ~= "j_phanta_cataclysm")
+          or card.area ~= G.jokers)
         and not (card.ability and (card.ability.set == "phanta_Zodiac" or card.ability.set == "phanta_Birthstone"))
         and not (card.ability and card.ability.perishable and card.ability.perish_tally == 0)) then
     return sell_use_ref(card)
