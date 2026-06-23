@@ -457,10 +457,10 @@ return {
             j_phanta_dollarsign             = {
                 name = 'Dollar Sign',
                 text = {
-                    "When hand is played,",
-                    "earn {C:money}$#1#{} if your total",
-                    "{C:money}money{} contains a {C:attention}5{}",
-                    "in any position"
+                    "{C:mult}+#1#{} Mult for each",
+                    "dollar of {C:money}interest{}",
+                    "you are due to earn",
+                    "{C:inactive}(Currently {C:mult}+#2#{C:inactive} Mult){}"
                 }
             },
             j_phanta_yellow                 = {
@@ -1393,9 +1393,9 @@ return {
                 name = 'Space Invader',
                 text = {
                     "When {C:attention}Blind{} is selected,",
-                    "creates {C:attention}#1#{} {C:planet}Planet{} cards if",
-                    "your consumable slots are {C:attention}empty{}",
-                    "{C:inactive}(Must have room){}"
+                    "creates {C:attention}#1#{} {C:planet}Planet{} cards",
+                    "{C:inactive}(Must have room for{}",
+                    "{C:inactive}all {C:planet}Planet{C:inactive} cards){}"
                 }
             },
             j_phanta_witchsmark             = {
@@ -1688,10 +1688,8 @@ return {
             j_phanta_topsyturvy             = {
                 name = "Topsy Turvy",
                 text = {
-                    "Played {C:attention}3s{} give {C:chips}+#1#{}",
-                    "Chips when scored,",
-                    "played {C:attention}2s{} give {C:chips}+#2#{}",
-                    "Chips when scored",
+                    "Played {C:attention}2s{} and {C:attention}3s{} give",
+                    "{C:chips}+#1#{} Chips when scored",
                 },
             },
             j_phanta_deckjoker              = {
@@ -1959,7 +1957,7 @@ return {
                 name = "Bloody Ace",
                 text = {
                     "Hands containing",
-                    "{C:attention}2 Aces{} count as",
+                    "{C:attention}3 Aces{} count as",
                     "{C:attention}Four of a Kinds{}"
                 }
             },
@@ -3875,7 +3873,7 @@ return {
                 text = {
                     "Retriggers the {C:attention}first{}",
                     "played card used",
-                    "in scoring {C:attention}#1#{} time#2#"
+                    "in scoring {C:attention}#1#{} times"
                 }
             },
             c_phanta_gemini = {

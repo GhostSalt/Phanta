@@ -299,24 +299,21 @@ SMODS.Back {
   pos = { x = 0, y = 5 },
   calculate = function(self, back, context)
     if context.individual and context.cardarea == G.play and context.other_card:get_id() == 14 and context.other_card:is_suit("Hearts") and count_consumables() < G.consumeables.config.card_limit then
+      G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
+      G.E_MANAGER:add_event(Event({
+        trigger = 'before',
+        delay = 0.0,
+        func = function()
+          play_sound("timpani")
+          SMODS.add_card({ set = "Tarot", key_append = "rebeldeck" })
+          G.GAME.consumeable_buffer = 0
+          return true
+        end
+      }))
       return {
-        extra = {
-          focus = context.other_card,
-          message = localize('k_plus_tarot'),
-          func = function()
-            G.E_MANAGER:add_event(Event({
-              trigger = 'before',
-              delay = 0.0,
-              func = function()
-                play_sound("timpani")
-                local new_card = SMODS.add_card({ set = "Tarot", key_append = "rebeldeck" })
-                return true
-              end
-            }))
-          end
-        },
+        message = localize('k_plus_tarot'),
         colour = G.C.PURPLE,
-        card = context.other_card
+        message_card = context.other_card
       }
     end
   end
@@ -340,7 +337,10 @@ SMODS.Back {
           end
         end
 
-        if next(valid_cards) then self.config.extra.chosen_rank = pseudorandom_element(valid_cards, pseudoseed("perplexing")):get_id() end
+        if next(valid_cards) then
+          self.config.extra.chosen_rank = pseudorandom_element(valid_cards,
+            pseudoseed("perplexing")):get_id()
+        end
 
         for i = 1, #G.playing_cards do
           if G.playing_cards[i]:get_id() == self.config.extra.chosen_rank then

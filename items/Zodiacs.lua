@@ -64,12 +64,12 @@ SMODS.Consumable {
   pos = { x = 1, y = 0 },
   atlas = "PhantaZodiacs",
   loc_vars = function(self, info_queue, card)
-    return { vars = { count_prognosticators(card) + 1, count_prognosticators(card) > 0 and localize("phanta_plural") or "" } }
+    return { vars = { count_prognosticators(card) + 2 } }
   end,
   month_range = { first = { month = 4, day = 20 }, last = { month = 5, day = 20 } },
   calculate = function(self, card, context)
     if context.repetition and context.cardarea == G.play and context.other_card == context.scoring_hand[1] then
-      return { repetitions = count_prognosticators(card) + 1 } -- Progs add 1 retrigger each.
+      return { repetitions = count_prognosticators(card) + 2 } -- Progs add 1 retrigger each.
     end
   end
 }
@@ -95,7 +95,7 @@ SMODS.Consumable {
   set = "phanta_Zodiac",
   key = "cancer",
   pos = { x = 3, y = 0 },
-  config = { extra = { chips = 20 } },
+  config = { extra = { chips = 40 } },
   atlas = "PhantaZodiacs",
   loc_vars = function(self, info_queue, card)
     return { vars = { card.ability.extra.chips + (count_prognosticators(card) * 30) } }
@@ -112,7 +112,7 @@ SMODS.Consumable {
   set = "phanta_Zodiac",
   key = "leo",
   pos = { x = 0, y = 1 },
-  config = { extra = { mult = 2 } },
+  config = { extra = { mult = 4 } },
   atlas = "PhantaZodiacs",
   loc_vars = function(self, info_queue, card)
     return { vars = { card.ability.extra.mult + (count_prognosticators(card) * 4) } }
@@ -292,7 +292,7 @@ SMODS.Consumable {
   set = "phanta_Zodiac",
   key = "pisces",
   pos = { x = 3, y = 2 },
-  config = { extra = { added_value = 5 } },
+  config = { extra = { added_value = 6 } },
   atlas = "PhantaZodiacs",
   loc_vars = function(self, info_queue, card)
     return { vars = { card.ability.extra.added_value + (count_prognosticators(card) * 3) } }

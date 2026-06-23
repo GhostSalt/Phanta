@@ -154,23 +154,21 @@ G.Phanta.centers["hintcoin"] = {
 }
 
 G.Phanta.centers["dollarsign"] = {
-  config = { extra = { money = 5 } },
+  config = { extra = { mult = 3 } },
   rarity = 1,
   atlas = 'Phanta',
   pos = { x = 10, y = 0 },
-  cost = 5,
+  cost = 4,
   blueprint_compat = true,
   eternal_compat = true,
   perishable_compat = true,
   loc_vars = function(self, info_queue, card)
-    return { vars = { card.ability.extra.money } }
+    return { vars = { card.ability.extra.mult, card.ability.extra.mult * (G.GAME.interest_amount*math.min(math.floor(G.GAME.dollars/5), G.GAME.interest_cap/5)) } }
   end,
   calculate = function(self, card, context)
-    if context.before then
-      local money_string = tostring(G.GAME.dollars)
-      for i = 1, #money_string do
-        if string.sub(money_string, i, i) == '5' then return { dollars = card.ability.extra.money } end
-      end
+    if context.joker_main then
+      local interest = (G.GAME.interest_amount*math.min(math.floor(G.GAME.dollars/5), G.GAME.interest_cap/5))
+      if interest > 0 then return { mult = card.ability.extra.mult * interest } end
     end
   end,
   pronouns = "they_them"
@@ -741,7 +739,7 @@ G.Phanta.centers["sigma"] = {
 }
 
 G.Phanta.centers["carlos"] = {
-  config = { extra = { added_chips = 5, current_chips = 0 } },
+  config = { extra = { added_chips = 4, current_chips = 0 } },
   loc_vars = function(self, info_queue, card)
     return { vars = { card.ability.extra.added_chips, card.ability.extra.current_chips } }
   end,
@@ -2474,11 +2472,11 @@ G.Phanta.centers["technicolourjoker"] = {
 }
 
 G.Phanta.centers["identity"] = {
-  config = { extra = { no_of_cards = 1 } },
+  config = { extra = { no_of_cards = 2 } },
   rarity = 2,
   atlas = 'Phanta',
   pos = { x = 1, y = 0 },
-  cost = 6,
+  cost = 7,
   loc_vars = function(self, info_queue, card)
     return { vars = { card.ability.extra.no_of_cards } }
   end,
@@ -3201,7 +3199,7 @@ G.Phanta.centers["blindjoker"] = {
 
 G.Phanta.centers["spaceinvader"] = {
   config = { extra = { no_of_planets = 2 } },
-  rarity = 2,
+  rarity = 1,
   atlas = 'PhantaMiscAnims3',
   pos = { x = 6, y = 2 },
   flipbook_anim = {
@@ -3215,7 +3213,7 @@ G.Phanta.centers["spaceinvader"] = {
     octopus = { anim = { { xrange = { first = 4, last = 5 }, y = 5, t = 0.5 } } },
   },
   flipbook_anim_extra_initial_state = "random",
-  cost = 6,
+  cost = 5,
   loc_vars = function(self, info_queue, card)
     return { vars = { card.ability.extra.no_of_planets } }
   end,
@@ -3223,7 +3221,7 @@ G.Phanta.centers["spaceinvader"] = {
   eternal_compat = true,
   perishable_compat = true,
   calculate = function(self, card, context)
-    if context.setting_blind and count_consumables() == 0 then
+    if context.setting_blind and G.consumeables.config.card_limit - count_consumables() >= card.ability.extra.no_of_planets then
       G.E_MANAGER:add_event(Event({
         func = function()
           card_eval_status_text(card, 'extra', nil, nil, nil,
@@ -4522,7 +4520,7 @@ G.Phanta.centers["spectretile"] = {
   check_for_unlock = function(self, args)
     return args.type == "phanta_double_ghost"
   end,
-  config = { extra = { odds = 3 } },
+  config = { extra = { odds = 2 } },
   rarity = 2,
   atlas = 'Phanta',
   pos = { x = 10, y = 5 },
