@@ -1160,6 +1160,31 @@ G.Phanta.centers["luckynumber"] = {
   pronouns = "it_its"
 }
 
+G.Phanta.centers["bermudatriangle"] = {
+  config = { extra = { current_mult = 0, added_mult = 1 } },
+  loc_vars = function(self, info_queue, card)
+    return { vars = { card.ability.extra.added_mult } }
+  end,
+  rarity = 1,
+  atlas = 'Phanta2',
+  pos = { x = 9, y = 8 },
+  cost = 5,
+  blueprint_compat = true,
+  eternal_compat = true,
+  perishable_compat = true,
+
+  calculate = function(self, card, context)
+    if context.individual and context.cardarea == G.play then
+      card.ability.extra.current_mult = card.ability.extra.current_mult + card.ability.extra.added_mult
+      return { mult = card.ability.extra.current_mult }
+    end
+    if context.after then
+      card.ability.extra.current_mult = 0
+    end
+  end,
+  pronouns = "any_all"
+}
+
 
 
 G.Phanta.centers["absentjoker"] = {
@@ -1611,6 +1636,66 @@ G.Phanta.centers["coldjoker"] = {
     end
   end,
   pronouns = "they_them"
+}
+
+G.Phanta.centers["sillyjoker"] = {
+  config = { extra = { mult = 15, cards = 5, disabled = false } },
+  loc_vars = function(self, info_queue, card)
+    return { vars = { card.ability.extra.mult, card.ability.extra.cards } }
+  end,
+  rarity = 1,
+  atlas = 'Phanta2',
+  pos = { x = 10, y = 8 },
+  flipbook_anim_states = {
+    active = {
+      anim = { { x = 10, y = 8, t = 1 } }, loop = false
+    },
+    disabled = {
+      anim = { { x = 11, y = 8, t = 1 } }, loop = false
+    }
+  },
+  flipbook_anim_initial_state = "active",
+  cost = 4,
+  blueprint_compat = true,
+  eternal_compat = true,
+  perishable_compat = true,
+  calculate = function(self, card, context)
+    if context.before and #G.play.cards < card.ability.extra.cards then
+      card.ability.extra.disabled = true
+      G.E_MANAGER:add_event(Event({
+        func = function()
+          card:flipbook_set_anim_state("disabled")
+          return true
+        end
+      }))
+      return { message = localize("k_disabled_ex"), colour = G.C.RED }
+    end
+
+    if context.joker_main and not card.ability.extra.disabled then
+      return { mult = card.ability.extra.mult }
+    end
+
+    if context.end_of_round and not context.individual and not context.repetition and not context.game_over and card.ability.extra.disabled then
+      card.ability.extra.disabled = false
+      G.E_MANAGER:add_event(Event({
+        func = function()
+          card:flipbook_set_anim_state("active")
+          return true
+        end
+      }))
+      return { message = localize("k_reset") }
+    end
+  end,
+  set_ability = function(self, card, initial, delay_sprites)
+    if self.discovered or card.params.bypass_discovery_center then
+      if card.ability.extra.disabled then
+        card:flipbook_set_anim_state("disabled")
+      else
+        card:flipbook_set_anim_state("active")
+      end
+    end
+  end,
+  pronouns = "he_him"
 }
 
 G.Phanta.centers["patientjoker"] = {
@@ -3222,11 +3307,11 @@ G.Phanta.centers["magiceggcup"] = {
       local _card = context.other_card
       local selectable_suits = {}
       for k, v in pairs(SMODS.Suits) do
-        if k ~= _card.base.suit then
+        if k ~= _card.ability.phanta_actual_suit or _card.base.suit then
           selectable_suits[k] = v
         end
       end
-      selectable_suits[_card.base.suit] = nil
+      selectable_suits[_card.ability.phanta_actual_suit or _card.base.suit] = nil
       local chosen_suit = (pseudorandom_element(selectable_suits, pseudoseed('magiceggcup')) or { key = "Spades" }).key
 
       local supported_suits = {
@@ -3693,9 +3778,9 @@ G.Phanta.centers["ontherun"] = {
 }
 
 G.Phanta.centers["balancingact"] = {
-  config = { extra = { money = 3 } },
+  config = { extra = { mult = 15 } },
   loc_vars = function(self, info_queue, card)
-    return { vars = { card.ability.extra.money } }
+    return { vars = { card.ability.extra.mult } }
   end,
   rarity = 1,
   atlas = 'Phanta2',
@@ -3705,8 +3790,8 @@ G.Phanta.centers["balancingact"] = {
   eternal_compat = true,
   perishable_compat = true,
   calculate = function(self, card, context)
-    if context.before and G.GAME.current_round.hands_left == G.GAME.current_round.discards_left then
-      return { dollars = card.ability.extra.money }
+    if context.joker_main and G.GAME.current_round.hands_left == G.GAME.current_round.discards_left then
+      return { mult = card.ability.extra.mult }
     end
   end,
   pronouns = "he_they"
@@ -3814,7 +3899,7 @@ G.Phanta.centers["mrbigmoneybags"] = {
   rarity = 2,
   atlas = 'Phanta2',
   pos = { x = 11, y = 2 },
-  cost = 30,
+  cost = 20,
   loc_vars = function(self, info_queue, card)
     return { vars = { card.ability.extra.xmult } }
   end,

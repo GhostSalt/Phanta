@@ -964,10 +964,19 @@ jd_def["j_phanta_tricolour"] = {
 
 jd_def["j_phanta_beadnecklace"] = {
   text = {
-    { text = "+" },
-    { ref_table = "card.ability.extra", ref_value = "current_mult", retrigger_type = "mult" }
+    { text = "+",                              colour = G.C.MULT },
+    { ref_table = "card.joker_display_values", ref_value = "mult", colour = G.C.MULT, retrigger_type = "mult" }
   },
-  text_config = { colour = G.C.MULT }
+  calc_function = function(card)
+    local text, _, scoring_hand = JokerDisplay.evaluate_hand()
+    local hand = {}
+    if text ~= 'Unknown' then
+      for _, v in pairs(scoring_hand) do
+        hand[#hand + 1] = v
+      end
+    end
+    card.joker_display_values.mult = card.ability.extra.mult * phanta_calculate_beadnecklace_suits(hand)
+  end
 }
 
 jd_def["j_phanta_p5joker"] = {

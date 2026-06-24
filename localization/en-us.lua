@@ -807,8 +807,7 @@ return {
             j_phanta_balancingact           = {
                 name = "Balancing Act",
                 text = {
-                    "Earn {C:money}$#1#{} when hand is",
-                    "played if remaining",
+                    "{C:mult}+#1#{} Mult if remaining",
                     "{C:blue}hands{} and {C:red}discards{}",
                     "are {C:attention}equal{}"
                 }
@@ -979,8 +978,8 @@ return {
             j_phanta_grimreaper             = {
                 name = 'The Grim Reaper',
                 text = {
-                    "Gains {C:white,X:mult}X#1#{} when using",
-                    "{C:tarot}Death{} {C:inactive}[Tarot card]{}",
+                    "Gains {C:white,X:mult}X#1#{} Mult when",
+                    "using {C:tarot}Death{} {C:inactive}[Tarot card]{}",
                     "{C:inactive}(Currently {C:white,X:mult}X#2#{C:inactive} Mult){}"
                 },
                 unlock = {
@@ -1105,7 +1104,7 @@ return {
                 name = 'Candle',
                 text = {
                     "When {C:attention}Blind{} is selected,",
-                    "{C:red}destroys{} 1 {C:tarot}Tarot{} card",
+                    "{C:red}destroys{} {C:attention}1{} {C:tarot}Tarot{} card",
                     "Gains {C:white,X:mult}X#1#{} Mult",
                     "if successful",
                     "{C:inactive}(Currently {C:white,X:mult}X#2#{C:inactive} Mult){}"
@@ -1179,6 +1178,15 @@ return {
                     "{C:inactive,s:0.75}Four Fingers or Shortcut){}"
                 }
             },
+            j_phanta_bermudatriangle      = {
+                name = 'Bermuda Triangle',
+                text = {
+                    "Played and scored",
+                    "cards give {C:mult}+#1#{} Mult",
+                    "for each card {C:attention}scored{}",
+                    "so far in this hand"
+                }
+            },
             j_phanta_technicolourjoker      = {
                 name = 'Technicolour Joker',
                 text = {
@@ -1216,12 +1224,9 @@ return {
             j_phanta_beadnecklace           = {
                 name = 'Bead Necklace',
                 text = {
-                    "If played hand contains",
-                    "a {C:attention}Straight{}, gains {C:mult}+#1#{} Mult",
-                    "for each unique scoring {C:attention}suit{}",
-                    "{C:inactive}(Currently {C:mult}+#2#{C:inactive} Mult){}",
-                    "{C:inactive,s:0.75}(Doesn't currently support{}",
-                    "{C:inactive,s:0.75}custom suits){}"
+                    "{C:mult}+#1#{} Mult for each",
+                    "distinct {C:attention}suit{} in",
+                    "played hand"
                 }
             },
             j_phanta_p5joker                = {
@@ -1724,6 +1729,15 @@ return {
                     "slot is {C:attention}empty{}"
                 }
             },
+            j_phanta_sillyjoker          = {
+                name = 'Silly Joker',
+                text = {
+                    "{C:mult}+#1#{} Mult if {C:attention}#2#{} cards were",
+                    "played, otherwise this",
+                    "{C:attention}Joker{} is {C:red}disabled{} for",
+                    "the rest of the round"
+                }
+            },
             j_phanta_patientjoker           = {
                 name = 'Patient Joker',
                 text = {
@@ -1997,9 +2011,9 @@ return {
             j_phanta_venndiagram            = {
                 name = 'Venn Diagram',
                 text = {
-                    "Gains {C:chips}+#1#{} Chips if",
-                    "played hand contains",
-                    "{C:attention}#2#{} of the same {C:attention}suit{}",
+                    "Gains {C:chips}+#1#{} Chips if played",
+                    "hand contains {C:attention}#2#{} cards",
+                    "of the same {C:attention}suit{}",
                     "{C:inactive}(Currently {C:chips}+#3#{C:inactive} Chips){}"
                 }
             },

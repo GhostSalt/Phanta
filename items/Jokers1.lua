@@ -2563,66 +2563,53 @@ G.Phanta.centers["tricolour"] = {
 }
 
 G.Phanta.centers["beadnecklace"] = {
-  config = { extra = { added_mult = 1, current_mult = 0 } },
-  rarity = 2,
+  config = { extra = { mult = 4 } },
+  rarity = 1,
   atlas = 'Phanta',
   pos = { x = 2, y = 9 },
-  cost = 5,
+  cost = 4,
   loc_vars = function(self, info_queue, card)
-    return { vars = { card.ability.extra.added_mult, card.ability.extra.current_mult } }
+    return { vars = { card.ability.extra.mult } }
   end,
   blueprint_compat = true,
   eternal_compat = true,
   perishable_compat = false,
   calculate = function(self, card, context)
-    if context.joker_main and card.ability.extra.current_mult > 0 then return { mult = card.ability.extra.current_mult } end
-
-    if context.before and not context.blueprint and (next(context.poker_hands['Straight']) or next(context.poker_hands['Straight Flush'])) then
-      local suits = {
-        ['Hearts'] = 0,
-        ['Diamonds'] = 0,
-        ['Spades'] = 0,
-        ['Clubs'] = 0
-      }
-      for i = 1, #context.scoring_hand do
-        if not SMODS.has_any_suit(context.scoring_hand[i]) then
-          if context.scoring_hand[i]:is_suit('Hearts', true) and suits["Hearts"] == 0 then
-            suits["Hearts"] = suits["Hearts"] + 1
-          elseif context.scoring_hand[i]:is_suit('Diamonds', true) and suits["Diamonds"] == 0 then
-            suits["Diamonds"] = suits["Diamonds"] + 1
-          elseif context.scoring_hand[i]:is_suit('Spades', true) and suits["Spades"] == 0 then
-            suits["Spades"] = suits["Spades"] + 1
-          elseif context.scoring_hand[i]:is_suit('Clubs', true) and suits["Clubs"] == 0 then
-            suits["Clubs"] = suits["Clubs"] + 1
-          end
-        end
-      end
-      for i = 1, #context.scoring_hand do
-        if SMODS.has_any_suit(context.scoring_hand[i]) then
-          if suits["Hearts"] == 0 then
-            suits["Hearts"] = suits["Hearts"] + 1
-          elseif suits["Diamonds"] == 0 then
-            suits["Diamonds"] = suits["Diamonds"] + 1
-          elseif suits["Spades"] == 0 then
-            suits["Spades"] = suits["Spades"] + 1
-          elseif suits["Clubs"] == 0 then
-            suits["Clubs"] = suits["Clubs"] + 1
-          end
-        end
-      end
-      if suits["Hearts"] > 0 or suits["Diamonds"] > 0 or suits["Spades"] > 0 or suits["Clubs"] > 0 then
-        card.ability.extra.current_mult = card.ability.extra.current_mult +
-            ((suits["Hearts"] + suits["Diamonds"] + suits["Spades"] + suits["Clubs"]) * card.ability.extra.added_mult)
-        return {
-          message = localize('k_upgrade_ex'),
-          colour = G.C.FILTER,
-          card = card
-        }
-      end
+    if context.joker_main then
+      local suits_found = phanta_calculate_beadnecklace_suits(context.scoring_hand) -- Moved to a function for ease of JokerDisplay calculation.
+      return { mult = card.ability.extra.mult * suits_found }
     end
   end,
   pronouns = "it_its"
 }
+
+function phanta_calculate_beadnecklace_suits(hand)
+  local all_suits = {}
+  for _, v in pairs(SMODS.Suits) do
+    if not v.in_pool or v:in_pool() then all_suits[#all_suits + 1] = v end
+  end
+
+  local suits_found = {}
+  local wilds = 0
+  for _, v in ipairs(hand) do
+    if not SMODS.has_any_suit(v) then
+      local card_suit = v.ability.phanta_actual_suit or v.base.suit
+      local is_found = false
+      for _, suit in ipairs(suits_found) do
+        if suit == card_suit then
+          is_found = true
+          break
+        end
+      end
+      if not is_found then
+        suits_found[#suits_found + 1] = card_suit
+      end
+    else
+      wilds = wilds + 1
+    end
+  end
+  return math.min(#suits_found + wilds, #all_suits)
+end
 
 G.Phanta.centers["p5joker"] = {
   config = { extra = { mult_per_hand = 2, current_mult = 0 } },
@@ -2660,10 +2647,10 @@ G.Phanta.centers["p5joker"] = {
 }
 
 G.Phanta.centers["crescent"] = {
-  rarity = 1,
+  rarity = 2,
   atlas = 'Phanta',
   pos = { x = 3, y = 0 },
-  cost = 4,
+  cost = 6,
   blueprint_compat = true,
   eternal_compat = true,
   perishable_compat = true,
@@ -3245,9 +3232,11 @@ G.Phanta.centers["spaceinvader"] = {
     end
   end,
   set_ability = function(self, card, initial, delay_sprites)
-    local choices = { "crab", "squid", "octopus" }
-    local choice = pseudorandom_element(choices, pseudoseed("spaceinvaderchoice"))
-    card:flipbook_set_anim_extra_state(choice)
+    if self.discovered or card.params.bypass_discovery_center then
+      local choices = { "crab", "squid", "octopus" }
+      local choice = pseudorandom_element(choices, pseudoseed("spaceinvaderchoice"))
+      card:flipbook_set_anim_extra_state(choice)
+    end
   end,
   pronouns = "any_all"
 }
@@ -4206,10 +4195,10 @@ G.Phanta.centers["selfportrait"] = {
 
 G.Phanta.centers["caniossoul"] = {
   config = { extra = { lost_xmult = 0.5, current_xmult = 3 } },
-  rarity = 3,
+  rarity = 2,
   atlas = 'Phanta',
   pos = { x = 4, y = 6 },
-  cost = 8,
+  cost = 7,
   blueprint_compat = true,
   eternal_compat = false,
   perishable_compat = true,
@@ -4268,10 +4257,10 @@ G.Phanta.centers["caniossoul"] = {
 
 G.Phanta.centers["tribouletssoul"] = {
   config = { extra = { given_xmult = 3, remaining_hands = 2, added_hands = 2 } },
-  rarity = 3,
+  rarity = 2,
   atlas = 'Phanta',
   pos = { x = 5, y = 6 },
-  cost = 8,
+  cost = 7,
   blueprint_compat = true,
   eternal_compat = false,
   perishable_compat = true,
@@ -4349,10 +4338,10 @@ G.Phanta.centers["tribouletssoul"] = {
 
 G.Phanta.centers["yorickssoul"] = {
   config = { extra = { lost_xmult = 1, current_xmult = 3 } },
-  rarity = 3,
+  rarity = 2,
   atlas = 'Phanta',
   pos = { x = 0, y = 7 },
-  cost = 8,
+  cost = 7,
   blueprint_compat = true,
   eternal_compat = false,
   perishable_compat = true,
@@ -4405,10 +4394,10 @@ G.Phanta.centers["yorickssoul"] = {
 
 G.Phanta.centers["chicotssoul"] = {
   config = { extra = { lost_xmult = 0.5, current_xmult = 3 } },
-  rarity = 3,
+  rarity = 2,
   atlas = 'Phanta',
   pos = { x = 1, y = 7 },
-  cost = 8,
+  cost = 7,
   blueprint_compat = true,
   eternal_compat = false,
   perishable_compat = true,
@@ -4461,10 +4450,10 @@ G.Phanta.centers["chicotssoul"] = {
 
 G.Phanta.centers["perkeossoul"] = {
   config = { extra = { lost_xmult = 0.5, current_xmult = 3 } },
-  rarity = 3,
+  rarity = 2,
   atlas = 'Phanta',
   pos = { x = 2, y = 7 },
-  cost = 8,
+  cost = 7,
   blueprint_compat = true,
   eternal_compat = false,
   perishable_compat = true,
@@ -4520,7 +4509,7 @@ G.Phanta.centers["spectretile"] = {
   check_for_unlock = function(self, args)
     return args.type == "phanta_double_ghost"
   end,
-  config = { extra = { odds = 2 } },
+  config = { extra = { odds = 3 } },
   rarity = 2,
   atlas = 'Phanta',
   pos = { x = 10, y = 5 },
