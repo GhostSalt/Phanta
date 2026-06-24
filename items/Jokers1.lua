@@ -814,7 +814,7 @@ G.Phanta.centers["diana"] = {
 
     if not context.blueprint and context.individual and context.cardarea == G.play and SMODS.has_enhancement(context.other_card, "m_bonus") then
       card.ability.extra.current_mult = card.ability.extra.current_mult + card.ability.extra.added_mult
-      return { message = localize("k_upgrade_ex"), colour = G.C.FILTER, card = card }
+      return { message = localize("k_upgrade_ex"), colour = G.C.FILTER, message_card = card }
     end
   end,
   enhancement_gate = "m_bonus",
@@ -4527,7 +4527,7 @@ G.Phanta.centers["spectretile"] = {
     return { vars = { num, denom } }
   end,
   calculate = function(self, card, context)
-    if context.buying_card and context.card.config.center.set == "Joker" and not context.buying_self and SMODS.pseudorandom_probability(card, "spectretile", 1, card.ability.extra.odds) and count_consumables() < G.consumeables.config.card_limit then
+    if context.buying_card and not context.card == card and SMODS.pseudorandom_probability(card, "spectretile", 1, card.ability.extra.odds) and count_consumables() < G.consumeables.config.card_limit then
       G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
       play_sound('timpani')
       G.E_MANAGER:add_event(Event({

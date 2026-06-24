@@ -1650,9 +1650,9 @@ return {
             j_phanta_spectretile            = {
                 name = 'Spectre Tile',
                 text = {
-                    "When a Joker is",
-                    "{C:attention}purchased{}, {C:green}#1# in #2#{} chance",
-                    "to create a {C:spectral}Spectral{} card",
+                    "When {C:money}purchasing{} a card,",
+                    "{C:green}#1# in #2#{} chance to create",
+                    "a {C:spectral}Spectral{} card",
                     "{C:inactive}(Must have room){}"
                 },
                 unlock = {
