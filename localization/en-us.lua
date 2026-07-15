@@ -2225,9 +2225,10 @@ return {
             j_phanta_ontherun               = {
                 name = "On the Run",
                 text = {
-                    "Gains {C:mult}+#1#{} Mult for each",
-                    "{C:attention}consecutive{} hand played",
-                    "with {C:red}0{} discards remaining",
+                    "Gains {C:mult}+#1#{} Mult if hand is",
+                    "played with {C:red}no discards{} left,",
+                    "loses {C:mult}-#3#{} Mult if hand is",
+                    "played with {C:red}discards{} left",
                     "{C:inactive}(Currently {C:mult}+#2#{C:inactive} Mult){}"
                 }
             },
