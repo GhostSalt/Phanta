@@ -1490,8 +1490,8 @@ return {
             j_phanta_lotteryticket          = {
                 name = 'Lottery Ticket',
                 text = {
-                    "If {C:attention}first hand{} of",
-                    "round is a {C:attention}Straight{},",
+                    "If {C:attention}first hand{} of round",
+                    "contains a {C:attention}Straight{},",
                     "upgrades {C:attention}Straight Flush{}",
                     "by {C:attention}#1#{} level#2#"
                 }

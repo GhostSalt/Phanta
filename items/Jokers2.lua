@@ -583,7 +583,7 @@ G.Phanta.centers["ghostimage"] = {
   flipbook_draw_extra = function(self, card, layer)
     if self.discovered or card.params.bypass_discovery_center then
       card.flipbook_extra["extra"]:draw_shader("negative_shine", nil, card.ARGS.send_to_shader, nil, card.children
-      .center)
+        .center)
     end
   end,
   cost = 6,
@@ -771,8 +771,11 @@ G.Phanta.centers["bryce"] = {
   calculate = function(self, card, context)
     if context.before then
       ease_discard(card.ability.extra.discards)
-      return { message = localize { type = "variable", key = card.ability.extra.discards == 1 and "a_discard" or "a_discards", vars = { card.ability.extra.discards } }, colour =
-      G.C.RED }
+      return {
+        message = localize { type = "variable", key = card.ability.extra.discards == 1 and "a_discard" or "a_discards", vars = { card.ability.extra.discards } },
+        colour =
+            G.C.RED
+      }
     end
   end,
   pronouns = "he_him",
@@ -1241,8 +1244,12 @@ G.Phanta.centers["venndiagram"] = {
   eternal_compat = true,
   perishable_compat = false,
   calculate = function(self, card, context)
-    if context.joker_main and card.ability.extra.current_chips > 0 then return { chips = card.ability.extra
-      .current_chips } end
+    if context.joker_main and card.ability.extra.current_chips > 0 then
+      return {
+        chips = card.ability.extra
+            .current_chips
+      }
+    end
 
     if context.before and not context.blueprint then
       local wilds = 0
@@ -1626,12 +1633,16 @@ G.Phanta.centers["coldjoker"] = {
   eternal_compat = true,
   perishable_compat = false,
   calculate = function(self, card, context)
-    if context.joker_main and card.ability.extra.current_chips > 0 then return { chips = card.ability.extra
-      .current_chips } end
+    if context.joker_main and card.ability.extra.current_chips > 0 then
+      return {
+        chips = card.ability.extra
+            .current_chips
+      }
+    end
 
     if context.end_of_round and not context.individual and not context.repetition and not context.blueprint and count_consumables({ ignore_catan = true }) > 0 then
       card.ability.extra.current_chips = card.ability.extra.current_chips +
-      (card.ability.extra.added_chips * count_consumables({ ignore_catan = true }))
+          (card.ability.extra.added_chips * count_consumables({ ignore_catan = true }))
       return { message = localize("k_upgrade_ex"), colour = G.C.FILTER }
     end
   end,
@@ -2258,8 +2269,12 @@ G.Phanta.centers["thefall"] = {
   eternal_compat = true,
   perishable_compat = false,
   calculate = function(self, card, context)
-    if context.joker_main and card.ability.extra.current_xmult > 1 then return { xmult = card.ability.extra
-      .current_xmult } end
+    if context.joker_main and card.ability.extra.current_xmult > 1 then
+      return {
+        xmult = card.ability.extra
+            .current_xmult
+      }
+    end
 
     if context.after then
       card.ability.extra.prev_hand = G.GAME.last_hand_played
@@ -3070,8 +3085,16 @@ SMODS.Booster:take_ownership_by_kind('Standard', {
   create_card = function(self, card, i)
     local _edition = poll_edition('standard_edition' .. G.GAME.round_resets.ante, 2, true)
     local _seal = SMODS.poll_seal({ mod = 10, guaranteed = next(SMODS.find_card("j_phanta_stampedjoker")) and true })
-    return { set = (pseudorandom(pseudoseed('stdset' .. G.GAME.round_resets.ante)) > 0.6) and "Enhanced" or "Base", edition =
-    _edition, seal = _seal, area = G.pack_cards, skip_materialize = true, soulable = true, key_append = "sta" }
+    return {
+      set = (pseudorandom(pseudoseed('stdset' .. G.GAME.round_resets.ante)) > 0.6) and "Enhanced" or "Base",
+      edition =
+          _edition,
+      seal = _seal,
+      area = G.pack_cards,
+      skip_materialize = true,
+      soulable = true,
+      key_append = "sta"
+    }
   end,
   loc_vars = pack_loc_vars,
 })
@@ -3121,7 +3144,7 @@ G.Phanta.centers["doublingcube"] = {
 }
 
 G.Phanta.centers["robojoker"] = {
-  config = { extra = { odds = 8 } },
+  config = { extra = { odds = 4 } },
   rarity = 1,
   atlas = "PhantaMiscAnims6",
   pos = { x = 5, y = 4 },
@@ -3209,7 +3232,9 @@ G.Phanta.centers["robojoker"] = {
       G.E_MANAGER:add_event(Event({
         delay = 0.1,
         func = function()
-          assert(SMODS.modify_rank(_card, 1))
+          if _card:get_id() < 10 then
+            assert(SMODS.modify_rank(_card, 1))
+          end
           return true
         end
       }))
@@ -3853,8 +3878,11 @@ G.Phanta.centers["maskofthephantom"] = {
           return true
         end
       }))
-      return { message = localize { key = "m_phanta_ghostcard", type = "name_text", set = "Enhanced" }, message_card =
-      card }
+      return {
+        message = localize { key = "m_phanta_ghostcard", type = "name_text", set = "Enhanced" },
+        message_card =
+            card
+      }
     end
   end,
   pronouns = "it_its"

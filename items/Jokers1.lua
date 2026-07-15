@@ -163,11 +163,11 @@ G.Phanta.centers["dollarsign"] = {
   eternal_compat = true,
   perishable_compat = true,
   loc_vars = function(self, info_queue, card)
-    return { vars = { card.ability.extra.mult, card.ability.extra.mult * (G.GAME.interest_amount*math.min(math.floor(G.GAME.dollars/5), G.GAME.interest_cap/5)) } }
+    return { vars = { card.ability.extra.mult, card.ability.extra.mult * (G.GAME.interest_amount * math.min(math.floor(G.GAME.dollars / 5), G.GAME.interest_cap / 5)) } }
   end,
   calculate = function(self, card, context)
     if context.joker_main then
-      local interest = (G.GAME.interest_amount*math.min(math.floor(G.GAME.dollars/5), G.GAME.interest_cap/5))
+      local interest = (G.GAME.interest_amount * math.min(math.floor(G.GAME.dollars / 5), G.GAME.interest_cap / 5))
       if interest > 0 then return { mult = card.ability.extra.mult * interest } end
     end
   end,
@@ -3690,24 +3690,9 @@ G.Phanta.centers["lotteryticket"] = {
       juice_card_until(card, eval, true)
     end
 
-    if G.GAME.current_round.hands_played == 0 and context.before and context.scoring_name == "Straight" then
-      G.E_MANAGER:add_event(Event({
-        func = function()
-          card_eval_status_text(card, 'extra', nil, nil, nil,
-            { message = localize('k_upgrade_ex') })
-          update_hand_text({ sound = 'button', volume = 0.7, pitch = 0.8, delay = 0.3 },
-            {
-              handname = "Straight Flush",
-              chips = G.GAME.hands["Straight Flush"].chips,
-              mult = G.GAME.hands["Straight Flush"].mult,
-              level = G.GAME.hands["Straight Flush"].level
-            })
-          level_up_hand(card, "Straight Flush", nil, card.ability.extra.no_of_upgrades)
-          update_hand_text({ sound = 'button', volume = 0.7, pitch = 0.8, delay = 0.3 },
-            { mult = 0, chips = 0, handname = '', level = '' })
-          return true
-        end
-      }))
+    if G.GAME.current_round.hands_played == 0 and context.before and next(context.poker_hands["Straight"]) then
+      card_eval_status_text(card, 'extra', nil, nil, nil, { message = localize('k_upgrade_ex') })
+      SMODS.upgrade_poker_hands { hands = "Straight Flush", level_up = card.ability.extra.no_of_upgrades, from = card }
     end
   end,
   pronouns = "it_its"
