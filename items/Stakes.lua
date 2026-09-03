@@ -8,8 +8,6 @@ SMODS.Atlas {
 SMODS.Stake {
     key = "white",
     applied_stakes = {},
-    above_stake = 'gold',
-    prefix_config = { above_stake = { false } },
     atlas = "PhantaStakes",
     pos = { x = 0, y = 0 },
     sticker_atlas = "PhantaStickers",
