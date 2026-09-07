@@ -3376,44 +3376,28 @@ G.Phanta.centers["conspiracist"] = {
 }
 
 G.Phanta.centers["wavyjoker"] = {
-  config = { extra = { no_of_tarots = 2 } },
   rarity = 1,
   atlas = 'Phanta',
   pos = { x = 8, y = 8 },
   cost = 4,
-  loc_vars = function(self, info_queue, card)
-    return { vars = { card.ability.extra.no_of_tarots } }
-  end,
   blueprint_compat = true,
   eternal_compat = true,
   perishable_compat = true,
   calculate = function(self, card, context)
-    if context.skip_blind then
+    if (context.skip_blind or context.skipping_booster) and count_consumables() < G.consumeables.config.card_limit then
+      G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
       G.E_MANAGER:add_event(Event({
         func = function()
-          card_eval_status_text(card, 'extra', nil, nil, nil,
-            {
-              message = localize { type = 'variable', key = 'a_tarots', vars = { card.ability.extra.no_of_tarots } },
-              colour = G.C.Tarot
-            })
           play_sound("timpani")
-          for i = 1, card.ability.extra.no_of_tarots do
-            if count_consumables() < G.consumeables.config.card_limit then
-              G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
-              G.E_MANAGER:add_event(Event({
-                func = function()
-                  local new_card = create_card("Tarot", G.consumables, nil, nil, nil, nil)
-                  new_card:add_to_deck()
-                  G.consumeables:emplace(new_card)
-                  new_card:juice_up(0.3, 0.5)
-                  return true
-                end
-              }))
-            end
-          end
+          G.GAME.consumeable_buffer = 0
+          SMODS.add_card { set = "Tarot", key_append = "wavy_tarot" }
           return true
         end
       }))
+      return {
+        message = localize { type = "variable", key = "a_tarot", vars = { 1 } },
+        colour = G.C.Tarot
+      }
     end
   end,
   pronouns = "any_all"

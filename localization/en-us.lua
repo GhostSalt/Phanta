@@ -1441,8 +1441,8 @@ return {
                 name = 'Wavy Joker',
                 text = {
                     "When skipping any",
-                    "{C:attention}Blind{}, creates up to",
-                    "{C:attention}#1#{} {C:tarot}Tarot{} cards",
+                    "{C:attention}Booster Pack{} or {C:attention}Blind{},",
+                    "creates a {C:tarot}Tarot{} card",
                     "{C:inactive}(Must have room){}"
                 }
             },
