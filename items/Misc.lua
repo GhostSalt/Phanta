@@ -11,9 +11,9 @@ function G.UIDEF.use_and_sell_buttons(card)
         nodes = {
           {
             n = G.UIT.R,
-            config = { ref_table = card, r = 0.08, padding = 0.1, align = "bm", minw = 0.5 * card.T.w - 0.15, maxw = 0.9 * card.T.w - 0.15, minh = 0.3 * card.T.h, hover = true, shadow = true, colour = G.C.RED, one_press = true, button = 'phanta_select_deathnote_card', func = 'phanta_can_select_deathnote_card' },
+            config = { ref_table = card, r = 0.08, padding = 0.1, align = "bm", minw = 0.5 * card.T.w - 0.15, maxw = 0.9 * card.T.w - 0.15, minh = 0.3 * card.T.h, hover = true, shadow = true, colour = G.C.RED, one_press = true, button = "phanta_select_deathnote_card", func = "phanta_can_select_deathnote_card" },
             nodes = {
-              { n = G.UIT.T, config = { text = localize('b_select'), colour = G.C.UI.TEXT_LIGHT, scale = 0.45, shadow = true } }
+              { n = G.UIT.T, config = { text = localize("b_select"), colour = G.C.UI.TEXT_LIGHT, scale = 0.45, shadow = true } }
             }
           },
         }
@@ -27,9 +27,25 @@ function G.UIDEF.use_and_sell_buttons(card)
         nodes = {
           {
             n = G.UIT.R,
-            config = { ref_table = card.config.center.key, r = 0.08, padding = 0.1, align = "bm", minw = 0.5 * card.T.w - 0.15, maxw = 0.9 * card.T.w - 0.15, minh = 0.3 * card.T.h, hover = true, shadow = true, colour = G.C.RED, one_press = true, button = 'phanta_select_cataclysm_card', func = 'phanta_can_select_cataclysm_card' },
+            config = { ref_table = card.config.center.key, r = 0.08, padding = 0.1, align = "bm", minw = 0.5 * card.T.w - 0.15, maxw = 0.9 * card.T.w - 0.15, minh = 0.3 * card.T.h, hover = true, shadow = true, colour = G.C.RED, one_press = true, button = "phanta_select_cataclysm_card", func = "phanta_can_select_cataclysm_card" },
             nodes = {
-              { n = G.UIT.T, config = { text = localize('b_select'), colour = G.C.UI.TEXT_LIGHT, scale = 0.45, shadow = true } }
+              { n = G.UIT.T, config = { text = localize("b_select"), colour = G.C.UI.TEXT_LIGHT, scale = 0.45, shadow = true } }
+            }
+          },
+        }
+      }
+    end
+
+    if G.OVERLAY_PHANTA_PHILOCOLLECTION then
+      return {
+        n = G.UIT.ROOT,
+        config = { padding = 0, colour = G.C.CLEAR },
+        nodes = {
+          {
+            n = G.UIT.R,
+            config = { ref_table = card.config.center.key, r = 0.08, padding = 0.1, align = "bm", minw = 0.5 * card.T.w - 0.15, maxw = 0.9 * card.T.w - 0.15, minh = 0.3 * card.T.h, hover = true, shadow = true, colour = G.C.RED, one_press = true, button = "phanta_select_philo_card", func = "phanta_can_select_philo_card" },
+            nodes = {
+              { n = G.UIT.T, config = { text = localize("b_select"), colour = G.C.UI.TEXT_LIGHT, scale = 0.45, shadow = true } }
             }
           },
         }
@@ -51,7 +67,7 @@ function G.UIDEF.use_and_sell_buttons(card)
     nodes = {
       {
         n = G.UIT.C,
-        config = { ref_table = card, align = "cr", padding = 0.1, r = 0.08, minw = 1.25, hover = true, shadow = true, colour = G.C.UI.BACKGROUND_INACTIVE, one_press = true, button = 'sell_card', func = 'can_sell_card' },
+        config = { ref_table = card, align = "cr", padding = 0.1, r = 0.08, minw = 1.25, hover = true, shadow = true, colour = G.C.UI.BACKGROUND_INACTIVE, one_press = true, button = "sell_card", func = "can_sell_card" },
         nodes = {
           { n = G.UIT.B, config = { w = 0.1, h = 0.6 } },
           {
@@ -62,15 +78,15 @@ function G.UIDEF.use_and_sell_buttons(card)
                 n = G.UIT.R,
                 config = { align = "cm", maxw = 1.25 },
                 nodes = {
-                  { n = G.UIT.T, config = { text = localize('b_sell'), colour = G.C.UI.TEXT_LIGHT, scale = 0.4, shadow = true } }
+                  { n = G.UIT.T, config = { text = localize("b_sell"), colour = G.C.UI.TEXT_LIGHT, scale = 0.4, shadow = true } }
                 }
               },
               {
                 n = G.UIT.R,
                 config = { align = "cm" },
                 nodes = {
-                  { n = G.UIT.T, config = { text = localize('$'), colour = G.C.WHITE, scale = 0.4, shadow = true } },
-                  { n = G.UIT.T, config = { ref_table = card, ref_value = 'sell_cost_label', colour = G.C.WHITE, scale = 0.55, shadow = true } }
+                  { n = G.UIT.T, config = { text = localize("$"), colour = G.C.WHITE, scale = 0.4, shadow = true } },
+                  { n = G.UIT.T, config = { ref_table = card, ref_value = "sell_cost_label", colour = G.C.WHITE, scale = 0.55, shadow = true } }
                 }
               }
             }
@@ -87,10 +103,10 @@ function G.UIDEF.use_and_sell_buttons(card)
     nodes = {
       {
         n = G.UIT.C,
-        config = { ref_table = card, align = "cr", maxw = 1.25, padding = 0.1, r = 0.08, minw = 1.25, minh = (card.area and card.area.config.type == 'joker') and 0 or 1, hover = true, shadow = true, colour = G.C.RED, button = 'run_profile_menu', func = 'phanta_can_profile_more' },
+        config = { ref_table = card, align = "cr", maxw = 1.25, padding = 0.1, r = 0.08, minw = 1.25, minh = (card.area and card.area.config.type == "joker") and 0 or 1, hover = true, shadow = true, colour = G.C.RED, button = "run_profile_menu", func = "phanta_can_profile_more" },
         nodes = {
           { n = G.UIT.B, config = { w = 0.1, h = 0.6 } },
-          { n = G.UIT.T, config = { text = localize('b_phanta_more'), colour = G.C.UI.TEXT_LIGHT, scale = 0.55, shadow = true } }
+          { n = G.UIT.T, config = { text = localize("b_phanta_more"), colour = G.C.UI.TEXT_LIGHT, scale = 0.55, shadow = true } }
         }
       }
     }
@@ -103,10 +119,10 @@ function G.UIDEF.use_and_sell_buttons(card)
     nodes = {
       {
         n = G.UIT.C,
-        config = { ref_table = card, align = "cr", maxw = 1.25, padding = 0.1, r = 0.08, minw = 1.25, minh = (card.area and card.area.config.type == 'joker') and 0 or 1, hover = true, shadow = true, colour = G.C.RED, button = 'phanta_modping_use', func = 'phanta_can_modping_use' },
+        config = { ref_table = card, align = "cr", maxw = 1.25, padding = 0.1, r = 0.08, minw = 1.25, minh = (card.area and card.area.config.type == "joker") and 0 or 1, hover = true, shadow = true, colour = G.C.RED, button = "phanta_modping_use", func = "phanta_can_modping_use" },
         nodes = {
           { n = G.UIT.B, config = { w = 0.1, h = 0.6 } },
-          { n = G.UIT.T, config = { text = localize('b_use'), colour = G.C.UI.TEXT_LIGHT, scale = 0.55, shadow = true } }
+          { n = G.UIT.T, config = { text = localize("b_use"), colour = G.C.UI.TEXT_LIGHT, scale = 0.55, shadow = true } }
         }
       }
     }
@@ -119,10 +135,10 @@ function G.UIDEF.use_and_sell_buttons(card)
     nodes = {
       {
         n = G.UIT.C,
-        config = { ref_table = card, align = "cr", maxw = 1.25, padding = 0.1, r = 0.08, minw = 1.25, minh = (card.area and card.area.config.type == 'joker') and 0 or 1, hover = true, shadow = true, colour = G.C.RED, button = 'run_deathnote_menu', func = 'phanta_can_deathnote_more' },
+        config = { ref_table = card, align = "cr", maxw = 1.25, padding = 0.1, r = 0.08, minw = 1.25, minh = (card.area and card.area.config.type == "joker") and 0 or 1, hover = true, shadow = true, colour = G.C.RED, button = "run_deathnote_menu", func = "phanta_can_deathnote_more" },
         nodes = {
           { n = G.UIT.B, config = { w = 0.1, h = 0.6 } },
-          { n = G.UIT.T, config = { text = localize('b_phanta_more'), colour = G.C.UI.TEXT_LIGHT, scale = 0.55, shadow = true } }
+          { n = G.UIT.T, config = { text = localize("b_phanta_more"), colour = G.C.UI.TEXT_LIGHT, scale = 0.55, shadow = true } }
         }
       }
     }
@@ -135,10 +151,10 @@ function G.UIDEF.use_and_sell_buttons(card)
     nodes = {
       {
         n = G.UIT.C,
-        config = { ref_table = card, align = "cr", maxw = 1.25, padding = 0.1, r = 0.08, minw = 1.25, minh = (card.area and card.area.config.type == 'joker') and 0 or 1, hover = true, shadow = true, colour = G.C.RED, button = 'run_cataclysm_menu', func = 'phanta_can_cataclysm_more' },
+        config = { ref_table = card, align = "cr", maxw = 1.25, padding = 0.1, r = 0.08, minw = 1.25, minh = (card.area and card.area.config.type == "joker") and 0 or 1, hover = true, shadow = true, colour = G.C.RED, button = "run_cataclysm_menu", func = "phanta_can_cataclysm_more" },
         nodes = {
           { n = G.UIT.B, config = { w = 0.1, h = 0.6 } },
-          { n = G.UIT.T, config = { text = localize('b_phanta_more'), colour = G.C.UI.TEXT_LIGHT, scale = 0.55, shadow = true } }
+          { n = G.UIT.T, config = { text = localize("b_phanta_more"), colour = G.C.UI.TEXT_LIGHT, scale = 0.55, shadow = true } }
         }
       }
     }
@@ -151,16 +167,16 @@ function G.UIDEF.use_and_sell_buttons(card)
       nodes = {
         {
           n = G.UIT.C,
-          config = { padding = 0.15, align = 'cl' },
+          config = { padding = 0.15, align = "cl" },
           nodes = {
             {
               n = G.UIT.R,
-              config = { align = 'cl' },
+              config = { align = "cl" },
               nodes = { sell }
             },
             {
               n = G.UIT.R,
-              config = { align = 'cl' },
+              config = { align = "cl" },
               nodes = { profile_more }
             }
           }
@@ -176,16 +192,16 @@ function G.UIDEF.use_and_sell_buttons(card)
       nodes = {
         {
           n = G.UIT.C,
-          config = { padding = 0.15, align = 'cl' },
+          config = { padding = 0.15, align = "cl" },
           nodes = {
             {
               n = G.UIT.R,
-              config = { align = 'cl' },
+              config = { align = "cl" },
               nodes = { sell }
             },
             {
               n = G.UIT.R,
-              config = { align = 'cl' },
+              config = { align = "cl" },
               nodes = { modping_use }
             }
           }
@@ -201,16 +217,16 @@ function G.UIDEF.use_and_sell_buttons(card)
       nodes = {
         {
           n = G.UIT.C,
-          config = { padding = 0.15, align = 'cl' },
+          config = { padding = 0.15, align = "cl" },
           nodes = {
             {
               n = G.UIT.R,
-              config = { align = 'cl' },
+              config = { align = "cl" },
               nodes = { sell }
             },
             {
               n = G.UIT.R,
-              config = { align = 'cl' },
+              config = { align = "cl" },
               nodes = { deathnote_more }
             }
           }
@@ -226,16 +242,16 @@ function G.UIDEF.use_and_sell_buttons(card)
       nodes = {
         {
           n = G.UIT.C,
-          config = { padding = 0.15, align = 'cl' },
+          config = { padding = 0.15, align = "cl" },
           nodes = {
             {
               n = G.UIT.R,
-              config = { align = 'cl' },
+              config = { align = "cl" },
               nodes = { sell }
             },
             {
               n = G.UIT.R,
-              config = { align = 'cl' },
+              config = { align = "cl" },
               nodes = { cataclysm_more }
             }
           }
@@ -251,9 +267,9 @@ function G.UIDEF.use_and_sell_buttons(card)
       nodes = {
         {
           n = G.UIT.R,
-          config = { ref_table = card, r = 0.08, padding = 0.1, align = "bm", minw = 0.5 * card.T.w - 0.15, maxw = 0.9 * card.T.w - 0.15, minh = 0.3 * card.T.h, hover = true, shadow = true, colour = G.C.UI.BACKGROUND_INACTIVE, one_press = true, button = 'use_card', func = 'can_select_card' },
+          config = { ref_table = card, r = 0.08, padding = 0.1, align = "bm", minw = 0.5 * card.T.w - 0.15, maxw = 0.9 * card.T.w - 0.15, minh = 0.3 * card.T.h, hover = true, shadow = true, colour = G.C.UI.BACKGROUND_INACTIVE, one_press = true, button = "use_card", func = "can_select_card" },
           nodes = {
-            { n = G.UIT.T, config = { text = localize('b_select'), colour = G.C.UI.TEXT_LIGHT, scale = 0.45, shadow = true } }
+            { n = G.UIT.T, config = { text = localize("b_select"), colour = G.C.UI.TEXT_LIGHT, scale = 0.45, shadow = true } }
           }
         },
       }
@@ -266,11 +282,11 @@ function G.UIDEF.use_and_sell_buttons(card)
     nodes = {
       {
         n = G.UIT.C,
-        config = { padding = 0.15, align = 'cl' },
+        config = { padding = 0.15, align = "cl" },
         nodes = {
           {
             n = G.UIT.R,
-            config = { align = 'cl' },
+            config = { align = "cl" },
             nodes = { sell }
           }
         }
@@ -282,10 +298,10 @@ end
 local can_select_card_ref = G.FUNCS.can_select_card
 G.FUNCS.can_select_card = function(e)
   local card = e.config.ref_table
-  if card.ability.set == 'phanta_Zodiac' then
+  if card.ability.set == "phanta_Zodiac" then
     if count_consumables() < G.consumeables.config.card_limit then
       e.config.colour = G.C.GREEN
-      e.config.button = 'use_card'
+      e.config.button = "use_card"
     else
       e.config.colour = G.C.UI.BACKGROUND_INACTIVE
       e.config.button = nil
@@ -298,12 +314,12 @@ end
 local scu = set_consumeable_usage
 function set_consumeable_usage(card)
   local ret = scu(card)
-  if card.config.center.set == 'Spectral' then
+  if card.config.center.set == "Spectral" then
     G.E_MANAGER:add_event(Event({
-      trigger = 'immediate',
+      trigger = "immediate",
       func = function()
         G.E_MANAGER:add_event(Event({
-          trigger = 'immediate',
+          trigger = "immediate",
           func = function()
             G.GAME.last_spectral = card.config.center_key
             return true

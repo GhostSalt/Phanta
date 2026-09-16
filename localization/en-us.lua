@@ -3266,6 +3266,14 @@ return {
             }
         },
         Tarot = {
+            c_phanta_philosopher = {
+                name = "The Philosopher",
+                text = {
+                    "Choose {C:attention}#1#{} of {C:attention}#2#{} {C:tarot}Tarot{}",
+                    "cards to create",
+                    "{C:inactive}(Must have room){}"
+                }
+            },
             c_phanta_gatherer = {
                 name = "The Gatherer",
                 text = {
@@ -3301,6 +3309,12 @@ return {
                 text = {
                     "Add {C:dark_edition}Waxed{} to {C:attention}#1#{}",
                     "selected cards in hand",
+                }
+            },
+            c_phanta_angel = {
+                name = "The Angel",
+                text = {
+                    
                 }
             }
         },
@@ -4361,6 +4375,11 @@ return {
             phanta_cataclysm_no_planet = "No Planets selected",
             k_phanta_cataclysm_tab1 = "Planet 1",
             k_phanta_cataclysm_tab2 = "Planet 2",
+
+            phanta_philo_menu_tooltip = {
+                "Select one of the above",
+                "Tarot cards to create."
+            },
 
             k_phanta_shattered_ex = "Shattered!",
 
