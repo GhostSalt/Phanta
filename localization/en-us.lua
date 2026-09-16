@@ -3314,7 +3314,9 @@ return {
             c_phanta_angel = {
                 name = "The Angel",
                 text = {
-                    
+                    "Select up to {C:attention}#2#{} card,",
+                    "all other cards in hand",
+                    "increase rank by {C:attention}#2#{}"
                 }
             }
         },

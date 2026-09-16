@@ -310,16 +310,80 @@ SMODS.Tarot {
   key = "angel",
   pos = { x = 2, y = 1 },
   config = {
-    extra = {  },
+    extra = { highlight_limit = 1, rank_increase = 1 },
   },
   atlas = "PhantaTarots",
   loc_vars = function(self, info_queue, card)
-    return { vars = {  } }
+    return { vars = { card.ability.extra.highlight_limit, card.ability.extra.rank_increase } }
   end,
   can_use = function(self, card)
-    return true
+    return #G.hand.highlighted <= card.ability.extra.highlight_limit
   end,
   use = function(self, card, area, copier)
-    
+    local cards = {}
+    for _, v in ipairs(G.hand.cards) do
+      local fresh = true
+      for __, vv in ipairs(G.hand.highlighted) do
+        if vv == v then
+          fresh = false; break
+        end
+      end
+      if fresh then cards[#cards + 1] = v end
+    end
+    G.E_MANAGER:add_event(Event({
+      trigger = "after",
+      delay = 0.4,
+      func = function()
+        play_sound("tarot1")
+        card:juice_up(0.3, 0.5)
+        return true
+      end
+    }))
+    for i = 1, #cards do
+      local percent = 1.15 - (i - 0.999) / (#cards - 0.998) * 0.3
+      G.E_MANAGER:add_event(Event({
+        trigger = "after",
+        delay = 0.15,
+        func = function()
+          cards[i]:flip()
+          play_sound("card1", percent)
+          cards[i]:juice_up(0.3, 0.3)
+          return true
+        end
+      }))
+    end
+    delay(0.2)
+    for i = 1, #cards do
+      G.E_MANAGER:add_event(Event({
+        trigger = "after",
+        delay = 0.1,
+        func = function()
+          assert(SMODS.modify_rank(cards[i], card.ability.extra.rank_increase))
+          return true
+        end
+      }))
+    end
+    for i = 1, #cards do
+      local percent = 0.85 + (i - 0.999) / (#cards - 0.998) * 0.3
+      G.E_MANAGER:add_event(Event({
+        trigger = "after",
+        delay = 0.15,
+        func = function()
+          cards[i]:flip()
+          play_sound("tarot2", percent, 0.6)
+          cards[i]:juice_up(0.3, 0.3)
+          return true
+        end
+      }))
+    end
+    G.E_MANAGER:add_event(Event({
+      trigger = "after",
+      delay = 0.2,
+      func = function()
+        G.hand:unhighlight_all()
+        return true
+      end
+    }))
+    delay(0.5)
   end
 }
