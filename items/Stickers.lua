@@ -51,7 +51,7 @@ SMODS.Sticker {
     badge_colour = HEX "4f5da1",
     default_compat = true,
     needs_enable_flag = true,
-    rate = 0.7,
+    rate = 0.5,
     loc_vars = function(self, info_queue, card)
         info_queue[#info_queue + 1] = G.P_CENTERS.c_phanta_sludge
         return { vars = { 2, card.ability.phanta_bestbefore_timer } }
