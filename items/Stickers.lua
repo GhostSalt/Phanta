@@ -18,7 +18,7 @@ SMODS.Sticker {
         return { vars = { G.phanta_pollutive_cost } }
     end,
     should_apply = function(self, card, center, area, bypass_roll)
-        if card.ability and card.ability.consumeable and G.GAME.modifiers["enable_" .. self.key] then
+        if card.ability and card.ability.consumeable and card.ability.set ~= "phanta_StarterPack" and G.GAME.modifiers["enable_" .. self.key] then
             self.last_roll = pseudorandom((area == G.pack_cards and "packssj" or "shopssj") .. self.key .. G.GAME.round_resets.ante)
             return bypass_roll or self.last_roll > (1 - self.rate)
         end
@@ -57,7 +57,7 @@ SMODS.Sticker {
         return { vars = { 2, card.ability.phanta_bestbefore_timer } }
     end,
     should_apply = function(self, card, center, area, bypass_roll)
-        if card.ability and card.ability.consumeable and G.GAME.modifiers["enable_" .. self.key] then
+        if card.ability and card.ability.consumeable and card.ability.set ~= "phanta_StarterPack" and G.GAME.modifiers["enable_" .. self.key] then
             self.last_roll = pseudorandom((area == G.pack_cards and "packssj" or "shopssj") .. self.key .. G.GAME.round_resets.ante)
             return bypass_roll or self.last_roll > (1 - self.rate)
         end
