@@ -1816,7 +1816,7 @@ G.Phanta.centers["jeandescole"] = {
     return {}
   end,
   calculate = function(self, card, context)
-    if context.pre_discard and G.GAME.current_round.discards_left <= 1 then
+    if context.pre_discard and not context.hook and G.GAME.current_round.discards_left <= 1 then
       local candidates = {}
       for i = 1, #G.hand.cards do
         if not next(SMODS.get_enhancements(G.hand.cards[i])) then

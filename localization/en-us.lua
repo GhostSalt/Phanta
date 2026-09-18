@@ -2786,6 +2786,21 @@ return {
                     "{C:inactive}({C:attention}#2#{C:inactive} remaining)",
                 },
             },
+            phanta_pollutive = {
+                name = "Pollutive",
+                text = {
+                    "Costs {C:money}$#1#{}",
+                    "to sell",
+                },
+            },
+            phanta_bestbefore = {
+                name = "Best Before",
+                text = {
+                    "After {C:attention}#1#{} rounds,",
+                    "becomes {C:attention}Sludge{}",
+                    "{C:inactive}({C:attention}#2#{C:inactive} remaining){}"
+                },
+            },
 
             phanta_white_sticker = {
                 name = "White Sticker (Phanta)",
@@ -3311,12 +3326,29 @@ return {
                     "selected cards in hand",
                 }
             },
+            c_phanta_exorcist = {
+                name = "The Exorcist",
+                text = {
+                    "Select {C:attention}#1#{} card,",
+                    "destroy {C:attention}#2#{} other",
+                    "cards in hand"
+                }
+            },
             c_phanta_angel = {
                 name = "The Angel",
                 text = {
                     "Select up to {C:attention}#2#{} card,",
                     "all other cards in hand",
                     "increase rank by {C:attention}#2#{}"
+                }
+            },
+            c_phanta_sludge = {
+                name = "Sludge",
+                text = {
+                    "{C:red}Destroy{} a random card",
+                    "in hand, add a random",
+                    "{C:red}debuffed{} card to hand",
+                    "Cannot be sold"
                 }
             }
         },
@@ -3443,9 +3475,8 @@ return {
             stake_phanta_black = {
                 name = "Black Stake (Phanta)",
                 text = {
-                    "Consumables can be {C:attention}Eternal{}",
-                    "{C:inactive,s:0.8}(Can't be sold or{}",
-                    "{C:inactive,s:0.8}destroyed, may be used){}",
+                    "Consumables can be {C:attention}Pollutive{}",
+                    "{C:inactive,s:0.8}(Costs $5 to sell){}",
                     "{C:inactive,s:0.8}(Excludes Starter Packs){}",
                     "{s:0.8}Applies all previous Stakes{}"
                 }
@@ -3453,8 +3484,8 @@ return {
             stake_phanta_blue = {
                 name = "Blue Stake (Phanta)",
                 text = {
-                    "Consumables can be {C:attention}Perishable{}",
-                    "{C:inactive,s:0.8}(Debuffed after 2 rounds){}",
+                    "Consumables can be {C:attention}Best Before{}",
+                    "{C:inactive,s:0.8}(Becomes Sludge after 2 rounds){}",
                     "{C:inactive,s:0.8}(Excludes Starter Packs){}",
                     "{s:0.8}Applies all previous Stakes{}"
                 }
@@ -4435,7 +4466,7 @@ return {
 
 
             phanta_credit_1 = "Mod by GhostSalt",
-            phanta_credit_2 = "Ability brainstorming: BakersDozenBagels",
+            phanta_credit_2 = "Playtesting and feedback: El Papu",
             phanta_credit_3 = "and help from the Balatro Discord server",
 
 
@@ -4460,7 +4491,11 @@ return {
             phanta_ghostcard = "Ghost Card",
             phanta_ghostseal_seal = "Ghost Seal",
             phanta_waxed = "Waxed",
-            phanta_drilled = "Drilled"
+            phanta_drilled = "Drilled",
+
+            phanta_sleepy = "Sleepy",
+            phanta_pollutive = "Pollutive",
+            phanta_bestbefore = "Best Before",
         },
         poker_hands = {
             ["phanta_junk"] = "Junk",

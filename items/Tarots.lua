@@ -57,7 +57,15 @@ SMODS.Tarot {
               func = function()
                 if G.consumeables.config.card_limit > #G.consumeables.cards then
                   play_sound("timpani")
-                  SMODS.add_card({ key = G.GAME.phanta_philo_cards[i] })
+                  local _card = SMODS.add_card({ key = G.GAME.phanta_philo_cards[i].key, edition = G.GAME.phanta_philo_cards[i].edition })
+                  for k, v in pairs(SMODS.Stickers) do
+                    if _card.ability[k] or _card[k] then
+                      _card:remove_sticker(k)
+                    end
+                  end
+                  for _, v in ipairs(G.GAME.phanta_philo_cards[i].stickers) do
+                    _card:add_sticker(v, true)
+                  end
                   card:juice_up(0.3, 0.5)
                 end
                 return true
@@ -307,6 +315,71 @@ SMODS.Tarot {
 }
 
 SMODS.Tarot {
+  key = "exorcist",
+  pos = { x = 3, y = 1 },
+  config = {
+    extra = { highlight = 1, destroy = 3 },
+  },
+  atlas = "PhantaTarots",
+  loc_vars = function(self, info_queue, card)
+    return { vars = { card.ability.extra.highlight, card.ability.extra.destroy } }
+  end,
+  can_use = function(self, card)
+    return #G.hand.cards > 0 and #G.hand.highlighted == card.ability.extra.highlight
+  end,
+  use = function(self, card, area, copier)
+    local cards = {}
+    for _, v in ipairs(G.hand.cards) do
+      local fresh = true
+      for __, vv in ipairs(G.hand.highlighted) do
+        if vv == v then
+          fresh = false; break
+        end
+      end
+      if fresh then cards[#cards + 1] = v end
+    end
+
+    local destroyed_cards = {}
+    local temp_hand = {}
+
+    for _, playing_card in ipairs(cards) do temp_hand[#temp_hand + 1] = playing_card end
+    table.sort(temp_hand,
+      function(a, b)
+        return not a.playing_card or not b.playing_card or a.playing_card < b.playing_card
+      end
+    )
+    pseudoshuffle(temp_hand, "exorcist_cards")
+    for i = 1, card.ability.extra.destroy do destroyed_cards[#destroyed_cards + 1] = temp_hand[i] end
+
+    G.E_MANAGER:add_event(Event({
+      trigger = "after",
+      delay = 0.4,
+      func = function()
+        play_sound("tarot1")
+        card:juice_up(0.3, 0.5)
+        return true
+      end
+    }))
+    G.E_MANAGER:add_event(Event({
+      trigger = "after",
+      delay = 0.2,
+      func = function()
+        SMODS.destroy_cards(destroyed_cards)
+        return true
+      end
+    }))
+    G.E_MANAGER:add_event(Event({
+      trigger = "after",
+      delay = 0.3,
+      func = function()
+        G.hand:unhighlight_all()
+        return true
+      end
+    }))
+  end
+}
+
+SMODS.Tarot {
   key = "angel",
   pos = { x = 2, y = 1 },
   config = {
@@ -317,7 +390,7 @@ SMODS.Tarot {
     return { vars = { card.ability.extra.highlight_limit, card.ability.extra.rank_increase } }
   end,
   can_use = function(self, card)
-    return #G.hand.highlighted <= card.ability.extra.highlight_limit
+    return #G.hand.cards > 0 and #G.hand.highlighted <= card.ability.extra.highlight_limit
   end,
   use = function(self, card, area, copier)
     local cards = {}
@@ -355,8 +428,6 @@ SMODS.Tarot {
     delay(0.2)
     for i = 1, #cards do
       G.E_MANAGER:add_event(Event({
-        trigger = "after",
-        delay = 0.1,
         func = function()
           assert(SMODS.modify_rank(cards[i], card.ability.extra.rank_increase))
           return true
@@ -385,5 +456,79 @@ SMODS.Tarot {
       end
     }))
     delay(0.5)
+  end
+}
+
+SMODS.Tarot {
+  key = "sludge",
+  pos = { x = 0, y = 2 },
+  config = {
+    extra = { cards = 1 },
+  },
+  atlas = "PhantaTarots",
+  loc_vars = function(self, info_queue, card)
+    info_queue[#info_queue + 1] = { key = "debuffed_default", set = "Other", vars = {} }
+    return { vars = { card.ability.extra.cards } }
+  end,
+  use = function(self, card, area, copier)
+    local destroyed_cards = {}
+    local temp_hand = {}
+
+    for _, playing_card in ipairs(G.hand.cards) do temp_hand[#temp_hand + 1] = playing_card end
+    table.sort(temp_hand,
+      function(a, b)
+        return not a.playing_card or not b.playing_card or a.playing_card < b.playing_card
+      end
+    )
+    pseudoshuffle(temp_hand, "sludge_cards")
+    for i = 1, card.ability.extra.cards do destroyed_cards[#destroyed_cards + 1] = temp_hand[i] end
+
+    G.E_MANAGER:add_event(Event({
+      trigger = "after",
+      delay = 0.4,
+      func = function()
+        play_sound("tarot1")
+        card:juice_up(0.3, 0.5)
+        return true
+      end
+    }))
+    G.E_MANAGER:add_event(Event({
+      trigger = "after",
+      delay = 0.5,
+      func = function()
+        SMODS.destroy_cards(destroyed_cards)
+        return true
+      end
+    }))
+    G.E_MANAGER:add_event(Event({
+      trigger = "after",
+      delay = 0.2,
+      func = function()
+        play_sound("timpani")
+        card:juice_up(0.3, 0.5)
+        for i = 1, card.ability.extra.cards do
+          local _card = SMODS.add_card { set = "Base", key_append = "sludge_debuffed" }
+          G.GAME.blind:debuff_card(_card)
+          SMODS.debuff_card(_card, true, "phanta_sludge")
+          G.hand:sort()
+          SMODS.calculate_context({ playing_card_added = true, cards = { _card } })
+        end
+        return true
+      end
+    }))
+    G.E_MANAGER:add_event(Event({
+      trigger = "after",
+      delay = 0.3,
+      func = function()
+        G.hand:unhighlight_all()
+        return true
+      end
+    }))
+  end,
+  can_use = function(self, card)
+    return #G.hand.cards > 0
+  end,
+  in_pool = function()
+    return false
   end
 }

@@ -46,44 +46,6 @@ SMODS.Stake {
     colour = G.C.GREEN
 }
 
-local main_menu_ref = Game.main_menu
-function Game:main_menu(change_context)
-    G.shared_sticker_consumable_eternal = Sprite(0, 0, G.CARD_W, G.CARD_H, G.ASSET_ATLAS["phanta_PhantaStickers"],
-        { x = 0, y = 0 })
-    G.shared_sticker_consumable_perishable = Sprite(0, 0, G.CARD_W, G.CARD_H, G.ASSET_ATLAS["phanta_PhantaStickers"],
-        { x = 0, y = 2 })
-    G.shared_sticker_consumable_rental = Sprite(0, 0, G.CARD_W, G.CARD_H, G.ASSET_ATLAS["phanta_PhantaStickers"],
-        { x = 1, y = 2 })
-
-    main_menu_ref(self, change_context)
-end
-
-local smods_sticker_drawstep_ref = SMODS.DrawSteps.stickers.func
-SMODS.DrawSteps.stickers.func = function(self, layer)
-    if self.ability.consumeable and self.config.center.set ~= "phanta_Zodiac" then
-        if self.ability.eternal then
-            G.shared_sticker_consumable_eternal.role.draw_major = self
-            G.shared_sticker_consumable_eternal:draw_shader('dissolve', nil, nil, nil, self.children.center)
-            G.shared_sticker_consumable_eternal:draw_shader('voucher', nil, self.ARGS.send_to_shader, nil,
-                self.children.center)
-            return
-        elseif self.ability.perishable then
-            G.shared_sticker_consumable_perishable.role.draw_major = self
-            G.shared_sticker_consumable_perishable:draw_shader('dissolve', nil, nil, nil, self.children.center)
-            G.shared_sticker_consumable_perishable:draw_shader('voucher', nil, self.ARGS.send_to_shader, nil,
-                self.children.center)
-            return
-        elseif self.ability.rental then
-            G.shared_sticker_consumable_rental.role.draw_major = self
-            G.shared_sticker_consumable_rental:draw_shader('dissolve', nil, nil, nil, self.children.center)
-            G.shared_sticker_consumable_rental:draw_shader('voucher', nil, self.ARGS.send_to_shader, nil,
-                self.children.center)
-            return
-        end
-    end
-    smods_sticker_drawstep_ref(self, layer)
-end
-
 SMODS.Stake {
     key = "black",
     applied_stakes = { "green" },
@@ -93,7 +55,7 @@ SMODS.Stake {
     sticker_atlas = "PhantaStickers",
     sticker_pos = { x = 0, y = 1 },
     modifiers = function()
-        G.GAME.modifiers.enable_eternal_consumables = true
+        G.GAME.modifiers.enable_phanta_pollutive = true
     end,
     colour = G.C.BLACK
 }
@@ -107,7 +69,7 @@ SMODS.Stake {
     sticker_atlas = "PhantaStickers",
     sticker_pos = { x = 4, y = 0 },
     modifiers = function()
-        G.GAME.modifiers.enable_perishable_consumables = true
+        G.GAME.modifiers.enable_phanta_bestbefore = true
     end,
     colour = G.C.BLUE
 }
@@ -155,22 +117,6 @@ SMODS.Stake {
     shiny = true,
 }
 
-local create_card_ref = create_card
-function create_card(_type, area, legendary, _rarity, skip_materialize, soulable, forced_key, key_append)
-    local card = create_card_ref(_type, area, legendary, _rarity, skip_materialize, soulable, forced_key, key_append)
-    local eternal_perishable_poll = pseudorandom((area == G.pack_cards and 'packetper' or 'etperpoll') ..
-        G.GAME.round_resets.ante)
-    if card.ability and card.ability.consumeable and card.config.center.set ~= "phanta_StarterPack" and G.GAME.modifiers.enable_eternal_consumables and eternal_perishable_poll > 0.65 then
-        card:set_eternal(true)
-    elseif card.ability and card.ability.consumeable and card.config.center.set ~= "phanta_StarterPack" and G.GAME.modifiers.enable_perishable_consumables and eternal_perishable_poll > 0.3 then
-        card:set_perishable(true)
-    end
-    if card.ability and card.ability.consumeable and card.config.center.set ~= "phanta_StarterPack" and G.GAME.modifiers.enable_rental_consumables and pseudorandom((area == G.pack_cards and 'packssjr' or 'ssjr') .. G.GAME.round_resets.ante) > 0.7 then
-        card:set_rental(true)
-    end
-    return card
-end
-
 local smods_context_ref = SMODS.calculate_context
 function SMODS.calculate_context(context, return_table, no_resolve)
     local ret = smods_context_ref(context, return_table, no_resolve)
@@ -180,12 +126,4 @@ function SMODS.calculate_context(context, return_table, no_resolve)
         (return_table or {})["phanta_black_stake"] = ret["phanta_black_stake"]
     end
     return return_table or ret
-end
-
-local set_perishable_ref = Card.set_perishable
-function Card:set_perishable(_perishable) 
-    set_perishable_ref(self, _perishable)
-    if G.GAME.modifiers.enable_perishable_consumables and self.ability.perishable and self.ability.consumeable then 
-        self.ability.perish_tally = 2
-    end
 end

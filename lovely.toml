@@ -229,24 +229,6 @@ match_indent = true
 
 [[patches]]
 [patches.pattern]
-target = 'card.lua'
-pattern = '''if self.config.center.eternal_compat and not self.ability.perishable then'''
-position = 'at'
-payload = '''if (self.config.center.eternal_compat or (self.ability and self.ability.consumeable and G.GAME.modifiers.enable_eternal_consumables)) and not self.ability.perishable then'''
-match_indent = true
-
-[[patches]]
-[patches.pattern]
-target = 'card.lua'
-pattern = '''if self.config.center.perishable_compat and not self.ability.eternal then'''
-position = 'at'
-payload = '''if (self.config.center.perishable_compat or (self.ability and self.ability.consumeable and G.GAME.modifiers.enable_perishable_consumables)) and not self.ability.eternal then'''
-match_indent = true
-
-
-
-[[patches]]
-[patches.pattern]
 target = 'functions/button_callbacks.lua'
 pattern = '''for i = 1, G.GAME.shop.joker_max - #G.shop_jokers.cards do'''
 position = 'at'
