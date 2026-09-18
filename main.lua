@@ -570,27 +570,6 @@ function Game:start_run(args)
 end
 
 function SMODS.current_mod:calculate(context)
-  if G.GAME.last_blind and G.GAME.last_blind.boss then
-    G.GAME.PhantaStarterPacks = G.GAME.PhantaStarterPacks or {}
-    G.GAME.PhantaStarterPacks.purchased_this_ante = false
-    G.GAME.PhantaStarterPacks.ante_pack = nil
-  end
-
-  if context and context.starting_shop and Phanta.config["starter_pack_enabled"] and not (G.GAME.PhantaStarterPacks and G.GAME.PhantaStarterPacks.purchased_this_ante) then
-    G.GAME.PhantaStarterPacks = G.GAME.PhantaStarterPacks or {}
-
-    G.phanta_finding_starterpack = true
-    local key = SMODS.poll_object { attributes = { "phanta_starterpack" }, append = "stopstarter" .. G.GAME.round_resets.ante, rarity = false }
-    G.phanta_finding_starterpack = nil
-    if G.GAME.PhantaStarterPacks.ante_pack then
-      key = G.GAME.PhantaStarterPacks.ante_pack
-    end
-    G.GAME.PhantaStarterPacks.ante_pack = key
-
-    local card = SMODS.add_card { key = key, area = G.shop_booster, bypass_discovery_center = true, bypass_discovery_ui = true }
-    create_shop_card_ui(card)
-  end
-
   if context.end_of_round and not context.repetition and not context.individual then
     if #G.deck.cards == 4 then
       check_for_unlock({ type = 'phanta_four_cards_remaining' })
