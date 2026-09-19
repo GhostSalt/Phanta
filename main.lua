@@ -572,25 +572,25 @@ end
 function SMODS.current_mod:calculate(context)
   if context.end_of_round and not context.repetition and not context.individual then
     if #G.deck.cards == 4 then
-      check_for_unlock({ type = 'phanta_four_cards_remaining' })
+      check_for_unlock({ type = "phanta_four_cards_remaining" })
     end
     for i, v in ipairs(G.jokers.cards) do
       if v.ability.phanta_sleepy then
-        v.ability.sleepy_tally = v.ability.sleepy_tally - 1
-        if v.ability.sleepy_tally > 0 then
-          card_eval_status_text(v, 'extra', nil, nil, nil,
+        v.ability.phanta_sleepy_tally = (v.ability.phanta_sleepy_tally or G.GAME.phanta_initial_ranks) - 1
+        if v.ability.phanta_sleepy_tally > 0 then
+          card_eval_status_text(v, "extra", nil, nil, nil,
             {
-              message = localize { type = 'variable', key = 'a_remaining', vars = { v.ability.sleepy_tally } },
+              message = localize { type = "variable", key = "a_remaining", vars = { v.ability.phanta_sleepy_tally } },
               colour = G.C.FILTER,
               message_card = v
             })
         else
-          v.ability.sleepy_tally = 0
-          v:set_debuff(false)
-          v.ability.phanta_sleepy = nil
-          card_eval_status_text(v, 'extra', nil, nil, nil,
+          v.ability.phanta_sleepy_tally = nil
+          SMODS.debuff_card(v, true, "phanta_sleepy")
+          v:remove_sticker("phanta_sleepy")
+          card_eval_status_text(v, "extra", nil, nil, nil,
             {
-              message = localize('phanta_sleepy_awake'),
+              message = localize("phanta_sleepy_awake"),
               colour = G.C.FILTER,
               message_card = v
             })
@@ -605,8 +605,8 @@ function SMODS.current_mod:calculate(context)
 
   if context.remove_playing_cards then
     for _, v in ipairs(context.removed) do
-      if SMODS.has_enhancement(v, "m_phanta_ghostcard") and v.seal == 'phanta_ghostseal' then
-        check_for_unlock({ type = 'phanta_remove_double_ghost' })
+      if SMODS.has_enhancement(v, "m_phanta_ghostcard") and v.seal == "phanta_ghostseal" then
+        check_for_unlock({ type = "phanta_remove_double_ghost" })
       end
     end
   end
@@ -617,7 +617,7 @@ function SMODS.current_mod:calculate(context)
       if text == "phanta_junk" then
         for _, v in ipairs(context.scoring_hand) do
           if SMODS.has_enhancement(v, "m_steel") then
-            check_for_unlock({ type = 'phanta_junk_scoring_steel' })
+            check_for_unlock({ type = "phanta_junk_scoring_steel" })
           end
         end
       end
@@ -628,7 +628,7 @@ function SMODS.current_mod:calculate(context)
           counted_marbles = counted_marbles + 1
         end
       end
-      if counted_marbles >= 5 then check_for_unlock({ type = 'phanta_five_marbles' }) end
+      if counted_marbles >= 5 then check_for_unlock({ type = "phanta_five_marbles" }) end
 
       local played_blue = false
       local held_blue = false
@@ -643,7 +643,7 @@ function SMODS.current_mod:calculate(context)
         end
       end
 
-      if played_blue and held_blue then check_for_unlock({ type = 'phanta_played_and_held_blue' }) end
+      if played_blue and held_blue then check_for_unlock({ type = "phanta_played_and_held_blue" }) end
     end
 
     if not G.GAME.phanta_number_of_unscored then G.GAME.phanta_number_of_unscored = 0 end
@@ -651,7 +651,7 @@ function SMODS.current_mod:calculate(context)
   end
 
   if context.reroll_shop and G.GAME.current_shop_rerolls >= 10 then
-    check_for_unlock({ type = 'phanta_ten_rerolls' })
+    check_for_unlock({ type = "phanta_ten_rerolls" })
   end
 end
 

@@ -131,13 +131,10 @@ SMODS.Sticker {
     rate = 0.25,
     needs_enable_flag = true,
     loc_vars = function(self, info_queue, card)
-        return { vars = { card.ability.sleepy_rounds or 2, card.ability.sleepy_tally or G.GAME.phanta_sleepy_rounds } }
+        return { vars = { G.GAME.phanta_sleepy_rounds, card.ability.sleepy_tally or G.GAME.phanta_sleepy_rounds } }
     end,
     apply = function(self, card, val)
-        card.ability[self.key] = val
-        if card.ability[self.key] == val then
-            card.ability.sleepy_tally = G.GAME.phanta_sleepy_rounds
-            card.ability.sleepy_rounds = G.GAME.phanta_sleepy_rounds
-        end
+        SMODS.Sticker.apply(self, card, val)
+        SMODS.debuff_card(card, true, "phanta_sleepy")
     end
 }
