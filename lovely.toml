@@ -352,3 +352,48 @@ pattern = '''G.GAME.current_round.used_packs[i] = get_pack('shop_pack').key'''
 position = 'after'
 payload = '''end'''
 match_indent = true
+
+
+
+[[patches]]
+[patches.pattern]
+target = "card.lua"
+pattern = '''if not self.added_to_deck then'''
+position = "at"
+payload = '''
+if not self.added_to_deck or self.ability.phanta_pending_add then
+    if not self.added_to_deck then'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = "card.lua"
+pattern = '''local obj = self.config.center
+        if obj and obj.add_to_deck and type(obj.add_to_deck) == 'function' then'''
+position = "before"
+payload = '''end'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = "card.lua"
+pattern = '''if obj and obj.add_to_deck and type(obj.add_to_deck) == 'function' then
+            obj:add_to_deck(self, from_debuff)'''
+position = "before"
+payload = '''if not self.ability.phanta_sleepy or self.ability.phanta_pending_add then
+    self.ability.phanta_pending_add = nil'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = "card.lua"
+pattern = '''if self.ability.name == 'Stuntman' then
+            G.hand:change_size(-self.ability.extra.h_size)
+        end'''
+position = "after"
+payload = '''
+else
+    SMODS.debuff_card(self, true, "phanta_sleepy")
+    self.ability.phanta_pending_add = true
+end'''
+match_indent = true

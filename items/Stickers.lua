@@ -124,6 +124,7 @@ SMODS.Sticker {
 
 SMODS.Sticker {
     key = "sleepy",
+    config = { extra = { rounds = 2 } },
     atlas = "PhantaStickers",
     pos = { x = 2, y = 2 },
     badge_colour = HEX "c75985",
@@ -131,10 +132,10 @@ SMODS.Sticker {
     rate = 0.25,
     needs_enable_flag = true,
     loc_vars = function(self, info_queue, card)
-        return { vars = { G.GAME.phanta_sleepy_rounds, card.ability.sleepy_tally or G.GAME.phanta_sleepy_rounds } }
+        return { vars = { self.config.extra.rounds, card.ability.phanta_sleepy_tally or self.config.extra.rounds } }
     end,
     apply = function(self, card, val)
         SMODS.Sticker.apply(self, card, val)
-        SMODS.debuff_card(card, true, "phanta_sleepy")
-    end
+        card.ability.phanta_sleepy_tally = self.config.extra.rounds
+    end,
 }

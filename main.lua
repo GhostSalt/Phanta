@@ -548,7 +548,6 @@ local game_start_run_ref = Game.start_run
 
 function Game:start_run(args)
   game_start_run_ref(self, args)
-  G.GAME.phanta_sleepy_rounds = 2
   phanta_assign_deck_joker()
   G.E_MANAGER:add_event(Event({
     func = function()
@@ -575,8 +574,8 @@ function SMODS.current_mod:calculate(context)
       check_for_unlock({ type = "phanta_four_cards_remaining" })
     end
     for i, v in ipairs(G.jokers.cards) do
-      if v.ability.phanta_sleepy then
-        v.ability.phanta_sleepy_tally = (v.ability.phanta_sleepy_tally or G.GAME.phanta_initial_ranks) - 1
+      if v.ability.phanta_sleepy or v.ability.phanta_pending_add then
+        v.ability.phanta_sleepy_tally = v.ability.phanta_sleepy_tally - 1
         if v.ability.phanta_sleepy_tally > 0 then
           card_eval_status_text(v, "extra", nil, nil, nil,
             {
@@ -586,8 +585,9 @@ function SMODS.current_mod:calculate(context)
             })
         else
           v.ability.phanta_sleepy_tally = nil
-          SMODS.debuff_card(v, true, "phanta_sleepy")
+          SMODS.debuff_card(v, false, "phanta_sleepy")
           v:remove_sticker("phanta_sleepy")
+          v:add_to_deck()
           card_eval_status_text(v, "extra", nil, nil, nil,
             {
               message = localize("phanta_sleepy_awake"),
