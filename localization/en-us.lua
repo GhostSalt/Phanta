@@ -1450,8 +1450,9 @@ return {
                 name = 'Sliding Puzzle',
                 text = {
                     "When {C:attention}Blind{} is selected,",
-                    "adds a random {C:attention}playing{}",
-                    "{C:attention}card{} to your hand"
+                    "choose up to {C:attention}#1#{} of {C:attention}#2#{}",
+                    "random {C:attention}playing cards{} to",
+                    "add to your hand"
                 }
             },
             j_phanta_sudoku                 = {
@@ -4412,6 +4413,11 @@ return {
             phanta_philo_menu_tooltip = {
                 "Select one of the above",
                 "Tarot cards to create."
+            },
+
+            phanta_slidingpuzzle_menu_tooltip = {
+                "Select one of the above",
+                "playing cards to create."
             },
 
             k_phanta_shattered_ex = "Shattered!",

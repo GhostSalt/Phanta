@@ -397,3 +397,13 @@ else
     self.ability.phanta_pending_add = true
 end'''
 match_indent = true
+
+
+
+[[patches]]
+[patches.pattern]
+target = "card.lua"
+pattern = '''if self.ability.consumeable or self.ability.set == 'Joker' or (self.area and self.area == G.pack_cards) then'''
+position = "at"
+payload = '''if self.ability.consumeable or self.ability.set == 'Joker' or (self.area and self.area == G.pack_cards) or (G.OVERLAY_PHANTA_SLIDINGPUZZLECOLLECTION and (self.ability.set == "Default" or self.ability.set == "Enhanced")) then'''
+match_indent = true

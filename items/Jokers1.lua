@@ -259,7 +259,10 @@ G.Phanta.centers["shootingstar"] = {
       for k, v in ipairs(context.removed) do
         if v:is_suit("Diamonds") then
           reward = reward + card.ability.extra.money
-          if not context.blueprint then card.ability.extra.money = card.ability.extra.money + card.ability.extra.added_money end
+          if not context.blueprint then
+            card.ability.extra.money = card.ability.extra.money +
+                card.ability.extra.added_money
+          end
         end
       end
       if reward > 0 then return { dollars = reward } end
@@ -3404,6 +3407,7 @@ G.Phanta.centers["wavyjoker"] = {
 }
 
 G.Phanta.centers["slidingpuzzle"] = {
+  config = { extra = { cards = 1, choices = 3 } },
   rarity = 2,
   atlas = 'PhantaMiscAnims4',
   pos = { x = 10, y = 6 },
@@ -3436,25 +3440,141 @@ G.Phanta.centers["slidingpuzzle"] = {
     { x = 11,                            y = 6,                            t = 0.05 }
   },
   cost = 5,
+  loc_vars = function(self, info_queue, card)
+    return { vars = { card.ability.extra.cards, card.ability.extra.choices } }
+  end,
   blueprint_compat = true,
   eternal_compat = true,
   perishable_compat = true,
   calculate = function(self, card, context)
-    if context.first_hand_drawn then
+    if context.setting_blind and not context.blueprint then
       G.E_MANAGER:add_event(Event({
-        func = function() -- Did I forget about enhancements, here?
-          SMODS.add_card { set = "Playing Card", seal = SMODS.poll_seal { key = 'slidingpuzzle_seal' .. G.GAME.round_resets.ante, mod = 10 }, edition = poll_edition('slidingpuzzle_edition' .. G.GAME.round_resets.ante, 2, true) }
-          G.hand:sort()
-          card:juice_up()
+        func = function()
+          G.FUNCS.phanta_run_slidingpuzzle_menu(card.ability.extra.choices, card.sort_id)
           return true
         end
       }))
+    end
 
-      playing_card_joker_effects({ true })
+    if context.first_hand_drawn then
+      if G.GAME.phanta_slidingpuzzle_cards then
+        G.GAME.phanta_slidingpuzzle_cards_temp = G.GAME.phanta_slidingpuzzle_cards
+        G.GAME.phanta_slidingpuzzle_cards = nil
+      end
+      if G.GAME.phanta_slidingpuzzle_cards_temp and G.GAME.phanta_slidingpuzzle_cards_temp[card.sort_id] and next(G.GAME.phanta_slidingpuzzle_cards_temp[card.sort_id]) then
+        for _, v in ipairs(G.GAME.phanta_slidingpuzzle_cards_temp[card.sort_id]) do
+          G.E_MANAGER:add_event(Event({
+            func = function()
+              SMODS.add_card { set = "Playing Card", front = v.front, enhancement = v.enhancement, seal = v.seal, edition = v.edition }
+              G.hand:sort()
+              card:juice_up()
+              return true
+            end
+          }))
+
+          playing_card_joker_effects({ true })
+        end
+      end
     end
   end,
   pronouns = "they_them"
 }
+
+G.FUNCS.phanta_run_slidingpuzzle_menu = function(amount, sort_id)
+  G.GAME.phanta_slidingpuzzle_cards = G.GAME.phanta_slidingpuzzle_cards or {}
+  G.GAME.phanta_slidingpuzzle_cards[sort_id] = {}
+  G.phanta_slidingpuzzle_current_id = sort_id
+  G.OVERLAY_PHANTA_SLIDINGPUZZLECOLLECTION = true
+  G.SETTINGS.paused = true
+  G.FUNCS.overlay_menu {
+    definition = phanta_create_slidingpuzzle_menu(amount)
+  }
+end
+
+G.FUNCS.phanta_create_slidingpuzzle_cards = function(amount)
+  G.your_collection = {}
+  G.your_collection[1] = CardArea(G.ROOM.T.x + 0.2 * G.ROOM.T.w / 2, G.ROOM.T.h, 3 * G.CARD_W,
+    0.9 * G.CARD_H, { card_limit = 3, type = "title", highlight_limit = 1, collection = true })
+  G.your_collection[1].config.phanta_cataclysm_selectable = true
+
+  for i = 1, amount do
+    local card = SMODS.create_card { set = "Playing Card", key_append = "slidingpuzzle", seal = SMODS.poll_seal { key = "slidingpuzzle_seal" .. G.GAME.round_resets.ante, mod = 10 }, edition = poll_edition("slidingpuzzle_edition" .. G.GAME.round_resets.ante, 2, true) }
+    G.your_collection[1]:emplace(card)
+  end
+  INIT_COLLECTION_CARD_ALERTS()
+
+  local t = {
+    {
+      n = G.UIT.C,
+      config = { align = "cm" },
+      nodes = {
+        {
+          n = G.UIT.R,
+          config = { align = "cm" },
+          nodes = {
+            {
+              n = G.UIT.B,
+              config = { w = 3, h = 0.2 },
+              nodes = {}
+            }
+          }
+        },
+        {
+          n = G.UIT.R,
+          config = { align = "cm", r = 0.1, colour = G.C.BLACK, emboss = 0.05 },
+          nodes = {
+            {
+              n = G.UIT.R,
+              config = { align = "cm", padding = 0.07, no_fill = true },
+              nodes = {
+                { n = G.UIT.O, config = { object = G.your_collection[1] } }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  return t
+end
+
+function phanta_create_slidingpuzzle_menu(amount)
+  return create_UIBox_generic_options({
+    infotip = localize("phanta_slidingpuzzle_menu_tooltip"),
+    contents = G.FUNCS.phanta_create_slidingpuzzle_cards(amount),
+    back_label = localize("b_skip"),
+    back_func = "phanta_leave_slidingpuzzle"
+  })
+end
+
+G.FUNCS.phanta_select_slidingpuzzle_card = function(e)
+  local thing = G.GAME.phanta_slidingpuzzle_cards[G.phanta_slidingpuzzle_current_id]
+  local enhancements = SMODS.get_enhancements(e.config.ref_table)
+  local candidates = {}
+  for k, _ in pairs(enhancements) do
+    candidates[#candidates+1] = k
+  end
+  thing[#thing + 1] = { front = e.config.ref_table.config.card_key, enhancement = candidates[1], seal = e.config.ref_table.seal, edition =
+  e.config.ref_table.edition }
+  G.FUNCS.phanta_leave_slidingpuzzle()
+end
+
+G.FUNCS.phanta_can_select_slidingpuzzle_card = function(e) end
+
+G.FUNCS.phanta_leave_slidingpuzzle = function(e)
+  G.OVERLAY_PHANTA_SLIDINGPUZZLE = nil
+  G.phanta_slidingpuzzle_current_id = nil
+  if G.OVERLAY_MENU then G.FUNCS.exit_overlay_menu() end
+  G.SETTINGS.paused = false
+end
+
+local controllerkpuref = Controller.key_press_update
+function Controller:key_press_update(key, dt)
+  if key == "escape" and G.SETTINGS.paused and G.OVERLAY_PHANTA_SLIDINGPUZZLECOLLECTION then
+    G.FUNCS.phanta_leave_slidingpuzzle()
+  end
+  return controllerkpuref(self, key, dt)
+end
 
 -- This code is so jank, sorry :sob:
 G.Phanta.centers["sudoku"] = {
