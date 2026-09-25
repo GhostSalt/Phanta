@@ -5,6 +5,13 @@ SMODS.Atlas {
     py = 95,
 }
 
+SMODS.Atlas {
+    key = "PhantaStickersHC",
+    path = "PhantaStickersHC.png",
+    px = 71,
+    py = 95,
+}
+
 G.phanta_pollutive_cost = 5
 
 SMODS.Sticker {
@@ -24,6 +31,11 @@ SMODS.Sticker {
         end
     end,
     draw = function(self, card, layer)
+        if Phanta.config["stickers_hc"] then
+            G.shared_stickers[self.key].atlas = G.ASSET_ATLAS.phanta_PhantaStickersHC
+        else
+            G.shared_stickers[self.key].atlas = G.ASSET_ATLAS.phanta_PhantaStickers
+        end
         if card.ability.set == "phanta_Hanafuda" then
             G.shared_stickers[self.key]:set_sprite_pos { x = 4, y = 2 }
         elseif card.ability.set == "phanta_Zodiac" then
@@ -63,6 +75,11 @@ SMODS.Sticker {
         end
     end,
     draw = function(self, card, layer)
+        if Phanta.config["stickers_hc"] then
+            G.shared_stickers[self.key].atlas = G.ASSET_ATLAS.phanta_PhantaStickersHC
+        else
+            G.shared_stickers[self.key].atlas = G.ASSET_ATLAS.phanta_PhantaStickers
+        end
         if card.ability.set == "phanta_Hanafuda" then
             G.shared_stickers[self.key]:set_sprite_pos { x = 1, y = 2 }
         elseif card.ability.set == "phanta_Zodiac" then

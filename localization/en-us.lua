@@ -4430,14 +4430,15 @@ return {
 
             phanta_requires_restart = "(Requires restart)",
             phanta_junk_enabled = "Enable Junk (Poker Hand)",
-            phanta_zodiac_enabled = "Zodiac Cards",
-            phanta_hanafuda_enabled = "Hanafuda Cards",
-            phanta_starter_pack_enabled = "Starter Packs",
+            phanta_zodiac_enabled = "Enable Zodiac Cards",
+            phanta_hanafuda_enabled = "Enable Hanafuda Cards",
+            phanta_starter_pack_enabled = "Enable Starter Packs",
             phanta_disable_animations = "Disable Animations",
             phanta_disable_custom_music = "Disable Custom Music",
             phanta_custom_title_screen = "Custom Title Screen",
             phanta_copper_grate_expanded = "Expand Copper Grate Tooltips",
             phanta_dougdimmadome_disable_hat = "Doug Dimmadome: Disable Big Hat",
+            phanta_stickers_hc = "High Contrast Stickers",
 
 
 
