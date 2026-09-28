@@ -339,8 +339,7 @@ match_indent = true
 target = 'game.lua'
 pattern = '''G.GAME.current_round.used_packs[i] = get_pack('shop_pack').key'''
 position = 'before'
-payload = '''if G.GAME.current_round.phanta_next_shop_spectral then
-    G.GAME.current_round.phanta_next_shop_spectral = false
+payload = '''if G.GAME.round_resets.ante == 4 and (G.GAME.selected_back.effect.center.key == "b_phanta_azran" or G.GAME.selected_sleeve == "sleeve_phanta_azran") then
     G.GAME.current_round.used_packs[i] = "p_spectral_normal_"..(math.random(1, 2))
 else'''
 match_indent = true

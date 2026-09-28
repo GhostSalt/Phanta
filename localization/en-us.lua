@@ -24,7 +24,9 @@ return {
                 name = 'Azran Deck',
                 text = {
                     "Very powerful {C:spectral}Spectral{}",
-                    "cards may appear"
+                    "cards may appear",
+                    "All {C:attention}Booster Packs{} in",
+                    "Ante {C:attention}4{} are {C:spectral}Spectral Packs{}"
                 }
             },
             b_phanta_badd = {
@@ -2226,10 +2228,9 @@ return {
             j_phanta_occultbanner           = {
                 name = "Occult Banner",
                 text = {
-                    "Next shop is {C:green}guaranteed{}",
-                    "to have a {C:spectral}Spectral Pack{}",
-                    "if {C:attention}Blind{} was defeated",
-                    "with {C:red}0{} discards used"
+                    "If {C:attention}Blind{} was defeated",
+                    "with {C:red}0{} discards used,",
+                    "creates an {C:spectral}Ethereal{} Tag"
                 }
             },
             j_phanta_ontherun               = {
@@ -3002,7 +3003,9 @@ return {
                 name = "Azran Sleeve",
                 text = {
                     "Very powerful {C:spectral}Spectral{}",
-                    "cards may appear"
+                    "cards may appear",
+                    "All {C:attention}Booster Packs{} in",
+                    "Ante {C:attention}4{} are {C:spectral}Spectral Packs{}"
                 }
             },
             sleeve_phanta_azran_alt = {

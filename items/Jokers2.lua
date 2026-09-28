@@ -3831,6 +3831,10 @@ G.Phanta.centers["haringjoker"] = {
 }
 
 G.Phanta.centers["occultbanner"] = {
+  loc_vars = function(self, info_queue, card)
+    info_queue[#info_queue + 1] = G.P_TAGS.tag_ethereal
+    return {}
+  end,
   rarity = 3,
   atlas = 'Phanta2',
   pos = { x = 0, y = 8 },
@@ -3839,9 +3843,16 @@ G.Phanta.centers["occultbanner"] = {
   eternal_compat = true,
   perishable_compat = true,
   calculate = function(self, card, context)
-    if context.end_of_round and not context.blueprint and not context.individual and not context.repetition and G.GAME.current_round.discards_used == 0 then
-      G.GAME.current_round.phanta_next_shop_spectral = true
-      return { message = localize("k_phanta_success_ex"), colour = G.C.GREEN }
+    if context.end_of_round and not context.game_over and context.main_eval and G.GAME.current_round.discards_used == 0 then
+      G.E_MANAGER:add_event(Event({
+        func = (function()
+          add_tag(Tag("tag_ethereal"))
+          play_sound("generic1", 0.9 + math.random() * 0.1, 0.8)
+          play_sound("holo1", 1.2 + math.random() * 0.1, 0.4)
+          return true
+        end)
+      }))
+      return { message = "+"..localize({ type = "name_text", set = "Tag", key = "tag_ethereal" }), colour = G.C.SECONDARY_SET.Spectral }
     end
   end,
   pronouns = "it_its"
