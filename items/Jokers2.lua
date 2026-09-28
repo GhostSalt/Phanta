@@ -1140,6 +1140,29 @@ G.Phanta.centers["longtail"] = {
   pronouns = "it_its"
 }
 
+G.Phanta.centers["ghostinthemachine"] = {
+  rarity = 2,
+  atlas = "Phanta2",
+  pos = { x = 0, y = 9 },
+  cost = 5,
+  blueprint_compat = false,
+  eternal_compat = true,
+  perishable_compat = true,
+  pronouns = "she_her"
+}
+
+local oldsmodsscorecard = SMODS.score_card
+function SMODS.score_card(card, context)
+  if next(SMODS.find_card("j_phanta_ghostinthemachine")) and context.cardarea == G.play and not G.phanta_considering_unscored then
+    G.phanta_considering_unscored = true
+    context.cardarea = "unscored"
+    SMODS.score_card(card, context)
+    context.cardarea = G.play
+    G.phanta_considering_unscored = nil
+  end
+  return oldsmodsscorecard(card, context)
+end
+
 G.Phanta.centers["luckynumber"] = {
   config = { extra = { odds = 5, money = 8 } },
   rarity = 1,
@@ -2645,6 +2668,58 @@ function Card:add_to_deck(card, from_debuff)
   return ref_return
 end
 
+G.Phanta.centers["dickgumshoe"] = {
+  config = { extra = { added_slots = 2, current_rerolls = 0, removed = 1 } },
+  loc_vars = function(self, info_queue, card)
+    local slots = card.ability.extra.added_slots - card.ability.extra.current_rerolls
+    return { vars = { (slots >= 0 and "+" or "") .. slots, math.abs(slots) == 1 and "" or localize("phanta_plural"), card.ability.extra.removed } }
+  end,
+  rarity = 2,
+  atlas = "Phanta2",
+  pos = { x = 1, y = 9 },
+  cost = 6,
+  blueprint_compat = false,
+  eternal_compat = true,
+  perishable_compat = true,
+  add_to_deck = function(self, card, from_debuff)
+    change_shop_size(card.ability.extra.added_slots - (card.ability.extra.removed * card.ability.extra.current_rerolls))
+  end,
+  remove_from_deck = function(self, card, from_debuff)
+    change_shop_size(-(card.ability.extra.added_slots - (card.ability.extra.removed * card.ability.extra.current_rerolls)))
+  end,
+  calculate = function(self, card, context)
+    if context.phanta_pre_reroll then
+      card:juice_up()
+      card.ability.extra.current_rerolls = card.ability.extra.current_rerolls + 1
+      change_shop_size(-card.ability.extra.removed)
+    end
+
+    if context.phanta_post_ending_shop then
+      G.E_MANAGER:add_event(Event({
+        func = function()
+          change_shop_size(card.ability.extra.removed * card.ability.extra.current_rerolls)
+          card.ability.extra.current_rerolls = 0
+          return true
+        end
+      }))
+      return { message = localize("k_reset") }
+    end
+  end,
+  pronouns = "he_him"
+}
+
+local reroll_shop_ref = G.FUNCS.reroll_shop
+G.FUNCS.reroll_shop = function(e)
+  SMODS.calculate_context({ phanta_pre_reroll = true })
+  reroll_shop_ref(e)
+end
+
+local toggle_shop_ref = G.FUNCS.toggle_shop
+G.FUNCS.toggle_shop = function(e)
+  toggle_shop_ref(e)
+  SMODS.calculate_context({ phanta_post_ending_shop = true })
+end
+
 G.Phanta.centers["valantgramarye"] = {
   rarity = 2,
   atlas = 'Phanta2',
@@ -3791,7 +3866,11 @@ G.Phanta.centers["ontherun"] = {
       if G.GAME.current_round.discards_left > 0 then
         if card.ability.extra.current_mult > 0 then
           card.ability.extra.current_mult = math.max(0, card.ability.extra.current_mult - card.ability.extra.lost_mult)
-          return { message = localize { type = "variable", key = "a_mult_minus", vars = { card.ability.extra.lost_mult } }, colour = G.C.RED }
+          return {
+            message = localize { type = "variable", key = "a_mult_minus", vars = { card.ability.extra.lost_mult } },
+            colour =
+                G.C.RED
+          }
         end
       else
         card.ability.extra.current_mult = card.ability.extra.current_mult + card.ability.extra.added_mult

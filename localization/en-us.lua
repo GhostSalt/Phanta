@@ -1951,6 +1951,15 @@ return {
                     "all {C:attention}unscored{} cards"
                 }
             },
+            j_phanta_dickgumshoe = {
+                name = "Dick Gumshoe",
+                text = {
+                    "{C:attention}#1#{} card slot#2# in the",
+                    "current shop, {C:red}-#3#{} for each",
+                    "{C:green}reroll{} in the current shop",
+                    "{C:inactive}(Resets at end of shop){}"
+                }
+            },
             j_phanta_valantgramarye         = {
                 name = "Valant Gramarye",
                 text = {
@@ -2239,6 +2248,14 @@ return {
                     "Earn {C:money}$#1#{} when playing",
                     "{C:attention}Straights{} without",
                     "{C:attention}face{} cards"
+                }
+            },
+            j_phanta_ghostinthemachine = {
+                name = "Ghost in the Machine",
+                text = {
+                    "Played and {C:attention}scored{} cards",
+                    "also trigger played and",
+                    "{C:attention}unscored{} effects"
                 }
             },
             j_phanta_mrbigmoneybags         = {
