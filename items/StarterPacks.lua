@@ -421,7 +421,7 @@ function SMODS.calculate_context(context, return_table)
     G.GAME.PhantaStarterPacks.ante_pack = nil
   end
 
-  if context and context.starting_shop and Phanta.config["starter_pack_enabled"] and not G.GAME.PhantaStarterPacks.purchased_this_ante then
+  if context and context.starting_shop and Phanta.config["starter_pack_enabled"] and not G.GAME.PhantaStarterPacks.purchased_this_ante and G.shop_booster then
     local key = pseudorandom_element(G.P_CENTER_POOLS.phanta_StarterPack,
       pseudoseed('shopstarter' .. G.GAME.round_resets.ante)).key
     if G.GAME.PhantaStarterPacks.ante_pack ~= nil then
