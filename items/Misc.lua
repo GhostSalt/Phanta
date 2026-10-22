@@ -79,7 +79,7 @@ function G.UIDEF.use_and_sell_buttons(card)
   if not card or ((not card.config or not card.config.center
           or (card.config.center.key ~= "j_phanta_profile" and card.config.center.key ~= "j_phanta_modping" and card.config.center.key ~= "j_phanta_deathnote" and card.config.center.key ~= "j_phanta_cataclysm")
           or card.area ~= G.jokers)
-        and not (card.ability and (card.ability.set == "phanta_Zodiac" or card.ability.set == "phanta_Birthstone"))
+        and not (card.ability and (card.ability.set == "phanta_Zodiac" or card.ability.set == "phanta_Birthstone" or card.ability.set == "phanta_StarterPack"))
         and card.config.center.key ~= "c_phanta_sludge"
         and not (card.ability and card.ability.perishable and card.ability.perish_tally == 0)) then
     return sell_use_ref(card)
@@ -130,6 +130,21 @@ function G.UIDEF.use_and_sell_buttons(card)
         nodes = {
           { n = G.UIT.B, config = { w = 0.1, h = 0.6 } },
           { n = G.UIT.T, config = { text = localize("b_use"), colour = G.C.UI.TEXT_LIGHT, scale = 0.55, shadow = true } }
+        }
+      }
+    }
+  }
+
+  local use_starterpack = {
+    n = G.UIT.C,
+    config = { align = "cr" },
+    nodes = {
+      {
+        n = G.UIT.C,
+        config = { ref_table = card, align = "cr", maxw = 1.25, padding = 0.1, r = 0.08, minw = 1.25, minh = (card.area and card.area.config.type == "joker") and 0 or 1, hover = true, shadow = true, colour = G.C.UI.BACKGROUND_INACTIVE, one_press = true, button = "use_card", func = "can_use_consumeable" },
+        nodes = {
+          { n = G.UIT.B, config = { w = 0.1, h = 0.6 } },
+          { n = G.UIT.T, config = { text = localize("b_open"), colour = G.C.UI.TEXT_LIGHT, scale = 0.55, shadow = true } }
         }
       }
     }
@@ -315,6 +330,31 @@ function G.UIDEF.use_and_sell_buttons(card)
               n = G.UIT.R,
               config = { align = "cl" },
               nodes = { cataclysm_more }
+            }
+          }
+        }
+      }
+    }
+  end
+
+  if card.ability.set == "phanta_StarterPack" then
+    return {
+      n = G.UIT.ROOT,
+      config = { padding = 0, colour = G.C.CLEAR },
+      nodes = {
+        {
+          n = G.UIT.C,
+          config = { padding = 0.15, align = "cl" },
+          nodes = {
+            {
+              n = G.UIT.R,
+              config = { align = "cl" },
+              nodes = { sell }
+            },
+            {
+              n = G.UIT.R,
+              config = { align = "cl" },
+              nodes = { use_starterpack }
             }
           }
         }

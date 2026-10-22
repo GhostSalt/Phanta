@@ -406,3 +406,24 @@ pattern = '''if self.ability.consumeable or self.ability.set == 'Joker' or (self
 position = "at"
 payload = '''if self.ability.consumeable or self.ability.set == 'Joker' or (self.area and self.area == G.pack_cards) or (G.OVERLAY_PHANTA_SLIDINGPUZZLECOLLECTION and (self.ability.set == "Default" or self.ability.set == "Enhanced")) then'''
 match_indent = true
+
+
+
+[[patches]]
+[patches.pattern]
+target = "game.lua"
+pattern = '''for k, v in ipairs(G.shop_booster.cards) do
+create_shop_card_ui(v)'''
+position = "at"
+payload = '''
+for k, v in ipairs(G.shop_booster.cards) do
+if v and v.ability and v.ability.set == "phanta_StarterPack" then
+phanta_create_shop_starter_pack_ui(v)
+else
+create_shop_card_ui(v)
+end'''
+match_indent = true
+
+
+
+
