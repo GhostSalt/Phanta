@@ -1180,7 +1180,7 @@ return {
                     "{C:inactive,s:0.75}Four Fingers or Shortcut){}"
                 }
             },
-            j_phanta_bermudatriangle      = {
+            j_phanta_bermudatriangle        = {
                 name = "Bermuda Triangle",
                 text = {
                     "Played and scored",
@@ -1732,7 +1732,7 @@ return {
                     "slot is {C:attention}empty{}"
                 }
             },
-            j_phanta_sillyjoker          = {
+            j_phanta_sillyjoker             = {
                 name = "Silly Joker",
                 text = {
                     "{C:mult}+#1#{} Mult if {C:attention}#2#{} cards were",
@@ -1953,7 +1953,7 @@ return {
                     "all {C:attention}unscored{} cards"
                 }
             },
-            j_phanta_dickgumshoe = {
+            j_phanta_dickgumshoe            = {
                 name = "Dick Gumshoe",
                 text = {
                     "{C:attention}#1#{} card slot#2# in the",
@@ -2251,7 +2251,7 @@ return {
                     "{C:attention}face{} cards"
                 }
             },
-            j_phanta_ghostinthemachine = {
+            j_phanta_ghostinthemachine      = {
                 name = "Ghost in the Machine",
                 text = {
                     "Played and {C:attention}scored{} cards",
@@ -2803,6 +2803,9 @@ return {
                     "Disabled until",
                     "after {C:attention}#1#{} rounds",
                     "{C:inactive}({C:attention}#2#{C:inactive} remaining)",
+                    "You may spend {C:money}$#3#{}",
+                    "to wake this card",
+                    "up {C:attention}immediately{}"
                 },
             },
             phanta_pollutive = {
@@ -3498,7 +3501,6 @@ return {
                 text = {
                     "Consumables can be {C:attention}Pollutive{}",
                     "{C:inactive,s:0.8}(Costs $5 to sell){}",
-                    "{C:inactive,s:0.8}(Excludes Starter Packs){}",
                     "{s:0.8}Applies all previous Stakes{}"
                 }
             },
@@ -3507,7 +3509,6 @@ return {
                 text = {
                     "Consumables can be {C:attention}Best Before{}",
                     "{C:inactive,s:0.8}(Becomes Sludge after 2 rounds){}",
-                    "{C:inactive,s:0.8}(Excludes Starter Packs){}",
                     "{s:0.8}Applies all previous Stakes{}"
                 }
             },
@@ -4394,6 +4395,7 @@ return {
             phanta_set = "SET",
             phanta_clear = "CLEAR",
             phanta_jokers = "JOKERS",
+            b_phanta_wake_up = "WAKE UP",
             phanta_consumables = "CONSUMABLES",
             phanta_profile_more_tooltip = {
                 "Charm, Meteor and Ethereal Tags",

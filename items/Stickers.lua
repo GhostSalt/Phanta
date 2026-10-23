@@ -26,7 +26,8 @@ SMODS.Sticker {
     end,
     should_apply = function(self, card, center, area, bypass_roll)
         if card.ability and card.ability.consumeable and card.ability.set ~= "phanta_StarterPack" and G.GAME.modifiers["enable_" .. self.key] then
-            self.last_roll = pseudorandom((area == G.pack_cards and "packssj" or "shopssj") .. self.key .. G.GAME.round_resets.ante)
+            self.last_roll = pseudorandom((area == G.pack_cards and "packssj" or "shopssj") ..
+                self.key .. G.GAME.round_resets.ante)
             return bypass_roll or self.last_roll > (1 - self.rate)
         end
     end,
@@ -70,7 +71,8 @@ SMODS.Sticker {
     end,
     should_apply = function(self, card, center, area, bypass_roll)
         if card.ability and card.ability.consumeable and card.ability.set ~= "phanta_StarterPack" and G.GAME.modifiers["enable_" .. self.key] then
-            self.last_roll = pseudorandom((area == G.pack_cards and "packssj" or "shopssj") .. self.key .. G.GAME.round_resets.ante)
+            self.last_roll = pseudorandom((area == G.pack_cards and "packssj" or "shopssj") ..
+                self.key .. G.GAME.round_resets.ante)
             return bypass_roll or self.last_roll > (1 - self.rate)
         end
     end,
@@ -101,7 +103,10 @@ SMODS.Sticker {
         if context.end_of_round and context.main_eval and not context.game_over then
             card.ability.phanta_bestbefore_timer = card.ability.phanta_bestbefore_timer - 1
             if card.ability.phanta_bestbefore_timer > 0 then
-                return { message = localize { type = "variable", key = "a_remaining", vars = { card.ability.phanta_bestbefore_timer } }, colour = G.C.FILTER }
+                return {
+                    message = localize { type = "variable", key = "a_remaining", vars = { card.ability.phanta_bestbefore_timer } },
+                    colour = G.C.FILTER
+                }
             else
                 G.E_MANAGER:add_event(Event({
                     trigger = "before",
@@ -133,7 +138,10 @@ SMODS.Sticker {
                         return true
                     end
                 }))
-                return { message = localize { key = "c_phanta_sludge", type = "name_text", set = "Tarot" }, colour = G.C.SECONDARY_SET.Tarot }
+                return {
+                    message = localize { key = "c_phanta_sludge", type = "name_text", set = "Tarot" },
+                    colour = G.C.SECONDARY_SET.Tarot
+                }
             end
         end
     end
@@ -141,18 +149,62 @@ SMODS.Sticker {
 
 SMODS.Sticker {
     key = "sleepy",
-    config = { extra = { rounds = 2 } },
+    config = { extra = { rounds = 2, cost = 9 } },
     atlas = "PhantaStickers",
     pos = { x = 2, y = 2 },
-    badge_colour = HEX "c75985",
+    badge_colour = HEX "59bfcf",
     default_compat = true,
     rate = 0.25,
     needs_enable_flag = true,
     loc_vars = function(self, info_queue, card)
-        return { vars = { self.config.extra.rounds, card.ability.phanta_sleepy_tally or self.config.extra.rounds } }
+        return { vars = { self.config.extra.rounds, card.ability.phanta_sleepy_tally or self.config.extra.rounds, self.config.extra.cost } }
     end,
     apply = function(self, card, val)
         SMODS.Sticker.apply(self, card, val)
         card.ability.phanta_sleepy_tally = self.config.extra.rounds
+        card.ability.phanta_sleepy_wake_up_cost = self.config.extra.cost
+
+        if card.ability[self.key] then card:set_cost() end
     end,
 }
+
+G.FUNCS.phanta_wake_up = function(e)
+    local card = e.config.ref_table
+    card.ability.phanta_sleepy_tally = nil
+    SMODS.debuff_card(card, false, "phanta_sleepy")
+    card:remove_sticker("phanta_sleepy")
+    card:add_to_deck()
+    if card.area then
+        card.area:unhighlight_all()
+    end
+    ease_dollars(-card.ability.phanta_sleepy_wake_up_cost or -9)
+    G.E_MANAGER:add_event(Event({
+        trigger = "after",
+        delay = 0.06 * G.SETTINGS.GAMESPEED,
+        blockable = false,
+        blocking = false,
+        func = function()
+            play_sound("tarot2", 0.76, 0.4); return true
+        end
+    }))
+    play_sound("tarot2", 1, 0.4)
+    card_eval_status_text(card, "extra", nil, nil, nil,
+        {
+            message = localize("phanta_sleepy_awake"),
+            colour = G.C.FILTER,
+            message_card = card
+        })
+end
+
+G.FUNCS.phanta_can_wake_up = function(e)
+    if (G.play and #G.play.cards > 0) or
+        (G.CONTROLLER.locked) or
+        (G.GAME.STOP_USE and G.GAME.STOP_USE > 0)
+        or G.GAME.dollars - (e.config.ref_table.ability.phanta_sleepy_wake_up_cost or 9) < to_big(G.GAME.bankrupt_at) then
+        e.config.colour = G.C.UI.BACKGROUND_INACTIVE
+        e.config.button = nil
+    else
+        e.config.colour = G.C.RED
+        e.config.button = "phanta_wake_up"
+    end
+end

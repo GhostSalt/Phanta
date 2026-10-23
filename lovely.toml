@@ -397,6 +397,14 @@ else
 end'''
 match_indent = true
 
+[[patches]]
+[patches.pattern]
+target = "card.lua"
+pattern = '''if self.ability.rental then self.cost = 1 end'''
+position = "after"
+payload = '''if self.ability.phanta_sleepy then self.cost = 1 end'''
+match_indent = true
+
 
 
 [[patches]]
