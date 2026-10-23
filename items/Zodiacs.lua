@@ -321,11 +321,21 @@ SMODS.Consumable {
   atlas = "PhantaZodiacs",
   atlas_extra = "phanta_PhantaZodiacUpgradesDarkHour",
   loc_vars = function(self, info_queue, card)
-    return { vars = { card.ability.extra.xmult + count_prognosticators(card) } }
+    return {
+      vars = {
+        localize(G.GAME.current_round.phanta_dark_hour_suit, "suits_plural"),
+        card.ability.extra.xmult + count_prognosticators(card),
+        colours = { G.C.SUITS[G.GAME.current_round.phanta_dark_hour_suit] }
+      }
+    }
   end,
   calculate = function(self, card, context)
-    if context.individual and context.cardarea == "unscored" and context.other_card:is_suit("Clubs") then
-      return { xmult = card.ability.extra.xmult + count_prognosticators(card) } -- Prog adds X2 Mult.
+    if context.individual and context.cardarea == "unscored" and context.other_card:is_suit(G.GAME.current_round.phanta_dark_hour_suit) then
+      return { xmult = card.ability.extra.xmult + count_prognosticators(card) } -- Prog adds X1 Mult.
+    end
+
+    if context.end_of_round and context.main_eval and context.game_over == false then
+      return { message = localize("k_reset"), message_card = card }
     end
   end,
 

@@ -1255,7 +1255,7 @@ G.Phanta.centers["pottedpeashooter"] = {
 }
 
 G.Phanta.centers["venndiagram"] = {
-  config = { extra = { added_chips = 8, current_chips = 0, required_of_suit = 3 } },
+  config = { extra = { added_chips = 15, current_chips = 0, required_of_suit = 3 } },
   loc_vars = function(self, info_queue, card)
     return { vars = { card.ability.extra.added_chips, card.ability.extra.required_of_suit, card.ability.extra.current_chips } }
   end,

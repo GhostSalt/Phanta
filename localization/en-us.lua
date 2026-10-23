@@ -2347,9 +2347,9 @@ return {
             j_phanta_deathnote              = {
                 name = "Death Note",
                 text = {
-                    "Press {C:red}MORE{} to enter",
-                    "the {C:attention}name{} of a card,",
-                    "cards with that {C:attention}name{}",
+                    "Press {C:red}MORE{} to enter the",
+                    "{C:attention}name{} of a card, cards with",
+                    "that {C:attention}name{} are {C:money}free{} and",
                     "spawn with {C:dark_edition}Negative{} edition",
                     "{C:inactive}(#1#{C:attention}#2#{C:inactive}){}"
                 },
@@ -2362,8 +2362,8 @@ return {
             j_phanta_ignaize                = {
                 name = "Ignaize",
                 text = {
-                    "Gains {X:mult,C:white}X#1#{} Mult when a",
-                    "{C:attention}consumable{} card is {C:attention}sold{}",
+                    "Gains {X:mult,C:white}X#1#{} Mult when",
+                    "a card is {C:attention}sold{}",
                     "{C:inactive}(Currently {X:mult,C:white}X#2#{C:inactive} Mult){}"
                 },
                 unlock = {
@@ -2397,9 +2397,22 @@ return {
                 name = "Famalia",
                 text = {
                     "When {C:attention}Blind{} is selected,",
-                    "adds a {C:attention}King{} with a",
-                    "{C:purple}Purple{} seal and {C:dark_edition}edition",
-                    "to your hand"
+                    "creates a random {C:dark_edition}Negative{}",
+                    "{C:tarot}Tarot{}, {C:planet}Planet{}, {C:spectral}Spectral{},",
+                    "{C:phanta_zodiac}Zodiac{} or {C:phanta_hanafuda}Hanafuda{} card"
+                },
+                unlock = {
+                    "{E:1,s:1.3}?????{}",
+                }
+            },
+            j_phanta_famalia_stickerless                = {
+                name = "Famalia",
+                text = {
+                    "When {C:attention}Blind{} is selected,",
+                    "creates a random {C:dark_edition}Negative{}",
+                    "{C:tarot}Tarot{}, {C:planet}Planet{}, {C:spectral}Spectral{},",
+                    "{C:phanta_zodiac}Zodiac{} or {C:phanta_hanafuda}Hanafuda{} card",
+                    "with no {C:attention}Stickers{}"
                 },
                 unlock = {
                     "{E:1,s:1.3}?????{}",
@@ -4043,8 +4056,9 @@ return {
                 name = "Dark Hour",
                 text = {
                     "Played cards with",
-                    "{C:clubs}Clubs{} suit give",
-                    "{C:white,X:mult}X#1#{} Mult if unscored"
+                    "{V:1}#1#{} suit give",
+                    "{C:white,X:mult}X#2#{} Mult if unscored,",
+                    "{S:0.9}suit changes each round{}"
                 },
             }
         },

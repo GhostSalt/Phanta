@@ -2,7 +2,7 @@ G.Phanta.centers["ignaize"] = {
   unlocked = false,
   config = { extra = { current_xmult = 1, added_xmult = 0.1 } },
   rarity = 4,
-  atlas = 'Phanta',
+  atlas = "Phanta",
   pos = { x = 2, y = 1 },
   soul_pos = {
     x = 3,
@@ -20,9 +20,9 @@ G.Phanta.centers["ignaize"] = {
     if context.joker_main and card.ability.extra.current_xmult > 1 then
       return { xmult = card.ability.extra.current_xmult }
     end
-    if context.selling_card and context.card.config.center.set ~= "Joker" and not context.blueprint then
+    if context.selling_card and context.card ~= card and not context.blueprint then
       card.ability.extra.current_xmult = card.ability.extra.current_xmult + card.ability.extra.added_xmult
-      card_eval_status_text(card, 'extra', nil, nil, nil, { message = localize("k_upgrade_ex") })
+      card_eval_status_text(card, "extra", nil, nil, nil, { message = localize("k_upgrade_ex") })
       return true
     end
   end,
@@ -32,7 +32,7 @@ G.Phanta.centers["ignaize"] = {
 G.Phanta.centers["dimere"] = {
   unlocked = false,
   rarity = 4,
-  atlas = 'Phanta',
+  atlas = "Phanta",
   pos = { x = 3, y = 1 },
   soul_pos = {
     x = 4,
@@ -63,7 +63,7 @@ G.Phanta.centers["dimere"] = {
       end
 
       pseudorandom_element(candidates, pseudoseed("dimere")):set_edition { negative = true }
-      card_eval_status_text(card, 'extra', nil, nil, nil,
+      card_eval_status_text(card, "extra", nil, nil, nil,
         { message = "+Negative" })
     end
   end,
@@ -74,7 +74,7 @@ G.Phanta.centers["goldor"] = {
   unlocked = false,
   config = { extra = { money = 3, xmult = 2 } },
   rarity = 4,
-  atlas = 'Phanta',
+  atlas = "Phanta",
   pos = { x = 4, y = 1 },
   soul_pos = {
     x = 5,
@@ -112,7 +112,7 @@ G.Phanta.centers["goldor"] = {
 G.Phanta.centers["famalia"] = {
   unlocked = false,
   rarity = 4,
-  atlas = 'Phanta',
+  atlas = "Phanta",
   pos = { x = 5, y = 1 },
   soul_pos = {
     x = 0,
@@ -120,32 +120,33 @@ G.Phanta.centers["famalia"] = {
   },
   phanta_shiny_soul = true,
   cost = 20,
-  loc_vars = function(self, info_queue, card)
-    --info_queue[#info_queue+1] = G.P_CENTERS.
-    return {}
-  end,
   blueprint_compat = true,
   eternal_compat = true,
   perishable_compat = true,
+  loc_vars = function(self, info_queue, card)
+    info_queue[#info_queue + 1] = { key = "e_negative_consumable", set = "Edition", config = { extra = 1 } }
+    local key = self.key
+    if G.GAME.modifiers.enable_phanta_pollutive or G.GAME.modifiers.enable_phanta_bestbefore then
+      key = key.."_stickerless"
+    end
+    return { key = key }
+  end,
   calculate = function(self, card, context)
-    if context.first_hand_drawn then
+    if context.setting_blind then
+      local set = pseudorandom_element({ "Tarot", "Planet", "Spectral", "phanta_Zodiac", "phanta_Hanafuda" },
+        pseudoseed("phanta_famalia_set"))
       G.E_MANAGER:add_event(Event({
         func = function()
-          local _suit = pseudorandom_element({ 'S', 'H', 'D', 'C' }, pseudoseed('famaliasu'))
-          local _card = create_playing_card({ front = G.P_CARDS[_suit .. '_K'], center = G.P_CENTERS.c_base }, G.hand,
-            nil, nil, { G.C.SECONDARY_SET.Enhanced })
-          _card:set_seal('Purple', true)
-
-          _card:set_edition(poll_edition('famaliaed', nil, true, true, nil))
-
-          G.GAME.blind:debuff_card(_card)
-          G.hand:sort()
-          if context.blueprint_card then context.blueprint_card:juice_up() else card:juice_up() end
+          --play_sound("timpani")
+          G.GAME.modifiers.phanta_block_modded_stickers = true
+          local new_card = SMODS.add_card { set = set, key_append = "phanta_famalia_card", force_stickers = {} }
+          G.GAME.modifiers.phanta_block_modded_stickers = nil
+          new_card:set_edition("e_negative", true)
           return true
         end
       }))
 
-      playing_card_joker_effects({ true })
+      return { message = "+" .. localize(string.lower("k_" .. set)) }
     end
   end,
   pronouns = "it_its"
@@ -155,7 +156,7 @@ G.Phanta.centers["godoor"] = {
   unlocked = false,
   config = { extra = { added_xmult = 0.5, current_xmult = 1, counted_rerolls = 0 } },
   rarity = 4,
-  atlas = 'Phanta',
+  atlas = "Phanta",
   pos = { x = 0, y = 2 },
   soul_pos = {
     x = 1,
@@ -196,7 +197,7 @@ G.Phanta.centers["godoor"] = {
         card.ability.extra.current_xmult = card.ability.extra.current_xmult + card.ability.extra.added_xmult
         card.ability.extra.counted_rerolls = 0
         return {
-          message = localize('k_upgrade_ex'),
+          message = localize("k_upgrade_ex"),
           colour = G.C.FILTER,
           card = card
         }
@@ -211,7 +212,7 @@ G.Phanta.centers["fainfol"] = {
   unlocked = false,
   config = { extra = { xmult = 1.5 } },
   rarity = 4,
-  atlas = 'Phanta',
+  atlas = "Phanta",
   pos = { x = 1, y = 2 },
   soul_pos = {
     x = 2,
@@ -222,7 +223,7 @@ G.Phanta.centers["fainfol"] = {
   loc_vars = function(self, info_queue, card)
     return {
       vars = {
-        localize(G.GAME.current_round.fainfol_card.suit, 'suits_singular'),
+        localize(G.GAME.current_round.fainfol_card.suit, "suits_singular"),
         card.ability.extra.xmult,
         colours = { G.C.SUITS[G.GAME.current_round.fainfol_card.suit] }
       }
@@ -235,7 +236,7 @@ G.Phanta.centers["fainfol"] = {
     if context.cardarea == G.hand and not context.end_of_round and not context.repetition and context.other_card and context.other_card:is_suit(G.GAME.current_round.fainfol_card.suit) then
       if context.other_card.debuff then
         return {
-          message = localize('k_debuffed'),
+          message = localize("k_debuffed"),
           colour = G.C.RED,
           card = card,
         }
@@ -262,7 +263,7 @@ G.Phanta.centers["granwyrm"] = {
   unlocked = false,
   config = { extra = { added_xmult = 0.8, current_unscored = 0, target_unscored = 16, current_xmult = 1 } },
   rarity = 4,
-  atlas = 'Phanta',
+  atlas = "Phanta",
   pos = { x = 2, y = 2 },
   soul_pos = {
     x = 3,
@@ -287,13 +288,13 @@ G.Phanta.centers["granwyrm"] = {
         card.ability.extra.current_xmult = card.ability.extra.current_xmult + card.ability.extra.added_xmult
         card.ability.extra.current_unscored = 0
         return {
-          message = localize { type = 'variable', key = 'a_xmult', vars = { card.ability.extra.current_xmult } },
+          message = localize { type = "variable", key = "a_xmult", vars = { card.ability.extra.current_xmult } },
           colour = G.C.RED,
           card = card
         }
       else
         return {
-          message = (card.ability.extra.target_unscored - card.ability.extra.current_unscored) .. '',
+          message = (card.ability.extra.target_unscored - card.ability.extra.current_unscored) .. "",
           colour = G.C.FILTER,
           card = card
         }
@@ -307,7 +308,7 @@ G.Phanta.centers["lightyagami"] = {
   unlocked = false,
   config = { extra = { xmult = 2.5 } },
   rarity = 4,
-  atlas = 'Phanta2',
+  atlas = "Phanta2",
   pos = { x = 9, y = 5 },
   soul_pos = {
     x = 10,

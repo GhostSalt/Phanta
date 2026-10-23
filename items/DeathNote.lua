@@ -108,7 +108,12 @@ G.UIDEF.phanta_deathnote_tab1 = function()
     }
   } }
 
-  return { n = G.UIT.ROOT, config = { align = "cm", padding = 0, colour = G.C.CLEAR, r = 0.1, minw = 7, minh = 4.2 }, nodes = t }
+  return {
+    n = G.UIT.ROOT,
+    config = { align = "cm", padding = 0, colour = G.C.CLEAR, r = 0.1, minw = 7, minh = 4.2 },
+    nodes =
+        t
+  }
 end
 
 G.UIDEF.phanta_deathnote_tab2 = function()
@@ -150,7 +155,12 @@ G.UIDEF.phanta_deathnote_tab2 = function()
     }
   } }
 
-  return { n = G.UIT.ROOT, config = { align = "cm", padding = 0, colour = G.C.CLEAR, r = 0.1, minw = 7, minh = 4.2 }, nodes = t }
+  return {
+    n = G.UIT.ROOT,
+    config = { align = "cm", padding = 0, colour = G.C.CLEAR, r = 0.1, minw = 7, minh = 4.2 },
+    nodes =
+        t
+  }
 end
 
 G.UIDEF.phanta_deathnote_tab3 = function()
@@ -201,7 +211,12 @@ G.UIDEF.phanta_deathnote_tab3 = function()
     }
   } }
 
-  return { n = G.UIT.ROOT, config = { align = "cm", padding = 0, colour = G.C.CLEAR, r = 0.1, minw = 7, minh = 4.2 }, nodes = t }
+  return {
+    n = G.UIT.ROOT,
+    config = { align = "cm", padding = 0, colour = G.C.CLEAR, r = 0.1, minw = 7, minh = 4.2 },
+    nodes =
+        t
+  }
 end
 
 
@@ -248,7 +263,9 @@ phanta_create_uibox_deathnote_jokers_collection = function(e)
 
   local joker_options = {}
   for i = 1, math.ceil(#G.P_CENTER_POOLS["Joker"] / (5 * #G.your_collection)) do
-    table.insert(joker_options, localize('k_page') .. ' ' .. tostring(i) .. '/' .. tostring(math.ceil(#G.P_CENTER_POOLS["Joker"] / (5 * #G.your_collection))))
+    table.insert(joker_options,
+      localize('k_page') ..
+      ' ' .. tostring(i) .. '/' .. tostring(math.ceil(#G.P_CENTER_POOLS["Joker"] / (5 * #G.your_collection))))
   end
 
   for i = 1, 5 do
@@ -257,7 +274,8 @@ phanta_create_uibox_deathnote_jokers_collection = function(e)
       if not center then break end
 
       local old_used_jokers = G.GAME.used_jokers[center.key]
-      local card = Card(G.your_collection[j].T.x + G.your_collection[j].T.w / 2, G.your_collection[j].T.y, G.CARD_W, G.CARD_H, G.P_CARDS.empty, center)
+      local card = Card(G.your_collection[j].T.x + G.your_collection[j].T.w / 2, G.your_collection[j].T.y, G.CARD_W,
+        G.CARD_H, G.P_CARDS.empty, center)
       G.GAME.used_jokers[center.key] = old_used_jokers
 
       card.sticker = get_joker_win_sticker(center)
@@ -275,7 +293,17 @@ phanta_create_uibox_deathnote_jokers_collection = function(e)
         n = G.UIT.R,
         config = { align = "cm" },
         nodes = {
-          create_option_cycle({ options = joker_options, w = 4.5, cycle_shoulders = true, opt_callback = 'phanta_your_deathnote_jokers_collection', current_option = 1, colour = G.C.RED, no_pips = true, focus_args = { snap_to = true, nav = 'wide' } })
+          create_option_cycle({
+            options = joker_options,
+            w = 4.5,
+            cycle_shoulders = true,
+            opt_callback =
+            'phanta_your_deathnote_jokers_collection',
+            current_option = 1,
+            colour = G.C.RED,
+            no_pips = true,
+            focus_args = { snap_to = true, nav = 'wide' }
+          })
         }
       },
     }
@@ -304,11 +332,13 @@ G.FUNCS.phanta_your_deathnote_jokers_collection = function(args)
   end
   for i = 1, 5 do
     for j = 1, #G.your_collection do
-      local center = G.P_CENTER_POOLS["Joker"][i + (j - 1) * 5 + (5 * #G.your_collection * (args.cycle_config.current_option - 1))]
+      local center = G.P_CENTER_POOLS["Joker"]
+          [i + (j - 1) * 5 + (5 * #G.your_collection * (args.cycle_config.current_option - 1))]
       if not center then break end
 
       local old_used_jokers = G.GAME.used_jokers[center.key]
-      local card = Card(G.your_collection[j].T.x + G.your_collection[j].T.w / 2, G.your_collection[j].T.y, G.CARD_W, G.CARD_H, G.P_CARDS.empty, center)
+      local card = Card(G.your_collection[j].T.x + G.your_collection[j].T.w / 2, G.your_collection[j].T.y, G.CARD_W,
+        G.CARD_H, G.P_CARDS.empty, center)
       G.GAME.used_jokers[center.key] = old_used_jokers
 
       G.your_collection[j]:emplace(card)
@@ -417,7 +447,8 @@ phanta_deathnote_consumable_collection_page = function(page)
           ref_table = { set = key },
           button = "phanta_deathnote_visit_consumable_type",
           label = { localize('b_' .. key:lower() .. '_cards') },
-          count = G.ACTIVE_MOD_UI and modsCollectionTally(G.P_CENTER_POOLS[key]) or G.DISCOVER_TALLIES[key:lower() .. 's'],
+          count = G.ACTIVE_MOD_UI and modsCollectionTally(G.P_CENTER_POOLS[key]) or
+              G.DISCOVER_TALLIES[key:lower() .. 's'],
           minw = 4,
           id = id,
           colour = G.C.SECONDARY_SET[key],
@@ -481,7 +512,9 @@ phanta_deathnote_your_collection_consumable_type = function(e)
   local set = e.config.ref_table.set
   local consumable_options = {}
   for i = 1, math.ceil(#G.P_CENTER_POOLS[set] / (5 * #G.your_collection)) do
-    table.insert(consumable_options, localize('k_page') .. ' ' .. tostring(i) .. '/' .. tostring(math.ceil(#G.P_CENTER_POOLS[set] / (5 * #G.your_collection))))
+    table.insert(consumable_options,
+      localize('k_page') ..
+      ' ' .. tostring(i) .. '/' .. tostring(math.ceil(#G.P_CENTER_POOLS[set] / (5 * #G.your_collection))))
   end
 
   for i = 1, 5 do
@@ -489,7 +522,8 @@ phanta_deathnote_your_collection_consumable_type = function(e)
       local center = G.P_CENTER_POOLS[set][i + (j - 1) * 5]
       if not center then break end
       local old_used_jokers = G.GAME.used_jokers[center.key]
-      local card = Card(G.your_collection[j].T.x + G.your_collection[j].T.w / 2, G.your_collection[j].T.y, G.CARD_W, G.CARD_H, nil, center)
+      local card = Card(G.your_collection[j].T.x + G.your_collection[j].T.w / 2, G.your_collection[j].T.y, G.CARD_W,
+        G.CARD_H, nil, center)
       G.your_collection[j]:emplace(card)
       G.GAME.used_jokers[center.key] = old_used_jokers
     end
@@ -504,7 +538,18 @@ phanta_deathnote_your_collection_consumable_type = function(e)
         n = G.UIT.R,
         config = { align = "cm" },
         nodes = {
-          create_option_cycle({ phanta_deathnote_set = set, options = consumable_options, w = 4.5, cycle_shoulders = true, opt_callback = 'phanta_deathnote_your_collection_consumable_type_thing', current_option = 1, colour = G.C.RED, no_pips = true, focus_args = { snap_to = true, nav = 'wide' } })
+          create_option_cycle({
+            phanta_deathnote_set = set,
+            options = consumable_options,
+            w = 4.5,
+            cycle_shoulders = true,
+            opt_callback =
+            'phanta_deathnote_your_collection_consumable_type_thing',
+            current_option = 1,
+            colour = G.C.RED,
+            no_pips = true,
+            focus_args = { snap_to = true, nav = 'wide' }
+          })
         }
       },
     }
@@ -542,11 +587,13 @@ G.FUNCS.phanta_deathnote_your_collection_consumable_type_thing = function(args)
 
   for i = 1, 5 do
     for j = 1, #G.your_collection do
-      local center = G.P_CENTER_POOLS[args.cycle_config.phanta_deathnote_set][i + (j - 1) * 5 + (5 * #G.your_collection * (args.cycle_config.current_option - 1))]
+      local center = G.P_CENTER_POOLS[args.cycle_config.phanta_deathnote_set]
+          [i + (j - 1) * 5 + (5 * #G.your_collection * (args.cycle_config.current_option - 1))]
       if not center then break end
 
       local old_used_jokers = G.GAME.used_jokers[center.key]
-      local card = Card(G.your_collection[j].T.x + G.your_collection[j].T.w / 2, G.your_collection[j].T.y, G.CARD_W, G.CARD_H, nil, center)
+      local card = Card(G.your_collection[j].T.x + G.your_collection[j].T.w / 2, G.your_collection[j].T.y, G.CARD_W,
+        G.CARD_H, nil, center)
       G.GAME.used_jokers[center.key] = old_used_jokers
 
       G.your_collection[j]:emplace(card)
@@ -721,7 +768,16 @@ function create_card(_type, area, legendary, _rarity, skip_materialize, soulable
     for i, v in ipairs(notes) do
       if v and v.ability and v.ability.extra and v.ability.extra.card_name
           and localize { key = card.config.center.key, type = "name_text", set = card.config.center.set }:lower() == v.ability.extra.card_name:lower() then
-        card:set_edition("e_negative")
+        card:set_edition("e_negative", true)
+        v:juice_up()
+        G.E_MANAGER:add_event(Event({
+          func = function()
+            card.ability.couponed = true
+            card:set_cost()
+            save_run()
+            return true
+          end
+        }))
       end
     end
   end
@@ -736,7 +792,16 @@ function SMODS:create_card(t)
     for i, v in ipairs(notes) do
       if v and v.ability and v.ability.extra and v.ability.extra.card_name
           and localize { key = card.config.center.key, type = "name_text", set = card.config.center.set }:lower() == v.ability.extra.card_name:lower() then
-        card:set_edition("e_negative")
+        card:set_edition("e_negative", true)
+        v:juice_up()
+        G.E_MANAGER:add_event(Event({
+          func = function()
+            card.ability.couponed = true
+            card:set_cost()
+            save_run()
+            return true
+          end
+        }))
       end
     end
   end

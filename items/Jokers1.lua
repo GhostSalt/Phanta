@@ -4071,7 +4071,7 @@ G.Phanta.centers["themace"] = {
 }
 
 G.Phanta.centers["thedagger"] = {
-  config = { extra = { added_mult = 2, current_mult = 0 } },
+  config = { extra = { added_mult = 3, current_mult = 0 } },
   rarity = 3,
   atlas = 'Phanta',
   pos = { x = 3, y = 6 },

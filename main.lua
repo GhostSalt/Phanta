@@ -159,7 +159,7 @@ function count_common_jokers()
 end
 
 function count_consumables(args)
-  if next(SMODS.find_mod('GSCatan')) and args and args.ignore_catan then
+  if next(SMODS.find_mod("GSCatan")) and args and args.ignore_catan then
     local count = 0
     for _, v in ipairs(G.consumeables.cards) do
       if v.config.center.set ~= "catan_Resource"
@@ -208,12 +208,12 @@ function is_current_month(card)
   local card_range = card.month_range or card.config.center.month_range
   if card_range.first.month < 0 or card_range.first.month > 12 or card_range.first.day < 0 or card_range.first.day > 31 then return false end
   if card_range.last.month < 0 or card_range.last.month > 12 or card_range.last.day < 0 or card_range.last.day > 31 then return false end
-  -- Technically, it's possible to have dates like the 31st of February be valid, but those should work fine anyway.
+  -- Technically, it is possible to have dates like the 31st of February be valid, but those should work fine anyway.
 
   local t = os.date("*t", os.time())
 
   -- Commenting because I need to think aloud, to grasp this. Also, hi!
-  -- If the range doesn't wrap around (f <= l), then we can check if the date is <= l, AND >= f.
+  -- If the range does not wrap around (f <= l), then we can check if the date is <= l, AND >= f.
   -- If the range does wrap around (f > l), then we can check if the date is <= l, OR >= f.
   -- This works regardless of loopover. Examples:
 
@@ -253,7 +253,7 @@ end
 function get_names_from_zodiacs(cards)
   local names = {}
   for i = 1, #cards do
-    names[#names + 1] = localize { type = 'name_text', set = cards[i].set, key = cards[i].config.center.key }
+    names[#names + 1] = localize { type = "name_text", set = cards[i].set, key = cards[i].config.center.key }
   end
   return names
 end
@@ -262,7 +262,7 @@ function count_steel_kings()
   local kings = {}
   if G.playing_cards then
     for i = 1, #G.playing_cards do
-      if SMODS.has_enhancement(G.playing_cards[i], 'm_steel') and G.playing_cards[i]:get_id() == 13 then
+      if SMODS.has_enhancement(G.playing_cards[i], "m_steel") and G.playing_cards[i]:get_id() == 13 then
         kings[#kings + 1] = G.playing_cards[i]
       end
     end
@@ -271,19 +271,19 @@ function count_steel_kings()
 end
 
 function is_blind_small()
-  return G.GAME.blind and G.GAME.blind:get_type() == 'Small'
+  return G.GAME.blind and G.GAME.blind:get_type() == "Small"
 end
 
 function is_blind_big()
-  return G.GAME.blind and G.GAME.blind:get_type() == 'Big'
+  return G.GAME.blind and G.GAME.blind:get_type() == "Big"
 end
 
 function is_blind_boss()
-  return G.GAME.blind and G.GAME.blind:get_type() == 'Boss'
+  return G.GAME.blind and G.GAME.blind:get_type() == "Boss"
 end
 
 function is_boss_active()
-  return G and G.GAME and G.GAME.blind and ((not G.GAME.blind.disabled) and (G.GAME.blind:get_type() == 'Boss'))
+  return G and G.GAME and G.GAME.blind and ((not G.GAME.blind.disabled) and (G.GAME.blind:get_type() == "Boss"))
 end
 
 function count_missing_ranks()
@@ -309,10 +309,10 @@ function count_base_copper_grates()
   if not G.playing_cards then return {} end
   local grates = {}
   for i, j in pairs(G.playing_cards) do
-    if (SMODS.has_enhancement(j, 'm_phanta_coppergratefresh')
-          or SMODS.has_enhancement(j, 'm_phanta_coppergrateexposed')
-          or SMODS.has_enhancement(j, 'm_phanta_coppergrateweathered')
-          or SMODS.has_enhancement(j, 'm_phanta_coppergrateoxidised'))
+    if (SMODS.has_enhancement(j, "m_phanta_coppergratefresh")
+          or SMODS.has_enhancement(j, "m_phanta_coppergrateexposed")
+          or SMODS.has_enhancement(j, "m_phanta_coppergrateweathered")
+          or SMODS.has_enhancement(j, "m_phanta_coppergrateoxidised"))
         and not (j.edition and j.edition.key ~= nil) then
       grates[#grates + 1] = j
     end
@@ -324,7 +324,7 @@ end
 function count_unique_tarots()
   local tarots_used = 0
   if G.GAME and G.GAME.consumeable_usage then
-    for k, v in pairs(G.GAME.consumeable_usage) do if v.set == 'Tarot' then tarots_used = tarots_used + 1 end end
+    for k, v in pairs(G.GAME.consumeable_usage) do if v.set == "Tarot" then tarots_used = tarots_used + 1 end end
   end
 
   return tarots_used
@@ -333,7 +333,7 @@ end
 function count_unique_planets()
   local planets_used = 0
   if G.GAME and G.GAME.consumeable_usage then
-    for k, v in pairs(G.GAME.consumeable_usage) do if v.set == 'Planet' then planets_used = planets_used + 1 end end
+    for k, v in pairs(G.GAME.consumeable_usage) do if v.set == "Planet" then planets_used = planets_used + 1 end end
   end
 
   return planets_used
@@ -425,7 +425,7 @@ function Card:start_dissolve()
   end
 end
 
---if not next(SMODS.find_mod('GSFlipbook')) then assert(SMODS.load_file("items/FlipbookFailsafe.lua"))() end
+--if not next(SMODS.find_mod("GSFlipbook")) then assert(SMODS.load_file("items/FlipbookFailsafe.lua"))() end
 
 local allFolders = { "none", "items" }
 
@@ -481,17 +481,17 @@ for i = 1, #allFolders do
   end
 end
 
-if next(SMODS.find_mod('Bakery')) then assert(SMODS.load_file("items/Charms.lua"))() end
-if next(SMODS.find_mod('partner')) then assert(SMODS.load_file("items/Partners.lua"))() end
-if next(SMODS.find_mod('CardSleeves')) then assert(SMODS.load_file("items/Sleeves.lua"))() end
-if next(SMODS.find_mod('artbox')) then assert(SMODS.load_file("items/ArtBox.lua"))() end
-if next(SMODS.find_mod('entr')) then assert(SMODS.load_file("items/Entropy.lua"))() end
+if next(SMODS.find_mod("Bakery")) then assert(SMODS.load_file("items/Charms.lua"))() end
+if next(SMODS.find_mod("partner")) then assert(SMODS.load_file("items/Partners.lua"))() end
+if next(SMODS.find_mod("CardSleeves")) then assert(SMODS.load_file("items/Sleeves.lua"))() end
+if next(SMODS.find_mod("artbox")) then assert(SMODS.load_file("items/ArtBox.lua"))() end
+if next(SMODS.find_mod("entr")) then assert(SMODS.load_file("items/Entropy.lua"))() end
 if JokerDisplay then
   assert(SMODS.load_file("items/JokerDisplayDefs1.lua"))()
   assert(SMODS.load_file("items/JokerDisplayDefs2.lua"))()
   assert(SMODS.load_file("items/JokerDisplayDefsLegendaries.lua"))()
 end
-local aura_enabled = next(SMODS.find_mod('Aura'))
+local aura_enabled = next(SMODS.find_mod("Aura"))
 
 
 
@@ -671,9 +671,10 @@ local igo = Game.init_game_object
 function Game:init_game_object()
   local ret = igo(self)
   ret.current_round.train_station_card = { id = nil, value = nil }
-  ret.current_round.fainfol_card = { suit = 'Spades' }
+  ret.current_round.fainfol_card = { suit = "Spades" }
   ret.current_round.puzzle_card = { id = nil }
-  ret.current_round.phanta_widget_suit = 'Clubs'
+  ret.current_round.phanta_widget_suit = "Clubs"
+  ret.current_round.phanta_dark_hour_suit = "Clubs"
   ret.current_round.datacube_card = { id = nil, value = nil }
   return ret
 end
@@ -695,25 +696,25 @@ Game.main_menu = function(change_context)
     )
     G.SPLASH_LOGO_PHANTA_GHOST:set_alignment({
       major = G.title_top,
-      type = 'cm',
-      bond = 'Strong',
+      type = "cm",
+      bond = "Strong",
       offset = { x = 0, y = 0 }
     })
     G.SPLASH_LOGO_PHANTA_GHOST:define_draw_steps({ {
-      shader = 'dissolve',
+      shader = "dissolve",
     } })
 
     G.SPLASH_LOGO_PHANTA_GHOST.dissolve_colours = { G.C.WHITE, G.C.WHITE }
     G.SPLASH_LOGO_PHANTA_GHOST.dissolve = 1
 
     G.E_MANAGER:add_event(Event({
-      trigger = 'after',
-      delay = change_context == 'splash' and 1.8 or change_context == 'game' and 2 or 0.5,
+      trigger = "after",
+      delay = change_context == "splash" and 1.8 or change_context == "game" and 2 or 0.5,
       blockable = false,
       blocking = false,
       func = (function()
-        ease_value(G.SPLASH_LOGO_PHANTA_GHOST, 'dissolve', -1, nil, nil, nil,
-          change_context == 'splash' and 2.3 or 0.9)
+        ease_value(G.SPLASH_LOGO_PHANTA_GHOST, "dissolve", -1, nil, nil, nil,
+          change_context == "splash" and 2.3 or 0.9)
         G.VIBRATION = G.VIBRATION + 1.5
         return true
       end)
@@ -721,12 +722,12 @@ Game.main_menu = function(change_context)
   end
 
   --[[G.SPLASH_BACK:define_draw_steps({ {
-    shader = 'splash',
+    shader = "splash",
     send = {
-      { name = 'time',       ref_table = G.TIMERS,  ref_value = 'REAL_SHADER' },
-      { name = 'vort_speed', val = 0.4 },
-      { name = 'colour_1',   ref_table = G.C.PHANTA.MISC_COLOURS, ref_value = 'PHANTA_MAIN_MENU_PRIMARY' },
-      { name = 'colour_2',   ref_table = G.C.PHANTA.MISC_COLOURS, ref_value = 'PHANTA_MAIN_MENU_SECONDARY' },flipbook_set_anim_extra_state
+      { name = "time",       ref_table = G.TIMERS,  ref_value = "REAL_SHADER" },
+      { name = "vort_speed", val = 0.4 },
+      { name = "colour_1",   ref_table = G.C.PHANTA.MISC_COLOURS, ref_value = "PHANTA_MAIN_MENU_PRIMARY" },
+      { name = "colour_2",   ref_table = G.C.PHANTA.MISC_COLOURS, ref_value = "PHANTA_MAIN_MENU_SECONDARY" },flipbook_set_anim_extra_state
 
     }
   } })]] --
@@ -827,28 +828,40 @@ function phanta_set_anim_extra_state(center, state)
 end]] --
 
 function SMODS.current_mod.reset_game_globals(run_start)
-  G.GAME.current_round.fainfol_card = G.GAME.current_round.fainfol_card or 'Clubs'
+  G.GAME.current_round.fainfol_card = G.GAME.current_round.fainfol_card or "Spades"
   local valid_cards_fainfol = {}
   for i, j in ipairs(G.playing_cards) do
-    if not SMODS.has_no_suit(j) and not j:is_suit(G.GAME.current_round.fainfol_card.suit) then
+    if not SMODS.has_no_suit(j) then
       valid_cards_fainfol[#valid_cards_fainfol + 1] = j
     end
   end
   if next(valid_cards_fainfol) then
-    local chosen_card = pseudorandom_element(valid_cards_fainfol, pseudoseed('fainfol' .. G.GAME.round_resets.ante))
-    G.GAME.current_round.fainfol_card.suit = chosen_card.base.suit
+    local chosen_card = pseudorandom_element(valid_cards_fainfol, pseudoseed("fainfol" .. G.GAME.round_resets.ante))
+    G.GAME.current_round.fainfol_card.suit = chosen_card.ability.phanta_actual_suit or chosen_card.base.suit
   end
 
-  G.GAME.current_round.phanta_widget_suit = G.GAME.current_round.phanta_widget_suit or { suit = 'Spades' }
+  G.GAME.current_round.phanta_widget_suit = G.GAME.current_round.phanta_widget_suit or { suit = "Clubs" }
   local valid_cards_widget = {}
   for i, j in ipairs(G.playing_cards) do
-    if not SMODS.has_no_suit(j) and not j:is_suit(G.GAME.current_round.phanta_widget_suit) then
+    if not SMODS.has_no_suit(j) then
       valid_cards_widget[#valid_cards_widget + 1] = j
     end
   end
   if next(valid_cards_widget) then
-    local chosen_card = pseudorandom_element(valid_cards_widget, pseudoseed('widget' .. G.GAME.round_resets.ante))
-    G.GAME.current_round.phanta_widget_suit = chosen_card.base.suit
+    local chosen_card = pseudorandom_element(valid_cards_widget, pseudoseed("widget" .. G.GAME.round_resets.ante))
+    G.GAME.current_round.phanta_widget_suit = chosen_card.ability.phanta_actual_suit or chosen_card.base.suit
+  end
+
+  G.GAME.current_round.phanta_dark_hour_suit = G.GAME.current_round.phanta_dark_hour_suit or { suit = "Clubs" }
+  local valid_cards_dark_hour = {}
+  for i, j in ipairs(G.playing_cards) do
+    if not SMODS.has_no_suit(j) then
+      valid_cards_dark_hour[#valid_cards_dark_hour + 1] = j
+    end
+  end
+  if next(valid_cards_dark_hour) then
+    local chosen_card = pseudorandom_element(valid_cards_dark_hour, pseudoseed("dark_hour" .. G.GAME.round_resets.ante))
+    G.GAME.current_round.phanta_dark_hour_suit = chosen_card.ability.phanta_actual_suit or chosen_card.base.suit
   end
 
 
@@ -860,20 +873,20 @@ function SMODS.current_mod.reset_game_globals(run_start)
     G.GAME.current_round.train_station_card.id = G.GAME.current_round.train_station_card.id + 1
   end
 
-  local value_table = { '2', '3', '4', '5', '6', '7', '8', '9', '10', 'Jack', 'Queen', 'King', 'Ace' }
+  local value_table = { "2", "3", "4", "5", "6", "7", "8", "9", "10", "Jack", "Queen", "King", "Ace" }
   G.GAME.current_round.train_station_card.value = value_table[G.GAME.current_round.train_station_card.id - 1]
 
   if not G.GAME.current_round.puzzle_card then G.GAME.current_round.puzzle_card = { id = 2 } end
-  local valid_cards_puzzle = {}
-  for i, j in ipairs(G.playing_cards) do
-    if not SMODS.has_no_rank(j) then
-      valid_cards_puzzle[#valid_cards_puzzle + 1] = j
-    end
-  end
 
   if (get_previous_blind() and get_previous_blind() == "boss") or not G.GAME.last_blind then
+    local valid_cards_puzzle = {}
+    for i, j in ipairs(G.playing_cards) do
+      if not SMODS.has_no_rank(j) then
+        valid_cards_puzzle[#valid_cards_puzzle + 1] = j
+      end
+    end
     if next(valid_cards_puzzle) then
-      local chosen_card = pseudorandom_element(valid_cards_puzzle, pseudoseed('puzzle' .. G.GAME.round_resets.ante))
+      local chosen_card = pseudorandom_element(valid_cards_puzzle, pseudoseed("puzzle" .. G.GAME.round_resets.ante))
       G.GAME.current_round.puzzle_card = { id = chosen_card:get_id() }
     end
   end
@@ -887,7 +900,7 @@ function SMODS.current_mod.reset_game_globals(run_start)
   end
 
   if next(valid_cards_datacube) then
-    local chosen_card = pseudorandom_element(valid_cards_datacube, pseudoseed('datacube' .. G.GAME.round_resets.ante))
+    local chosen_card = pseudorandom_element(valid_cards_datacube, pseudoseed("datacube" .. G.GAME.round_resets.ante))
     G.GAME.current_round.datacube_card = { id = chosen_card:get_id(), value = chosen_card.base.value }
   end
 end
@@ -981,7 +994,7 @@ function phanta_create_silly_toggle(args)
                   line_emboss = 0.5 * args.scale,
                   ref_table = args,
                   colour = args.inactive_colour,
-                  button = 'toggle_button',
+                  button = "toggle_button",
                   button_dist = 0.2,
                   hover = true,
                   toggle_callback = args.callback,
@@ -1160,14 +1173,14 @@ SMODS.DrawStep {
     G.phanta_dougdimmadome_hat_sprite.role.draw_major = self
     for i = 0, 25 do
       local hoff = -1 - i * 0.4
-      G.phanta_dougdimmadome_hat_sprite:draw_shader('dissolve', nil, nil, nil, self.children.center, 0, 0, 0, hoff)
+      G.phanta_dougdimmadome_hat_sprite:draw_shader("dissolve", nil, nil, nil, self.children.center, 0, 0, 0, hoff)
     end
   end,
   conditions = { vortex = false, facing = "front" },
 }
 
 --[[SMODS.DrawStep {
-  key = 'extra',
+  key = "extra",
   order = 21,
   func = function(self, layer)
     if not self.phanta_extra and self.config.center.pos_extra then
@@ -1179,21 +1192,21 @@ SMODS.DrawStep {
       if self.config.center.discovered or (self.params and self.params.bypass_discovery_center) then
         self.phanta_extra:set_sprite_pos(self.config.center.pos_extra)
         self.phanta_extra.role.draw_major = self
-        if (self.edition and self.edition.negative and (not self.delay_edition or self.delay_edition.negative)) or (self.ability.name == 'Antimatter' and (self.config.center.discovered or self.bypass_discovery_center)) then
-          self.phanta_extra:draw_shader('negative', nil, self.ARGS.send_to_shader, nil, self.children.center)
+        if (self.edition and self.edition.negative and (not self.delay_edition or self.delay_edition.negative)) or (self.ability.name == "Antimatter" and (self.config.center.discovered or self.bypass_discovery_center)) then
+          self.phanta_extra:draw_shader("negative", nil, self.ARGS.send_to_shader, nil, self.children.center)
         elseif not self:should_draw_base_shader() then
         elseif not self.greyed then
-          self.phanta_extra:draw_shader('dissolve', nil, nil, nil, self.children.center)
+          self.phanta_extra:draw_shader("dissolve", nil, nil, nil, self.children.center)
         end
 
-        if self.ability.name == 'Invisible Joker' and (self.config.center.discovered or self.bypass_discovery_center) then
+        if self.ability.name == "Invisible Joker" and (self.config.center.discovered or self.bypass_discovery_center) then
           if self:should_draw_base_shader() then
-            self.phanta_extra:draw_shader('voucher', nil, self.ARGS.send_to_shader, nil, self.children.center)
+            self.phanta_extra:draw_shader("voucher", nil, self.ARGS.send_to_shader, nil, self.children.center)
           end
         end
 
         local center = self.config.center
-        if center.draw_extra and type(center.draw_extra) == 'function' then
+        if center.draw_extra and type(center.draw_extra) == "function" then
           center:draw_extra(self, layer)
         end
 
@@ -1201,7 +1214,7 @@ SMODS.DrawStep {
         if edition then
           for k, v in pairs(G.P_CENTER_POOLS.Edition) do
             if edition[v.key:sub(3)] and v.shader then
-              if type(v.draw) == 'function' then
+              if type(v.draw) == "function" then
                 v:draw(self, layer)
               else
                 self.phanta_extra:draw_shader(v.shader, nil, self.ARGS.send_to_shader, nil, self.children.center)
@@ -1209,17 +1222,17 @@ SMODS.DrawStep {
             end
           end
         end
-        if (edition and edition.negative) or (self.ability.name == 'Antimatter' and (self.config.center.discovered or self.bypass_discovery_center)) then
-          self.phanta_extra:draw_shader('negative_shine', nil, self.ARGS.send_to_shader, nil, self.children.center)
+        if (edition and edition.negative) or (self.ability.name == "Antimatter" and (self.config.center.discovered or self.bypass_discovery_center)) then
+          self.phanta_extra:draw_shader("negative_shine", nil, self.ARGS.send_to_shader, nil, self.children.center)
         end
       end
     end
   end,
-  conditions = { vortex = false, facing = 'front' }
+  conditions = { vortex = false, facing = "front" }
 }
 
 SMODS.DrawStep {
-  key = 'extra2',
+  key = "extra2",
   order = 21.1,
   func = function(self, layer)
     if not self.phanta_extra2 and self.config.center.pos_extra2 then
@@ -1231,21 +1244,21 @@ SMODS.DrawStep {
       if self.config.center.discovered or (self.params and self.params.bypass_discovery_center) then
         self.phanta_extra2:set_sprite_pos(self.config.center.pos_extra2)
         self.phanta_extra2.role.draw_major = self
-        if (self.edition and self.edition.negative and (not self.delay_edition or self.delay_edition.negative)) or (self.ability.name == 'Antimatter' and (self.config.center.discovered or self.bypass_discovery_center)) then
-          self.phanta_extra2:draw_shader('negative', nil, self.ARGS.send_to_shader, nil, self.children.center)
+        if (self.edition and self.edition.negative and (not self.delay_edition or self.delay_edition.negative)) or (self.ability.name == "Antimatter" and (self.config.center.discovered or self.bypass_discovery_center)) then
+          self.phanta_extra2:draw_shader("negative", nil, self.ARGS.send_to_shader, nil, self.children.center)
         elseif not self:should_draw_base_shader() then
         elseif not self.greyed then
-          self.phanta_extra2:draw_shader('dissolve', nil, nil, nil, self.children.center)
+          self.phanta_extra2:draw_shader("dissolve", nil, nil, nil, self.children.center)
         end
 
-        if self.ability.name == 'Invisible Joker' and (self.config.center.discovered or self.bypass_discovery_center) then
+        if self.ability.name == "Invisible Joker" and (self.config.center.discovered or self.bypass_discovery_center) then
           if self:should_draw_base_shader() then
-            self.phanta_extra2:draw_shader('voucher', nil, self.ARGS.send_to_shader, nil, self.children.center)
+            self.phanta_extra2:draw_shader("voucher", nil, self.ARGS.send_to_shader, nil, self.children.center)
           end
         end
 
         local center = self.config.center
-        if center.draw_extra2 and type(center.draw_extra) == 'function' then
+        if center.draw_extra2 and type(center.draw_extra) == "function" then
           self.phanta_extra2:draw_extra2(self, layer)
         end
 
@@ -1253,7 +1266,7 @@ SMODS.DrawStep {
         if edition then
           for k, v in pairs(G.P_CENTER_POOLS.Edition) do
             if edition[v.key:sub(3)] and v.shader then
-              if type(v.draw) == 'function' then
+              if type(v.draw) == "function" then
                 v:draw(self, layer)
               else
                 self.phanta_extra2:draw_shader(v.shader, nil, self.ARGS.send_to_shader, nil, self.children.center)
@@ -1261,13 +1274,13 @@ SMODS.DrawStep {
             end
           end
         end
-        if (edition and edition.negative) or (self.ability.name == 'Antimatter' and (self.config.center.discovered or self.bypass_discovery_center)) then
-          self.phanta_extra2:draw_shader('negative_shine', nil, self.ARGS.send_to_shader, nil, self.children.center)
+        if (edition and edition.negative) or (self.ability.name == "Antimatter" and (self.config.center.discovered or self.bypass_discovery_center)) then
+          self.phanta_extra2:draw_shader("negative_shine", nil, self.ARGS.send_to_shader, nil, self.children.center)
         end
       end
     end
   end,
-  conditions = { vortex = false, facing = 'front' }
+  conditions = { vortex = false, facing = "front" }
 }]] --
 
 
@@ -1278,7 +1291,7 @@ SMODS.DrawStep:take_ownership("back", {
           (self.params.viewed_back and G.GAME.viewed_back)
       if not (cback and cback.effect.center.key == "b_phanta_retired") then
         local overlay = G.C.WHITE
-        if self.area and self.area.config.type == 'deck' and self.rank > 3 then
+        if self.area and self.area.config.type == "deck" and self.rank > 3 then
           self.back_overlay = self.back_overlay or {}
           self.back_overlay[1] = 0.5 + ((#self.area.cards - self.rank) % 7) / 50
           self.back_overlay[2] = 0.5 + ((#self.area.cards - self.rank) % 7) / 50
@@ -1287,10 +1300,10 @@ SMODS.DrawStep:take_ownership("back", {
           overlay = self.back_overlay
         end
 
-        if self.area and self.area.config.type == 'deck' then
+        if self.area and self.area.config.type == "deck" then
           self.children.back:draw(overlay)
         else
-          self.children.back:draw_shader('dissolve')
+          self.children.back:draw_shader("dissolve")
         end
       end
     end
@@ -1299,7 +1312,7 @@ SMODS.DrawStep:take_ownership("back", {
 
 -- Stolen from Hot Potato, which itself got this from TMD.
 SMODS.DrawStep {
-  key = 'deck_shader',
+  key = "deck_shader",
   order = 5,
   func = function(self)
     if self.children.back then
@@ -1319,12 +1332,12 @@ SMODS.DrawStep {
       end
     end
   end,
-  conditions = { vortex = false, facing = 'back' }
+  conditions = { vortex = false, facing = "back" }
 }
 
 
 SMODS.DrawStep {
-  key = 'shiny_soul',
+  key = "shiny_soul",
   order = 61,
   func = function(self)
     if self.config.center.soul_pos and (self.config.center.discovered or self.bypass_discovery_center) and self.config.center.phanta_shiny_soul then
@@ -1335,12 +1348,12 @@ SMODS.DrawStep {
           0.00 * math.sin((G.TIMERS.REAL) * math.pi * 5) * (1 - (G.TIMERS.REAL - math.floor(G.TIMERS.REAL))) ^ 2
 
       if self.children.floating_sprite then
-        self.children.floating_sprite:draw_shader('booster', nil, self.ARGS.send_to_shader, nil, self.children.center,
+        self.children.floating_sprite:draw_shader("booster", nil, self.ARGS.send_to_shader, nil, self.children.center,
           scale_mod, rotate_mod)
       end
     end
   end,
-  conditions = { vortex = false, facing = 'front' }
+  conditions = { vortex = false, facing = "front" }
 }
 
 
@@ -1358,8 +1371,8 @@ function Game:update(dt)
   end
 
   for k, v in pairs(G.P_CENTERS) do
-    if v.set == 'phanta_Zodiac' or v.set == 'phanta_Birthstone' then v:phanta_update_zodiac_level_anim() end
-    if v.set == 'Planet' then phanta_update_planet_level_anim(v) end
+    if v.set == "phanta_Zodiac" or v.set == "phanta_Birthstone" then v:phanta_update_zodiac_level_anim() end
+    if v.set == "Planet" then phanta_update_planet_level_anim(v) end
   end
   --[[
   if not Phanta.config["animations_disabled"] then
@@ -1549,7 +1562,7 @@ end]] --
 SMODS.current_mod.extra_tabs = function()
   return {
     {
-      label = 'Credits',
+      label = "Credits",
       tab_definition_function = function()
         return {
           n = G.UIT.ROOT,
