@@ -3531,8 +3531,8 @@ return {
             stake_phanta_gold = {
                 name = "Gold Stake (Phanta)",
                 text = {
-                    "{C:attention}-1{} card slot in the",
-                    "shop until it is {C:green}rerolled{}",
+                    "The first {C:green}reroll{} each",
+                    "shop costs {C:money}$3{} extra",
                     "{s:0.8}Applies all previous Stakes{}"
                 },
             }

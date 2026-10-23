@@ -588,6 +588,18 @@ function SMODS.current_mod:calculate(context)
           SMODS.debuff_card(v, false, "phanta_sleepy")
           v:remove_sticker("phanta_sleepy")
           v:add_to_deck()
+
+          G.E_MANAGER:add_event(Event({
+            trigger = "after",
+            delay = 0.06 * G.SETTINGS.GAMESPEED,
+            blockable = false,
+            blocking = false,
+            func = function()
+              play_sound("tarot2", 0.76, 0.4); return true
+            end
+          }))
+          play_sound("tarot2", 1, 0.4)
+
           card_eval_status_text(v, "extra", nil, nil, nil,
             {
               message = localize("phanta_sleepy_awake"),
@@ -898,10 +910,10 @@ end
 
 
 SMODS.Atlas {
-    key = "PhantaCheckMark",
-    path = "PhantaCheckMark.png",
-    px = 66,
-    py = 66,
+  key = "PhantaCheckMark",
+  path = "PhantaCheckMark.png",
+  px = 66,
+  py = 66,
 }
 
 function phanta_create_silly_toggle(args)
@@ -916,50 +928,93 @@ function phanta_create_silly_toggle(args)
   args.ref_table = args.ref_table or {}
   args.ref_value = args.ref_value or "waw"
 
-  local check = Sprite(0,0,0.5*args.scale,0.5*args.scale,G.ASSET_ATLAS.phanta_PhantaCheckMark, {x=0, y=0})
+  local check = Sprite(0, 0, 0.5 * args.scale, 0.5 * args.scale, G.ASSET_ATLAS.phanta_PhantaCheckMark, { x = 0, y = 0 })
   check.states.drag.can = false
   check.states.visible = false
 
   local info
-  if args.info then 
+  if args.info then
     info = {}
-    for k, v in ipairs(args.info) do 
-      table.insert(info, {n=G.UIT.R, config={align = "cm", minh = 0.05}, nodes={
-        {n=G.UIT.T, config={text = v, scale = 0.25, colour = G.C.UI.TEXT_LIGHT}}
-      }})
+    for k, v in ipairs(args.info) do
+      table.insert(info, {
+        n = G.UIT.R,
+        config = { align = "cm", minh = 0.05 },
+        nodes = {
+          { n = G.UIT.T, config = { text = v, scale = 0.25, colour = G.C.UI.TEXT_LIGHT } }
+        }
+      })
     end
-    info = {n=G.UIT.R, config={align = "cm", minh = 0.05}, nodes=info}
+    info = { n = G.UIT.R, config = { align = "cm", minh = 0.05 }, nodes = info }
   end
 
-  local t = 
-        {n=args.col and G.UIT.C or G.UIT.R, config={align = "cm", padding = 0.1, r = 0.1, colour = G.C.CLEAR, focus_args = {funnel_from = true}}, nodes={
-          {n=G.UIT.C, config={align = "cr", minw = args.w}, nodes={
-            {n=G.UIT.T, config={text = args.label, scale = args.label_scale, colour = G.C.UI.TEXT_LIGHT}},
-            {n=G.UIT.B, config={w = 0.1, h = 0.1}},
-          }},
-          {n=G.UIT.C, config={align = "cl", minw = 0.3*args.w}, nodes={
-            {n=G.UIT.C, config={align = "cm", r = 0.1, colour = G.C.BLACK}, nodes={
-              {n=G.UIT.C, config={align = "cm", r = 0.1, padding = 0.03, minw = 0.4*args.scale, minh = 0.4*args.scale, outline_colour = G.C.WHITE, outline = 1.2*args.scale, line_emboss = 0.5*args.scale, ref_table = args,
+  local t =
+  {
+    n = args.col and G.UIT.C or G.UIT.R,
+    config = { align = "cm", padding = 0.1, r = 0.1, colour = G.C.CLEAR, focus_args = { funnel_from = true } },
+    nodes = {
+      {
+        n = G.UIT.C,
+        config = { align = "cr", minw = args.w },
+        nodes = {
+          { n = G.UIT.T, config = { text = args.label, scale = args.label_scale, colour = G.C.UI.TEXT_LIGHT } },
+          { n = G.UIT.B, config = { w = 0.1, h = 0.1 } },
+        }
+      },
+      {
+        n = G.UIT.C,
+        config = { align = "cl", minw = 0.3 * args.w },
+        nodes = {
+          {
+            n = G.UIT.C,
+            config = { align = "cm", r = 0.1, colour = G.C.BLACK },
+            nodes = {
+              {
+                n = G.UIT.C,
+                config = {
+                  align = "cm",
+                  r = 0.1,
+                  padding = 0.03,
+                  minw = 0.4 * args.scale,
+                  minh = 0.4 * args.scale,
+                  outline_colour = G.C.WHITE,
+                  outline = 1.2 * args.scale,
+                  line_emboss = 0.5 * args.scale,
+                  ref_table = args,
                   colour = args.inactive_colour,
-                  button = 'toggle_button', button_dist = 0.2, hover = true, toggle_callback = args.callback, func = "toggle", focus_args = {funnel_to = true}}, nodes={
-                  {n=G.UIT.O, config={object = check}},
-              }},
-            }}
-          }},
-        }}
-   if args.hide_label then 
-       local t2 = {}
-       for i = 1, #t.nodes do
-           if i ~= 1 then table.insert(t2, t.nodes[i]) end
-       end
-       t.nodes = t2
-   end
-   if args.info then 
-     t = {n=args.col and G.UIT.C or G.UIT.R, config={align = "cm"}, nodes={
-       t,
-       info,
-     }}
-   end
+                  button = 'toggle_button',
+                  button_dist = 0.2,
+                  hover = true,
+                  toggle_callback = args.callback,
+                  func = "toggle",
+                  focus_args = { funnel_to = true }
+                },
+                nodes = {
+                  { n = G.UIT.O, config = { object = check } },
+                }
+              },
+            }
+          }
+        }
+      },
+    }
+  }
+  if args.hide_label then
+    local t2 = {}
+    for i = 1, #t.nodes do
+      if i ~= 1 then table.insert(t2, t.nodes[i]) end
+    end
+    t.nodes = t2
+  end
+  if args.info then
+    t = {
+      n = args.col and G.UIT.C or G.UIT.R,
+      config = { align = "cm" },
+      nodes = {
+        t,
+        info,
+      }
+    }
+  end
   return t
 end
 
@@ -967,71 +1022,107 @@ local phanta_config_tab = function()
   local phanta_nodes = {}
 
   phanta_nodes[1] = { n = G.UIT.C, config = { align = "cm", padding = 0.1 }, nodes = {} }
-  phanta_nodes[1].nodes[#phanta_nodes[1].nodes + 1] = { n = G.UIT.R, config = { align = "cr" }, nodes = {phanta_create_silly_toggle({
-    label = localize("phanta_junk_enabled"),
-    ref_table = Phanta.config,
-    ref_value = "junk_enabled",
-    callback = function()
-    end,
-  })}}
-  phanta_nodes[1].nodes[#phanta_nodes[1].nodes + 1] = { n = G.UIT.R, config = { align = "cr" }, nodes = {phanta_create_silly_toggle({
-    label = localize("phanta_zodiac_enabled"),
-    ref_table = Phanta.config,
-    ref_value = "zodiac_enabled",
-    callback = function()
-    end,
-  })}}
-  phanta_nodes[1].nodes[#phanta_nodes[1].nodes + 1] = { n = G.UIT.R, config = { align = "cr" }, nodes = {phanta_create_silly_toggle({
-    label = localize("phanta_hanafuda_enabled"),
-    ref_table = Phanta.config,
-    ref_value = "hanafuda_enabled",
-    callback = function()
-    end,
-  })}}
-  phanta_nodes[1].nodes[#phanta_nodes[1].nodes + 1] = { n = G.UIT.R, config = { align = "cr" }, nodes = {phanta_create_silly_toggle({
-    label = localize("phanta_starter_pack_enabled"),
-    ref_table = Phanta.config,
-    ref_value = "starter_pack_enabled",
-    callback = function()
-    end,
-  })}}
+  phanta_nodes[1].nodes[#phanta_nodes[1].nodes + 1] = {
+    n = G.UIT.R,
+    config = { align = "cr" },
+    nodes = { phanta_create_silly_toggle({
+      label = localize("phanta_junk_enabled"),
+      ref_table = Phanta.config,
+      ref_value = "junk_enabled",
+      callback = function()
+      end,
+    }) }
+  }
+  phanta_nodes[1].nodes[#phanta_nodes[1].nodes + 1] = {
+    n = G.UIT.R,
+    config = { align = "cr" },
+    nodes = { phanta_create_silly_toggle({
+      label = localize("phanta_zodiac_enabled"),
+      ref_table = Phanta.config,
+      ref_value = "zodiac_enabled",
+      callback = function()
+      end,
+    }) }
+  }
+  phanta_nodes[1].nodes[#phanta_nodes[1].nodes + 1] = {
+    n = G.UIT.R,
+    config = { align = "cr" },
+    nodes = { phanta_create_silly_toggle({
+      label = localize("phanta_hanafuda_enabled"),
+      ref_table = Phanta.config,
+      ref_value = "hanafuda_enabled",
+      callback = function()
+      end,
+    }) }
+  }
+  phanta_nodes[1].nodes[#phanta_nodes[1].nodes + 1] = {
+    n = G.UIT.R,
+    config = { align = "cr" },
+    nodes = { phanta_create_silly_toggle({
+      label = localize("phanta_starter_pack_enabled"),
+      ref_table = Phanta.config,
+      ref_value = "starter_pack_enabled",
+      callback = function()
+      end,
+    }) }
+  }
   phanta_nodes[2] = { n = G.UIT.C, config = { align = "cm", padding = 0.1 }, nodes = {} }
-  phanta_nodes[2].nodes[#phanta_nodes[2].nodes + 1] = { n = G.UIT.R, config = { align = "cr" }, nodes = {phanta_create_silly_toggle({
-    label = localize("phanta_disable_custom_music"),
-    ref_table = Phanta.config,
-    ref_value = "custom_music_disabled",
-    callback = function()
-    end,
-  })}}
-  phanta_nodes[2].nodes[#phanta_nodes[2].nodes + 1] = { n = G.UIT.R, config = { align = "cr" }, nodes = {phanta_create_silly_toggle({
-    label = localize("phanta_custom_title_screen"),
-    ref_table = Phanta.config,
-    ref_value = "custom_title_screen",
-    callback = function()
-    end,
-    info = { localize("phanta_requires_restart") }
-  })}}
-  phanta_nodes[2].nodes[#phanta_nodes[2].nodes + 1] = { n = G.UIT.R, config = { align = "cr" }, nodes = {phanta_create_silly_toggle({
-    label = localize("phanta_copper_grate_expanded"),
-    ref_table = Phanta.config,
-    ref_value = "copper_grate_expanded",
-    callback = function()
-    end,
-  })}}
-  phanta_nodes[2].nodes[#phanta_nodes[2].nodes + 1] = { n = G.UIT.R, config = { align = "cr" }, nodes = {phanta_create_silly_toggle({
-    label = localize("phanta_dougdimmadome_disable_hat"),
-    ref_table = Phanta.config,
-    ref_value = "dougdimmadome_disable_hat",
-    callback = function()
-    end,
-  })}}
-  phanta_nodes[2].nodes[#phanta_nodes[2].nodes + 1] = { n = G.UIT.R, config = { align = "cr" }, nodes = {phanta_create_silly_toggle({
-    label = localize("phanta_stickers_hc"),
-    ref_table = Phanta.config,
-    ref_value = "stickers_hc",
-    callback = function()
-    end,
-  })}}
+  phanta_nodes[2].nodes[#phanta_nodes[2].nodes + 1] = {
+    n = G.UIT.R,
+    config = { align = "cr" },
+    nodes = { phanta_create_silly_toggle({
+      label = localize("phanta_disable_custom_music"),
+      ref_table = Phanta.config,
+      ref_value = "custom_music_disabled",
+      callback = function()
+      end,
+    }) }
+  }
+  phanta_nodes[2].nodes[#phanta_nodes[2].nodes + 1] = {
+    n = G.UIT.R,
+    config = { align = "cr" },
+    nodes = { phanta_create_silly_toggle({
+      label = localize("phanta_custom_title_screen"),
+      ref_table = Phanta.config,
+      ref_value = "custom_title_screen",
+      callback = function()
+      end,
+      info = { localize("phanta_requires_restart") }
+    }) }
+  }
+  phanta_nodes[2].nodes[#phanta_nodes[2].nodes + 1] = {
+    n = G.UIT.R,
+    config = { align = "cr" },
+    nodes = { phanta_create_silly_toggle({
+      label = localize("phanta_copper_grate_expanded"),
+      ref_table = Phanta.config,
+      ref_value = "copper_grate_expanded",
+      callback = function()
+      end,
+    }) }
+  }
+  phanta_nodes[2].nodes[#phanta_nodes[2].nodes + 1] = {
+    n = G.UIT.R,
+    config = { align = "cr" },
+    nodes = { phanta_create_silly_toggle({
+      label = localize("phanta_dougdimmadome_disable_hat"),
+      ref_table = Phanta.config,
+      ref_value = "dougdimmadome_disable_hat",
+      callback = function()
+      end,
+    }) }
+  }
+  phanta_nodes[2].nodes[#phanta_nodes[2].nodes + 1] = {
+    n = G.UIT.R,
+    config = { align = "cr" },
+    nodes = { phanta_create_silly_toggle({
+      label = localize("phanta_stickers_hc"),
+      ref_table = Phanta.config,
+      ref_value = "stickers_hc",
+      callback = function()
+      end,
+    }) }
+  }
   return {
     n = G.UIT.ROOT,
     config = {

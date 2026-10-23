@@ -111,11 +111,34 @@ SMODS.Stake {
     sticker_atlas = "PhantaStickers",
     sticker_pos = { x = 3, y = 1 },
     modifiers = function()
-        G.GAME.modifiers.fewer_shop_slots_pre_reroll = 1
+        G.GAME.modifiers.extra_first_reroll_cost = 3
     end,
     colour = G.C.GOLD,
     shiny = true,
 }
+
+local calculate_reroll_cost_ref = calculate_reroll_cost
+function calculate_reroll_cost(skip_increment)
+    calculate_reroll_cost_ref(skip_increment)
+    if G.GAME.modifiers.extra_first_reroll_cost and not (G.GAME.current_round.phanta_no_of_rerolls and G.GAME.current_round.phanta_no_of_rerolls > 0) then
+        G.GAME.current_round.reroll_cost = G.GAME.current_round.reroll_cost + G.GAME.modifiers.extra_first_reroll_cost
+    end
+end
+
+local new_round_ref = new_round
+function new_round()
+    local ret = new_round_ref()
+    G.GAME.current_round.phanta_no_of_rerolls = 0
+    return ret
+end
+
+local can_reroll_ref = G.FUNCS.can_reroll
+G.FUNCS.can_reroll = function(e)
+    can_reroll_ref(e)
+    if e.config.colour == G.C.GREEN and G.GAME.modifiers.extra_first_reroll_cost and not (G.GAME.current_round.phanta_no_of_rerolls and G.GAME.current_round.phanta_no_of_rerolls > 0) then
+        e.config.colour = G.C.GOLD
+    end
+end
 
 local smods_context_ref = SMODS.calculate_context
 function SMODS.calculate_context(context, return_table, no_resolve)

@@ -178,6 +178,7 @@ G.FUNCS.phanta_wake_up = function(e)
         card.area:unhighlight_all()
     end
     ease_dollars(-card.ability.phanta_sleepy_wake_up_cost or -9)
+
     G.E_MANAGER:add_event(Event({
         trigger = "after",
         delay = 0.06 * G.SETTINGS.GAMESPEED,
@@ -188,6 +189,7 @@ G.FUNCS.phanta_wake_up = function(e)
         end
     }))
     play_sound("tarot2", 1, 0.4)
+    
     card_eval_status_text(card, "extra", nil, nil, nil,
         {
             message = localize("phanta_sleepy_awake"),

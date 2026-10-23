@@ -407,6 +407,17 @@ match_indent = true
 
 
 
+
+[[patches]]
+[patches.pattern]
+target = "functions/button_callbacks.lua"
+pattern = '''local final_free = G.GAME.current_round.free_rerolls > 0'''
+position = "before"
+payload = '''G.GAME.current_round.phanta_no_of_rerolls = (G.GAME.current_round.phanta_no_of_rerolls or 0) + 1'''
+match_indent = true
+
+
+
 [[patches]]
 [patches.pattern]
 target = "card.lua"
