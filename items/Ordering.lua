@@ -106,6 +106,8 @@ local joker_order = {
     "stachenscarfen",
     "aldus",
     "theblackraven",
+    "dmitriallen",
+    "antonherzen",
     "jeandescole",
     "milesedgeworth",
     "dickgumshoe",

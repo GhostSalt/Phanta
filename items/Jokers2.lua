@@ -2368,8 +2368,7 @@ G.Phanta.centers["donpaolo"] = {
 
 SMODS.Sound({
   key = "future_luke_sold",
-  path = "phanta_future_luke_sold.ogg",
-  replace = true
+  path = "phanta_future_luke_sold.ogg"
 })
 
 G.Phanta.centers["futureluke"] = {
@@ -2396,12 +2395,12 @@ G.Phanta.centers["futureluke"] = {
   eternal_compat = true,
   perishable_compat = true,
   calculate = function(self, card, context)
-    if context.using_consumeable and context.consumeable.config.center.set == "Planet" then
-      return { dollars = card.ability.extra.money }
+    if context.selling_self and not context.blueprint then
+      play_sound("phanta_future_luke_sold", 1, 0.7)
     end
 
-    if context.selling_self and not context.blueprint then
-      play_sound("phanta_future_luke_sold", 1, 0.9)
+    if context.using_consumeable and context.consumeable.config.center.set == "Planet" then
+      return { dollars = card.ability.extra.money }
     end
   end,
   pronouns = "he_him"
@@ -2531,6 +2530,113 @@ function SMODS.calculate_context(context, return_table)
   if context and context.starting_shop then phanta_black_raven_add_to_shop(G.GAME.phanta_black_raven_cards or 0) end
   return context_ref(context, return_table)
 end
+
+SMODS.Sound({
+  key = "dmitri_sold",
+  path = "phanta_dmitri_sold.ogg"
+})
+
+G.Phanta.centers["dmitriallen"] = {
+  rarity = 3,
+  atlas = "Phanta2",
+  pos = { x = 2, y = 9 },
+  cost = 10,
+  loc_vars = function(self, info_queue, card)
+    if card.area and card.area == G.jokers then
+      local other_joker
+      for i = 1, #G.jokers.cards do
+        if G.jokers.cards[i] == card then
+          other_joker = G.jokers.cards[i - 1]; break
+        end
+      end
+      local compatible = other_joker and other_joker ~= card and other_joker.config.center.blueprint_compat
+      local main_end = {
+        {
+          n = G.UIT.C,
+          config = { align = "bm", minh = 0.4 },
+          nodes = {
+            {
+              n = G.UIT.C,
+              config = { ref_table = card, align = "m", colour = compatible and mix_colours(G.C.GREEN, G.C.JOKER_GREY, 0.8) or mix_colours(G.C.RED, G.C.JOKER_GREY, 0.8), r = 0.05, padding = 0.06 },
+              nodes = {
+                { n = G.UIT.T, config = { text = " " .. localize("k_" .. (compatible and "compatible" or "incompatible")) .. " ", colour = G.C.UI.TEXT_LIGHT, scale = 0.32 * 0.8 } },
+              }
+            }
+          }
+        }
+      }
+      return { main_end = main_end }
+    end
+  end,
+  blueprint_compat = true,
+  eternal_compat = true,
+  perishable_compat = true,
+
+  calculate = function(self, card, context)
+    if context.selling_self and not context.blueprint then
+      play_sound("phanta_dmitri_sold", 1, 0.7)
+    end
+
+    local other_joker
+    for i = 1, #G.jokers.cards do
+      if G.jokers.cards[i] == card then
+        other_joker = G.jokers.cards[i - 1]; break
+      end
+    end
+    local ret = SMODS.blueprint_effect(card, other_joker, context)
+    if ret then ret.colour = G.C.RED end
+    return ret
+  end,
+  pronouns = "he_him"
+}
+
+SMODS.Sound({
+  key = "anton_sold",
+  path = "phanta_anton_sold.ogg"
+})
+
+G.Phanta.centers["antonherzen"] = {
+  rarity = 3,
+  atlas = "Phanta2",
+  pos = { x = 3, y = 9 },
+  cost = 10,
+  loc_vars = function(self, info_queue, card)
+    if card.area and card.area == G.jokers then
+      local other_joker = G.jokers.cards[#G.jokers.cards]
+      local compatible = other_joker and other_joker ~= card and other_joker.config.center.blueprint_compat
+      local main_end = {
+        {
+          n = G.UIT.C,
+          config = { align = "bm", minh = 0.4 },
+          nodes = {
+            {
+              n = G.UIT.C,
+              config = { ref_table = card, align = "m", colour = compatible and mix_colours(G.C.GREEN, G.C.JOKER_GREY, 0.8) or mix_colours(G.C.RED, G.C.JOKER_GREY, 0.8), r = 0.05, padding = 0.06 },
+              nodes = {
+                { n = G.UIT.T, config = { text = " " .. localize("k_" .. (compatible and "compatible" or "incompatible")) .. " ", colour = G.C.UI.TEXT_LIGHT, scale = 0.32 * 0.8 } },
+              }
+            }
+          }
+        }
+      }
+      return { main_end = main_end }
+    end
+  end,
+  blueprint_compat = true,
+  eternal_compat = true,
+  perishable_compat = true,
+
+  calculate = function(self, card, context)
+    if context.selling_self and not context.blueprint then
+      play_sound("phanta_anton_sold", 1, 0.7)
+    end
+
+    local ret = SMODS.blueprint_effect(card, G.jokers.cards[#G.jokers.cards], context)
+    if ret then ret.colour = G.C.BLUE end
+    return ret
+  end,
+  pronouns = "he_him"
+}
 
 G.Phanta.centers["zero"] = {
   config = { extra = { sum = 9 } },
@@ -3088,20 +3194,17 @@ G.Phanta.centers["astro"] = {
 
 SMODS.Sound({
   key = "dougdimmadome_0",
-  path = "phanta_dougdimmadome_0.ogg",
-  replace = true
+  path = "phanta_dougdimmadome_0.ogg"
 })
 
 SMODS.Sound({
   key = "dougdimmadome_1",
-  path = "phanta_dougdimmadome_1.ogg",
-  replace = true
+  path = "phanta_dougdimmadome_1.ogg"
 })
 
 SMODS.Sound({
   key = "dougdimmadome_2",
-  path = "phanta_dougdimmadome_2.ogg",
-  replace = true
+  path = "phanta_dougdimmadome_2.ogg"
 })
 
 G.Phanta.centers["dougdimmadome"] = {
@@ -3852,7 +3955,7 @@ G.Phanta.centers["occultbanner"] = {
           return true
         end)
       }))
-      return { message = "+"..localize({ type = "name_text", set = "Tag", key = "tag_ethereal" }), colour = G.C.SECONDARY_SET.Spectral }
+      return { message = "+" .. localize({ type = "name_text", set = "Tag", key = "tag_ethereal" }), colour = G.C.SECONDARY_SET.Spectral }
     end
   end,
   pronouns = "it_its"

@@ -1926,6 +1926,20 @@ return {
                     "the {C:attention}Vouchers{}"
                 }
             },
+            j_phanta_dmitriallen            = {
+                name = "Dmitri Allen",
+                text = {
+                    "Copies ability of",
+                    "{C:attention}Joker{} to the left"
+                }
+            },
+            j_phanta_antonherzen            = {
+                name = "Anton Herzen",
+                text = {
+                    "Copies the ability",
+                    "of rightmost {C:attention}Joker{}"
+                }
+            },
             j_phanta_zero                   = {
                 name = "Zero",
                 text = {
@@ -2405,7 +2419,7 @@ return {
                     "{E:1,s:1.3}?????{}",
                 }
             },
-            j_phanta_famalia_stickerless                = {
+            j_phanta_famalia_stickerless    = {
                 name = "Famalia",
                 text = {
                     "When {C:attention}Blind{} is selected,",
