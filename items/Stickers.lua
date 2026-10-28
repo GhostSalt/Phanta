@@ -163,10 +163,14 @@ SMODS.Sticker {
         SMODS.Sticker.apply(self, card, val)
         card.ability.phanta_sleepy_tally = self.config.extra.rounds
         card.ability.phanta_sleepy_wake_up_cost = self.config.extra.cost
-
-        if card.ability[self.key] then card:set_cost() end
     end,
 }
+
+local is_eternal_ref = SMODS.is_eternal
+SMODS.is_eternal = function(card, trigger)
+    if card and card.ability and card.ability.phanta_sleepy then return true end
+    return is_eternal_ref(card, trigger)
+end
 
 G.FUNCS.phanta_wake_up = function(e)
     local card = e.config.ref_table

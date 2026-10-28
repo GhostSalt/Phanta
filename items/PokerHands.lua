@@ -3,7 +3,7 @@ SMODS.PokerHand {
   chips = 5,
   mult = 2,
   l_chips = 10,
-  l_mult = 3,
+  l_mult = 2,
   visible = false,
   above_hand = "High Card",
   example = {

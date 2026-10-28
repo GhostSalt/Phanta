@@ -1201,7 +1201,7 @@ return {
                 name = "Identity",
                 text = {
                     "Creates {C:attention}#1#{} random {C:spectral}Spectral{}",
-                    "card at the end of the",
+                    "cards at the end of the",
                     "{C:attention}shop{}, {C:red,E:2}self destructs{}",
                     "{C:inactive}(Must have room){}"
                 }
@@ -2827,12 +2827,12 @@ return {
             phanta_sleepy = {
                 name = "Sleepy",
                 text = {
-                    "Disabled until",
+                    "Disabled and can't be",
+                    "sold or destroyed until",
                     "after {C:attention}#1#{} rounds",
                     "{C:inactive}({C:attention}#2#{C:inactive} remaining)",
-                    "You may spend {C:money}$#3#{}",
-                    "to wake this card",
-                    "up {C:attention}immediately{}"
+                    "You may spend {C:money}$#3#{} to",
+                    "wake this card {C:attention}immediately{}"
                 },
             },
             phanta_pollutive = {
@@ -3551,7 +3551,8 @@ return {
                 name = "Orange Stake (Phanta)",
                 text = {
                     "Shop can have {C:attention}Sleepy{} Jokers",
-                    "{C:inactive,s:0.8}(Debuffed until after 2 rounds){}",
+                    "{C:inactive,s:0.8}(Debuffed and can't be sold or{}",
+                    "{C:inactive,s:0.8}destroyed until after 2 rounds){}",
                     "{s:0.8}Applies all previous Stakes{}"
                 }
             },
@@ -4423,7 +4424,7 @@ return {
             phanta_set = "SET",
             phanta_clear = "CLEAR",
             phanta_jokers = "JOKERS",
-            b_phanta_wake_up = "WAKE UP",
+            b_phanta_wake_up = "WAKE",
             phanta_consumables = "CONSUMABLES",
             phanta_profile_more_tooltip = {
                 "Charm, Meteor and Ethereal Tags",
