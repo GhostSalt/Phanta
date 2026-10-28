@@ -801,8 +801,8 @@ return {
             j_phanta_exitsign               = {
                 name = "Exit Sign",
                 text = {
-                    "Earn {C:money}$#1#{} when hand",
-                    "is played if {C:blue}0{} hands",
+                    "Earn {C:money}$#1#{} at end",
+                    "of round if {C:blue}0{} hands",
                     "and {C:red}0{} discards remain"
                 }
             },

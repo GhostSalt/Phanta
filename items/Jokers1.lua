@@ -1105,7 +1105,7 @@ G.Phanta.centers["scratchart"] = {
 }
 
 G.Phanta.centers["animalinstinct"] = {
-  config = { extra = { added_xmult = 0.25, current_xmult = 1 } },
+  config = { extra = { added_xmult = 0.2, current_xmult = 1 } },
   loc_vars = function(self, info_queue, card)
     return { vars = { card.ability.extra.added_xmult, card.ability.extra.current_xmult } }
   end,
@@ -1265,16 +1265,16 @@ G.Phanta.centers["exitsign"] = {
   rarity = 1,
   atlas = 'Phanta',
   pos = { x = 8, y = 1 },
-  cost = 5,
+  cost = 6,
   blueprint_compat = true,
   eternal_compat = true,
   perishable_compat = true,
   loc_vars = function(self, info_queue, card)
     return { vars = { card.ability.extra.money_given } }
   end,
-  calculate = function(self, card, context)
-    if context.before and G.GAME.current_round.hands_left == 0 and G.GAME.current_round.discards_left == 0 then
-      return { dollars = card.ability.extra.money_given }
+  calc_dollar_bonus = function(self, card)
+    if G.GAME.current_round.hands_left <= 0 and G.GAME.current_round.discards_left <= 0 then
+      return card.ability.extra.money_given
     end
   end,
   pronouns = "it_its"
