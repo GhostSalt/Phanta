@@ -662,7 +662,7 @@ function SMODS.current_mod:calculate(context)
     G.GAME.phanta_number_of_unscored = G.GAME.phanta_number_of_unscored + (#G.play.cards - #context.scoring_hand)
   end
 
-  if context.reroll_shop and G.GAME.current_shop_rerolls >= 10 then
+  if context.reroll_shop and G.GAME.current_shop_rerolls and G.GAME.current_shop_rerolls >= 10 then
     check_for_unlock({ type = "phanta_ten_rerolls" })
   end
 end

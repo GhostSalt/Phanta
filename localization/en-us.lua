@@ -1689,8 +1689,8 @@ return {
                 name = "Peekaboo",
                 text = {
                     "{C:mult}+#1#{} Mult",
-                    "Has a {C:attention}secret{}",
-                    "second ability"
+                    "Has a random",
+                    "{C:attention}secret{} ability"
                 }
             },
             j_phanta_topsyturvy             = {
@@ -1727,9 +1727,8 @@ return {
             j_phanta_absentjoker            = {
                 name = "Absent Joker",
                 text = {
-                    "{C:mult}+#1#{} Mult if",
-                    "at least {C:attention}1{} Joker",
-                    "slot is {C:attention}empty{}"
+                    "{C:mult}+#1#{} Mult if at least",
+                    "{C:attention}1{} Joker slot is {C:attention}empty{}"
                 }
             },
             j_phanta_sillyjoker             = {

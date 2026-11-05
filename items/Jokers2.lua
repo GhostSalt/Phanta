@@ -376,7 +376,7 @@ G.Phanta.centers["peekaboo"] = {
 }
 
 G.Phanta.centers["topsyturvy"] = {
-  config = { extra = { chips = 30 } },
+  config = { extra = { chips = 32 } },
   loc_vars = function(self, info_queue, card)
     return { vars = { card.ability.extra.chips } }
   end,
@@ -1694,7 +1694,7 @@ G.Phanta.centers["sillyjoker"] = {
   eternal_compat = true,
   perishable_compat = true,
   calculate = function(self, card, context)
-    if context.before and #G.play.cards < card.ability.extra.cards then
+    if context.before and #G.play.cards < card.ability.extra.cards and not card.ability.extra.disabled then
       card.ability.extra.disabled = true
       G.E_MANAGER:add_event(Event({
         func = function()
