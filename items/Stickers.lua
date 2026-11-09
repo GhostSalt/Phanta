@@ -28,7 +28,7 @@ SMODS.Sticker {
         if card.ability and card.ability.consumeable and card.ability.set ~= "phanta_StarterPack" and G.GAME.modifiers["enable_" .. self.key] then
             self.last_roll = pseudorandom((area == G.pack_cards and "packssj" or "shopssj") ..
                 self.key .. G.GAME.round_resets.ante)
-            return bypass_roll or self.last_roll > (1 - self.rate)
+            return bypass_roll or G.GAME.modifiers.all_phanta_pollutive or self.last_roll > (1 - self.rate)
         end
     end,
     draw = function(self, card, layer)
@@ -73,7 +73,7 @@ SMODS.Sticker {
         if card.ability and card.ability.consumeable and card.ability.set ~= "phanta_StarterPack" and G.GAME.modifiers["enable_" .. self.key] then
             self.last_roll = pseudorandom((area == G.pack_cards and "packssj" or "shopssj") ..
                 self.key .. G.GAME.round_resets.ante)
-            return bypass_roll or self.last_roll > (1 - self.rate)
+            return bypass_roll or G.GAME.modifiers.all_phanta_bestbefore or self.last_roll > (1 - self.rate)
         end
     end,
     draw = function(self, card, layer)
@@ -160,6 +160,7 @@ SMODS.Sticker {
         return { vars = { self.config.extra.rounds, card.ability.phanta_sleepy_tally or self.config.extra.rounds, self.config.extra.cost } }
     end,
     apply = function(self, card, val)
+        if card.config.center.key == "j_phanta_developerdifficulty" then return end
         SMODS.Sticker.apply(self, card, val)
         card.ability.phanta_sleepy_tally = self.config.extra.rounds
         card.ability.phanta_sleepy_wake_up_cost = self.config.extra.cost

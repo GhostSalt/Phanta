@@ -230,6 +230,8 @@ local joker_order = {
     "fainfol",
     "granwyrm",
     "lightyagami",
+
+    "developerdifficulty"
 }
 
 local cbean_found = next(SMODS.find_mod("ColdBeans"))

@@ -2484,6 +2484,137 @@ return {
 
 
 
+            j_phanta_developerdifficulty   = {
+                name = "Developer Difficulty",
+                text = {
+                    {
+                        "An extra {C:attention}challenge{} for those",
+                        "who hate fair, balanced gameplay",
+                        "Effects get worse each {C:attention}Ante{}"
+                    },
+                    {
+                        "{C:inactive}Currently no effects{}"
+                    }
+                }
+            },
+            j_phanta_developerdifficulty_2 = {
+                name = "Developer Difficulty",
+                text = {
+                    {
+                        "An extra {C:attention}challenge{} for those",
+                        "who hate fair, balanced gameplay",
+                        "Effects get worse each {C:attention}Ante{}"
+                    },
+                    {
+                        "Lose {C:red}$#1#{} each round"
+                    }
+                }
+            },
+            j_phanta_developerdifficulty_3 = {
+                name = "Developer Difficulty",
+                text = {
+                    {
+                        "An extra {C:attention}challenge{} for those",
+                        "who hate fair, balanced gameplay",
+                        "Effects get worse each {C:attention}Ante{}"
+                    },
+                    {
+                        "Lose {C:red}$#1#{} each round",
+                        "All consumables are {C:attention}Pollutive{}"
+                    }
+                }
+            },
+            j_phanta_developerdifficulty_4 = {
+                name = "Developer Difficulty",
+                text = {
+                    {
+                        "An extra {C:attention}challenge{} for those",
+                        "who hate fair, balanced gameplay",
+                        "Effects get worse each {C:attention}Ante{}"
+                    },
+                    {
+                        "Lose {C:red}$#1#{} each round",
+                        "All consumables are {C:attention}Pollutive{}",
+                        "All consumables are {C:attention}Best Before{}"
+                    }
+                }
+            },
+            j_phanta_developerdifficulty_5 = {
+                name = "Developer Difficulty",
+                text = {
+                    {
+                        "An extra {C:attention}challenge{} for those",
+                        "who hate fair, balanced gameplay",
+                        "Effects get worse each {C:attention}Ante{}"
+                    },
+                    {
+                        "Lose {C:red}$#1#{} each round",
+                        "All consumables are {C:attention}Pollutive{}",
+                        "All consumables are {C:attention}Best Before{}",
+                        "{C:blue}-#2#{} hand each round"
+                    }
+                }
+            },
+            j_phanta_developerdifficulty_6 = {
+                name = "Developer Difficulty",
+                text = {
+                    {
+                        "An extra {C:attention}challenge{} for those",
+                        "who hate fair, balanced gameplay",
+                        "Effects get worse each {C:attention}Ante{}"
+                    },
+                    {
+                        "Lose {C:red}$#1#{} each round",
+                        "All consumables are {C:attention}Pollutive{}",
+                        "All consumables are {C:attention}Best Before{}",
+                        "{C:blue}-#2#{} hand each round",
+                        "{C:white,X:mult}X#3#{} Mult"
+                    }
+                }
+            },
+            j_phanta_developerdifficulty_7 = {
+                name = "Developer Difficulty",
+                text = {
+                    {
+                        "An extra {C:attention}challenge{} for those",
+                        "who hate fair, balanced gameplay",
+                        "Effects get worse each {C:attention}Ante{}"
+                    },
+                    {
+                        "Lose {C:red}$#1#{} each round",
+                        "All consumables are {C:attention}Pollutive{}",
+                        "All consumables are {C:attention}Best Before{}",
+                        "{C:blue}-#2#{} hand each round",
+                        "{C:white,X:mult}X#3#{} Mult",
+                        "{C:red}-#4#{} {C:attention}Booster Pack{} each shop"
+                    }
+                }
+            },
+            j_phanta_developerdifficulty_8 = {
+                name = "Developer Difficulty",
+                text = {
+                    {
+                        "An extra {C:attention}challenge{} for those",
+                        "who hate fair, balanced gameplay",
+                        "Effects get worse each {C:attention}Ante{}"
+                    },
+                    {
+                        "Lose {C:red}$#1#{} each round",
+                        "All consumables are {C:attention}Pollutive{}",
+                        "All consumables are {C:attention}Best Before{}",
+                        "{C:blue}-#2#{} hand each round",
+                        "{C:white,X:mult}X#3#{} Mult",
+                        "{C:red}-#4#{} {C:attention}Booster Pack{} each shop",
+                        "no final ability yet"
+                    }
+                }
+            },
+
+
+
+
+
+
 
             j_phanta_deckjoker_red = {
                 name = "Deck Joker (Red)",
@@ -4465,6 +4596,7 @@ return {
             },
 
             k_phanta_shattered_ex = "Shattered!",
+            k_phanta_new_effect = "new effect.",
 
             phanta_theblackraven_blackmarket = "THE BLACK MARKET",
 
@@ -4514,6 +4646,8 @@ return {
             phanta_animal_badge = "Animal",
             phanta_bright_badge = "Bright",
 
+            k_phanta_awful = "Awful",
+
 
 
             phanta_credit_1 = "Mod by GhostSalt",
@@ -4547,6 +4681,8 @@ return {
             phanta_sleepy = "Sleepy",
             phanta_pollutive = "Pollutive",
             phanta_bestbefore = "Best Before",
+
+            phanta_awful = "Awful"
         },
         poker_hands = {
             ["phanta_junk"] = "Junk",

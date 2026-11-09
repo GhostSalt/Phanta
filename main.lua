@@ -447,6 +447,7 @@ local allFiles = {
 
     "Jokers1",
     "Jokers2",
+    "selfdestructs",
     "Cataclysm",
     "DeathNote",
     "Legendaries",

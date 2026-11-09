@@ -1,3 +1,39 @@
+function phanta_deathnote_get_pool()
+  G.phanta_deathnote_temp_showman = true
+
+  local valid = {}
+  for k, v in pairs(SMODS.Rarities) do
+    local pool = get_current_pool("Joker", k, nil, "phanta_deathnote_pool")
+    if type(pool) == "table" and pool[1] ~= "empty_rarity" then
+      for _, v in ipairs(SMODS.cull_pool(pool, {})) do
+        valid[#valid + 1] = v
+      end
+    end
+  end
+  local new_pool = {}
+  for _, v in ipairs(G.P_CENTER_POOLS.Joker) do
+    if not v.no_collection and not (G.GAME.modifiers.modded_only and not v.mod) then
+      new_pool[#new_pool + 1] = { key = v.key, debuff = true }
+      for _, vv in ipairs(valid) do
+        if v.key == vv then
+          new_pool[#new_pool].debuff = nil
+          break
+        end
+      end
+    end
+  end
+  
+  G.phanta_deathnote_temp_showman = nil
+
+  return new_pool
+end
+
+local showman_ref = SMODS.showman
+function SMODS.showman(card_key)
+  if G.phanta_deathnote_temp_showman then return true end
+  return showman_ref(card_key)
+end
+
 G.FUNCS.run_deathnote_menu = function(e)
   G.SETTINGS.paused = true
   G.GAME.phanta_current_deathnote_card = e.config.ref_table
@@ -261,24 +297,23 @@ phanta_create_uibox_deathnote_jokers_collection = function(e)
     G.your_collection[j].config.phanta_deathnote_selectable = true
   end
 
+  local pool = phanta_deathnote_get_pool()
   local joker_options = {}
-  for i = 1, math.ceil(#G.P_CENTER_POOLS["Joker"] / (5 * #G.your_collection)) do
-    table.insert(joker_options,
-      localize('k_page') ..
-      ' ' .. tostring(i) .. '/' .. tostring(math.ceil(#G.P_CENTER_POOLS["Joker"] / (5 * #G.your_collection))))
+  for i = 1, math.ceil(#pool / (5 * #G.your_collection)) do
+    table.insert(joker_options, localize('k_page') .. ' ' .. tostring(i) .. '/' .. tostring(math.ceil(#pool / (5 * #G.your_collection))))
   end
 
   for i = 1, 5 do
     for j = 1, #G.your_collection do
-      local center = G.P_CENTER_POOLS["Joker"][i + (j - 1) * 5]
-      if not center then break end
+      local key_bundle = pool[i + (j - 1) * 5]
+      if not key_bundle then break end
 
-      local old_used_jokers = G.GAME.used_jokers[center.key]
-      local card = Card(G.your_collection[j].T.x + G.your_collection[j].T.w / 2, G.your_collection[j].T.y, G.CARD_W,
-        G.CARD_H, G.P_CARDS.empty, center)
-      G.GAME.used_jokers[center.key] = old_used_jokers
+      local old_used_jokers = G.GAME.used_jokers[key_bundle.key]
+      local card = Card(G.your_collection[j].T.x + G.your_collection[j].T.w / 2, G.your_collection[j].T.y, G.CARD_W, G.CARD_H, G.P_CARDS.empty, G.P_CENTERS[key_bundle.key])
+      G.GAME.used_jokers[key_bundle.key] = old_used_jokers
 
-      card.sticker = get_joker_win_sticker(center)
+      card.sticker = get_joker_win_sticker(G.P_CENTERS[key_bundle.key])
+      if key_bundle.debuff then card.greyed = true end
       G.your_collection[j]:emplace(card)
     end
   end
@@ -312,6 +347,14 @@ phanta_create_uibox_deathnote_jokers_collection = function(e)
 end
 
 G.FUNCS.phanta_leave_deathnote_jokers_collection = function(e)
+  for j = 1, #G.your_collection do
+    for i = #G.your_collection[j].cards, 1, -1 do
+      local c = G.your_collection[j]:remove_card(G.your_collection[j].cards[i])
+      c:remove()
+      c = nil
+    end
+  end
+
   G.OVERLAY_PHANTA_DEATHNOTECOLLECTION = false
 
   if G.OVERLAY_MENU then G.FUNCS.exit_overlay_menu() end
@@ -330,17 +373,17 @@ G.FUNCS.phanta_your_deathnote_jokers_collection = function(args)
       c = nil
     end
   end
+  local pool = phanta_deathnote_get_pool()
   for i = 1, 5 do
     for j = 1, #G.your_collection do
-      local center = G.P_CENTER_POOLS["Joker"]
-          [i + (j - 1) * 5 + (5 * #G.your_collection * (args.cycle_config.current_option - 1))]
-      if not center then break end
+      local key_bundle = pool[i + (j - 1) * 5 + (5 * #G.your_collection * (args.cycle_config.current_option - 1))]
+      if not key_bundle then break end
 
-      local old_used_jokers = G.GAME.used_jokers[center.key]
-      local card = Card(G.your_collection[j].T.x + G.your_collection[j].T.w / 2, G.your_collection[j].T.y, G.CARD_W,
-        G.CARD_H, G.P_CARDS.empty, center)
-      G.GAME.used_jokers[center.key] = old_used_jokers
-
+      local old_used_jokers = G.GAME.used_jokers[key_bundle.key]
+      local card = Card(G.your_collection[j].T.x + G.your_collection[j].T.w / 2, G.your_collection[j].T.y, G.CARD_W, G.CARD_H, G.P_CARDS.empty, G.P_CENTERS[key_bundle.key])
+      G.GAME.used_jokers[key_bundle.key] = old_used_jokers
+      card.sticker = get_joker_win_sticker(G.P_CENTERS[key_bundle.key])
+      if key_bundle.debuff and G.P_CENTERS[key_bundle.key].rarity ~= 4 then card.greyed = true; card.T.w = card.T.w / 1.5; card.T.h = card.T.h / 1.5 end
       G.your_collection[j]:emplace(card)
     end
   end
@@ -521,11 +564,11 @@ phanta_deathnote_your_collection_consumable_type = function(e)
     for j = 1, #G.your_collection do
       local center = G.P_CENTER_POOLS[set][i + (j - 1) * 5]
       if not center then break end
-      local old_used_jokers = G.GAME.used_jokers[center.key]
+      G.phanta_deathnote_temp_showman = true
       local card = Card(G.your_collection[j].T.x + G.your_collection[j].T.w / 2, G.your_collection[j].T.y, G.CARD_W,
         G.CARD_H, nil, center)
       G.your_collection[j]:emplace(card)
-      G.GAME.used_jokers[center.key] = old_used_jokers
+      G.phanta_deathnote_temp_showman = nil
     end
   end
 
@@ -591,10 +634,10 @@ G.FUNCS.phanta_deathnote_your_collection_consumable_type_thing = function(args)
           [i + (j - 1) * 5 + (5 * #G.your_collection * (args.cycle_config.current_option - 1))]
       if not center then break end
 
-      local old_used_jokers = G.GAME.used_jokers[center.key]
+      G.phanta_deathnote_temp_showman = true
       local card = Card(G.your_collection[j].T.x + G.your_collection[j].T.w / 2, G.your_collection[j].T.y, G.CARD_W,
         G.CARD_H, nil, center)
-      G.GAME.used_jokers[center.key] = old_used_jokers
+      G.phanta_deathnote_temp_showman = nil
 
       G.your_collection[j]:emplace(card)
     end
@@ -766,7 +809,7 @@ function create_card(_type, area, legendary, _rarity, skip_materialize, soulable
   local notes = SMODS.find_card("j_phanta_deathnote")
   if next(notes) then
     for i, v in ipairs(notes) do
-      if v and v.ability and v.ability.extra and v.ability.extra.card_name
+      if v and v.ability and v.ability.extra and v.ability.extra.card_name and not (v.edition and v.edition.key == "e_negative")
           and localize { key = card.config.center.key, type = "name_text", set = card.config.center.set }:lower() == v.ability.extra.card_name:lower() then
         card:set_edition("e_negative", true)
         v:juice_up()
@@ -790,7 +833,7 @@ function SMODS:create_card(t)
   local notes = SMODS.find_card("j_phanta_deathnote")
   if next(notes) then
     for i, v in ipairs(notes) do
-      if v and v.ability and v.ability.extra and v.ability.extra.card_name
+      if v and v.ability and v.ability.extra and v.ability.extra.card_name and not (v.edition and v.edition.key == "e_negative")
           and localize { key = card.config.center.key, type = "name_text", set = card.config.center.set }:lower() == v.ability.extra.card_name:lower() then
         card:set_edition("e_negative", true)
         v:juice_up()
