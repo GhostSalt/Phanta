@@ -1114,7 +1114,7 @@ G.Phanta.centers["datacube"] = {
 }
 
 G.Phanta.centers["longtail"] = {
-  config = { extra = { mult = 3 } },
+  config = { extra = { mult = 4 } },
   loc_vars = function(self, info_queue, card)
     return { vars = { card.ability.extra.mult } }
   end,
