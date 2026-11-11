@@ -1211,7 +1211,7 @@ return {
                 text = {
                     "Creates a {C:spectral}Spectral{}",
                     "card after selling",
-                    "{C:attention}#1#{} {C:inactive}[#2#]{} {C:tarot}Tarot{} cards",
+                    "{C:attention}#1#{} {C:inactive}[#2#]{} consumables",
                     "{C:inactive}(Must have room){}"
                 }
             },
@@ -2259,9 +2259,8 @@ return {
             j_phanta_longtail               = {
                 name = "Long Tail",
                 text = {
-                    "Earn {C:money}$#1#{} when playing",
-                    "{C:attention}Straights{} without",
-                    "{C:attention}face{} cards"
+                    "Played {C:attention}6s{}-{C:attention}10s{} give",
+                    "{C:mult}+#1#{} Mult when scored"
                 }
             },
             j_phanta_ghostinthemachine      = {
@@ -2605,7 +2604,7 @@ return {
                         "{C:blue}-#2#{} hand each round",
                         "{C:white,X:mult}X#3#{} Mult",
                         "{C:red}-#4#{} {C:attention}Booster Pack{} each shop",
-                        "no final ability yet"
+                        "{C:red}Destroys{} first drawn hand"
                     }
                 }
             },
@@ -4729,6 +4728,91 @@ return {
         },
         suits_plural = {
             phanta_unknown = "?"
+        },
+        tutorial = {
+            phanta_win_developerdifficulty_1 = {
+                "congrats! you beat",
+                "the hardest mode",
+                "phanta has to offer"
+            },
+            phanta_win_developerdifficulty_2 = {
+                "thanks for playing",
+                "my mod for as long",
+                "as you have"
+            },
+            phanta_win_developerdifficulty_3 = {
+                "i'm never comfortable venting",
+                "about my mental health, but i",
+                "made this difficulty option",
+                "to be a place to do that"
+            },
+            phanta_win_developerdifficulty_4 = {
+                "in summary, i'm not",
+                "doing great, mentally"
+            },
+            phanta_win_developerdifficulty_5 = {
+                "i'm stressed because of",
+                "university responsibilities,",
+                "overdue commissions and other",
+                "unfulfilled favours"
+            },
+            phanta_win_developerdifficulty_6 = {
+                "it's been very overwhelming.",
+                "plus, i've hit a roadblock",
+                "during the development of my",
+                "game that's put it on hold"
+            },
+            phanta_win_developerdifficulty_7 = {
+                "i kinda suck, and i'm",
+                "sorry to those who",
+                "know that to be true"
+            },
+            phanta_win_developerdifficulty_8 = {
+                "help feels",
+                "so distant"
+            },
+            phanta_win_developerdifficulty_9= {
+                "i'm still having to put",
+                "up with gender dysphoria"
+            },
+            phanta_win_developerdifficulty_10 = {
+                "my parents don't accept",
+                "that i'm trans, and refuse",
+                "to help me transition"
+            },
+            phanta_win_developerdifficulty_11 = {
+                "mum thinks it's because",
+                "i got groomed once. dad",
+                "thinks i'm a crossdresser"
+            },
+            phanta_win_developerdifficulty_12 = {
+                "hopefully things change.",
+                "i'll still be here if",
+                "they don't, though"
+            },
+            phanta_win_developerdifficulty_13 = {
+                "again, thanks for playing this mod.",
+                "it's a great validation boost to",
+                "see people send screenshots and",
+                "feedback, and to see videos of it"
+            },
+            phanta_win_developerdifficulty_14 = {
+                "unseen's videos have been",
+                "regular rewatches during",
+                "particularly dark periods",
+                "of my life"
+            },
+            phanta_win_developerdifficulty_15 = {
+                "if you are making or have",
+                "made content relating to",
+                "phanta, from the bottom of",
+                "my heart, thank you so much."
+            },
+            phanta_win_developerdifficulty_16 = {
+                "anyway, thanks for listening.",
+                "congrats on the win. i'll let",
+                "you get back to your run now"
+            },
         },
         v_dictionary = {
             a_discards = "+#1# Discards",

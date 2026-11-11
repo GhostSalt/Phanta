@@ -112,6 +112,7 @@ SMODS.Stake {
     sticker_pos = { x = 3, y = 1 },
     modifiers = function()
         G.GAME.modifiers.extra_first_reroll_cost = 3
+        G.GAME.modifiers.phanta_devdifficulty_available = true
     end,
     colour = G.C.GOLD,
     shiny = true,

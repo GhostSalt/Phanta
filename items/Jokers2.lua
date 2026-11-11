@@ -1114,9 +1114,9 @@ G.Phanta.centers["datacube"] = {
 }
 
 G.Phanta.centers["longtail"] = {
-  config = { extra = { money = 4 } },
+  config = { extra = { mult = 3 } },
   loc_vars = function(self, info_queue, card)
-    return { vars = { card.ability.extra.money } }
+    return { vars = { card.ability.extra.mult } }
   end,
   rarity = 1,
   atlas = 'Phanta2',
@@ -1126,18 +1126,11 @@ G.Phanta.centers["longtail"] = {
   eternal_compat = true,
   perishable_compat = true,
   calculate = function(self, card, context)
-    if context.before and next(context.poker_hands["Straight"]) then
-      local valid = true
-      for _, v in ipairs(context.scoring_hand) do
-        if v:is_face() then
-          valid = false
-        end
-      end
-
-      if valid then return { dollars = card.ability.extra.money } end
+    if context.individual and context.cardarea == G.play and context.other_card:get_id() >= 6 and context.other_card:get_id() <= 10 then
+      return { mult = card.ability.extra.mult }
     end
   end,
-  pronouns = "it_its"
+  pronouns = "she_her"
 }
 
 G.Phanta.centers["ghostinthemachine"] = {
@@ -3743,9 +3736,9 @@ G.Phanta.centers["birthdaycard"] = {
 }
 
 G.Phanta.centers["tartanjoker"] = {
-  config = { extra = { current_tarots = 0, target_tarots = 7 } },
+  config = { extra = { current_cards = 0, target_cards = 7 } },
   loc_vars = function(self, info_queue, card)
-    return { vars = { card.ability.extra.target_tarots, card.ability.extra.target_tarots - card.ability.extra.current_tarots } }
+    return { vars = { card.ability.extra.target_cards, card.ability.extra.target_cards - card.ability.extra.current_cards } }
   end,
   rarity = 2,
   atlas = 'Phanta2',
@@ -3755,10 +3748,10 @@ G.Phanta.centers["tartanjoker"] = {
   eternal_compat = true,
   perishable_compat = false,
   calculate = function(self, card, context)
-    if context.selling_card and context.card.config.center.set == "Tarot" then
-      card.ability.extra.current_tarots = card.ability.extra.current_tarots + 1
-      if card.ability.extra.current_tarots >= card.ability.extra.target_tarots then
-        card.ability.extra.current_tarots = 0
+    if context.selling_card and context.card.ability.consumeable then
+      card.ability.extra.current_cards = card.ability.extra.current_cards + 1
+      if card.ability.extra.current_cards >= card.ability.extra.target_cards then
+        card.ability.extra.current_cards = 0
         if count_consumables() < G.consumeables.config.card_limit or
             (count_consumables() == G.consumeables.config.card_limit and not (context.card.edition and (context.card.edition.negative or context.card.edition.phanta_drilled or context.card.edition.smsn_brownglaze))) then
           G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
@@ -3787,7 +3780,7 @@ G.Phanta.centers["tartanjoker"] = {
           }
         end
       else
-        return { message = card.ability.extra.current_tarots .. "/" .. card.ability.extra.target_tarots }
+        return { message = card.ability.extra.current_cards .. "/" .. card.ability.extra.target_cards }
       end
     end
   end,

@@ -449,3 +449,86 @@ pattern = '''for k, v in ipairs(SMODS.Sticker.obj_buffer) do'''
 position = "after"
 payload = '''if G.GAME.modifiers.phanta_block_modded_stickers then break end'''
 match_indent = true
+
+
+
+
+
+
+
+
+[[patches]]
+[patches.pattern]
+target = "card.lua"
+pattern = '''if self.area and self.ability.couponed and (self.area == G.shop_jokers or self.area == G.shop_booster) then self.cost = 0 end'''
+position = "after"
+payload = '''if self.config and self.config.center.key == "j_phanta_developerdifficulty" then self.cost = 0 end'''
+match_indent = true
+
+
+
+
+
+
+
+
+[[patches]]
+[patches.pattern]
+target = "functions/UI_definitions.lua"
+pattern = '''not show_win_cta and UIBox_button({id = 'from_game_won', button = 'notify_then_setup_run', label = {localize('b_start_new_run')}, minw = 2.5, maxw = 2.5, minh = 1, focus_args = {nav = 'wide', snap_to = true}}) or nil,'''
+position = "at"
+payload = '''not show_win_cta and UIBox_button({id = 'from_game_won', button = 'notify_then_setup_run', func = 'phanta_can_leave_win_screen_new_run', label = {localize('b_start_new_run')}, minw = 2.5, maxw = 2.5, minh = 1, focus_args = {nav = 'wide', snap_to = true}}) or nil,'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = "functions/UI_definitions.lua"
+pattern = '''not show_win_cta and UIBox_button({button = 'go_to_menu', label = {localize('b_main_menu')}, minw = 2.5, maxw = 2.5, minh = 1, focus_args = {nav = 'wide'}}) or nil,'''
+position = "at"
+payload = '''not show_win_cta and UIBox_button({button = 'go_to_menu', func = 'phanta_can_leave_win_screen_main_menu', label = {localize('b_main_menu')}, minw = 2.5, maxw = 2.5, minh = 1, focus_args = {nav = 'wide'}}) or nil,'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = "functions/UI_definitions.lua"
+pattern = '''UIBox_button({button = 'exit_overlay_menu', label = {localize('b_endless')}, minw = 6.5, maxw = 5, minh = 1.2, scale = 0.7, shadow = true, colour = G.C.BLUE, focus_args = {nav = 'wide', button = 'x',set_button_pip = true}}),'''
+position = "at"
+payload = '''UIBox_button({button = 'phanta_leave_win_screen_exit_overlay', func = 'phanta_can_leave_win_screen_exit_overlay', label = {localize('b_endless')}, minw = 6.5, maxw = 5, minh = 1.2, scale = 0.7, shadow = true, colour = G.C.BLUE, focus_args = {nav = 'wide', button = 'x',set_button_pip = true}}),'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = "functions/state_events.lua"
+pattern = '''G.E_MANAGER:add_event(Event({
+trigger = 'after',
+delay = 2.5,
+blocking = false,
+func = (function()
+    if G.OVERLAY_MENU and G.OVERLAY_MENU:get_UIE_by_ID('jimbo_spot') then'''
+position = "before"
+payload = '''if next(SMODS.find_card("j_phanta_developerdifficulty")) then phanta_dev_diff_jimbo() else'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = "functions/state_events.lua"
+pattern = '''set_profile_progress()'''
+position = "after"
+payload = '''
+      G.E_MANAGER:add_event(Event({func = function() for _, v in ipairs(G.jokers.cards) do if v and not v.getting_sliced and v.config and v.config.center.key == "j_phanta_developerdifficulty" then SMODS.destroy_cards(v, { skip_calc = true, bypass_eternal = true }) end end return true end}))'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = "functions/state_events.lua"
+pattern = '''Jimbo:add_button(localize('b_wishlist'), 'wishlist_steam', G.C.DARK_EDITION, nil, true, 1.6)
+                        return true
+                    end}))
+            end
+            end
+        return true
+    end)
+}))'''
+position = "after"
+payload = '''end'''
+match_indent = true
