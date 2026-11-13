@@ -110,7 +110,7 @@ end
 
 local context_ref = SMODS.calculate_context
 function SMODS.calculate_context(context, return_table)
-  if context and context.starting_shop and G.GAME.modifiers.phanta_devdifficulty_available then
+  if context and context.starting_shop and G.GAME.modifiers.phanta_devdifficulty_available and G.shop_vouchers then
     G.GAME.modifiers.phanta_devdifficulty_available = nil
 
     G.shop_vouchers.config.card_limit = G.shop_vouchers.config.card_limit + 1
