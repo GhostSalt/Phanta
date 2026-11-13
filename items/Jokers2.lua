@@ -3637,7 +3637,7 @@ G.Phanta.centers["doublelift"] = {
 }
 
 G.Phanta.centers["strawman"] = {
-  config = { extra = { hands = 1, money = 5 }, immutable = { loneliness = 0 } },
+  config = { extra = { hands = 1, money = 5 }, immutable = { loneliness = 0, prev_sounds = {} } },
   loc_vars = function(self, info_queue, card)
     return { vars = { card.ability.extra.hands, card.ability.extra.money } }
   end,
@@ -3654,6 +3654,7 @@ G.Phanta.centers["strawman"] = {
   calculate = function(self, card, context)
     if context.end_of_round and context.main_eval and not context.game_over then
       card.ability.immutable.loneliness = card.ability.immutable.loneliness + 1
+        card.ability.immutable.used_this_round = nil
       if card.ability.immutable.loneliness == 3 then
         G.E_MANAGER:add_event(Event({
           func = function()
@@ -3666,7 +3667,9 @@ G.Phanta.centers["strawman"] = {
   end,
   add_to_deck = function(self, card, from_debuff)
     if not from_debuff then
-      play_sound("phanta_strawman_"..math.random(4, 6))
+      local ix = math.random(4, 6)
+      card.ability.immutable.prev_sounds[1] = ix
+      play_sound("phanta_strawman_" .. ix)
     end
   end
 }
@@ -3691,9 +3694,20 @@ G.FUNCS.phanta_strawman_use = function(e)
       if G.GAME.blind and G.GAME.blind.in_blind and G.GAME.current_round.hands_left > card.ability.extra.hands then
         ease_hands_played(-card.ability.extra.hands)
         ease_dollars(card.ability.extra.money)
-        card:juice_up()
+        card:juice_up(0.2, 0.2)
         play_sound("phanta_strawman_poke", 1, 0.4)
-        play_sound("phanta_strawman_" .. math.random(1, 6))
+        if not card.ability.immutable.used_this_round then
+          local ix = math.random(1, 6)
+          while ix == card.ability.immutable.prev_sounds[1] or ix == card.ability.immutable.prev_sounds[2] or ix == card.ability.immutable.prev_sounds[3] do
+            ix = math.random(1, 6)
+          end
+          card.ability.immutable.prev_sounds[3] = card.ability.immutable.prev_sounds[2]
+          card.ability.immutable.prev_sounds[2] = card.ability.immutable.prev_sounds[1]
+          card.ability.immutable.prev_sounds[1] = ix
+
+          play_sound("phanta_strawman_" .. ix)
+        end
+        card.ability.immutable.used_this_round = true
         card.ability.immutable.loneliness = 0
       end
       return true
@@ -4013,7 +4027,11 @@ G.Phanta.centers["occultbanner"] = {
           return true
         end)
       }))
-      return { message = "+" .. localize({ type = "name_text", set = "Tag", key = "tag_ethereal" }), colour = G.C.SECONDARY_SET.Spectral }
+      return {
+        message = "+" .. localize({ type = "name_text", set = "Tag", key = "tag_ethereal" }),
+        colour = G.C
+            .SECONDARY_SET.Spectral
+      }
     end
   end,
   pronouns = "it_its"
