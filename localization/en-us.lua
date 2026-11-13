@@ -2162,6 +2162,15 @@ return {
                     "least {C:attention}#1#{} cards"
                 }
             },
+            j_phanta_strawman                = {
+                name = "Strawman",
+                text = {
+                    "During a round, press",
+                    "{C:red}USE{} to lose {C:blue}#1#{} hand",
+                    "and earn {C:money}$#2#{}",
+                    "{C:inactive,s:0.9}(Cannot reduce past 1 hand){}"
+                }
+            },
             j_phanta_modping                = {
                 name = "Mod Ping",
                 text = {

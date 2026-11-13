@@ -52,6 +52,23 @@ SMODS.Sound({
   replace = true
 })
 
+for i = 1, 6 do
+  SMODS.Sound({
+    key = "strawman_" .. i,
+    path = "phanta_strawman_" .. i .. ".ogg"
+  })
+end
+
+SMODS.Sound({
+  key = "strawman_poke",
+  path = "phanta_strawman_poke.ogg"
+})
+
+SMODS.Sound({
+  key = "strawman_wub",
+  path = "phanta_strawman_wub.ogg"
+})
+
 SMODS.Sound({
   vol = 1,
   pitch = 1,

@@ -167,6 +167,7 @@ local joker_order = {
     "spaceinvader",
     "witchsmark",
     "modernart",
+    "strawman",
     "modping",
     "alecwatson",
     "clapperboard",

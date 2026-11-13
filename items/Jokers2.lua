@@ -3636,6 +3636,71 @@ G.Phanta.centers["doublelift"] = {
   pronouns = "it_its"
 }
 
+G.Phanta.centers["strawman"] = {
+  config = { extra = { hands = 1, money = 5 }, immutable = { loneliness = 0 } },
+  loc_vars = function(self, info_queue, card)
+    return { vars = { card.ability.extra.hands, card.ability.extra.money } }
+  end,
+  rarity = 1,
+  atlas = 'Phanta2',
+  pos = { x = 4, y = 9 },
+  pixel_size = { w = 55 },
+  display_size = { w = 55 * 1.2, h = 95 * 1.2 },
+  cost = 5,
+  blueprint_compat = false,
+  eternal_compat = true,
+  perishable_compat = true,
+  pronouns = "it_its",
+  calculate = function(self, card, context)
+    if context.end_of_round and context.main_eval and not context.game_over then
+      card.ability.immutable.loneliness = card.ability.immutable.loneliness + 1
+      if card.ability.immutable.loneliness == 3 then
+        G.E_MANAGER:add_event(Event({
+          func = function()
+            play_sound("phanta_strawman_wub", 1)
+            return true
+          end
+        }))
+      end
+    end
+  end,
+  add_to_deck = function(self, card, from_debuff)
+    if not from_debuff then
+      play_sound("phanta_strawman_"..math.random(4, 6))
+    end
+  end
+}
+
+G.FUNCS.phanta_can_strawman_use = function(e)
+  local card = e.config.ref_table
+
+  if G.GAME.blind and G.GAME.blind.in_blind and G.GAME.current_round.hands_left > card.ability.extra.hands then
+    e.config.colour = G.C.RED
+    e.config.button = "phanta_strawman_use"
+  else
+    e.config.colour = G.C.UI.BACKGROUND_INACTIVE
+    e.config.button = nil
+  end
+end
+
+G.FUNCS.phanta_strawman_use = function(e)
+  local card = e.config.ref_table
+
+  G.E_MANAGER:add_event(Event({
+    func = function()
+      if G.GAME.blind and G.GAME.blind.in_blind and G.GAME.current_round.hands_left > card.ability.extra.hands then
+        ease_hands_played(-card.ability.extra.hands)
+        ease_dollars(card.ability.extra.money)
+        card:juice_up()
+        play_sound("phanta_strawman_poke", 1, 0.4)
+        play_sound("phanta_strawman_" .. math.random(1, 6))
+        card.ability.immutable.loneliness = 0
+      end
+      return true
+    end
+  }))
+end
+
 G.Phanta.centers["modping"] = {
   config = { extra = { money_needed = 5, money_increase = 10 } },
   loc_vars = function(self, info_queue, card)
