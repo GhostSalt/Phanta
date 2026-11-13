@@ -789,7 +789,8 @@ function phanta_deathnote_is_existing_card()
   local banned = { "Voucher", "Back", "Enhanced", "Edition", "Booster" }
   local valid = false
   for k, v in pairs(G.P_CENTERS) do
-    if localize { key = k, type = "name_text", set = v.set }:lower() == G.GAME.phanta_deathnote_name:lower() then
+    local loc = localize { key = k, type = "name_text", set = v.set }
+    if loc and loc:lower() == G.GAME.phanta_deathnote_name:lower() then
       local is_banned = false
       for i, banned_key in ipairs(banned) do
         if v.set == banned_key then is_banned = true end
