@@ -3650,16 +3650,16 @@ G.Phanta.centers["strawman"] = {
     blushy_to_normal = { anim = { { xrange = { first = 2, last = 3 }, y = 8, t = 0.05 } }, loop = false, continuation = "normal" },
     poked = {
       anim = {
-        { xrange = { first = 4, last = 5 }, y = 8, t = 0.05 },
-        { xrange = { first = 4, last = 5 }, y = 8, t = 0.05 },
-        { xrange = { first = 4, last = 5 }, y = 8, t = 0.05 },
-        { xrange = { first = 4, last = 5 }, y = 8, t = 0.05 },
-        { xrange = { first = 4, last = 5 }, y = 8, t = 0.05 },
-        { xrange = { first = 4, last = 5 }, y = 8, t = 0.05 },
-        { xrange = { first = 4, last = 5 }, y = 8, t = 0.05 },
-        { xrange = { first = 4, last = 5 }, y = 8, t = 0.05 },
-        { xrange = { first = 4, last = 5 }, y = 8, t = 0.05 },
-        { xrange = { first = 4, last = 5 }, y = 8, t = 0.05 }
+        { xrange = { first = 4, last = 6 }, y = 8, t = 0.04 },
+        { xrange = { first = 4, last = 6 }, y = 8, t = 0.04 },
+        { xrange = { first = 4, last = 6 }, y = 8, t = 0.04 },
+        { xrange = { first = 4, last = 6 }, y = 8, t = 0.04 },
+        { xrange = { first = 4, last = 6 }, y = 8, t = 0.04 },
+        { xrange = { first = 4, last = 6 }, y = 8, t = 0.04 },
+        { xrange = { first = 4, last = 6 }, y = 8, t = 0.04 },
+        { xrange = { first = 4, last = 6 }, y = 8, t = 0.04 },
+        { xrange = { first = 4, last = 6 }, y = 8, t = 0.04 },
+        { xrange = { first = 4, last = 6 }, y = 8, t = 0.04 }
       },
       loop = false,
       continuation = "blushy"
@@ -3687,13 +3687,6 @@ G.Phanta.centers["strawman"] = {
           end
         }))
       end
-    end
-  end,
-  add_to_deck = function(self, card, from_debuff)
-    if not from_debuff then
-      local ix = math.random(4, 6)
-      card.ability.immutable.prev_sounds[1] = ix
-      play_sound("phanta_strawman_" .. ix)
     end
   end
 }
