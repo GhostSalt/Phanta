@@ -3637,13 +3637,34 @@ G.Phanta.centers["doublelift"] = {
 }
 
 G.Phanta.centers["strawman"] = {
-  config = { extra = { hands = 1, money = 5 }, immutable = { loneliness = 0, prev_sounds = {} } },
+  config = { extra = { hands = 1, money = 3 }, immutable = { loneliness = 0, prev_sounds = {} } },
   loc_vars = function(self, info_queue, card)
     return { vars = { card.ability.extra.hands, card.ability.extra.money } }
   end,
   rarity = 1,
-  atlas = 'Phanta2',
-  pos = { x = 4, y = 9 },
+  atlas = "PhantaMiscAnims7",
+  pos = { x = 0, y = 8 },
+  flipbook_anim_states = {
+    normal = { anim = { { x = 0, y = 8, t = 1 } }, loop = false },
+    blushy = { anim = { { x = 1, y = 8, t = 1 } }, loop = false },
+    blushy_to_normal = { anim = { { xrange = { first = 2, last = 3 }, y = 8, t = 0.05 } }, loop = false, continuation = "normal" },
+    poked = {
+      anim = {
+        { xrange = { first = 4, last = 5 }, y = 8, t = 0.05 },
+        { xrange = { first = 4, last = 5 }, y = 8, t = 0.05 },
+        { xrange = { first = 4, last = 5 }, y = 8, t = 0.05 },
+        { xrange = { first = 4, last = 5 }, y = 8, t = 0.05 },
+        { xrange = { first = 4, last = 5 }, y = 8, t = 0.05 },
+        { xrange = { first = 4, last = 5 }, y = 8, t = 0.05 },
+        { xrange = { first = 4, last = 5 }, y = 8, t = 0.05 },
+        { xrange = { first = 4, last = 5 }, y = 8, t = 0.05 },
+        { xrange = { first = 4, last = 5 }, y = 8, t = 0.05 },
+        { xrange = { first = 4, last = 5 }, y = 8, t = 0.05 }
+      },
+      loop = false,
+      continuation = "blushy"
+    }
+  },
   pixel_size = { w = 55 },
   display_size = { w = 55 * 1.2, h = 95 * 1.2 },
   cost = 5,
@@ -3653,8 +3674,11 @@ G.Phanta.centers["strawman"] = {
   pronouns = "it_its",
   calculate = function(self, card, context)
     if context.end_of_round and context.main_eval and not context.game_over then
+      if card.ability.immutable.blushy then
+        card:flipbook_set_anim_state("blushy_to_normal")
+      end
+      card.ability.immutable.blushy = nil
       card.ability.immutable.loneliness = card.ability.immutable.loneliness + 1
-        card.ability.immutable.used_this_round = nil
       if card.ability.immutable.loneliness == 3 then
         G.E_MANAGER:add_event(Event({
           func = function()
@@ -3696,7 +3720,7 @@ G.FUNCS.phanta_strawman_use = function(e)
         ease_dollars(card.ability.extra.money)
         card:juice_up(0.2, 0.2)
         play_sound("phanta_strawman_poke", 1, 0.4)
-        if not card.ability.immutable.used_this_round then
+        if not card.ability.immutable.blushy then
           local ix = math.random(1, 6)
           while ix == card.ability.immutable.prev_sounds[1] or ix == card.ability.immutable.prev_sounds[2] or ix == card.ability.immutable.prev_sounds[3] do
             ix = math.random(1, 6)
@@ -3707,7 +3731,8 @@ G.FUNCS.phanta_strawman_use = function(e)
 
           play_sound("phanta_strawman_" .. ix)
         end
-        card.ability.immutable.used_this_round = true
+        card:flipbook_set_anim_state("poked")
+        card.ability.immutable.blushy = true
         card.ability.immutable.loneliness = 0
       end
       return true
@@ -4027,11 +4052,7 @@ G.Phanta.centers["occultbanner"] = {
           return true
         end)
       }))
-      return {
-        message = "+" .. localize({ type = "name_text", set = "Tag", key = "tag_ethereal" }),
-        colour = G.C
-            .SECONDARY_SET.Spectral
-      }
+      return { message = "+" .. localize({ type = "name_text", set = "Tag", key = "tag_ethereal" }), colour = G.C.SECONDARY_SET.Spectral }
     end
   end,
   pronouns = "it_its"
