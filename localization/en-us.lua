@@ -2170,6 +2170,14 @@ return {
                     "{C:blue}#1#{} hand and earn {C:money}$#2#{}"
                 }
             },
+            j_phanta_housebroken                = {
+                name = "Housebroken",
+                text = {
+                    "During a round,",
+                    "press {C:red}USE{} to lose",
+                    "{C:blue}#1#{} hand and earn {C:money}$#2#{}"
+                }
+            },
             j_phanta_modping                = {
                 name = "Mod Ping",
                 text = {
@@ -2558,7 +2566,7 @@ return {
                         "Lose {C:red}$#1#{} each round",
                         "All consumables are {C:attention}Pollutive{}",
                         "All consumables are {C:attention}Best Before{}",
-                        "{C:blue}-#2#{} hand each round"
+                        "{C:red}-#2#{} discard each round"
                     }
                 }
             },
@@ -2574,7 +2582,7 @@ return {
                         "Lose {C:red}$#1#{} each round",
                         "All consumables are {C:attention}Pollutive{}",
                         "All consumables are {C:attention}Best Before{}",
-                        "{C:blue}-#2#{} hand each round",
+                        "{C:red}-#2#{} discard each round",
                         "{C:white,X:mult}X#3#{} Mult"
                     }
                 }
@@ -2591,7 +2599,7 @@ return {
                         "Lose {C:red}$#1#{} each round",
                         "All consumables are {C:attention}Pollutive{}",
                         "All consumables are {C:attention}Best Before{}",
-                        "{C:blue}-#2#{} hand each round",
+                        "{C:red}-#2#{} discard each round",
                         "{C:white,X:mult}X#3#{} Mult",
                         "{C:red}-#4#{} {C:attention}Booster Pack{} each shop"
                     }
@@ -2609,7 +2617,7 @@ return {
                         "Lose {C:red}$#1#{} each round",
                         "All consumables are {C:attention}Pollutive{}",
                         "All consumables are {C:attention}Best Before{}",
-                        "{C:blue}-#2#{} hand each round",
+                        "{C:red}-#2#{} discard each round",
                         "{C:white,X:mult}X#3#{} Mult",
                         "{C:red}-#4#{} {C:attention}Booster Pack{} each shop",
                         "{C:red}Destroys{} first drawn hand"

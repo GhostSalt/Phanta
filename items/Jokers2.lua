@@ -3639,7 +3639,11 @@ G.Phanta.centers["doublelift"] = {
 G.Phanta.centers["strawman"] = {
   config = { extra = { hands = 1, money = 3 }, immutable = { loneliness = 0, prev_sounds = {} } },
   loc_vars = function(self, info_queue, card)
-    return { vars = { card.ability.extra.hands, card.ability.extra.money } }
+    local key = self.key
+    if card.ability.immutable.housebroken then
+      key = "j_phanta_housebroken"
+    end
+    return { key = key, vars = { card.ability.extra.hands, card.ability.extra.money } }
   end,
   rarity = 1,
   atlas = "PhantaMiscAnims7",
@@ -3663,7 +3667,42 @@ G.Phanta.centers["strawman"] = {
       },
       loop = false,
       continuation = "blushy"
-    }
+    },
+
+    housebroken = { anim = { { x = 7, y = 8, t = 1 } }, loop = false },
+    housebroken_poked_1 = {
+      anim = {
+        { x = 8,  y = 8, t = 0.05 },
+        { x = 10, y = 8, t = 0.05 },
+        { x = 8,  y = 8, t = 0.05 },
+        { x = 10, y = 8, t = 0.05 },
+        { x = 9,  y = 8, t = 1 }
+      },
+      loop = false,
+      continuation = "housebroken"
+    },
+    housebroken_poked_2 = {
+      anim = {
+        { x = 11, y = 8, t = 0.05 },
+        { x = 1,  y = 9, t = 0.05 },
+        { x = 11, y = 8, t = 0.05 },
+        { x = 1,  y = 9, t = 0.05 },
+        { x = 0,  y = 9, t = 1 }
+      },
+      loop = false,
+      continuation = "housebroken"
+    },
+    housebroken_poked_3 = {
+      anim = {
+        { x = 2, y = 9, t = 0.05 },
+        { x = 4, y = 9, t = 0.05 },
+        { x = 2, y = 9, t = 0.05 },
+        { x = 4, y = 9, t = 0.05 },
+        { x = 3, y = 9, t = 1 }
+      },
+      loop = false,
+      continuation = "housebroken"
+    },
   },
   pixel_size = { w = 55 },
   display_size = { w = 55 * 1.2, h = 95 * 1.2 },
@@ -3673,7 +3712,7 @@ G.Phanta.centers["strawman"] = {
   perishable_compat = true,
   pronouns = "it_its",
   calculate = function(self, card, context)
-    if context.end_of_round and context.main_eval and not context.game_over then
+    if context.end_of_round and context.main_eval and not context.game_over and not card.ability.immutable.housebroken then
       if card.ability.immutable.blushy then
         card:flipbook_set_anim_state("blushy_to_normal")
       end
@@ -3687,6 +3726,20 @@ G.Phanta.centers["strawman"] = {
           end
         }))
       end
+    end
+  end,
+  set_ability = function(self, card, initial, delay_sprites)
+    if self.discovered or card.params.bypass_discovery_center then
+      local choices = { "normal", "normal", "housebroken" }
+      local choice = pseudorandom_element(choices, pseudoseed("strawman_appearance"))
+      if not G.PROFILES[G.SETTINGS.profile].phanta_strawman_seen then
+        G.PROFILES[G.SETTINGS.profile].phanta_strawman_seen = true
+        choice = "normal"
+      end
+      card:flipbook_set_anim_state(choice)
+      card.ability.immutable.housebroken = choice == "housebroken"
+      print(choice)
+      print(card.ability.immutable.housebroken)
     end
   end
 }
@@ -3713,20 +3766,24 @@ G.FUNCS.phanta_strawman_use = function(e)
         ease_dollars(card.ability.extra.money)
         card:juice_up(0.2, 0.2)
         play_sound("phanta_strawman_poke", 1, 0.4)
-        if not card.ability.immutable.blushy then
-          local ix = math.random(1, 6)
-          while ix == card.ability.immutable.prev_sounds[1] or ix == card.ability.immutable.prev_sounds[2] or ix == card.ability.immutable.prev_sounds[3] do
-            ix = math.random(1, 6)
-          end
-          card.ability.immutable.prev_sounds[3] = card.ability.immutable.prev_sounds[2]
-          card.ability.immutable.prev_sounds[2] = card.ability.immutable.prev_sounds[1]
-          card.ability.immutable.prev_sounds[1] = ix
+        if not card.ability.immutable.housebroken then
+          if not card.ability.immutable.blushy then
+            local ix = math.random(1, 6)
+            while ix == card.ability.immutable.prev_sounds[1] or ix == card.ability.immutable.prev_sounds[2] or ix == card.ability.immutable.prev_sounds[3] do
+              ix = math.random(1, 6)
+            end
+            card.ability.immutable.prev_sounds[3] = card.ability.immutable.prev_sounds[2]
+            card.ability.immutable.prev_sounds[2] = card.ability.immutable.prev_sounds[1]
+            card.ability.immutable.prev_sounds[1] = ix
 
-          play_sound("phanta_strawman_" .. ix)
+            play_sound("phanta_strawman_" .. ix)
+          end
+          card:flipbook_set_anim_state("poked")
+          card.ability.immutable.blushy = true
+          card.ability.immutable.loneliness = 0
+        else
+          card:flipbook_set_anim_state("housebroken_poked_" .. math.random(1, 3))
         end
-        card:flipbook_set_anim_state("poked")
-        card.ability.immutable.blushy = true
-        card.ability.immutable.loneliness = 0
       end
       return true
     end

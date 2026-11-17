@@ -5,11 +5,11 @@ SMODS.Rarity {
 }
 
 G.Phanta.centers["developerdifficulty"] = {
-  config = { extra_slots_used = -1, couponed = true, extra = { lost_money = 3, lost_hands = 1, xmult = 0.666, lost_boosters = 1 }, immutable = { seen_ante = 0, last_seen_ante = 0 } },
+  config = { extra_slots_used = -1, couponed = true, extra = { lost_money = 3, lost_discards = 1, xmult = 0.666, lost_boosters = 1 }, immutable = { seen_ante = 0, last_seen_ante = 0 } },
   loc_vars = function(self, info_queue, card)
     local key = self.key
     if card.ability.immutable.seen_ante >= 2 then key = key .. "_" .. card.ability.immutable.seen_ante end
-    return { key = key, vars = { card.ability.extra.lost_money, card.ability.extra.lost_hands, card.ability.extra.xmult == 0.666 and card.ability.extra.xmult .. "" or card.ability.extra.xmult, card.ability.extra.lost_boosters } }
+    return { key = key, vars = { card.ability.extra.lost_money, card.ability.extra.lost_discards, card.ability.extra.xmult == 0.666 and card.ability.extra.xmult .. "" or card.ability.extra.xmult, card.ability.extra.lost_boosters } }
   end,
   in_pool = function() return false end,
   no_collection = true,
@@ -73,8 +73,8 @@ G.Phanta.centers["developerdifficulty"] = {
           }))
         end
         if card.ability.immutable.seen_ante >= 5 and card.ability.immutable.last_seen_ante < 5 then
-          G.GAME.round_resets.hands = G.GAME.round_resets.hands - card.ability.extra.lost_hands
-          ease_hands_played(-card.ability.extra.lost_hands)
+          G.GAME.round_resets.discards = G.GAME.round_resets.discards - card.ability.extra.lost_discards
+          ease_discard(-card.ability.extra.lost_discards)
         end
         if card.ability.immutable.seen_ante >= 7 and card.ability.immutable.last_seen_ante < 7 then
           SMODS.change_booster_limit(-card.ability.extra.lost_boosters)
